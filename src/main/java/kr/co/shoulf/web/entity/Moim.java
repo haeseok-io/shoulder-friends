@@ -19,7 +19,7 @@ public class Moim {
     private Long moimNo;
     @Column(nullable = false, length = 20)
     private String type;
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String subject;
     @Column
     private String shortDesc;
@@ -30,6 +30,9 @@ public class Moim {
     @Column
     private Integer hits;
 
+    //    @ManyToOne
+    //    @JoinColumn(name = "userNo", nullable = false)
+    //    private Users users;
 }
 
 
