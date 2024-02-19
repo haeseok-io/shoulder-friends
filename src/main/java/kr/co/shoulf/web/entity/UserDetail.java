@@ -32,10 +32,4 @@ public class UserDetail {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
     private Users users;
-
-    @OneToMany(mappedBy = "userDetail", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<UserPortfolio> userPortfolioList;
-
-    @OneToMany(mappedBy = "userDetail", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<UserLanguage> userLanguageList;
 }
