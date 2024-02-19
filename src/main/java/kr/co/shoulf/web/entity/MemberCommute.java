@@ -13,7 +13,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Commute {
+@Table(name = "member_commute")
+public class MemberCommute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commuteNo;
