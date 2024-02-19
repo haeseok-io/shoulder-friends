@@ -1,10 +1,7 @@
 package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -29,6 +26,7 @@ public class UserDetail {
     @Column
     private String blogLink;
 
+    @ToString.Exclude
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
     private Users users;
