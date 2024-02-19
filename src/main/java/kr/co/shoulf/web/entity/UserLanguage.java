@@ -7,17 +7,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "user_portfolio")
+@Table(name = "user_language")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPortfolio {
+public class UserLanguage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long portfolioNo;
-    @Column
-    private String url;
+    private Long userLanguageNo;
+    @Column(nullable = false, length = 50)
+    private String name;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
