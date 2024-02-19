@@ -18,4 +18,8 @@ public class MemberSalary {
     private Long salaryNo;
     @Column(nullable = false)
     private Integer sal;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "member_no")
+    private Member member;
 }

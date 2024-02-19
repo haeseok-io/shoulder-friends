@@ -21,4 +21,8 @@ public class MemberSalaryDetail {
     private Integer payComm;
     @Column(nullable = false)
     private String payDate;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "salary_no")
+    private MemberSalary memberSalary;
 }

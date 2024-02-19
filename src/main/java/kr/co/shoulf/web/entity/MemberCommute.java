@@ -30,4 +30,8 @@ public class MemberCommute {
     private String date;
     @Column(length = 20, nullable = false)
     private String status;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "member_no")
+    private Member member;
 }
