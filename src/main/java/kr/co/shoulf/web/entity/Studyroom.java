@@ -21,6 +21,9 @@ public class Studyroom {
     @Column(nullable = false)
     private Integer price;
 
+    @ManyToOne
+    @JoinColumn(name = "studycafe_no", nullable = false)
+    private Studycafe studycafe;
 //    @OneToMany(fetch = FetchType.EAGER)
 //    private Studycafe studycafe.studycafeNo;
 }
