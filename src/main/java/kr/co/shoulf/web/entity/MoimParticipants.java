@@ -1,11 +1,19 @@
 package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.catalina.User;
 import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 
 @Entity
 @Table(name = "moim_participants")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MoimParticipants {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
