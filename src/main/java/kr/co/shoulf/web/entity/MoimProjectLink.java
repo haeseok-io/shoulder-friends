@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class MoimProjectLink {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer moimProjectLinkNo;
+    private Long moimProjectLinkNo;
 
     @Column(nullable = false)
     private String url;
