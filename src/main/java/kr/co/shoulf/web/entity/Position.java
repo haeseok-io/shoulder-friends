@@ -20,7 +20,4 @@ public class Position {
     private Long jobNo;
     @Column(length = 100, nullable = false)
     private String bigName;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_no")
-    private List<PositionDetail> positionDetailList;
 }
