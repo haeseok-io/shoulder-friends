@@ -35,6 +35,4 @@ public class Board {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
     private Users users;
-
-    // test
 }
