@@ -16,9 +16,9 @@ public class PositionDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long jobDetailNo;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "jobNo", nullable = false)
-    private Position jobNo;
+    private Position position;
     @Column(length = 100, nullable = false)
     private String middleName;
 }

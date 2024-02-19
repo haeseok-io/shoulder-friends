@@ -24,13 +24,13 @@ public class MoimParticipants {
     private String job;
     @Column(nullable = false)
     private Integer status;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "userNo", nullable = false)
-    private Users userNo;
-    @ManyToOne
+    private Users users;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "moimHeadcountNo", nullable = false)
-    private MoimHeadcount moimHeadcountNo;
-    @ManyToOne
+    private MoimHeadcount moimHeadcount;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "moimNo", nullable = false)
-    private Moim moimNo;
+    private Moim moim;
 }

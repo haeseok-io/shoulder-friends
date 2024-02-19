@@ -16,11 +16,11 @@ public class MoimHeadcount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long moimHeadcountNo;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "moimNo", nullable = false)
-    private Moim moimNo;
+    private Moim moim;
     private Integer personnel;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "jobDetailNo")
-    private PositionDetail jobDetailNo;
+    private PositionDetail positionDetail;
 }

@@ -16,10 +16,10 @@ public class UserInterestCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userInterestCategoryNo;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "userNo", nullable = false)
-    private UserDetail userNo;
-    @ManyToOne
+    private UserDetail userDetail;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryNo", nullable = false)
-    private Category categoryNo;
+    private Category category;
 }
