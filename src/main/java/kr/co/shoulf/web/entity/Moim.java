@@ -17,20 +17,29 @@ public class Moim {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long moimNo;
+
     @Column(nullable = false, length = 20)
     private String type;
+
     @Column(nullable = false)
     private String subject;
+
     @Column
     private String shortDesc;
-    @Column(nullable = false)
+
+    @Column
     @ColumnDefault("1") // 기본값
     private Integer status;
 
     @Column
+    @ColumnDefault("0") // 기본값
     private Integer hits;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private MoimDetail moimDetail;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userNo", nullable = false)
     private Users users;
 }
