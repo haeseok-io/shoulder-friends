@@ -25,7 +25,6 @@ public class MoimDetail {
     @Column(length = 200)
     private String offAddr;
 
-/*
     @ManyToOne
     @JoinColumn(name = "onlineNo",nullable = false)
     private Online online;
@@ -37,7 +36,7 @@ public class MoimDetail {
     @ManyToOne
     @JoinColumn(name = "studyCategoryNo")
     private  StudyCategory studyCategory;
-*/
+
 
 
 }

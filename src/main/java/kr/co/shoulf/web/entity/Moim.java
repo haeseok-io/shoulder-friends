@@ -30,9 +30,9 @@ public class Moim {
     @Column
     private Integer hits;
 
-    //    @ManyToOne
-    //    @JoinColumn(name = "userNo", nullable = false)
-    //    private Users users;
+    @ManyToOne
+    @JoinColumn(name = "userNo", nullable = false)
+    private Users users;
 }
 
 

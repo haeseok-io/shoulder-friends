@@ -17,9 +17,9 @@ public class MoimLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer likeNo;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_no", nullable = false)
-//    private Users user;
+    @ManyToOne
+    @JoinColumn(name = "userNo", nullable = false)
+    private Users user;
 
     @ManyToOne
     @JoinColumn(name = "moimNo", nullable = false)
