@@ -33,13 +33,11 @@ public class MemberAnnualDetail {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_no")
-    @Column(nullable = false)
     private Member member;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "approval_member_no")
     private Member approvalMember;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "annual_no")
-    @Column(nullable = false)
     private MemberAnnual memberAnnual;
 }

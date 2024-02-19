@@ -25,6 +25,5 @@ public class MemberAnnualRejected {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "reject_member_no")
-    @Column(nullable = false)
     private Member member;
 }
