@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class MoimLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer likeNo;
+    private Long likeNo;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "userNo", nullable = false)

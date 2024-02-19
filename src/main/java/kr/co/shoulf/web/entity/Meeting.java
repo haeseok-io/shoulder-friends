@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class Meeting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer meetingNo;
+    private Long meetingNo;
 
     @Column(nullable = false)
     private LocalDateTime meetDate;
