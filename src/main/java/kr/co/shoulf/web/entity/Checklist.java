@@ -27,8 +27,8 @@ public class Checklist {
     @JoinColumn(name = "moimNo", nullable = false)
     private Moim moim;
 
-//    @ManyToOne
-//    @JoinColumn(name = "userNo", nullable = false)
-//    private Users users;
+    @ManyToOne
+    @JoinColumn(name = "userNo", nullable = false)
+    private Users users;
 
 }
