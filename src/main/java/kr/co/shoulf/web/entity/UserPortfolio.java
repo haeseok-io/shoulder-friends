@@ -19,7 +19,7 @@ public class UserPortfolio {
     @Column
     private String url;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
     private UserDetail userDetail;
 }
