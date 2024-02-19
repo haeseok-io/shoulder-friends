@@ -30,9 +30,9 @@ public class Moim {
     @Column
     private Integer hits;
 
-    //    @ManyToOne
-    //    @JoinColumn(name = "userNo", nullable = false)
-    //    private Users users;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "userNo", nullable = false)
+    private Users users;
 }
 
 

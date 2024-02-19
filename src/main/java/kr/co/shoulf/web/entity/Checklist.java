@@ -23,12 +23,12 @@ public class Checklist {
     @Column(nullable = false)
     private Integer status;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "moimNo", nullable = false)
     private Moim moim;
 
-//    @ManyToOne
-//    @JoinColumn(name = "userNo", nullable = false)
-//    private Users users;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "userNo", nullable = false)
+    private Users users;
 
 }
