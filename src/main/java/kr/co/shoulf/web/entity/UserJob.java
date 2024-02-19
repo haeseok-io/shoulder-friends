@@ -19,6 +19,6 @@ public class UserJob {
     private Integer level;
     private Integer career;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "jobDetailNo", nullable = false)
+    @JoinColumn(name = "job_detail_no", nullable = false)
     private PositionDetail positionDetail;
 }

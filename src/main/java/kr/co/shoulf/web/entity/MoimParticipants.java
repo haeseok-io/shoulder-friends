@@ -25,12 +25,12 @@ public class MoimParticipants {
     @Column(nullable = false)
     private Integer status;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "userNo", nullable = false)
+    @JoinColumn(name = "user_no", nullable = false)
     private Users users;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "moimHeadcountNo", nullable = false)
+    @JoinColumn(name = "moim_headcount_no", nullable = false)
     private MoimHeadcount moimHeadcount;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "moimNo", nullable = false)
+    @JoinColumn(name = "moim_no", nullable = false)
     private Moim moim;
 }

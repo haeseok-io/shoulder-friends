@@ -17,9 +17,9 @@ public class UserOnline {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userOnlineNo;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "userNo", nullable = false)
+    @JoinColumn(name = "user_no", nullable = false)
     private UserDetail userDetail;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "onlineNo", nullable = false)
+    @JoinColumn(name = "online_no", nullable = false)
     private Online online;
 }

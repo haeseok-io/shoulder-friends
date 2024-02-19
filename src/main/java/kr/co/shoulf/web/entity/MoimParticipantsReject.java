@@ -17,7 +17,7 @@ public class MoimParticipantsReject {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long moimParticipantsRejectNo;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "moimParticipantsNo", nullable = false)
+    @JoinColumn(name = "moim_participants_no", nullable = false)
     private MoimParticipants moimParticipants;
     @Column(nullable = false)
     private String contents;

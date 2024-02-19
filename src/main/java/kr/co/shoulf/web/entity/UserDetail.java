@@ -33,9 +33,9 @@ public class UserDetail {
     @JoinColumn(name = "user_no")
     private Users users;
 
-    @OneToMany(mappedBy = "userDetail", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user_detail", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserPortfolio> userPortfolioList;
 
-    @OneToMany(mappedBy = "userDetail", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user_detail", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserLanguage> userLanguageList;
 }
