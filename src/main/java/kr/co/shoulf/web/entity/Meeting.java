@@ -33,7 +33,7 @@ public class Meeting {
     @CreationTimestamp
     private LocalDateTime regdate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "moimNo", nullable = false)
     private Moim moim;
 }

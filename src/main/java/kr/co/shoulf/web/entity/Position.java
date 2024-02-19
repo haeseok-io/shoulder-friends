@@ -21,6 +21,6 @@ public class Position {
     @Column(length = 100, nullable = false)
     private String bigName;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "jobNo")
+    @JoinColumn(name = "job_no")
     private List<PositionDetail> positionDetailList;
 }

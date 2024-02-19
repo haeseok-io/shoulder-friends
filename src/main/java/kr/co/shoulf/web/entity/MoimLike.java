@@ -17,11 +17,11 @@ public class MoimLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer likeNo;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_no", nullable = false)
-//    private Users user;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "userNo", nullable = false)
+    private Users user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "moimNo", nullable = false)
     private Moim moim;
 }
