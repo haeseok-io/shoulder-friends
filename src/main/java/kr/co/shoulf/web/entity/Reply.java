@@ -13,7 +13,7 @@ public class Reply {
     @Column(nullable = false)
     private Integer depth;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_no")
     private Reply parentReply;
 
