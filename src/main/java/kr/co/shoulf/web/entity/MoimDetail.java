@@ -25,15 +25,15 @@ public class MoimDetail {
     @Column(length = 200)
     private String offAddr;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "onlineNo",nullable = false)
     private Online online;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "catrgoryNo")
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "studyCategoryNo")
     private  StudyCategory studyCategory;
 

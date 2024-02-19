@@ -19,7 +19,7 @@ public class MoimLanguage {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "moimNo", nullable = false)
     private Moim moim;
 }
