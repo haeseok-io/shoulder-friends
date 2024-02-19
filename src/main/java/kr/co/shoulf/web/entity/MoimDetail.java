@@ -27,12 +27,13 @@ public class MoimDetail {
     @Column(length = 200)
     private String offAddr;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "moimNo", nullable = false)
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "moimNo")
     private Moim moim;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "onlineNo",nullable = false)
+    @JoinColumn(name = "onlineNo", nullable = false)
     private Online online;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -41,8 +42,7 @@ public class MoimDetail {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "studyCategoryNo")
-    private  StudyCategory studyCategory;
-
+    private StudyCategory studyCategory;
 
 
 }
