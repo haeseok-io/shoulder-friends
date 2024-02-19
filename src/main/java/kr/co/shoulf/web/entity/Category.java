@@ -10,4 +10,5 @@ public class Category {
     private Long categoryNo;
     @Column(length = 100, nullable = false)
     private String categoryName;
+
 }
