@@ -26,4 +26,20 @@ public class MemberAnnualDetail {
     private Integer useNum;
     @Column(nullable = false)
     private Integer status;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "annual_detail_no")
+    private MemberAnnualRejected memberAnnualRejected;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "member_no")
+    @Column(nullable = false)
+    private Member member;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "approval_member_no")
+    private Member approvalMember;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "annual_no")
+    @Column(nullable = false)
+    private MemberAnnual memberAnnual;
 }

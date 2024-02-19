@@ -22,4 +22,9 @@ public class MemberAnnualRejected {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "annual_detail_no")
     MemberAnnualDetail memberAnnualDetail;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "reject_member_no")
+    @Column(nullable = false)
+    private Member member;
 }

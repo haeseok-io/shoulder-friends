@@ -26,4 +26,9 @@ public class MemberAnnual {
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private String issueDate;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "member_no")
+    @Column(nullable = false)
+    private Member member;
 }
