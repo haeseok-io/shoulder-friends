@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class MoimProjectPlatform {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer moimProjectPlaformNo;
+    private Long moimProjectPlaformNo;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "platformNo", nullable = false)

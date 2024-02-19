@@ -17,7 +17,7 @@ import java.util.List;
 public class MoimDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer moimNo;
+    private Long moimNo;
     @Column(nullable = false)
     private String detailDesc;
     @Column(length = 200)

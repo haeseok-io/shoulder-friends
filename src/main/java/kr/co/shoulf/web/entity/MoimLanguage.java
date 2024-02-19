@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class MoimLanguage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer moimLanguageNo;
+    private Long moimLanguageNo;
     @Column(nullable = false, length = 50)
     private String name;
 

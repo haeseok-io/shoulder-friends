@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Checklist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer checklistNo;
+    private Long checklistNo;
 
     @Column(nullable = false)
     private String contents;
