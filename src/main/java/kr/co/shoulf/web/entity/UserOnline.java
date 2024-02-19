@@ -1,9 +1,17 @@
 package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "user_online")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserOnline {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
