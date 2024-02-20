@@ -20,7 +20,7 @@ public class MoimProjectLink {
     @Column(nullable = false)
     private String url;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moimNo", nullable = false)
     private MoimDetail moimDetail;
 }
