@@ -31,13 +31,13 @@ public class MemberAnnualDetail {
     @PrimaryKeyJoinColumn
     private MemberAnnualRejected memberAnnualRejected;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_no")
     private Member member;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "approval_member_no")
     private Member approvalMember;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "annual_no")
     private MemberAnnual memberAnnual;
 }

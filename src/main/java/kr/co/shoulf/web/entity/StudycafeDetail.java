@@ -23,7 +23,7 @@ public class StudycafeDetail {
     @Column(nullable = false)
     private Integer Y;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "studycafe_no")
     private Studycafe studycafe;

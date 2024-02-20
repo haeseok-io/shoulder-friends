@@ -27,7 +27,7 @@ public class MemberAnnual {
     @Column(nullable = false)
     private String issueDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_no")
     private Member member;
 }

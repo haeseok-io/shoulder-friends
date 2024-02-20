@@ -19,12 +19,12 @@ public class MemberAnnualRejected {
     @Column(length = 500)
     private String content;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "annual_detail_no")
     MemberAnnualDetail memberAnnualDetail;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reject_member_no")
     private Member member;
 }

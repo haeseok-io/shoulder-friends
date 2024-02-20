@@ -19,7 +19,7 @@ public class MemberSalary {
     @Column(nullable = false)
     private Integer sal;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_no")
     private Member member;
 }

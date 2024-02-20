@@ -22,7 +22,7 @@ public class MemberSalaryDetail {
     @Column(nullable = false)
     private String payDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "salary_no")
     private MemberSalary memberSalary;
 }

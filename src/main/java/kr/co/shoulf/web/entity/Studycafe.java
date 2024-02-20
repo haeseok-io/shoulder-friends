@@ -27,7 +27,7 @@ public class Studycafe {
     @Column(length = 200)
     private String mainImg;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_no")
     private Member member;
 

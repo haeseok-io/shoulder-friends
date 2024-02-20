@@ -24,7 +24,7 @@ public class StudyroomDetail {
     @Column(length = 2, columnDefinition = "char(2) default 'N'")
     private String wboard;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "studyroom_no")
     private Studyroom studyroom;

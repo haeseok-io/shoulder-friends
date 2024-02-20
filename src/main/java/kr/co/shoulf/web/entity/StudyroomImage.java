@@ -19,7 +19,7 @@ public class StudyroomImage {
     @Column(nullable = false)
     private Integer seq;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "studyroom_no")
     private StudyroomDetail studyroomDetail;
 }
