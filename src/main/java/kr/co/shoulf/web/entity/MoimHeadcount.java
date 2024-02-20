@@ -21,6 +21,6 @@ public class MoimHeadcount {
     private Moim moim;
     private Integer personnel;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_detail_no")
+    @JoinColumn(name = "position_detail_no")
     private PositionDetail positionDetail;
 }

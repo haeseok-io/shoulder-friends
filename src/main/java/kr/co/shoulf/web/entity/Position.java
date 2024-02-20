@@ -17,7 +17,7 @@ import java.util.List;
 public class Position {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long jobNo;
+    private Long PositionNo;
     @Column(length = 100, nullable = false)
     private String bigName;
 }
