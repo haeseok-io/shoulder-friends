@@ -15,12 +15,14 @@ import lombok.NoArgsConstructor;
 public class UserJob {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userNo;
+    private Long userJobNo;
     private Integer level;
     private Integer career;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_detail_no", nullable = false)
     private PositionDetail positionDetail;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
     private UserDetail userDetail;
