@@ -32,15 +32,15 @@ public class MoimDetail {
     @JoinColumn(name = "moimNo")
     private Moim moim;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "onlineNo", nullable = false)
     private Online online;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "catrgoryNo")
     private Category category;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "studyCategoryNo")
     private StudyCategory studyCategory;
 
