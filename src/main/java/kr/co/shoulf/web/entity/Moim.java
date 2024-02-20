@@ -35,7 +35,7 @@ public class Moim {
     @ColumnDefault("0") // 기본값
     private Integer hits;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
     private MoimDetail moimDetail;
 

@@ -27,7 +27,7 @@ public class MoimDetail {
     @Column(length = 200)
     private String offAddr;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "moimNo")
     private Moim moim;
