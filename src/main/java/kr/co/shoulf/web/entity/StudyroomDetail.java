@@ -26,6 +26,6 @@ public class StudyroomDetail {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapsId
-    @JoinColumn(name = "studyroomNo")
+    @JoinColumn(name = "studyroom_no")
     private Studyroom studyroom;
 }
