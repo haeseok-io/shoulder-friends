@@ -17,7 +17,6 @@ public class UserOnline {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userOnlineNo;
     @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "user_no", nullable = false)
     private UserDetail userDetail;
     @ManyToOne(fetch = FetchType.LAZY)

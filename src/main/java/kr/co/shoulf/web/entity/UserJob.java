@@ -22,7 +22,6 @@ public class UserJob {
     @JoinColumn(name = "job_detail_no", nullable = false)
     private PositionDetail positionDetail;
     @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "user_no")
     private UserDetail userDetail;
 }
