@@ -30,4 +30,5 @@ class MoimParticipantsRejectRepositoryTest {
 
         test.forEach(moimParticipantsReject -> moimParticipantsRejectRepository.save(moimParticipantsReject));
     }
+
 }
