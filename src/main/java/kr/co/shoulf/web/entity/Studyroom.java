@@ -28,6 +28,4 @@ public class Studyroom {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
     private StudyroomDetail studyroomDetail;
-//    @OneToMany(fetch = FetchType.EAGER)
-//    private Studycafe studycafe.studycafeNo;
 }
