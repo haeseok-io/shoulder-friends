@@ -20,11 +20,9 @@ public class MemberCommute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commuteNo;
-    @UpdateTimestamp
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date inTime;
-    @UpdateTimestamp
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date outTime;
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
