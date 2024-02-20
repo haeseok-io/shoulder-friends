@@ -24,13 +24,16 @@ public class MoimParticipants {
     private String job;
     @Column(nullable = false)
     private Integer status;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no", nullable = false)
     private Users users;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moim_headcount_no", nullable = false)
     private MoimHeadcount moimHeadcount;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moim_no", nullable = false)
     private Moim moim;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @PrimaryKeyJoinColumn
+    private MoimParticipantsReject moimParticipantsReject;
 }

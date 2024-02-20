@@ -18,7 +18,11 @@ public class UserJob {
     private Long userNo;
     private Integer level;
     private Integer career;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_detail_no", nullable = false)
     private PositionDetail positionDetail;
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "user_no")
+    private UserDetail userDetail;
 }
