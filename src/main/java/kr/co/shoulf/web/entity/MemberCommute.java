@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.Date;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -20,14 +22,14 @@ public class MemberCommute {
     private Long commuteNo;
     @UpdateTimestamp
     @Temporal(TemporalType.TIME)
-    private String inTime;
+    private Date inTime;
     @UpdateTimestamp
     @Temporal(TemporalType.TIME)
-    private String outTime;
+    private Date outTime;
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private String date;
+    private Date date;
     @Column(length = 20, nullable = false)
     private String status;
 

@@ -24,6 +24,8 @@ public class Studyroom {
     @ManyToOne
     @JoinColumn(name = "studycafe_no", nullable = false)
     private Studycafe studycafe;
-//    @OneToMany(fetch = FetchType.EAGER)
-//    private Studycafe studycafe.studycafeNo;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn
+    private StudyroomDetail studyroomDetail;
 }

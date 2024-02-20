@@ -25,6 +25,7 @@ public class StudyroomDetail {
     private String wboard;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "studyroom_no")
+    @MapsId
+    @JoinColumn(name = "studyroomNo")
     private Studyroom studyroom;
 }

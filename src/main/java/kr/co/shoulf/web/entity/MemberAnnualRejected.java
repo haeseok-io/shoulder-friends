@@ -20,6 +20,7 @@ public class MemberAnnualRejected {
     private String content;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @MapsId
     @JoinColumn(name = "annual_detail_no")
     MemberAnnualDetail memberAnnualDetail;
 
