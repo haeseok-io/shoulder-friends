@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "member_annual_rejected")
 public class MemberAnnualRejected {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long  annualDetailNo;
     @Column(length = 500)
     private String content;
