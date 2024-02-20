@@ -8,8 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class MoimDetailRepositoryTest {
     @Autowired
@@ -59,6 +57,26 @@ class MoimDetailRepositoryTest {
         list.add(MoimDetail.builder().moim(moim9).detailDesc("인공지능~").moimImg("https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png").fee(20000).offAddr("대구").online(onlineList.get(0)).category(categoryList.get(11)).build());
         list.add(MoimDetail.builder().moim(moim10).detailDesc("SNS~").moimImg("https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png").fee(20000).offAddr("강릉").online(onlineList.get(0)).category(categoryList.get(4)).build());
         list.forEach(moimDetail -> moimDetailRepository.save(moimDetail));
+    }
+
+    @Test
+    void insertOne(){
+        onlineList = onlineRepository.findAll();
+        categoryList = categoryRepository.findAll();
+        studyCategoryList = studyCategoryRepository.findAll();
+
+        Users user = Users.builder().email("ysm@naver.com").pass("5545").nickname("심온").role("ROLE_USER").build();
+        userRepository.save(user);
+
+        Moim moim = Moim.builder().type("proejct").subject("프로젝트7").shortDesc("레시피앱 개발").users(user).build();
+        MoimDetail moimDetail = MoimDetail.builder()
+                .moim(moim).detailDesc("레시피앱~")
+                .moimImg("https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png")
+                .fee(10000).offAddr("일산")
+                .online(onlineList.get(0))
+                .category(categoryList.get(10))
+                .build();
+        moimDetailRepository.save(moimDetail);
     }
 
 }
