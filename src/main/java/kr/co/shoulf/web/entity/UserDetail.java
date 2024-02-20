@@ -26,8 +26,13 @@ public class UserDetail {
     @Column
     private String blogLink;
 
-    @ToString.Exclude
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @OneToOne
+    @MapsId
     @JoinColumn(name = "user_no")
     private Users users;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private UserJob userJob;
 }
