@@ -34,11 +34,11 @@ public class Message {
     @Column(name = "regdate", updatable = false)
     private LocalDateTime regdate;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_no")
     private Users receiver;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_no")
     private Users sender;
 }
