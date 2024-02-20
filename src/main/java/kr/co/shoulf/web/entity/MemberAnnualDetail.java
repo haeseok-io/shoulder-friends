@@ -28,7 +28,7 @@ public class MemberAnnualDetail {
     private Integer status;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "annual_detail_no")
+    @PrimaryKeyJoinColumn
     private MemberAnnualRejected memberAnnualRejected;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
