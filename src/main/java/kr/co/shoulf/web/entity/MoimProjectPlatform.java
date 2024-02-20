@@ -17,11 +17,11 @@ public class MoimProjectPlatform {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long moimProjectPlaformNo;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "platformNo", nullable = false)
     private Platform platform;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moimNo", nullable = false)
     private MoimDetail moimDetail;
 }

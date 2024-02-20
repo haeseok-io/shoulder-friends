@@ -23,12 +23,18 @@ public class Moim {
     private String subject;
     @Column
     private String shortDesc;
-    @Column(nullable = false)
+
+    @Column
     @ColumnDefault("1") // 기본값
     private Integer status;
 
     @Column
+    @ColumnDefault("0") // 기본값
     private Integer hits;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn
+    private MoimDetail moimDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userNo", nullable = false)
