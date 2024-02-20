@@ -37,7 +37,7 @@ public class Payment {
     @Column(nullable = false)
     private LocalDateTime payDate;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reservation_no")
     private Reservation reservation;
 

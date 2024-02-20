@@ -26,7 +26,7 @@ public class Users {
     @Column(length = 20, columnDefinition = "varchar(20) default 'ROLE_USER'")
     private String role;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
     private UserDetail userDetail;
 }
