@@ -37,7 +37,7 @@ public class Moim {
     private MoimDetail moimDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userNo", nullable = false)
+    @JoinColumn(name = "user_no", nullable = false)
     private Users users;
 }
 
