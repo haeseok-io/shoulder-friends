@@ -16,7 +16,7 @@ public class MoimParticipantsReject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long moimParticipantsRejectNo;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moim_participants_no", nullable = false)
     private MoimParticipants moimParticipants;
     @Column(nullable = false)

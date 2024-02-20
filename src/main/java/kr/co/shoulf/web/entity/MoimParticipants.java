@@ -33,7 +33,7 @@ public class MoimParticipants {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moim_no", nullable = false)
     private Moim moim;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @PrimaryKeyJoinColumn
     private MoimParticipantsReject moimParticipantsReject;
 }
