@@ -16,10 +16,11 @@ public class UserOnline {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userOnlineNo;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
     @JoinColumn(name = "user_no", nullable = false)
     private UserDetail userDetail;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "online_no", nullable = false)
     private Online online;
 }
