@@ -35,9 +35,15 @@ public class Reservation {
     @Column(length = 20)
     private String ip;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
     private Users users;
 
-    // 일정과 공간에 대한 설정 해야함
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meeting_no")
+    private Meeting meeting;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "studyroom_no")
+    private Studyroom studyroom;
 }
