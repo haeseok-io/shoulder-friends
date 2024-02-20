@@ -19,7 +19,7 @@ public class UserLanguage {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
     private UserDetail userDetail;
 }
