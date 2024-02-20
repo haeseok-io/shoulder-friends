@@ -25,4 +25,8 @@ public class Users {
     private String nickname;
     @Column(length = 20, columnDefinition = "varchar(20) default 'ROLE_USER'")
     private String role;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private UserDetail userDetail;
 }
