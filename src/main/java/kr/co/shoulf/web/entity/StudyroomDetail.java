@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Data
@@ -23,6 +22,8 @@ public class StudyroomDetail {
     private String beam;
     @Column(length = 2, columnDefinition = "char(2) default 'N'")
     private String wboard;
+    @Column
+    private Integer socket;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
