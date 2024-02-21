@@ -4,6 +4,7 @@ import kr.co.shoulf.web.entity.Checklist;
 import kr.co.shoulf.web.entity.Moim;
 import kr.co.shoulf.web.entity.Users;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,5 +32,11 @@ class ChecklistRepositoryTest {
         list.add(Checklist.builder().contents("데이터베이스 설계").status(1).moim(moim.get()).users(user1.get()).build());
         list.add(Checklist.builder().contents("웹서버 구축").status(1).moim(moim.get()).users(user9.get()).build());
         list.forEach(checklist -> checklistRepository.save(checklist));
+    }
+
+    @Test
+    void selectOne(){
+        Checklist checklist = checklistRepository.findAll().stream().findFirst().get();
+        Assertions.assertEquals("와이어프레임", checklist.getContents());
     }
 }
