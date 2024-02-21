@@ -28,4 +28,10 @@ class MeetingRepositoryTest {
                 .build();
         meetingRepository.save(meeting);
     }
+
+    @Test
+    void selectOne(){
+        Meeting meeting = meetingRepository.findAll().stream().findFirst().get();
+        assertEquals("회의", meeting.getContents());
+    }
 }
