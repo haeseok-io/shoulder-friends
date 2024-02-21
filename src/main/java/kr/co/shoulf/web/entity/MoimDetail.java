@@ -29,19 +29,19 @@ public class MoimDetail {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "moimNo")
+    @JoinColumn(name = "moim_no")
     private Moim moim;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "onlineNo", nullable = false)
+    @JoinColumn(name = "online_no", nullable = false)
     private Online online;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "catrgoryNo")
+    @JoinColumn(name = "catrgory_no")
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "studyCategoryNo")
+    @JoinColumn(name = "study_category_no")
     private StudyCategory studyCategory;
 
 

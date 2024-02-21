@@ -29,6 +29,6 @@ class MemberRepositoryTest {
         test.add(Member.builder().id("iii").pw("9999").name("맹구").post("49700").addr("서울시 광진구").phone("1099999999").hiredate("2024-01-01").role("ROLE_EMP").build());
         test.add(Member.builder().id("jjj").pw("1010").name("철수").post("60880").addr("서울시 강남구").phone("1010101010").hiredate("2024-01-01").role("ROLE_EMP").build());
 
-        test.forEach(member -> memberRepository.save(member));
+        memberRepository.saveAll(test);
     }
 }

@@ -20,6 +20,6 @@ public class MoimLanguage {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "moimNo", nullable = false)
+    @JoinColumn(name = "moim_no", nullable = false)
     private MoimDetail moimDetail;
 }
