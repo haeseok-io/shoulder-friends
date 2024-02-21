@@ -19,9 +19,9 @@ public class StudycafeDetail {
     @Column(nullable = false)
     private String detail;
     @Column(nullable = false)
-    private Integer x;
+    private Double x;
     @Column(nullable = false)
-    private Integer y;
+    private Double y;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
