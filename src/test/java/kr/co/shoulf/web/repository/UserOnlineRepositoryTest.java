@@ -1,9 +1,6 @@
 package kr.co.shoulf.web.repository;
 
-import kr.co.shoulf.web.entity.Online;
-import kr.co.shoulf.web.entity.UserDetail;
-import kr.co.shoulf.web.entity.UserInterestCategory;
-import kr.co.shoulf.web.entity.UserOnline;
+import kr.co.shoulf.web.entity.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +15,7 @@ class UserOnlineRepositoryTest {
     @Autowired
     private UserOnlineRepository userOnlineRepository;
     @Autowired
-    private UserDetailRepository userDetailRepository;
+    private UserRepository userRepository;
     @Autowired
     private OnlineRepository onlineRepository;
 
@@ -26,19 +23,19 @@ class UserOnlineRepositoryTest {
     @DisplayName("회원 온/오프라인 추가")
     void testInsertUserOnline() {
         ArrayList<UserOnline> test = new ArrayList<>();
-        List<UserDetail> userDetails = userDetailRepository.findAll();
+        List<Users> users = userRepository.findAll();
         List<Online> onlines = onlineRepository.findAll();
 
-        test.add(UserOnline.builder().userDetail(userDetails.get(0)).online(onlines.get(0)).build());
-        test.add(UserOnline.builder().userDetail(userDetails.get(1)).online(onlines.get(0)).build());
-        test.add(UserOnline.builder().userDetail(userDetails.get(2)).online(onlines.get(0)).build());
-        test.add(UserOnline.builder().userDetail(userDetails.get(3)).online(onlines.get(0)).build());
-        test.add(UserOnline.builder().userDetail(userDetails.get(4)).online(onlines.get(0)).build());
-        test.add(UserOnline.builder().userDetail(userDetails.get(5)).online(onlines.get(0)).build());
-        test.add(UserOnline.builder().userDetail(userDetails.get(6)).online(onlines.get(1)).build());
-        test.add(UserOnline.builder().userDetail(userDetails.get(7)).online(onlines.get(2)).build());
-        test.add(UserOnline.builder().userDetail(userDetails.get(8)).online(onlines.get(0)).build());
-        test.add(UserOnline.builder().userDetail(userDetails.get(9)).online(onlines.get(0)).build());
+        test.add(UserOnline.builder().users(users.get(0)).online(onlines.get(0)).build());
+        test.add(UserOnline.builder().users(users.get(1)).online(onlines.get(0)).build());
+        test.add(UserOnline.builder().users(users.get(2)).online(onlines.get(0)).build());
+        test.add(UserOnline.builder().users(users.get(3)).online(onlines.get(0)).build());
+        test.add(UserOnline.builder().users(users.get(4)).online(onlines.get(0)).build());
+        test.add(UserOnline.builder().users(users.get(5)).online(onlines.get(0)).build());
+        test.add(UserOnline.builder().users(users.get(6)).online(onlines.get(1)).build());
+        test.add(UserOnline.builder().users(users.get(7)).online(onlines.get(2)).build());
+        test.add(UserOnline.builder().users(users.get(8)).online(onlines.get(0)).build());
+        test.add(UserOnline.builder().users(users.get(9)).online(onlines.get(0)).build());
 
         test.forEach(userOnline -> userOnlineRepository.save(userOnline));
 
