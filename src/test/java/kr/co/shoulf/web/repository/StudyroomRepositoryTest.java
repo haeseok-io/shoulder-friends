@@ -22,25 +22,25 @@ class StudyroomRepositoryTest {
     void testInsertStudyroom () {
         ArrayList<Studyroom> test = new ArrayList<>();
 
-        test.add(Studyroom.builder().name("101호").price(40000).studycafe(studycafeRepository.findById(1L).get()).build());
-        test.add(Studyroom.builder().name("102호").price(50000).studycafe(studycafeRepository.findById(1L).get()).build());
-        test.add(Studyroom.builder().name("103호").price(80000).studycafe(studycafeRepository.findById(1L).get()).build());
-        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(2L).get()).build());
-        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(2L).get()).build());
-        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(3L).get()).build());
-        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(3L).get()).build());
-        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(4L).get()).build());
-        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(4L).get()).build());
-        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(5L).get()).build());
-        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(5L).get()).build());
-        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(6L).get()).build());
-        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(6L).get()).build());
-        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(7L).get()).build());
-        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(7L).get()).build());
-        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(8L).get()).build());
-        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(8L).get()).build());
-        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(9L).get()).build());
-        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(9L).get()).build());
+        test.add(Studyroom.builder().name("101호").price(40000).studycafe(studycafeRepository.findById(1L).orElse(null)).build());
+        test.add(Studyroom.builder().name("102호").price(50000).studycafe(studycafeRepository.findById(1L).orElse(null)).build());
+        test.add(Studyroom.builder().name("103호").price(80000).studycafe(studycafeRepository.findById(1L).orElse(null)).build());
+        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(2L).orElse(null)).build());
+        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(2L).orElse(null)).build());
+        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(3L).orElse(null)).build());
+        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(3L).orElse(null)).build());
+        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(4L).orElse(null)).build());
+        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(4L).orElse(null)).build());
+        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(5L).orElse(null)).build());
+        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(5L).orElse(null)).build());
+        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(6L).orElse(null)).build());
+        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(6L).orElse(null)).build());
+        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(7L).orElse(null)).build());
+        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(7L).orElse(null)).build());
+        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(8L).orElse(null)).build());
+        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(8L).orElse(null)).build());
+        test.add(Studyroom.builder().name("101호").price(50000).studycafe(studycafeRepository.findById(9L).orElse(null)).build());
+        test.add(Studyroom.builder().name("102호").price(80000).studycafe(studycafeRepository.findById(9L).orElse(null)).build());
 
         studyroomRepository.saveAll(test);
 
