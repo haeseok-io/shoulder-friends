@@ -1,5 +1,6 @@
 package kr.co.shoulf.web.repository;
 
+import kr.co.shoulf.web.entity.Moim;
 import kr.co.shoulf.web.entity.MoimDetail;
 import kr.co.shoulf.web.entity.MoimProjectLink;
 import org.junit.jupiter.api.Test;
@@ -16,15 +17,15 @@ class MoimProjectLinkRepositoryTest {
     @Autowired
     MoimProjectLinkRepository moimProjectLinkRepository;
     @Autowired
-    MoimDetailRepository moimDetailRepository;
+    MoimRepository moimRepository;
 
     @Test
-    void insertData(){
-        List<MoimDetail> moimDetailList = moimDetailRepository.findAll();
+    void insertData() {
+        List<Moim> moimList = moimRepository.findAll();
         List<MoimProjectLink> list = new ArrayList<>();
-        list.add(MoimProjectLink.builder().url("https://github.com/bbb").moimDetail(moimDetailList.get(1)).build());
-        list.add(MoimProjectLink.builder().url("https://github.com/fff").moimDetail(moimDetailList.get(5)).build());
-        list.add(MoimProjectLink.builder().url("https://github.com/iii").moimDetail(moimDetailList.get(8)).build());
+        list.add(MoimProjectLink.builder().url("https://github.com/bbb").moim(moimList.get(1)).build());
+        list.add(MoimProjectLink.builder().url("https://github.com/fff").moim(moimList.get(5)).build());
+        list.add(MoimProjectLink.builder().url("https://github.com/iii").moim(moimList.get(8)).build());
         list.forEach(moimProjectLink -> moimProjectLinkRepository.save(moimProjectLink));
     }
 
