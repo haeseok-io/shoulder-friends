@@ -18,7 +18,7 @@ public class UserInterestCategory {
     private Long userInterestCategoryNo;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no", nullable = false)
-    private UserDetail userDetail;
+    private Users users;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_no", nullable = false)
     private Category category;

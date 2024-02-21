@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.catalina.User;
 
 @Entity
 @Table(name = "user_job")
@@ -25,5 +26,5 @@ public class UserJob {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
-    private UserDetail userDetail;
+    private Users users;
 }
