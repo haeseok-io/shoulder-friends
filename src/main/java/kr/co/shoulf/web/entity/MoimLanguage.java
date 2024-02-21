@@ -21,5 +21,5 @@ public class MoimLanguage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moim_no", nullable = false)
-    private MoimDetail moimDetail;
+    private Moim moim;
 }
