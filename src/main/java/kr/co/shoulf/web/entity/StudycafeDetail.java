@@ -21,7 +21,7 @@ public class StudycafeDetail {
     @Column(nullable = false)
     private Integer x;
     @Column(nullable = false)
-    private Integer Y;
+    private Integer y;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
