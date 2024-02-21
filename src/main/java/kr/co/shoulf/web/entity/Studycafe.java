@@ -26,12 +26,12 @@ public class Studycafe {
     private String addr;
     @Column(length = 200)
     private String mainImg;
+    @Column(nullable = false)
+    private Double x;
+    @Column(nullable = false)
+    private Double y;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_no")
     private Member member;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private StudycafeDetail studycafeDetail;
 }
