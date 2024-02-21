@@ -1,10 +1,7 @@
 package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -36,6 +33,7 @@ public class Moim {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
+    @ToString.Exclude
     private MoimDetail moimDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
