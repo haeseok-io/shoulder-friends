@@ -22,6 +22,6 @@ public class MoimProjectPlatform {
     private Platform platform;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "moimNo", nullable = false)
-    private MoimDetail moimDetail;
+    @JoinColumn(name = "moim_no", nullable = false)
+    private Moim moim;
 }

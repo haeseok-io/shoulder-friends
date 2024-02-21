@@ -1,5 +1,6 @@
 package kr.co.shoulf.web.repository;
 
+import kr.co.shoulf.web.entity.Moim;
 import kr.co.shoulf.web.entity.MoimDetail;
 import kr.co.shoulf.web.entity.MoimProjectPlatform;
 import kr.co.shoulf.web.entity.Platform;
@@ -19,18 +20,19 @@ class MoimProjectPlatformRepositoryTest {
     @Autowired
     PlatformRepository platformRepository;
     @Autowired
-    MoimDetailRepository moimDetailRepository;
+    MoimRepository moimRepository;
+
     @Test
     void insertData(){
         List<Platform> platformList = platformRepository.findAll();
-        List<MoimDetail> moimDetailList = moimDetailRepository.findAll();
+        List<Moim> moimList = moimRepository.findAll();
         List<MoimProjectPlatform> list = new ArrayList<>();
-        list.add(MoimProjectPlatform.builder().platform(platformList.get(0)).moimDetail(moimDetailList.get(0)).build());
-        list.add(MoimProjectPlatform.builder().platform(platformList.get(0)).moimDetail(moimDetailList.get(1)).build());
-        list.add(MoimProjectPlatform.builder().platform(platformList.get(1)).moimDetail(moimDetailList.get(4)).build());
-        list.add(MoimProjectPlatform.builder().platform(platformList.get(0)).moimDetail(moimDetailList.get(5)).build());
-        list.add(MoimProjectPlatform.builder().platform(platformList.get(2)).moimDetail(moimDetailList.get(8)).build());
-        list.add(MoimProjectPlatform.builder().platform(platformList.get(3)).moimDetail(moimDetailList.get(9)).build());
+        list.add(MoimProjectPlatform.builder().platform(platformList.get(0)).moim(moimList.get(0)).build());
+        list.add(MoimProjectPlatform.builder().platform(platformList.get(0)).moim(moimList.get(1)).build());
+        list.add(MoimProjectPlatform.builder().platform(platformList.get(1)).moim(moimList.get(4)).build());
+        list.add(MoimProjectPlatform.builder().platform(platformList.get(0)).moim(moimList.get(5)).build());
+        list.add(MoimProjectPlatform.builder().platform(platformList.get(2)).moim(moimList.get(8)).build());
+        list.add(MoimProjectPlatform.builder().platform(platformList.get(3)).moim(moimList.get(9)).build());
         list.forEach(moimProjectPlatform -> moimProjectPlatformRepository.save(moimProjectPlatform));
     }
 
