@@ -21,5 +21,5 @@ public class UserPortfolio {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
-    private UserDetail userDetail;
+    private Users users;
 }
