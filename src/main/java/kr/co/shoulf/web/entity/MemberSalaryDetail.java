@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -19,8 +21,10 @@ public class MemberSalaryDetail {
     @Column(nullable = false)
     private Integer paySal;
     private Integer payComm;
+
+    @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private String payDate;
+    private Date payDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "salary_no")
