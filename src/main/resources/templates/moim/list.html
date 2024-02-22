@@ -4,20 +4,29 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 <body>
 <!--모임 리스트에 가져와야할 정보
     Moim(type, category, subject, shortDesc), MoimLanguage, MoimHeadcount, MoimLike
     검색기능 -> Position, PositionDetail, Moim(status)
 -->
-    <div th:each="list : ${moimList}">
-        <p>[[${list.moimNo}]]</p>
-        <p>[[${list.moim.type}]]</p>
-        <p>[[${list.moim.subject}]]</p>
-        <p>[[${list.moim.shortDesc}]]</p>
-        <th:block th:if="${list.moim.users!=null}">
-            <p>리더 이메일 : [[${list.moim.users.email}]]</p>
-            <p>리더 닉네임 : [[${list.moim.users.nickname}]]</p>
-        </th:block>
+    <div class="container">
+        <div class="newMoim">
+            <div th:each="moims : ${newMoims}">
+                <img th:src="${moims.moimImg}" alt="">
+            </div>
+        </div>
+        <div th:each="list : ${moimList}">
+            <p>[[${list.moimNo}]]</p>
+            <p>[[${list.moim.type}]]</p>
+            <p>[[${list.moim.subject}]]</p>
+            <p>[[${list.moim.shortDesc}]]</p>
+            <th:block th:if="${list.moim.users!=null}">
+                <p>리더 이메일 : [[${list.moim.users.email}]]</p>
+                <p>리더 닉네임 : [[${list.moim.users.nickname}]]</p>
+            </th:block>
+        </div>
     </div>
 </body>
 </html>
