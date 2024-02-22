@@ -6,9 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Time;
 
 @Entity
 @Data
@@ -20,15 +20,15 @@ public class MemberCommute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commuteNo;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date inTime;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date outTime;
+    @Temporal(TemporalType.TIME)
+    private Time inTime;
+    @Temporal(TemporalType.TIME)
+    private Time outTime;
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date date;
-    @Column(length = 20, nullable = false)
+    @Column(length = 20)
     private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
