@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "board")
@@ -28,9 +28,10 @@ public class Board {
     @Column(nullable = false, length = 20)
     private String ip;
 
-    @CreatedDate
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "regdate", updatable = false)
-    private LocalDateTime regdate;
+    private Timestamp regdate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
