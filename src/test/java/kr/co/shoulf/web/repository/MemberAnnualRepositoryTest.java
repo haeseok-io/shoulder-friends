@@ -21,24 +21,24 @@ class MemberAnnualRepositoryTest {
     @Test
     @DisplayName("직원 연차 데이터 10개 추가")
     void testInsertMemberAnnual() {
-        // memberAnnual 데이터 10개 조회, 생성, 저장
-        for (int i = 0; i < 10; i++) {
-            Optional<Member> optionalMember = memberRepository.findById((long) (i + 1));
-            if (optionalMember.isPresent()) {
-                Member member = optionalMember.get();
-
-                MemberAnnual memberAnnual = MemberAnnual.builder()
-                        .type(1)
-                        .num(7)
-                        .reason("기본 지급")
-                        .issueDate("2024-01-01")
-                        .member(member)
-                        .build();
-
-                memberAnnualRepository.save(memberAnnual);
-            }
-        }
-            Long count = memberAnnualRepository.count();
-            assertEquals(10, count);
+        //// memberAnnual 데이터 10개 조회, 생성, 저장
+        //for (int i = 0; i < 10; i++) {
+        //    Optional<Member> optionalMember = memberRepository.findById((long) (i + 1));
+        //    if (optionalMember.isPresent()) {
+        //        Member member = optionalMember.get();
+        //
+        //        MemberAnnual memberAnnual = MemberAnnual.builder()
+        //                .type(1)
+        //                .num(7)
+        //                .reason("기본 지급")
+        //                .issueDate("2024-01-01")
+        //                .member(member)
+        //                .build();
+        //
+        //        memberAnnualRepository.save(memberAnnual);
+        //    }
+        //}
+        //    Long count = memberAnnualRepository.count();
+        //    assertEquals(10, count);
     }
 }

@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "meeting")
@@ -21,7 +21,8 @@ public class Meeting {
     private Long meetingNo;
 
     @Column(nullable = false)
-    private LocalDateTime meetDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp meetDate;
 
     @Column(nullable = false)
     private String addr;
@@ -31,7 +32,8 @@ public class Meeting {
 
     @Column(nullable = false)
     @CreationTimestamp
-    private LocalDateTime regdate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp regdate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moimNo", nullable = false)

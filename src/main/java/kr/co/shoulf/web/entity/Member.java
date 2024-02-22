@@ -7,6 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import java.sql.Date;
 
 @Entity
 @Data
@@ -14,6 +18,8 @@ import org.hibernate.annotations.CreationTimestamp;
 @NoArgsConstructor
 @Builder
 @Table(name = "member")
+@DynamicInsert
+@DynamicUpdate
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,11 +36,13 @@ public class Member {
     private String addr;
     @Column(length = 20)
     private String phone;
+
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private String hiredate;
-    @Column(length = 20, nullable = false,
-            columnDefinition = "varchar(20) default 'ROLE_NONE'")
+    private Date hiredate;
+
+    @Column(length = 20, nullable = false)
+    @ColumnDefault("'ROLE_NONE'")
     private String role;
 }

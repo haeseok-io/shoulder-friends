@@ -16,10 +16,12 @@ public class MoimHeadcount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long moimHeadcountNo;
+    private Integer personnel;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moim_no", nullable = false)
     private Moim moim;
-    private Integer personnel;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_detail_no")
     private PositionDetail positionDetail;

@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 public class PositionDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long PositionDetailNo;
+    private Integer PositionDetailNo;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Position_no", nullable = false)
+    @JoinColumn(name = "position_no", nullable = false)
     private Position position;
     @Column(length = 100, nullable = false)
     private String middleName;
