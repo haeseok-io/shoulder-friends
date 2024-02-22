@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>cafe_list</title>
+</head>
+<body>
+    <div>
+        <h2>숙소 리스트</h2>
+        <div th:each="dto:${listCafe}">
+            <a th:href="@{/study/room_list(studycafeNo=${dto.studycafeNo})}"><img th:src="${dto.mainImg}"></a>
+            <p th:text="${dto.name}"></p>
+        </div>
+    </div>
+</body>
+</html>

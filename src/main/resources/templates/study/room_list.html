@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>cafe_detail</title>
+</head>
+<body>
+<div>
+    <h2>스터디 카페 상세</h2>
+    <div></div>
+    <div>
+        <img th:src="${oneCafe.mainImg}">
+        <p th:text="${oneCafe.name}"></p>
+        <p th:text="${oneCafe.shortDesc}"></p>
+        <p th:text="${oneCafe.post}"></p>
+        <p th:text="${oneCafe.addr}"></p>
+    </div>
+    <div>
+        <div th:each="dto : ${listRoom}">
+            <p th:text="${dto.name}"></p>
+            <p th:text="${dto.price}"></p>
+            <div th:text="${dto.studyroomDetail}">[[${maxNum}]]</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
