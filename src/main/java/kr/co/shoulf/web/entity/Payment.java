@@ -6,8 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 @Entity
 @Table(name = "payment")
@@ -15,14 +17,16 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentNo;
     @Column(nullable = false)
-    private Integer approvalNum;
+    private Long approvalNum;
     @Column(nullable = false)
-    private Integer cardNum;
+    private Long cardNum;
     @Column(nullable = false, length = 30)
     private String name;
     @Column(nullable = false, length = 200)
@@ -31,11 +35,13 @@ public class Payment {
     private String email;
     @Column(nullable = false)
     private Integer price;
+    @Column
     @ColumnDefault("1")
     private Integer status;
 
+    @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private LocalDateTime payDate;
+    private Date payDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reservation_no")
