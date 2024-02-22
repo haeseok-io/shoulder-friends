@@ -17,7 +17,12 @@ public class MoimSerivceImple implements MoimService{
     private final MoimDetailRepository moimDetailRepository;
 
     @Override
-    public List<MoimDetail> getList() {
+    public List<MoimDetail> readAll() {
         return moimDetailRepository.findAll().stream().toList();
+    }
+
+    @Override
+    public List<MoimDetail> readNewMoim(int moims) {
+        return moimDetailRepository.readNewMoim(moims);
     }
 }
