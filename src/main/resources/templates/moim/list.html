@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--모임 리스트에 가져와야할 정보
+    Moim(type, category, subject, shortDesc), MoimLanguage, MoimHeadcount, MoimLike
+    검색기능 -> Position, PositionDetail, Moim(status)
+-->
+    <div th:each="list : ${moimList}">
+        <p>[[${list.moimNo}]]</p>
+        <p>[[${list.moim.type}]]</p>
+        <p>[[${list.moim.subject}]]</p>
+        <p>[[${list.moim.shortDesc}]]</p>
+        <th:block th:if="${list.moim.users!=null}">
+            <p>리더 이메일 : [[${list.moim.users.email}]]</p>
+            <p>리더 닉네임 : [[${list.moim.users.nickname}]]</p>
+        </th:block>
+    </div>
+</body>
+</html>
