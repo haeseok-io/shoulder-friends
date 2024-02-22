@@ -6,10 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "reservation")
@@ -17,17 +19,21 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationNo;
 
+    @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private LocalDate checkin;
+    private Date checkin;
 
-    @CreatedDate
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)
-    private LocalDateTime regdate;
+    private Timestamp regdate;
 
     @ColumnDefault("1")
     private Integer status;
