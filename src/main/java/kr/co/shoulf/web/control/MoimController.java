@@ -19,8 +19,10 @@ public class MoimController {
 
     @GetMapping("/list")
     public String moimList(Model model){
-        List<MoimDetail> moimList = moimService.getList();
+        List<MoimDetail> moimList = moimService.readAll();
+        List<MoimDetail> newMoims = moimService.readNewMoim(2);
         model.addAttribute("moimList", moimList);
+        model.addAttribute("newMoims", newMoims);
         System.out.println(moimList);
         return "moim/list";
     }
