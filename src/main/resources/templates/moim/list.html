@@ -13,19 +13,30 @@
 -->
     <div class="container">
         <div class="newMoim">
+            <h3>신규 모임</h3>
             <div th:each="moims : ${newMoims}">
-                <img th:src="${moims.moimImg}" alt="">
+                <img th:src="${moims.moimDetail.moimImg}" alt="">
+                <p>모임 번호 : [[${moims.moimNo}]]</p>
+                <p>모임 유형 : [[${moims.type}]]</p>
+                <p>제목 : [[${moims.subject}]]</p>
+                <p>요약설명 : [[${moims.shortDesc}]]</p>
+                <th:block th:if="${moims.users!=null}">
+                    <p>리더 이메일 : [[${moims.users.email}]]</p>
+                    <p>리더 닉네임 : [[${moims.users.nickname}]]</p>
+                </th:block>
+                <hr>
             </div>
         </div>
-        <div th:each="list : ${moimList}">
-            <p>[[${list.moimNo}]]</p>
-            <p>[[${list.moim.type}]]</p>
-            <p>[[${list.moim.subject}]]</p>
-            <p>[[${list.moim.shortDesc}]]</p>
-            <th:block th:if="${list.moim.users!=null}">
-                <p>리더 이메일 : [[${list.moim.users.email}]]</p>
-                <p>리더 닉네임 : [[${list.moim.users.nickname}]]</p>
+        <div class="allMoim" th:each="moim : ${moimList}">
+            <p>모임 번호 : [[${moim.moimNo}]]</p>
+            <p>모임 유형 : [[${moim.type}]]</p>
+            <p>제목 : [[${moim.subject}]]</p>
+            <p>요약설명 : [[${moim.shortDesc}]]</p>
+            <th:block th:if="${moim.users!=null}">
+                <p>리더 이메일 : [[${moim.users.email}]]</p>
+                <p>리더 닉네임 : [[${moim.users.nickname}]]</p>
             </th:block>
+            <hr>
         </div>
     </div>
 </body>
