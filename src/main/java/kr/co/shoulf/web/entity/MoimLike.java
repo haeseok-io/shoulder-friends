@@ -18,10 +18,10 @@ public class MoimLike {
     private Long likeNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userNo", nullable = false)
-    private Users user;
+    @JoinColumn(name = "user_no", nullable = false)
+    private Users users;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "moimNo", nullable = false)
+    @JoinColumn(name = "moim_no", nullable = false)
     private Moim moim;
 }
