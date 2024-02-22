@@ -33,7 +33,6 @@ public class Moim {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
-    @ToString.Exclude
     private MoimDetail moimDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
