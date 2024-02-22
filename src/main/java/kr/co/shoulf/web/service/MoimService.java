@@ -6,5 +6,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 public interface MoimService {
-    List<MoimDetail> getList();
+    List<MoimDetail> readAll();
+    List<MoimDetail> readNewMoim(int moims);
 }
