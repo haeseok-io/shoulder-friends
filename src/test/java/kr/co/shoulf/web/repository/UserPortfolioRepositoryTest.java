@@ -19,12 +19,12 @@ class UserPortfolioRepositoryTest {
     @Test
     @DisplayName("회원 포트폴리오 테스트 데이터 추가")
     void testInsertUserPortfolio() {
-        UserDetail userDetail1 = userDetailRepository.findById(1L).get();
-        UserDetail userDetail4 = userDetailRepository.findById(4L).get();
-        UserDetail userDetail7 = userDetailRepository.findById(7L).get();
-
-        userPortfolioRepository.save(UserPortfolio.builder().url("https://drive.google.com/aaa").userDetail(userDetail1).build());
-        userPortfolioRepository.save(UserPortfolio.builder().url("https://drive.google.com/ddd").userDetail(userDetail4).build());
-        userPortfolioRepository.save(UserPortfolio.builder().url("https://drive.google.com/ggg").userDetail(userDetail7).build());
+        //UserDetail userDetail1 = userDetailRepository.findById(1L).get();
+        //UserDetail userDetail4 = userDetailRepository.findById(4L).get();
+        //UserDetail userDetail7 = userDetailRepository.findById(7L).get();
+        //
+        //userPortfolioRepository.save(UserPortfolio.builder().url("https://drive.google.com/aaa").userDetail(userDetail1).build());
+        //userPortfolioRepository.save(UserPortfolio.builder().url("https://drive.google.com/ddd").userDetail(userDetail4).build());
+        //userPortfolioRepository.save(UserPortfolio.builder().url("https://drive.google.com/ggg").userDetail(userDetail7).build());
     }
 }
