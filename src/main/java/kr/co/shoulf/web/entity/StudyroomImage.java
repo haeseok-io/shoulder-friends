@@ -21,5 +21,5 @@ public class StudyroomImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "studyroom_no")
-    private StudyroomDetail studyroomDetail;
+    private Studyroom studyroom;
 }
