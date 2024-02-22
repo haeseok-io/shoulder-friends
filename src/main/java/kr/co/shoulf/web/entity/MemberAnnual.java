@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.sql.Date;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -22,10 +24,11 @@ public class MemberAnnual {
     @Column(nullable = false)
     private Integer num;
     private String reason;
+
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private String issueDate;
+    private Date issueDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_no")
