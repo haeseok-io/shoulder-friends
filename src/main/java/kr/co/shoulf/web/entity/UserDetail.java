@@ -30,5 +30,6 @@ public class UserDetail {
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "user_no")
+    @ToString.Exclude
     private Users users;
 }

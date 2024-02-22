@@ -1,10 +1,7 @@
 package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
@@ -23,6 +20,7 @@ public class Studyroom {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "studycafe_no", nullable = false)
+    @ToString.Exclude
     private Studycafe studycafe;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

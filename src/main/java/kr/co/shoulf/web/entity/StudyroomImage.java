@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @AllArgsConstructor
@@ -21,5 +22,6 @@ public class StudyroomImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "studyroom_no")
+    @ToString.Exclude
     private Studyroom studyroom;
 }

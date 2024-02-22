@@ -1,10 +1,7 @@
 package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
@@ -22,9 +19,11 @@ public class MemberAnnualRejected {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reject_member_no")
+    @ToString.Exclude
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "annual_detail_no")
+    @ToString.Exclude
     MemberAnnualDetail memberAnnualDetail;
 }

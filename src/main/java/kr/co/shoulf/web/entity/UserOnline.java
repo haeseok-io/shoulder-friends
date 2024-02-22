@@ -1,10 +1,7 @@
 package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "user_online")
@@ -16,10 +13,14 @@ public class UserOnline {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userOnlineNo;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no", nullable = false)
+    @ToString.Exclude
     private Users users;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "online_no", nullable = false)
+    @ToString.Exclude
     private Online online;
 }

@@ -1,10 +1,7 @@
 package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "moim_project_paltform")
@@ -19,9 +16,11 @@ public class MoimProjectPlatform {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "platformNo", nullable = false)
+    @ToString.Exclude
     private Platform platform;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moim_no", nullable = false)
+    @ToString.Exclude
     private Moim moim;
 }

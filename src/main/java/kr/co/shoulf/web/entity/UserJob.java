@@ -1,10 +1,7 @@
 package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.apache.catalina.User;
 
 @Entity
@@ -22,9 +19,11 @@ public class UserJob {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_detail_no", nullable = false)
+    @ToString.Exclude
     private PositionDetail positionDetail;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
+    @ToString.Exclude
     private Users users;
 }

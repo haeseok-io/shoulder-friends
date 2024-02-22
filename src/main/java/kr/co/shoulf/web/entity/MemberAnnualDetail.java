@@ -1,10 +1,7 @@
 package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
@@ -27,17 +24,18 @@ public class MemberAnnualDetail {
     @Column(nullable = false)
     private Integer status;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private MemberAnnualRejected memberAnnualRejected;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_no")
+    @ToString.Exclude
     private Member member;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "approval_member_no")
+    @ToString.Exclude
     private Member approvalMember;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "annual_no")
+    @ToString.Exclude
     private MemberAnnual memberAnnual;
 }
