@@ -3,17 +3,35 @@
 <th:block th:fragment="header">
     <header>
         <div class="container">
-            <h1 class="logo">
-                <a href="/">
-                    <img src="/images/logo.png" alt="">
-                </a>
-            </h1>
+            <div class="logo">
+                <h1>
+                    <a href="/"><img src="/images/logo.png" alt=""></a>
+                </h1>
+            </div>
 
             <div class="gnb">
                 <ul>
                     <li><a href="">모임</a></li>
                     <li><a href="">팀원찾기</a></li>
                     <li><a href="">커뮤니티</a></li>
+                </ul>
+            </div>
+
+            <div class="write">
+                <a href="">
+                    <i class="bi bi-plus"></i>
+                    모임 등록하기
+                </a>
+            </div>
+
+            <div class="etc">
+                <ul>
+                    <li>
+                        <i class="bi bi-bell"></i>
+                    </li>
+                    <li>
+                        <i class="bi bi-person"></i>
+                    </li>
                 </ul>
             </div>
         </div>
