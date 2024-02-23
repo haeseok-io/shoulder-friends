@@ -1,16 +1,14 @@
 package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Table(name = "studyroom_image")
+@Data
 public class StudyroomImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
