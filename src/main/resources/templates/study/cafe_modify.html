@@ -1,10 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>cafe_modify</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        function DaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    var addr = '';
+                    var extraAddr = '';
+
+                    if (data.userSelectedType === 'R') {
+                        addr = data.roadAddress;
+                    } else {
+                        addr = data.jibunAddress;
+                    }
+
+                    if(data.userSelectedType === 'R'){
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraAddr += data.bname;
+                        }
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        if(extraAddr !== ''){
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        document.getElementById("extraAddress").value = extraAddr;
+
+                    } else {
+                        document.getElementById("extraAddress").value = '';
+                    }
+                    document.getElementById('postcode').value = data.zonecode;
+                    document.getElementById("address").value = addr;
+                    document.getElementById("detailAddress").focus();
+                }
+            }).open();
+        }
+    </script>
 </head>
 <body>
-
+<div>
+    <h2>카페 수정</h2>
+    <form action="/study/cafe_write" method="post"></form>
+    카페 이름<input type="text" name="name" id="name" th:value="${oneCafe.name}">
+    카페 설명<input type="text" name="shortDesc" id="shortDesc" th:value="${oneCafe.shortDesc}">
+    <div class="">
+        <div class="">
+            <input type="text" name="post" id="post" th:value="${oneCafe.post}" placeholder="우편번호" readonly onclick="DaumPostcode();" />
+        </div>
+        <div class="">
+            <button type="button" onclick="DaumPostcode();">우편번호 찾기</button>
+        </div>
+    </div>
+    <div class="">
+        <div class="">
+            <input type="text" name="addr" id="addr" th:value="${oneCafe.addr}" placeholder="주소" readonly onclick="DaumPostcode();" />
+        </div>
+    </div>
+    <div class="">
+        <div class="">
+            <input type="text" name="addr_detail" id="addr_detail" placeholder="상세주소" />
+        </div>
+    </div>
+    <input type="submit" value="등록">
+    </form>
+</div>
 </body>
 </html>
