@@ -19,7 +19,7 @@ public class MoimDTO {
     private String category;
     private String subject;
     private String desc;
-    private Long like;
+    private Integer like;
     List<LanguageDTO> languageList;
     List<HeadcountDTO> headcountList;
 }
