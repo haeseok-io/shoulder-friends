@@ -49,6 +49,7 @@ public class StudyController {
 
     @GetMapping("/room_list")
     public void room_list(Model model, @RequestParam Long studycafeNo){
+        model.addAttribute("roomImgList",studyService.listRoomImg(studycafeNo));
         model.addAttribute("studycafeNo", studycafeNo);
         model.addAttribute("listRoom", studyService.listRoom(studycafeNo));
         model.addAttribute("oneCafe", studyService.oneCafe(studycafeNo));
