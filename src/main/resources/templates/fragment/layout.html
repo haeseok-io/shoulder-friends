@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>어깨동무</title>
+
+    <th:block th:replace="fragment/config :: configFragment"></th:block>
+</head>
+<body>
+<th:block th:replace="fragment/header :: header"></th:block>
+<th:block layout:fragment="visual"></th:block>
+<th:block layout:fragment="container"></th:block>
+<th:block th:replace="fragment/footer :: footer"></th:block>
+</body>
+</html>
