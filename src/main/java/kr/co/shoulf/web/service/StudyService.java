@@ -38,10 +38,9 @@ public class StudyService {
     }
 
     //스터디룸 스터디카페 고유번호로 찾기
-    public List<StudyroomImage> listRoom(Long studycafeNo) {
-        List<StudyroomImage> studyroomImageList = new ArrayList<>();
-
-        return null;
+    public List<Studyroom> listRoom(Long studycafeNo) {
+        List<Studyroom> studyroomList = studyroomRepository.findByStudycafe_StudycafeNo(studycafeNo);
+        return studyroomList;
     }
 
     //스터디룸 고유번호로 찾기
