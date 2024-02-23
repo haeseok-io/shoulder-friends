@@ -43,6 +43,17 @@ public class StudyService {
         return studyroomList;
     }
 
+    //스터디카페 번호로 이미지 목록 가져오기
+    public List<StudyroomImage> listRoomImg(Long studycafeNo){
+        List<StudyroomImage> studyroomImageList = new ArrayList<>();
+        studyroomRepository.findByStudycafe_StudycafeNo(studycafeNo).forEach(studyroom -> {
+            studyroomImageRepository.findByStudyroom(studyroom).forEach(studyroomImage -> {
+                studyroomImageList.add(studyroomImage);
+            });
+        });
+        return studyroomImageList;
+    }
+
     //스터디룸 고유번호로 찾기
     public Studyroom oneRoom(Long studyroomNo) {
         Optional<Studyroom> result = studyroomRepository.findById(studyroomNo);
