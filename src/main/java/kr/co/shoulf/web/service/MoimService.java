@@ -21,6 +21,10 @@ public class MoimService {
     private final MoimHeadcountRepository moimHeadcountRepository;
     private final MoimParticipantsRepository moimParticipantsRepository;
 
+    private final StudycafeRepository studycafeRepository;
+    private final StudyroomRepository studyroomRepository;
+    private final StudyroomImageRepository studyroomImageRepository;
+
     public List<Moim> readAll() {
         return moimRepository.findAll();
     }
@@ -66,6 +70,7 @@ public class MoimService {
             list.add(
                     MoimDTO.builder()
                             .no(moim.getMoimNo())
+                            .img(moim.getMoimDetail().getMoimImg())
                             .type(type)
                             .category(category)
                             .subject(moim.getSubject())

@@ -15,6 +15,7 @@ import java.util.List;
 @Repository
 public class MoimDTO {
     private Long no;
+    private String img;
     private String type;
     private String category;
     private String subject;
