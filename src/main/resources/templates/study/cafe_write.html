@@ -1,8 +1,11 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>cafe_write</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/layout}">
+
+<th:block layout:fragment="css">
+
+</th:block>
+<th:block layout:fragment="js">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
@@ -40,33 +43,37 @@
             }).open();
         }
     </script>
-</head>
-<body>
-    <div>
-        <h2>카페 등록</h2>
-        <form action="/study/cafe_write" method="post"></form>
-        카페 이름<input type="text" name="name" id="name">
-        카페 설명<input type="text" name="shortDesc" id="shortDesc">
-        <div class="">
+</th:block>
+
+<th:block layout:fragment="container">
+    <main>
+        <div class="container">
+            <h2>카페 등록</h2>
+            <form action="/study/cafe_write" method="post"></form>
+            카페 이름<input type="text" name="name" id="name">
+            카페 설명<input type="text" name="shortDesc" id="shortDesc">
             <div class="">
-                <input type="text" name="post" id="post" placeholder="우편번호" readonly onclick="DaumPostcode();" />
+                <div class="">
+                    <input type="text" name="post" id="post" placeholder="우편번호" readonly onclick="DaumPostcode();" />
+                </div>
+                <div class="">
+                    <button type="button" onclick="DaumPostcode();">우편번호 찾기</button>
+                </div>
             </div>
             <div class="">
-                <button type="button" onclick="DaumPostcode();">우편번호 찾기</button>
+                <div class="">
+                    <input type="text" name="addr" id="addr" placeholder="주소" readonly onclick="DaumPostcode();" />
+                </div>
             </div>
+            <div class="">
+                <div class="">
+                    <input type="text" name="addr_detail" id="addr_detail" placeholder="상세주소" />
+                </div>
+            </div>
+            <input type="submit" value="등록">
+            </form>
         </div>
-        <div class="">
-            <div class="">
-                <input type="text" name="addr" id="addr" placeholder="주소" readonly onclick="DaumPostcode();" />
-            </div>
-        </div>
-        <div class="">
-            <div class="">
-                <input type="text" name="addr_detail" id="addr_detail" placeholder="상세주소" />
-            </div>
-        </div>
-        <input type="submit" value="등록">
-        </form>
-    </div>
-</body>
+    </main>
+</th:block>
+
 </html>
