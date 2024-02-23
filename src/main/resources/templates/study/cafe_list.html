@@ -1,17 +1,25 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>cafe_list</title>
-</head>
-<body>
-    <div>
-        <h2>카페 리스트</h2>
-        <div><a th:href="@{/study/cafe_write}">스터디 카페 등록</a></div>
-        <div th:each="dto:${listCafe}">
-            <a th:href="@{/study/room_list(studycafeNo=${dto.studycafeNo})}"><img th:src="${dto.mainImg}"></a>
-            <p th:text="${dto.name}"></p>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/layout}">
+
+<th:block layout:fragment="css">
+
+</th:block>
+<th:block layout:fragment="js">
+
+</th:block>
+
+<th:block layout:fragment="container">
+    <main>
+        <div class="container">
+            <h2>카페 리스트</h2>
+            <div><a th:href="@{/study/cafe_write}">스터디 카페 등록</a></div>
+            <div th:each="dto:${listCafe}">
+                <a th:href="@{/study/room_list(studycafeNo=${dto.studycafeNo})}"><img th:src="${dto.mainImg}"></a>
+                <p th:text="${dto.name}"></p>
+            </div>
         </div>
-    </div>
-</body>
+    </main>
+</th:block>
+
 </html>

@@ -1,35 +1,43 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>cafe_detail</title>
-</head>
-<body>
-<div>
-    <h2>스터디 카페 상세</h2>
-    <div>
-        <div><a th:href="@{/study/cafe_modify(studycafeNo=${studycafeNo})}">카페수정</a></div>
-        <div><a th:href="@{/study/cafe_delete(studycafeNo=${studycafeNo})}">카페삭제</a></div>
-    </div>
-    <div>
-        <img th:src="${oneCafe.mainImg}">
-        <p th:text="${oneCafe.name}"></p>
-        <p th:text="${oneCafe.shortDesc}"></p>
-        <p th:text="${oneCafe.post}"></p>
-        <p th:text="${oneCafe.addr}"></p>
-    </div>
-    <div>
-        <div th:each="dto : ${listRoom}">
-            <p th:text="${dto.name}"></p>
-            <p th:text="${dto.price}"></p>
-            <div th:text="${dto.studyroomDetail.maxNum}"></div>
-            <div th:text="${dto.studyroomDetail.beam}"></div>
-            <div th:text="${dto.studyroomDetail.wboard}"></div>
-            <div th:text="${dto.studyroomDetail.socket}"></div>
-            <div><a th:href="@{/study/room_modify(studyroomNo=${dto.studyroomNo})}">수정</a></div>
-            <div><a th:href="@{/study/room_delete(studyroomNo=${dto.studyroomNo})}">삭제</a></div>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/layout}">
+
+<th:block layout:fragment="css">
+
+</th:block>
+<th:block layout:fragment="js">
+
+</th:block>
+
+<th:block layout:fragment="container">
+    <main>
+        <div class="container">
+            <h2>스터디 카페 상세</h2>
+            <div>
+                <div><a th:href="@{/study/cafe_modify(studycafeNo=${studycafeNo})}">카페수정</a></div>
+                <div><a th:href="@{/study/cafe_delete(studycafeNo=${studycafeNo})}">카페삭제</a></div>
+            </div>
+            <div>
+                <img th:src="${oneCafe.mainImg}">
+                <p th:text="${oneCafe.name}"></p>
+                <p th:text="${oneCafe.shortDesc}"></p>
+                <p th:text="${oneCafe.post}"></p>
+                <p th:text="${oneCafe.addr}"></p>
+            </div>
+            <div>
+                <div th:each="dto : ${listRoom}">
+                    <p th:text="${dto.name}"></p>
+                    <p th:text="${dto.price}"></p>
+                    <div th:text="${dto.studyroomDetail.maxNum}"></div>
+                    <div th:text="${dto.studyroomDetail.beam}"></div>
+                    <div th:text="${dto.studyroomDetail.wboard}"></div>
+                    <div th:text="${dto.studyroomDetail.socket}"></div>
+                    <div><a th:href="@{/study/room_modify(studyroomNo=${dto.studyroomNo})}">수정</a></div>
+                    <div><a th:href="@{/study/room_delete(studyroomNo=${dto.studyroomNo})}">삭제</a></div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-</body>
+    </main>
+</th:block>
+
 </html>
