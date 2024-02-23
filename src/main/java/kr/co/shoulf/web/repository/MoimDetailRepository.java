@@ -15,4 +15,5 @@ public interface MoimDetailRepository extends JpaRepository<MoimDetail,Long> {
     List<MoimDetail> readNewMoim(@Param("limit")int limit);
 
     List<MoimDetail> findTop2ByOrderByMoimNoDesc();
+    List<MoimDetail> findTop8ByOrderByMoim_HitsDesc();
 }
