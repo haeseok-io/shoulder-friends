@@ -19,7 +19,7 @@ public class HelloController {
 //        this.studyroomImageRepository = studyroomImageRepository;
 //    }
 
-    @GetMapping(value = {"/"})
+    @GetMapping(value = {"/test"})
     public String test(HttpSession session, Model model) {
         Users loggedInUser = (Users) session.getAttribute("loggedInUser");
         if (loggedInUser != null) {

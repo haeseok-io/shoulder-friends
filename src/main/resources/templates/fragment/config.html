@@ -1,0 +1,11 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout">
+
+<th:block th:fragment="configFragment">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <script th:src="@{/js/main.js}"></script>
+
+    <th:block layout:fragment="css"></th:block>
+    <th:block layout:fragment="js"></th:block>
+</th:block>
+
+</html>
