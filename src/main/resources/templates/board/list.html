@@ -1,0 +1,73 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/layout}">
+
+<th:block layout:fragment="css">
+
+</th:block>
+<th:block layout:fragment="js">
+
+</th:block>
+
+<th:block layout:fragment="container">
+    <main>
+        <div class="container">
+            <div class="wrapper weekBest">
+                <div class="mainTitle">
+                    <div class="title">
+                        <p class="subject">주간 인기 게시물</p>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="wrap">
+                        <div class="cate">
+                            <span>
+                                <th:block th:if="${boardBest.board.cate == 1}">자유</th:block>
+                                <th:block th:if="${boardBest.board.cate == 2}">개발Q&A</th:block>
+                            </span>
+                        </div>
+                        <p class="subject">[[${boardBest.board.title}]]</p>
+                        <p class="desc">[[${boardBest.board.contents}]]</p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="wrapper all">
+                <div class="mainTitle">
+                    <div class="title">
+                        <p class="subject">커뮤니티</p>
+                    </div>
+                    <div class="selectCategory">
+                        <a href="/board/">전체</a>
+                        <a href="/board/?cate=1">자유게시판</a>
+                        <a href="/board/?cate=2">개발Q&A</a>
+                    </div>
+                </div>
+                <div class="allContents">
+                    <ul>
+                        <li th:each="data : ${boardList}">
+                            <div class="wrap">
+                                <div class="cate">
+                                    <span>
+                                        <th:block th:if="${data.board.cate == 1}">자유</th:block>
+                                        <th:block th:if="${data.board.cate == 2}">개발Q&A</th:block>
+                                    </span>
+                                </div>
+                                <p class="subject">[[${data.board.title}]]</p>
+                                <p class="desc">[[${data.board.contents}]]</p>
+                                <div class="etc">
+                                    <img th:src="${data.board.users.userDetail.getProfileImg()}" alt="">
+                                    <span>[[${data.board.users.nickname}]]</span>
+                                    <span>조회수 : [[${data.board.hits}]]</span>
+                                    <span>작성일 : [[${data.board.regdate}]]</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+</th:block>
+
+</html>
