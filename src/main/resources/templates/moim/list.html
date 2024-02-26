@@ -9,6 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
     .newMoim, .moimList {
         display: inline-block;
@@ -18,6 +19,76 @@
         justify-content: center;
     }
 </style>
+<script>
+    $(() => {
+        var positionSelect = $('#position');
+        var positionDetailSelect = $('#positionDetail');
+
+        // 서버에서 직무 대분류 목록을 가져와서 positionSelect 업데이트
+        $.ajax({
+            url: '/position',
+            type: 'get',
+            dataType: 'json',
+            success: function (data) {
+                console.log('hahaha');
+                console.log(data);
+
+                // 중복을 방지하기 위해 Set 사용
+                var uniquePositions = new Set(data.list.map(function (positionDetail) {
+                    return positionDetail.positionNo;
+                }));
+
+                // 기존 옵션 제거
+                positionSelect.empty();
+
+                // 새로운 옵션 추가
+                uniquePositions.forEach(function (positionNo) {
+                    var position = data.list.find(function (positionDetail) {
+                        return positionDetail.positionNo == positionNo;
+                    });
+
+                    positionSelect.append($('<option>', {
+                        value: position.positionNo,
+                        text: position.bigName
+                    }));
+                });
+
+                // positionSelect 초기화 후 첫 번째 항목을 선택
+                positionSelect.val(data.list[0].positionNo);
+
+                // 초기값에 대한 positionDetail 업데이트
+                updatePositionDetailSelect(data.list[0]);
+            }
+        });
+
+        // positionSelect 변경 시에 호출되는 함수
+        positionSelect.on('change', function () {
+            var selectedPositionNo = $(this).val();
+
+            // 선택된 position에 대한 상세 정보로 positionDetail 업데이트
+            var selectedPosition = data.list.find(function (positionDetail) {
+                return positionDetail.positionNo == selectedPositionNo;
+            });
+
+            // 업데이트 함수 호출
+            updatePositionDetailSelect(selectedPosition);
+        });
+
+        // positionDetailSelect 업데이트 함수
+        function updatePositionDetailSelect(selectedPosition) {
+            // 기존 옵션 제거
+            positionDetailSelect.empty();
+            console.log(selectedPosition);
+            // 새로운 옵션 추가
+            $.each(selectedPosition, function (index, positionDetail) {
+                positionDetailSelect.append($('<option>', {
+                    value: positionDetail.positionDetailNo,
+                    text: positionDetail.middleName
+                }));
+            });
+        }
+    });
+</script>
 <body>
 <!--모임 리스트에 가져와야할 정보
     Moim(type, category, subject, shortDesc), MoimLanguage, MoimHeadcount, MoimLike
@@ -42,29 +113,16 @@
     <div>
         <h3>전체 모임</h3>
         <div class="search">
-            <select name="selectMoim" id="">
+            <select name="selectMoim" id="selectMoim">
                 <option value="allMoim">모집 전체</option>
                 <option value="project">프로젝트</option>
                 <option value="study">스터디</option>
             </select>
-            <select name="position" id="">
-                <option value="allPosition">직무 대분류</option>
-                <option value="plan">기획</option>
-                <option value="design">디자인</option>
-                <option value="front">프론트엔드개발</option>
-                <option value="back">백엔드개발</option>
-                <option value="business">사업</option>
-                <option value="etc">기타</option>
+            <select name="position" id="position">
+                <option>직무 대분류</option>
             </select>
-            <select name="positionDetail" id="">
-                <option value="allMoim">직무 중분류</option>
-                <option value="study">UI/UX 기획</option>
-                <option value="study">게임기획</option>
-                <option value="study">프로젝트 매니저</option>
-                <option value="study">프로덕트 매니저/오너</option>
-                <option value="study">컨텐트 기획</option>
-                <option value="study">하드웨어(제품) 기획</option>
-                <option value="study">기타</option>
+            <select name="positionDetail" id="positionDetail">
+                <option>직무 중분류</option>
             </select>
         </div>
         <div class="moimList" th:each="moim : ${moimList}">
