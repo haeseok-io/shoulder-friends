@@ -86,11 +86,15 @@
                             <div class="wrap">
                                 <p class="nickname">
                                     [[${data.nickname}]]
-                                    <span class="level">Lv. <span>[[${data.positionLevel}]]</span></span>
+                                    <th:block th:if="${data.positionLevel!=null}">
+                                        <span class="level">Lv. <span>[[${data.positionLevel}]]</span></span>
+                                    </th:block>
                                 </p>
+                                <th:block th:if="${data.positionDetailName!=null}">
                                 <p class="positionDetail">
                                     [[${data.positionDetailName}]]
                                 </p>
+                                </th:block>
                             </div>
                             <div class="message">
                                 <i class="bi bi-envelope"></i>
