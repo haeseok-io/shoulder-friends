@@ -25,10 +25,10 @@ public class AdminLoginController {
     @PostMapping("/loginProc")
     public String loginOk(@ModelAttribute Member member, Model model, HttpSession session) {
         Member memberDetails = adminLoginService.adminLogin(member);
-        System.out.println(memberDetails);
         if(memberDetails != null) {
             // 세션에 유저 정보 저장
             session.setAttribute("loggedInUser", memberDetails);
+            System.out.println("memberDetails : " + memberDetails);
             return "redirect:/admin/";
         } else {
             // 로그인 실패 시
