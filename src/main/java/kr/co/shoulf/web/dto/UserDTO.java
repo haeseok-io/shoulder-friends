@@ -20,5 +20,5 @@ public class UserDTO {
     private String positionDetailName;
     private String online;
 
-    private Integer progressMoimNum;
+    private Integer progressMoimNum; // 진행중인 모임 갯수
 }
