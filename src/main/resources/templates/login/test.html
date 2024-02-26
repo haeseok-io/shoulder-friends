@@ -6,7 +6,9 @@
 </head>
 <body>
     <h2>loginOk</h2>
-    <h3>[[${session.loggedInUser.email}]]</h3>
+    <div th:if="${session.loggedInUser}">
+        <h3 th:text="${session.loggedInUser.email}"></h3>
+    </div>
     <a href="/hello">hello</a>
     <a href="/hello">hello2</a>
     <a href="/login/">login</a>

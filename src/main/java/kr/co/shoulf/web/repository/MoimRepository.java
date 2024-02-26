@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface MoimRepository extends JpaRepository<Moim,Long> {
+    List<Moim> findTop2ByOrderByMoimNoDesc();
     List<Moim> findTop8ByOrderByHitsDesc();
 }
