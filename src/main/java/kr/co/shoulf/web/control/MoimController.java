@@ -2,6 +2,7 @@ package kr.co.shoulf.web.control;
 
 import kr.co.shoulf.web.entity.Moim;
 import kr.co.shoulf.web.service.MoimSerivce;
+import kr.co.shoulf.web.service.MoimService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,12 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/moim")
 public class MoimController {
-    private final MoimSerivce moimSerivce;
+    private final MoimService moimService;
 
     @GetMapping("/list")
     public String moimList(Model model){
-        List<Moim> moimList = moimSerivce.readAll();
-        List<Moim> newMoims = moimSerivce.readNewMoim();
+        List<Moim> moimList = moimService.readAll();
+        List<Moim> newMoims = moimService.readNewMoim();
         model.addAttribute("moimList", moimList);
         model.addAttribute("newMoims", newMoims);
         System.out.println(moimList);
