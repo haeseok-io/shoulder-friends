@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>어드민 로그인</title>
+</head>
+<body>
+    <h2>관리자 로그인 페이지</h2>
+    <form action="/admin/loginProc" method="post">
+        ID : <input type="text" name="id" id="id"/>
+        PW : <input type="password" name="pw" id="pw" />
+        <button type="submit">로그인</button>
+        <br>
+        [[${error}]]
+        <a href="/admin/login/register" class="adminRegisterBtn">회원 가입하기</a>
+    </form>
+</body>
+</html>
