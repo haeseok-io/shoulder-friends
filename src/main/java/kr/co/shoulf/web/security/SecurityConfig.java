@@ -25,17 +25,16 @@ public class SecurityConfig{
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/login/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 );
-        http
-                .csrf((auth) -> auth.disable());
         http
                 .formLogin((auth) -> auth
                         .loginPage("/login/")
                         .loginProcessingUrl("/login/loginProc").permitAll()
                         .defaultSuccessUrl("/")
                 );
+        http
+                .csrf((auth) -> auth.disable());
         return http.build();
     }
 
