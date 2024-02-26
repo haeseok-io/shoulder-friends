@@ -2,6 +2,7 @@ package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
@@ -24,6 +25,9 @@ public class Board {
     private String contents;
     @Column(nullable = false, length = 20)
     private String ip;
+    @Column
+    @ColumnDefault("0") // 기본값
+    private Integer hits;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
