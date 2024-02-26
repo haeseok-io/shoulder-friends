@@ -34,7 +34,7 @@ public class MoimService {
         return moimRepository.findTop2ByOrderByMoimNoDesc();
     }
 
-    public List<MoimDTO> readBest() {
+    public List<MoimDTO> readBestList() {
         List<MoimDTO> list = new ArrayList<>();
 
         moimRepository.findTop8ByOrderByHitsDesc().forEach(moim -> {
