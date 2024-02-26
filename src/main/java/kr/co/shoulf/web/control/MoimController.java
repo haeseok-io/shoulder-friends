@@ -1,7 +1,6 @@
 package kr.co.shoulf.web.control;
 
 import kr.co.shoulf.web.entity.Moim;
-import kr.co.shoulf.web.service.MoimSerivce;
 import kr.co.shoulf.web.service.MoimService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
