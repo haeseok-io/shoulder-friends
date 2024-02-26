@@ -6,7 +6,43 @@
 
 </th:block>
 <th:block layout:fragment="js">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f1da5cac1e623212589550b0421c5af7&libraries=services,clusterer,drawing"></script>
+    <script>
+        $(() => {
+            var xx = $("#x").val();
+            var yy = $("#y").val();
 
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                mapOption = {
+                    center: new kakao.maps.LatLng(xx, yy), // 지도의 중심좌표
+                    level: 3 // 지도의 확대 레벨
+                };
+
+            // 지도를 생성합니다
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+
+            var markers = new kakao.maps.Marker({
+                map: map,
+                position: mapOption.center
+            });
+
+            var circle = new kakao.maps.Circle({
+                center : new kakao.maps.LatLng(xx, yy),  // 원의 중심좌표
+                radius: 40, // 미터 단위의 원의 반지름
+                strokeWeight: 2, // 선의 두께
+                strokeColor: '#2D37C2', // 선의 색깔
+                strokeOpacity: 1, // 선의 불투명도
+                strokeStyle: 'dashed', // 선 스타일
+                fillColor: '#AAAEEB', // 채우기 색깔
+                fillOpacity: 0.8,  // 채우기 불투명도
+            });
+
+            // 지도에 원을 표시합니다
+            circle.setMap(map);
+        })
+    </script>
 </th:block>
 
 <th:block layout:fragment="container">
@@ -23,6 +59,11 @@
                 <p th:text="${oneCafe.shortDesc}"></p>
                 <p th:text="${oneCafe.post}"></p>
                 <p th:text="${oneCafe.addr}"></p>
+                <div>
+                    <div id="map" style="width:500px;height:400px;"></div>
+                </div>
+                <input type="hidden" name="x" id="x" th:value="${oneCafe.x}">
+                <input type="hidden" name="y" id="y" th:value="${oneCafe.y}">
             </div>
             <div>
                 <div th:each="imgdto : ${roomImgList}">
