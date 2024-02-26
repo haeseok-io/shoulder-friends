@@ -3,7 +3,7 @@
       layout:decorate="~{fragment/layout}">
 
 <th:block layout:fragment="css">
-
+    <link rel="stylesheet" th:href="@{/css/index.css}">
 </th:block>
 <th:block layout:fragment="js">
 
@@ -12,7 +12,81 @@
 <th:block layout:fragment="container">
     <main>
         <div class="container">
-            여기다가 html 작성하세요
+
+            <div class="wrapper weekBest">
+                <div class="mainTitle">
+                    <div class="title">
+                        <p class="subject">주간 인기 모임</p>
+                        <span class="desc">한주에 가장 인기있는 모임을 만나보세요!</span>
+                    </div>
+                    <div class="etc">
+                        <a href="" class="more">전체 모임 보기</a>
+                    </div>
+                </div>
+                <div class="content">
+                    <ul class="moimList">
+                        <li th:each="data : ${moimBestList}">
+                            <div class="category">
+                                <span class="badge text-bg-dark">[[${data.category}]]</span>
+                            </div>
+                            <div class="thumbnail">
+                                <img th:src="${data.img}" alt="">
+                            </div>
+                            <div class="wrap">
+                                <div class="etc">
+                                    <div class="type">
+                                        <span th:class="'badge ' + (${data.type=='프로젝트'} ? 'project' : 'study')">[[${data.type}]]</span>
+                                    </div>
+                                    <div class="like">
+                                        <i class="bi bi-heart"></i>
+                                        <span>[[${data.like}]]</span>
+                                    </div>
+                                </div>
+                                <p class="subject">[[${data.subject}]]</p>
+                                <p class="desc">[[${data.desc}]]</p>
+                                <div class="language">
+                                    <ul class="languageList">
+                                        <li th:each="language : ${data.languageList}">
+                                            <th:block th:if="${language.path==null}">
+                                            <div class="item">
+                                                <span class="badge rounded-pill text-bg-secondary">[[${language.name}]]</span>
+                                            </div>
+                                            </th:block>
+
+                                            <th:block th:if="${language.path!=null}">
+                                            <div class="item">
+                                                <img th:src="${language.path}" alt="">
+                                            </div>
+                                            </th:block>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="wrapper newUserList">
+                <div class="mainTitle">
+                    <div class="title">
+                        <p class="subject">새로 합류한 팀원</p>
+                        <span class="desc">어깨동무에 새롭게 합류한 팀원들이에요!</span>
+                    </div>
+                    <div class="etc">
+                        <a href="" class="more">전체 팀원 보기</a>
+                    </div>
+                </div>
+                <div class="content">
+                    <ul>
+                        <li th:each="data : ${userNewList}">
+                            <div class="thumbnail">
+                                [[${data}]]
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </main>
 </th:block>
