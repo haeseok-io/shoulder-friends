@@ -10,4 +10,6 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<Users, Long> {
     Users findByEmail(String email);
     List<Users> findTop12ByOrderByUserNoDesc();
+
+    boolean existsByEmail(String email);
 }
