@@ -35,7 +35,7 @@ public class UserService {
 
             userList.add(
                     UserDTO.builder()
-                            .userNo(user.getUserNo())
+                            .no(user.getUserNo())
                             .nickname(user.getNickname())
                             .profileImg(userProfileImg)
                             .introduce(user.getUserDetail().getIntroduce())
