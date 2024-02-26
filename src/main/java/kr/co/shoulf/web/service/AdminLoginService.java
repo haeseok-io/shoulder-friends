@@ -16,16 +16,22 @@ public class AdminLoginService {
     public Member adminLogin(Member member) {
         // 받아온 멤버의 ID로 해당 멤버의 정보 불러오기
         Member readMember = memberRepository.findById(member.getId());
-        System.out.println(readMember.getId());
+        System.out.println("readMember.getId() : " + readMember);
 
         if (readMember == null) {
             throw new UsernameNotFoundException("가입된 아이디를 찾을 수 없습니다. " + member.getId());
         }
 
         return Member.builder()
-                .id(member.getId())
-                .pw(member.getPw())
-                .role(member.getRole())
+                .memberNo(readMember.getMemberNo())
+                .id(readMember.getId())
+                .pw(readMember.getPw())
+                .role(readMember.getRole())
+                .name(readMember.getName())
+                .post(readMember.getPost())
+                .addr(readMember.getAddr())
+                .phone(readMember.getPhone())
+                .hiredate(readMember.getHiredate())
                 .build();
     }
 
