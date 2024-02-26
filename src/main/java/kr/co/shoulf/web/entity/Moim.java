@@ -37,6 +37,7 @@ public class Moim {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no", nullable = false)
+    @ToString.Exclude
     private Users users;
 }
 

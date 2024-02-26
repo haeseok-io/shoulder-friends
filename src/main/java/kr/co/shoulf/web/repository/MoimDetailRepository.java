@@ -10,10 +10,6 @@ import java.util.List;
 
 @Repository
 public interface MoimDetailRepository extends JpaRepository<MoimDetail,Long> {
-
-    @Query(value = "SELECT * FROM moim_detail  m order by m.moim_no desc limit :limit", nativeQuery = true)
-    List<MoimDetail> readNewMoim(@Param("limit")int limit);
-
     List<MoimDetail> findTop2ByOrderByMoimNoDesc();
     List<MoimDetail> findTop8ByOrderByMoim_HitsDesc();
 }

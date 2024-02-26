@@ -10,9 +10,9 @@
         <p>로그인</p>
         <button class="closeBtn"></button>
         <label>
-            <form action="/login/" method="post">
-                ID : <input type="text" name="email" id="email"/>
-                PW : <input type="password" name="pass" id="pass" />
+            <form action="/login/loginProc" method="post">
+                ID : <input type="text" name="username" id="username"/>
+                PW : <input type="password" name="password" id="password" />
                 <button type="submit">로그인</button>
                 <br>
                 [[${error}]]

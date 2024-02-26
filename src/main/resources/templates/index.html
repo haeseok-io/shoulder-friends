@@ -6,7 +6,19 @@
     <link rel="stylesheet" th:href="@{/css/index.css}">
 </th:block>
 <th:block layout:fragment="js">
+    <script>
+        $(() => {
+            $(".moimList > li").click(e => {
+                let no = $(e.currentTarget).data('no');
+                document.location.href = "/moim/detail?no="+no;
+            });
 
+            $(".userList > li").click(e => {
+                let no = $(e.currentTarget).data('no');
+                document.location.href = "/user/detail?no="+no;
+            });
+        });
+    </script>
 </th:block>
 
 <th:block layout:fragment="container">
@@ -25,7 +37,7 @@
                 </div>
                 <div class="content">
                     <ul class="moimList">
-                        <li th:each="data : ${moimBestList}">
+                        <li th:each="data : ${moimBestList}" th:data-no="${data.no}">
                             <div class="category">
                                 <span class="badge text-bg-dark">[[${data.category}]]</span>
                             </div>
@@ -67,7 +79,7 @@
                 </div>
             </div>
 
-            <div class="wrapper newUserList">
+            <div class="wrapper newUser">
                 <div class="mainTitle">
                     <div class="title">
                         <p class="subject">새로 합류한 팀원</p>
@@ -78,10 +90,26 @@
                     </div>
                 </div>
                 <div class="content">
-                    <ul>
-                        <li th:each="data : ${userNewList}">
+                    <ul class="userList">
+                        <li th:each="data : ${userNewList}" th:data-no="${data.no}">
                             <div class="thumbnail">
-                                [[${data}]]
+                                <img th:src="${data.profileImg}" alt="">
+                            </div>
+                            <div class="wrap">
+                                <p class="nickname">
+                                    [[${data.nickname}]]
+                                    <th:block th:if="${data.positionLevel!=null}">
+                                        <span class="level">Lv. <span>[[${data.positionLevel}]]</span></span>
+                                    </th:block>
+                                </p>
+                                <th:block th:if="${data.positionDetailName!=null}">
+                                <p class="positionDetail">
+                                    [[${data.positionDetailName}]]
+                                </p>
+                                </th:block>
+                            </div>
+                            <div class="message">
+                                <i class="bi bi-envelope"></i>
                             </div>
                         </li>
                     </ul>
