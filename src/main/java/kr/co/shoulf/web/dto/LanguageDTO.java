@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LanguageDTO {
+    private Long no;
     private String name;
     private String path;
 }
