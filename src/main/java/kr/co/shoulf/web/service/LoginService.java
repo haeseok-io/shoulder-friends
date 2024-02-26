@@ -3,7 +3,6 @@ package kr.co.shoulf.web.service;
 import kr.co.shoulf.web.entity.UserDetail;
 import kr.co.shoulf.web.entity.Users;
 import kr.co.shoulf.web.repository.UserDetailRepository;
-import kr.co.shoulf.web.repository.UserJobRepository;
 import kr.co.shoulf.web.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     private final UserRepository userRepository;
     private final UserDetailRepository userDetailRepository;
-    private final UserJobRepository userJobRepository;
     private final PasswordEncoder passwordEncoder;
     public UserDetails login(Users users) {
         Users readUser = userRepository.findByEmail(users.getEmail());
