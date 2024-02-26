@@ -22,6 +22,8 @@ header .container .etc ul { display: flex; align-items: center; }
 header .container .etc ul li { margin-left: 20px; font-size: 1.6rem; color: #382B47; }
 
 
+main { padding-bottom: 50px; }
+
 
 /* 공통 클래스 */
 .mainTitle { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
