@@ -1,6 +1,7 @@
 package kr.co.shoulf.web.service;
 
 import kr.co.shoulf.web.dto.UserDTO;
+import kr.co.shoulf.web.dto.UserDetailDTO;
 import kr.co.shoulf.web.entity.UserJob;
 import kr.co.shoulf.web.entity.UserOnline;
 import kr.co.shoulf.web.repository.MoimParticipantsRepository;
@@ -22,7 +23,7 @@ public class UserService {
     private final UserJobRepository userJobRepository;
     private final UserOnlineRepository userOnlineRepository;
 
-    public List<UserDTO> readNewUsers() {
+    public List<UserDTO> readNewUserList() {
         List<UserDTO> userList = new ArrayList<>();
 
         userRepository.findTop12ByOrderByUserNoDesc().forEach(user -> {
@@ -47,4 +48,12 @@ public class UserService {
 
         return userList;
     }
+    public UserDetailDTO readUserDetail() {
+        UserDetailDTO userDetailDTO = UserDetailDTO.userDetailBuilder()
+
+                .build();
+
+        return null;
+    }
+
 }

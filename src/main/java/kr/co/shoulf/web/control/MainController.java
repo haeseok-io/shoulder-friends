@@ -17,8 +17,8 @@ public class MainController {
 
     @GetMapping(value = "/")
     public String index(Model model) {
-        model.addAttribute("moimBestList", moimService.readBest());
-        model.addAttribute("userNewList", userService.readNewUsers());
+        model.addAttribute("moimBestList", moimService.readBestList());
+        model.addAttribute("userNewList", userService.readNewUserList());
         return "index";
     }
 }
