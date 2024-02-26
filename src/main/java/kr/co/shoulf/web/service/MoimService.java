@@ -1,8 +1,13 @@
 package kr.co.shoulf.web.service;
 
-import jakarta.transaction.Transactional;
-import kr.co.shoulf.web.dto.*;
-import kr.co.shoulf.web.entity.*;
+import kr.co.shoulf.web.dto.LanguageDTO;
+import kr.co.shoulf.web.dto.MoimDTO;
+import kr.co.shoulf.web.dto.MoimHeadcountDTO;
+import kr.co.shoulf.web.dto.MoimParticipantDTO;
+import kr.co.shoulf.web.entity.Moim;
+import kr.co.shoulf.web.entity.MoimParticipants;
+import kr.co.shoulf.web.entity.MoimParticipantsReject;
+import kr.co.shoulf.web.entity.PositionDetail;
 import kr.co.shoulf.web.repository.*;
 import kr.co.shoulf.web.util.LanguageImgPathConvert;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +26,7 @@ public class MoimService {
     private final MoimLanguageRepository moimLanguageRepository;
     private final MoimHeadcountRepository moimHeadcountRepository;
     private final MoimParticipantsRepository moimParticipantsRepository;
-
-    private final StudycafeRepository studycafeRepository;
-    private final StudyroomRepository studyroomRepository;
-    private final StudyroomImageRepository studyroomImageRepository;
+    private final MoimParticipantsRejectRepository moimParticipantsRejectRepository;
 
     public List<Moim> readAll() {
         return moimRepository.findAll();
@@ -35,20 +37,20 @@ public class MoimService {
     }
 
     public List<MoimDTO> readBestList() {
+        List<MoimDTO> list = getMoimData(moimRepository.findTop8ByOrderByHitsDesc());
+        return list;
+    }
+
+    private List<MoimDTO> getMoimData(List<Moim> moimList) {
         List<MoimDTO> list = new ArrayList<>();
 
-        moimRepository.findTop8ByOrderByHitsDesc().forEach(moim -> {
-            // 타입
-            String type = moim.getType().equals("project") ? "프로젝트" : "스터디";
-
-            // 모임 카테고리
-            String category = moim.getMoimDetail().getCategory()!=null ? moim.getMoimDetail().getCategory().getCategoryName() : moim.getMoimDetail().getStudyCategory().getStudyCategoryName();
-
+        moimList.forEach(moim -> {
             // 모임 사용언어/기술
             List<LanguageDTO> languageList = new ArrayList<>();
             moimLanguageRepository.findByMoim(moim).forEach(moimLanguage -> {
                 languageList.add(
                         LanguageDTO.builder()
+                                .no(moimLanguage.getMoimLanguageNo())
                                 .name(moimLanguage.getName())
                                 .path(LanguageImgPathConvert.getImgPath(moimLanguage.getName()))
                                 .build()
@@ -56,34 +58,57 @@ public class MoimService {
             });
 
             // 모집 직무/인원
-            List<HeadcountDTO> headcountList = new ArrayList<>();
-            moimHeadcountRepository.findByMoim(moim).forEach(moimHeadcount -> {
-                PositionDetail positionDetail = moimHeadcount.getPositionDetail();
-                String positionName = positionDetail!=null ? positionDetail.getPosition().getBigName() : "무관";
-                String positionDetailName = positionDetail!=null ? positionDetail.getMiddleName() : "누구나 가능";
+            List<MoimHeadcountDTO> headcountList = new ArrayList<>();
+            moimHeadcountRepository.findByMoim(moim).forEach(headcount -> {
+                // 지원자
+                List<MoimParticipantDTO> participantList = new ArrayList<>();
+                List<MoimParticipantDTO> participantApprovalList = new ArrayList<>();
+                List<MoimParticipantDTO> participantRejectedList = new ArrayList<>();
+
+                moimParticipantsRepository.findByMoimHeadcount(headcount).forEach(participant -> {
+                    MoimParticipantDTO participantDTO = new MoimParticipantDTO();
+
+                    participantDTO.setMoimParticipantsNo(participant.getMoimParticipantsNo());
+                    participantDTO.setReason(participant.getReason());
+                    participantDTO.setJob(participant.getJob());
+                    participantDTO.setStatus(participant.getStatus());
+                    participantDTO.setUsers(participant.getUsers());
+
+                    if( participant.getStatus().equals(3) ) {
+                        MoimParticipantsReject moimParticipantsReject = moimParticipantsRejectRepository.findByMoimParticipants_MoimParticipantsNo(participant.getMoimParticipantsNo());
+                        participantDTO.setReject(moimParticipantsReject);
+                    }
+
+                    participantList.add(participantDTO);
+                    if( participant.getStatus().equals(2) )         participantApprovalList.add(participantDTO);
+                    else if( participant.getStatus().equals(3) )    participantRejectedList.add(participantDTO);
+                });
+
 
                 headcountList.add(
-                        HeadcountDTO.builder()
-                                .no(moimHeadcount.getMoimHeadcountNo())
-                                .personnel(moimHeadcount.getPersonnel())
-                                .positionName(positionName)
-                                .positionDetailName(positionDetailName)
-                                .approvalNum(moimParticipantsRepository.countByMoimHeadcountAndStatus(moimHeadcount, 2))
+                        MoimHeadcountDTO.builder()
+                                .moimHeadcountNo(headcount.getMoimHeadcountNo())
+                                .personnel(headcount.getPersonnel())
+                                .participantList(participantList)
+                                .participantApprovalList(participantApprovalList)
+                                .participantRejectedList(participantRejectedList)
                                 .build()
                 );
             });
 
+            // 데이터 담기
             list.add(
                     MoimDTO.builder()
-                            .no(moim.getMoimNo())
-                            .img(moim.getMoimDetail().getMoimImg())
-                            .type(type)
-                            .category(category)
+                            .moimNo(moim.getMoimNo())
+                            .type(moim.getType())
                             .subject(moim.getSubject())
-                            .desc(moim.getShortDesc())
-                            .like(moimLikeRepository.countByMoim(moim))
+                            .shortDesc(moim.getShortDesc())
+                            .status(moim.getStatus())
+                            .hits(moim.getHits())
+                            .moimDetail(moim.getMoimDetail())
                             .languageList(languageList)
                             .headcountList(headcountList)
+                            .likeList(moimLikeRepository.findByMoim(moim))
                             .build()
             );
         });

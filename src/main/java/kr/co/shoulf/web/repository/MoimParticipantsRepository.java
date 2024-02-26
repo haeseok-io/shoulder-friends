@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface MoimParticipantsRepository extends JpaRepository<MoimParticipants, Long> {
-    Integer countByMoimHeadcountAndStatus(MoimHeadcount moimHeadcount, Integer status);
-    Integer countByUsersAndStatus(Users users, Integer status);
+    List<MoimParticipants> findByMoimHeadcount(MoimHeadcount moimHeadcount);
+    List<MoimParticipants> findByMoimHeadcountAndStatus(MoimHeadcount moimHeadcount, Integer status);
 }

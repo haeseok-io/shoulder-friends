@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LanguageDTO {
+public class InterestDTO {
     private Long no;
     private String name;
-    private String path;
 }

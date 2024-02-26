@@ -1,17 +1,19 @@
 package kr.co.shoulf.web.service;
 
 import kr.co.shoulf.web.dto.UserDTO;
+import kr.co.shoulf.web.dto.UserDetailDTO;
 import kr.co.shoulf.web.entity.UserJob;
 import kr.co.shoulf.web.entity.UserOnline;
-import kr.co.shoulf.web.repository.UserJobRepository;
-import kr.co.shoulf.web.repository.UserOnlineRepository;
-import kr.co.shoulf.web.repository.UserRepository;
+import kr.co.shoulf.web.entity.UserPortfolio;
+import kr.co.shoulf.web.entity.Users;
+import kr.co.shoulf.web.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -20,26 +22,20 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserJobRepository userJobRepository;
     private final UserOnlineRepository userOnlineRepository;
+    private final UserPortfolioRepository userPortfolioRepository;
+    private final UserLanguageRepository userLanguageRepository;
+    private final UserInterestCategoryRepository userInterestCategoryRepository;
 
     public List<UserDTO> readNewUserList() {
         List<UserDTO> userList = new ArrayList<>();
 
         userRepository.findTop12ByOrderByUserNoDesc().forEach(user -> {
-            UserJob userJob = userJobRepository.findByUsers(user);
-            UserOnline userOnline = userOnlineRepository.findByUsers(user);
-
-            Integer userPositionLevel = userJob!=null ? userJob.getLevel() : null;
-            String userPositionDetailName = userJob!=null ? userJob.getPositionDetail().getMiddleName() : null;
-            String userProfileImg = user.getUserDetail().getProfileImg()!=null ? user.getUserDetail().getProfileImg() : "https://letspl.me/assets/images/prof-no-img.png";
-
             userList.add(
                     UserDTO.builder()
-                            .no(user.getUserNo())
+                            .userNo(user.getUserNo())
                             .nickname(user.getNickname())
-                            .profileImg(userProfileImg)
-                            .introduce(user.getUserDetail().getIntroduce())
-                            .positionLevel(userPositionLevel)
-                            .positionDetailName(userPositionDetailName)
+                            .userDetail(user.getUserDetail())
+                            .userJob(userJobRepository.findByUsers(user))
                             .build()
             );
         });
@@ -47,4 +43,16 @@ public class UserService {
         return userList;
     }
 
+    public UserDetailDTO readUserDetail(Long userNo) {
+        Optional<Users> usersOptional = userRepository.findById(userNo);
+
+        // 조회되는 사용자가 없을 경우
+        if( usersOptional.isEmpty() )    return null;
+
+        Users users = usersOptional.get();
+
+
+
+        return UserDetailDTO.builder().build();
+    }
 }

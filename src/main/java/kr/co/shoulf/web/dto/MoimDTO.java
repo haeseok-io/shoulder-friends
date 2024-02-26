@@ -1,26 +1,21 @@
 package kr.co.shoulf.web.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Repository;
+import kr.co.shoulf.web.entity.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Repository
-public class MoimDTO {
-    private Long no;
-    private String img;
-    private String type;
-    private String category;
-    private String subject;
-    private String desc;
-    private Integer like;
-    List<LanguageDTO> languageList;
-    List<HeadcountDTO> headcountList;
+@EqualsAndHashCode(callSuper = true)
+public class MoimDTO extends Moim {
+    private List<LanguageDTO> languageList; // 사용언어/기술
+    private List<MoimHeadcountDTO> headcountList; // 모집인원
+    private List<MoimLike> likeList; // 관심
+    private List<MoimProjectLink> projectLinkList; // 참고링크
+    private List<MoimProjectPlatform> projectPlatformList; // 플랫폼
+    private List<Checklist> checklist; // 체크리스트
 }
