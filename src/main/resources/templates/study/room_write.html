@@ -1,0 +1,32 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/layout}">
+
+<th:block layout:fragment="css">
+
+</th:block>
+<th:block layout:fragment="js">
+
+</th:block>
+
+<th:block layout:fragment="container">
+    <main>
+        <div class="container">
+            <h2>룸 등록</h2>
+            <form action="/study/room_write" method="post">
+                룸 이름<input type="text" name="name" id="name">
+                룸 금액<input type="text" name="price" id="price">
+                최대 정원<input type="text" name="maxNum" id="maxNum">
+                빔프로젝트<input type="radio" name="beam" id="beamY">Y
+                <input type="radio" name="beam" id="beamN">N
+                화이트보드<input type="radio" name="wboard" id="wboardY">Y
+                <input type="radio" name="wboard" id="wboardN">N
+                콘센트<input type="radio" name="socket" id="socketY">Y
+                <input type="radio" name="socket" id="socketN">
+                <input type="submit" value="등록">
+            </form>
+        </div>
+    </main>
+</th:block>
+
+</html>
