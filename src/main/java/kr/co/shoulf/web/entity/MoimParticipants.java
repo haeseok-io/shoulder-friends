@@ -2,6 +2,7 @@ package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -9,7 +10,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table(name = "moim_participants")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicInsert

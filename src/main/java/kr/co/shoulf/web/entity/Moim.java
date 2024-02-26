@@ -2,6 +2,7 @@ package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -10,7 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @DynamicInsert
 public class Moim {
     @Id

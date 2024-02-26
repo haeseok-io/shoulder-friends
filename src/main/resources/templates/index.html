@@ -10,7 +10,7 @@
         $(() => {
             $(".moimList > li").click(e => {
                 let no = $(e.currentTarget).data('no');
-                document.location.href = "/moim/detail?no="+no;
+                document.location.href = "/moim/detail/"+no;
             });
 
             $(".userList > li").click(e => {
@@ -37,38 +37,42 @@
                 </div>
                 <div class="content">
                     <ul class="moimList">
-                        <li th:each="data : ${moimBestList}" th:data-no="${data.no}">
+                        <li th:each="data : ${moimBestList}" th:data-no="${data.moimNo}">
                             <div class="category">
-                                <span class="badge text-bg-dark">[[${data.category}]]</span>
+                                <span class="badge text-bg-dark">
+                                    <th:block th:if="${data.moimDetail.category!=null}">[[${data.moimDetail.category.categoryName}]]</th:block>
+                                    <th:block th:if="${data.moimDetail.studyCategory!=null}">[[${data.moimDetail.studyCategory.studyCategoryName}]]</th:block>
+                                </span>
                             </div>
                             <div class="thumbnail">
-                                <img th:src="${data.img}" alt="">
+                                <img th:src="${data.moimDetail.moimImg}" alt="">
                             </div>
                             <div class="wrap">
                                 <div class="etc">
                                     <div class="type">
-                                        <span th:class="'badge ' + (${data.type=='프로젝트'} ? 'project' : 'study')">[[${data.type}]]</span>
+                                        <span class="badge project" th:if="${data.type eq 'project'}">프로젝트</span>
+                                        <span class="badge study" th:if="${data.type eq 'study'}">스터디</span>
                                     </div>
                                     <div class="like">
                                         <i class="bi bi-heart"></i>
-                                        <span>[[${data.like}]]</span>
+                                        <span>[[${data.likeList.size()}]]</span>
                                     </div>
                                 </div>
                                 <p class="subject">[[${data.subject}]]</p>
-                                <p class="desc">[[${data.desc}]]</p>
+                                <p class="desc">[[${data.shortDesc}]]</p>
                                 <div class="language">
                                     <ul class="languageList">
                                         <li th:each="language : ${data.languageList}">
                                             <th:block th:if="${language.path==null}">
-                                            <div class="item">
-                                                <span class="badge rounded-pill text-bg-secondary">[[${language.name}]]</span>
-                                            </div>
+                                                <div class="item">
+                                                    <span class="badge rounded-pill text-bg-secondary">[[${language.name}]]</span>
+                                                </div>
                                             </th:block>
 
                                             <th:block th:if="${language.path!=null}">
-                                            <div class="item">
-                                                <img th:src="${language.path}" alt="">
-                                            </div>
+                                                <div class="item">
+                                                    <img th:src="${language.path}" alt="">
+                                                </div>
                                             </th:block>
                                         </li>
                                     </ul>
@@ -91,20 +95,25 @@
                 </div>
                 <div class="content">
                     <ul class="userList">
-                        <li th:each="data : ${userNewList}" th:data-no="${data.no}">
+                        <li th:each="data : ${userNewList}" th:data-no="${data.userNo}">
                             <div class="thumbnail">
-                                <img th:src="${data.profileImg}" alt="">
+                                <img th:if="${data.userDetail.profileImg eq null}" src="https://letspl.me/assets/images/prof-no-img.png" alt="">
+                                <img th:unless="${data.userDetail.profileImg eq null}" th:src="${data.userDetail.profileImg}" alt="">
                             </div>
                             <div class="wrap">
                                 <p class="nickname">
                                     [[${data.nickname}]]
-                                    <th:block th:if="${data.positionLevel!=null}">
-                                        <span class="level">Lv. <span>[[${data.positionLevel}]]</span></span>
+                                    <th:block th:unless="${data.userJob eq null}">
+                                    <span class="level" th:unless="${data.userJob.level eq null}">
+                                        Lv.
+                                        <span>[[${data.userJob.level}]]</span>
+                                    </span>
                                     </th:block>
                                 </p>
-                                <th:block th:if="${data.positionDetailName!=null}">
-                                <p class="positionDetail">
-                                    [[${data.positionDetailName}]]
+
+                                <th:block th:unless="${data.userJob eq null}">
+                                <p class="positionDetail" th:unless="${data.userJob.positionDetail eq null}">
+                                    [[${data.userJob.positionDetail.middleName}]]
                                 </p>
                                 </th:block>
                             </div>

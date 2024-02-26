@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface MoimLikeRepository extends JpaRepository<MoimLike,Long> {
-    Integer countByMoim(Moim moim);
+    List<MoimLike> findByMoim(Moim moim);
 }
