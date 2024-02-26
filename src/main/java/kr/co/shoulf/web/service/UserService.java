@@ -48,12 +48,5 @@ public class UserService {
 
         return userList;
     }
-    public UserDetailDTO readUserDetail() {
-        UserDetailDTO userDetailDTO = UserDetailDTO.userDetailBuilder()
-
-                .build();
-
-        return null;
-    }
 
 }
