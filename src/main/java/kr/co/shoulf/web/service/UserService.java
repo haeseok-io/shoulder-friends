@@ -3,7 +3,6 @@ package kr.co.shoulf.web.service;
 import kr.co.shoulf.web.dto.UserDTO;
 import kr.co.shoulf.web.entity.UserJob;
 import kr.co.shoulf.web.entity.UserOnline;
-import kr.co.shoulf.web.repository.MoimParticipantsRepository;
 import kr.co.shoulf.web.repository.UserJobRepository;
 import kr.co.shoulf.web.repository.UserOnlineRepository;
 import kr.co.shoulf.web.repository.UserRepository;
@@ -21,29 +20,31 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserJobRepository userJobRepository;
     private final UserOnlineRepository userOnlineRepository;
-    private final MoimParticipantsRepository moimParticipantsRepository;
 
-    public List<UserDTO> readNewUsers() {
+    public List<UserDTO> readNewUserList() {
         List<UserDTO> userList = new ArrayList<>();
 
         userRepository.findTop12ByOrderByUserNoDesc().forEach(user -> {
             UserJob userJob = userJobRepository.findByUsers(user);
             UserOnline userOnline = userOnlineRepository.findByUsers(user);
 
+            Integer userPositionLevel = userJob!=null ? userJob.getLevel() : null;
+            String userPositionDetailName = userJob!=null ? userJob.getPositionDetail().getMiddleName() : null;
+            String userProfileImg = user.getUserDetail().getProfileImg()!=null ? user.getUserDetail().getProfileImg() : "https://letspl.me/assets/images/prof-no-img.png";
+
             userList.add(
                     UserDTO.builder()
-                            .userNo(user.getUserNo())
+                            .no(user.getUserNo())
                             .nickname(user.getNickname())
-                            .profileImg(user.getUserDetail().getProfileImg())
+                            .profileImg(userProfileImg)
                             .introduce(user.getUserDetail().getIntroduce())
-                            .positionLevel(userJob.getLevel())
-                            .positionDetailName(userJob.getPositionDetail().getMiddleName())
-                            .online(userOnline.getOnline().getOnlineName())
-                            .progressMoimNum(moimParticipantsRepository.countByUsersAndStatus(user, 2))
+                            .positionLevel(userPositionLevel)
+                            .positionDetailName(userPositionDetailName)
                             .build()
             );
         });
 
         return userList;
     }
+
 }

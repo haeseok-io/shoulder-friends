@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
-    private Long userNo;
+    private Long no;
     private String nickname;
     private String profileImg;
     private String introduce;
@@ -20,5 +20,5 @@ public class UserDTO {
     private String positionDetailName;
     private String online;
 
-    private Integer progressMoimNum;
+    private Integer progressMoimNum; // 진행중인 모임 갯수
 }

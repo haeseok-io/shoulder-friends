@@ -3,7 +3,7 @@
 .weekBest {}
 .weekBest .content {}
 .weekBest .content .moimList { display: flex; justify-content: flex-start; flex-wrap: wrap; }
-.weekBest .content .moimList > li { position: relative; width: calc(25% - (60px / 4)); border: 1px solid #ccc; border-radius: 10px; margin-right: 20px; margin-bottom: 20px; overflow: hidden; }
+.weekBest .content .moimList > li { position: relative; width: calc(25% - (60px / 4)); border: 1px solid #ccc; border-radius: 10px; margin-right: 20px; margin-bottom: 30px; overflow: hidden; }
 .weekBest .content .moimList > li:nth-child(4n) { margin-right: 0; }
 
 .weekBest .content .moimList > li .category { position: absolute; top: 10px; left: 10px; opacity: .7; }
@@ -27,3 +27,22 @@
 .weekBest .content .moimList > li .wrap .language .languageList { display: flex; align-items: center; height: 50px; }
 .weekBest .content .moimList > li .wrap .language .languageList .item { text-align: center; margin-right: 10px; }
 .weekBest .content .moimList > li .wrap .language .languageList .item img { width: 25px; height: auto; }
+
+
+/* 새로합류한 팀원 */
+.newUser {}
+.newUser .content {}
+.newUser .content .userList { display: flex; justify-content: flex-start; flex-wrap: wrap; }
+.newUser .content .userList > li { position: relative; display: flex; justify-content: space-between; align-items: center; width: calc(25% - (60px / 4)); border: 1px solid #ccc; border-radius: 10px; margin-right: 20px; margin-bottom: 30px; padding: 30px; overflow: hidden; cursor: pointer; }
+.newUser .content .userList > li:nth-child(4n) { margin-right: 0; }
+
+.newUser .content .userList > li .thumbnail { width: 25%; }
+.newUser .content .userList > li .thumbnail img { width: 60px; height: auto; border: 1px solid #ccc; border-radius: 100%; overflow: hidden; }
+
+.newUser .content .userList > li .wrap { width: 50%; padding-left: 20px; }
+.newUser .content .userList > li .wrap .nickname { font-weight: 600; font-size: 1.1rem; color: #1F1926; }
+.newUser .content .userList > li .wrap .nickname .level { font-weight: 300; font-size: .9rem; color: #FF8911; }
+.newUser .content .userList > li .wrap .positionDetail { font-size: .9rem; color: #aaa; }
+
+.newUser .content .userList > li .message { width: 25%; text-align: right; cursor: pointer; }
+.newUser .content .userList > li .message i { font-size: 1.5rem; color: #ccc; }

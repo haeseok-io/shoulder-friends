@@ -30,11 +30,7 @@ public class MoimService {
         return moimRepository.findAll();
     }
 
-    public List<Moim> readNewMoim() { // 신규 모임 가져오기
-        return moimRepository.findTop2ByOrderByMoimNoDesc();
-    }
-
-    public List<MoimDTO> readBest() {
+    public List<MoimDTO> readBestList() {
         List<MoimDTO> list = new ArrayList<>();
 
         moimRepository.findTop8ByOrderByHitsDesc().forEach(moim -> {
