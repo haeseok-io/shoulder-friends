@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
-    private Long userNo;
+    private Long no;
     private String nickname;
     private String profileImg;
     private String introduce;
