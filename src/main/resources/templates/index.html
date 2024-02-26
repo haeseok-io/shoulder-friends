@@ -6,7 +6,19 @@
     <link rel="stylesheet" th:href="@{/css/index.css}">
 </th:block>
 <th:block layout:fragment="js">
+    <script>
+        $(() => {
+            $(".moimList > li").click(e => {
+                let no = $(e.currentTarget).data('no');
+                document.location.href = "/moim/detail?no="+no;
+            });
 
+            $(".userList > li").click(e => {
+                let no = $(e.currentTarget).data('no');
+                document.location.href = "/user/detail?no="+no;
+            });
+        });
+    </script>
 </th:block>
 
 <th:block layout:fragment="container">
@@ -25,7 +37,7 @@
                 </div>
                 <div class="content">
                     <ul class="moimList">
-                        <li th:each="data : ${moimBestList}">
+                        <li th:each="data : ${moimBestList}" th:data-no="${data.no}">
                             <div class="category">
                                 <span class="badge text-bg-dark">[[${data.category}]]</span>
                             </div>
@@ -79,7 +91,7 @@
                 </div>
                 <div class="content">
                     <ul class="userList">
-                        <li th:each="data : ${userNewList}">
+                        <li th:each="data : ${userNewList}" th:data-no="${data.no}">
                             <div class="thumbnail">
                                 <img th:src="${data.profileImg}" alt="">
                             </div>
