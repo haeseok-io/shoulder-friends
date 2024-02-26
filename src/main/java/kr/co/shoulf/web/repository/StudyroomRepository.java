@@ -11,5 +11,6 @@ import java.util.List;
 
 @Repository
 public interface StudyroomRepository extends JpaRepository<Studyroom, Long> {
+    //스터디카페 번호로 스터디룸 목록
     List<Studyroom> findByStudycafe_StudycafeNo(Long studyCafeNo);
 }

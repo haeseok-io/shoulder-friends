@@ -1,14 +1,12 @@
 package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Builder
 @Table(name = "studyroom_image")
 public class StudyroomImage {

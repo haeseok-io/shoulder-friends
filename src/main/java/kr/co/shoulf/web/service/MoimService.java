@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import kr.co.shoulf.web.dto.*;
 import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.repository.*;
+import kr.co.shoulf.web.util.LanguageImgPathConvert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,10 @@ public class MoimService {
     private final MoimHeadcountRepository moimHeadcountRepository;
     private final MoimParticipantsRepository moimParticipantsRepository;
 
+    private final StudycafeRepository studycafeRepository;
+    private final StudyroomRepository studyroomRepository;
+    private final StudyroomImageRepository studyroomImageRepository;
+
     public List<Moim> readAll() {
         return moimRepository.findAll();
     }
@@ -30,7 +35,7 @@ public class MoimService {
 
         moimRepository.findTop8ByOrderByHitsDesc().forEach(moim -> {
             // 타입
-            String type = moim.getType()=="project" ? "프로젝트" : "스터디";
+            String type = moim.getType().equals("project") ? "프로젝트" : "스터디";
 
             // 모임 카테고리
             String category = moim.getMoimDetail().getCategory()!=null ? moim.getMoimDetail().getCategory().getCategoryName() : moim.getMoimDetail().getStudyCategory().getStudyCategoryName();
@@ -41,6 +46,7 @@ public class MoimService {
                 languageList.add(
                         LanguageDTO.builder()
                                 .name(moimLanguage.getName())
+                                .path(LanguageImgPathConvert.getImgPath(moimLanguage.getName()))
                                 .build()
                 );
             });
@@ -66,6 +72,7 @@ public class MoimService {
             list.add(
                     MoimDTO.builder()
                             .no(moim.getMoimNo())
+                            .img(moim.getMoimDetail().getMoimImg())
                             .type(type)
                             .category(category)
                             .subject(moim.getSubject())

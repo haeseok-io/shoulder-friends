@@ -1,1 +1,32 @@
 @charset "UTF-8";
+
+.container { width: 1440px; max-width: 1440px; margin: 0 auto; }
+.container .wrapper { margin-top: 50px; padding: 10px 0; }
+
+header { display: flex; align-items: center; border-bottom: 1px solid #ccc; height: 80px; }
+header .container { display: flex; justify-content: flex-start; align-items: center; }
+
+header .container .logo a { display: flex; }
+header .container .logo img { width: 150px; height: auto; }
+
+header .container .gnb { margin-left: 100px; }
+header .container .gnb ul { display: flex; }
+header .container .gnb ul li { margin-right: 30px; padding: 0 10px; }
+header .container .gnb ul li a { font-weight: 600; font-size: 1.3rem; color: #382B47; }
+
+header .container .write { margin-left: auto; }
+header .container .write a { display: flex; justify-content: center; align-items: center; height: 40px; background: #382B47; border-radius: 5px; padding: 0 20px; font-size: .9rem; color: #fff; }
+
+header .container .etc { margin-left: 10px; }
+header .container .etc ul { display: flex; align-items: center; }
+header .container .etc ul li { margin-left: 20px; font-size: 1.6rem; color: #382B47; }
+
+
+
+/* 공통 클래스 */
+.mainTitle { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.mainTitle .title {}
+.mainTitle .title .subject { margin-bottom: 10px; font-weight: 600; font-size: 1.4rem; color: #1F1926; }
+.mainTitle .title .des { color: #888; }
+.mainTitle .etc {}
+.mainTitle .etc .more { font-size: .9rem; color: #888; }

@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+.weekBest {}
+.weekBest .content {}
+.weekBest .content .moimList { display: flex; justify-content: flex-start; flex-wrap: wrap; }
+.weekBest .content .moimList > li { position: relative; width: calc(25% - (60px / 4)); border: 1px solid #ccc; border-radius: 10px; margin-right: 20px; margin-bottom: 20px; overflow: hidden; }
+.weekBest .content .moimList > li:nth-child(4n) { margin-right: 0; }
+
+.weekBest .content .moimList > li .category { position: absolute; top: 10px; left: 10px; opacity: .7; }
+.weekBest .content .moimList > li .category span { font-size: .8rem; font-weight: 400; }
+
+.weekBest .content .moimList > li .thumbnail { width: 100%; height: 150px; }
+.weekBest .content .moimList > li .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+
+.weekBest .content .moimList > li .wrap { padding: 20px; cursor: pointer; }
+.weekBest .content .moimList > li .wrap .etc { display: flex; justify-content: space-between; align-items: center; }
+.weekBest .content .moimList > li .wrap .etc .type .badge { font-size: .8rem; font-weight: 400; }
+.weekBest .content .moimList > li .wrap .etc .type .project { background: #7B27FF; }
+.weekBest .content .moimList > li .wrap .etc .type .study { background: #FF8911; }
+.weekBest .content .moimList > li .wrap .etc .like { display: flex; align-items: center; color: #888; }
+.weekBest .content .moimList > li .wrap .etc .like span { margin-left: 5px; margin-top: -3px; }
+
+.weekBest .content .moimList > li .wrap .subject { margin-top: 10px; font-weight: 600; font-size: 1rem; color: #1F1926; }
+.weekBest .content .moimList > li .wrap .desc { margin-top: 5px; font-size: .8rem; color: #888; }
+
+.weekBest .content .moimList > li .wrap .language { margin-top: 10px; }
+.weekBest .content .moimList > li .wrap .language .languageList { display: flex; align-items: center; height: 50px; }
+.weekBest .content .moimList > li .wrap .language .languageList .item { text-align: center; margin-right: 10px; }
+.weekBest .content .moimList > li .wrap .language .languageList .item img { width: 25px; height: auto; }

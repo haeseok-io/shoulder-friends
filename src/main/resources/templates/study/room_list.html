@@ -25,7 +25,10 @@
                 <p th:text="${oneCafe.addr}"></p>
             </div>
             <div>
+                <div th:each="imgdto : ${roomImgList}">
                 <div th:each="dto : ${listRoom}">
+                    <div th:switch="${imgdto.studyroom.studyroomNo}">
+                    <span th:case="${dto.studyroomNo}"><img th:src="${imgdto.path}"></span>
                     <p th:text="${dto.name}"></p>
                     <p th:text="${dto.price}"></p>
                     <div th:text="${dto.studyroomDetail.maxNum}"></div>
@@ -34,7 +37,9 @@
                     <div th:text="${dto.studyroomDetail.socket}"></div>
                     <div><a th:href="@{/study/room_modify(studyroomNo=${dto.studyroomNo})}">수정</a></div>
                     <div><a th:href="@{/study/room_delete(studyroomNo=${dto.studyroomNo})}">삭제</a></div>
+                    </div>
                 </div>
+            </div>
             </div>
         </div>
     </main>

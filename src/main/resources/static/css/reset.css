@@ -25,4 +25,4 @@ textarea                        { border: 1px solid #ccc; outline: 0; }
 
 iframe                          { border: 0; }
 
-body                            { font-family: "Dotum","돋움","vernada",sans-serif; font-size: 12px; line-height: 1.4; color: #666; }
+body                            { font-family: "Pretendard", sans-serif; font-weight: 400; font-size: 1rem; line-height: 1.3rem; color: #666; }

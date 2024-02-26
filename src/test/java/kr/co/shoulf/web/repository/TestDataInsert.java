@@ -321,7 +321,7 @@ public class TestDataInsert {
         // 데이터 추가
         for(int i=0; i<userDetailList.size(); i++) {
             userDetailRepository.save(userDetailList.get(i));
-            userRepository.save(userList.get(i));
+            //userRepository.save(userList.get(i));
         }
     }
 
