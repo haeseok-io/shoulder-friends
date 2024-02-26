@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HeadcountDTO {
+public class InterestDTO {
     private Long no;
-    private int personnel;
-    private String positionName;
-    private String positionDetailName;
-    private int approvalNum; // 승인자수
+    private String name;
 }
