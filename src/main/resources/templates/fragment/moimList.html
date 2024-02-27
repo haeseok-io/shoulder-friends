@@ -1,0 +1,75 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="moimList">
+    <ul class="moimList" th:if="${templateData!=null}">
+        <li th:each="data : ${templateData}" th:data-no="${data.moimNo}">
+            <div class="category">
+                <span class="badge badge-size-sm badge-category" th:if="${data.moimDetail.category!=null}">[[${data.moimDetail.category.categoryName}]]</span>
+                <span class="badge badge-size-sm badge-category" th:if="${data.moimDetail.studyCategory!=null}">[[${data.moimDetail.studyCategory.studyCategoryName}]]</span>
+            </div>
+            <div class="thumbnail">
+                <img th:src="${data.moimDetail.moimImg}" alt="">
+            </div>
+            <div class="wrap">
+                <div class="etc">
+                    <div class="type">
+                        <span class="badge badge-size-sm badge-project" th:if="${data.type eq 'project'}">프로젝트</span>
+                        <span class="badge badge-size-sm badge-study" th:if="${data.type eq 'study'}">스터디</span>
+                    </div>
+                    <div class="like">
+                        <i class="bi bi-heart"></i>
+                        <span>[[${data.likeList.size()}]]</span>
+                    </div>
+                </div>
+                <p class="subject">[[${data.subject}]]</p>
+                <p class="desc">[[${data.shortDesc}]]</p>
+                <div class="language">
+                    <ul class="languageList">
+                        <li th:each="language : ${data.languageList}">
+                            <div class="item" th:if="${language.path==null}">
+                                <span class="badge rounded-pill text-bg-secondary">[[${language.name}]]</span>
+                            </div>
+                            <div class="item" th:if="${language.path!=null}">
+                                <img th:src="${language.path}" alt="">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <ul class="moimList" th:if="${templateData==null}">
+        <li data-no="">
+            <div class="category">
+                <span class="badge badge-size-sm badge-category"></span>
+            </div>
+            <div class="thumbnail">
+                <img src="" alt="">
+            </div>
+            <div class="wrap">
+                <div class="etc">
+                    <div class="type">
+                        <span class="badge badge-size-sm"></span>
+                    </div>
+                    <div class="like">
+                        <i class="bi bi-heart"></i>
+                        <span></span>
+                    </div>
+                </div>
+                <p class="subject"></p>
+                <p class="desc"></p>
+                <div class="language">
+                    <ul class="languageList">
+                        <li>
+                            <div class="item"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+    </ul>
+</th:block>
+
+</html>
+
