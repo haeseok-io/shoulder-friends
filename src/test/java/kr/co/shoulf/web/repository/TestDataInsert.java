@@ -1013,15 +1013,15 @@ public class TestDataInsert {
     @Order(30)
     void insertStudycafe() {
         List<List<Object>> dataList = new ArrayList<>();
-        dataList.add(Arrays.asList("어깨동무 스터디 카페 종로점", "스터디 카페 종로점입니다.", "3134", "서울 종로구 율곡로10길 105", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 37.5729361, 126.9922303, 2L));
-        dataList.add(Arrays.asList("어깨동무 스터디 카페 강남점", "스터디 카페 강남점입니다.", "6130", "서울 강남구 테헤란로7길 21", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 37.5009602, 127.0299804, 3L));
-        dataList.add(Arrays.asList("어깨동무 스터디 카페 서대문구점", "스터디 카페 서대문구점입니다.", "3718", "서울 서대문구 연희로 248", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 37.5792596, 126.9364938, 4L));
-        dataList.add(Arrays.asList("어깨동무 스터디 카페 용인점", "스터디 카페 용인점입니다.", "17019", "경기 용인시 처인구 중부대로 1199", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 37.2408414, 127.1775117, 5L));
-        dataList.add(Arrays.asList("어깨동무 스터디 카페 인천점", "스터디 카페 인천점입니다.", "21554", "인천 남동구 정각로 29", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 37.456255, 126.705206, 6L));
-        dataList.add(Arrays.asList("어깨동무 스터디 카페 대구점", "스터디 카페 대구점입니다.", "41939", "대구 중구 공평로10길 25", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 35.8686883, 128.601256, 7L));
-        dataList.add(Arrays.asList("어깨동무 스터디 카페 부산점", "스터디 카페 부산점입니다.", "47545", "부산 연제구 중앙대로 1001", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 35.1800626, 129.0745963, 8L));
-        dataList.add(Arrays.asList("어깨동무 스터디 카페 광주점", "스터디 카페 광주점입니다.", "61945", "광주 서구 내방로 111", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 25.1597705, 126.8515218, 9L));
-        dataList.add(Arrays.asList("어깨동무 스터디 카페 대전점", "스터디 카페 대전점입니다.", "35242", "대전 서구 둔산로 100", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 36.3501707, 127.3848389, 10L));
+        dataList.add(Arrays.asList("어깨동무 스터디 카페 종로점", "스터디 카페 종로점입니다.", "3134", "서울 종로구 율곡로10길 105", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 126.9922303, 37.5729361, 2L));
+        dataList.add(Arrays.asList("어깨동무 스터디 카페 강남점", "스터디 카페 강남점입니다.", "6130", "서울 강남구 테헤란로7길 21", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 127.0299804, 37.5009602, 3L));
+        dataList.add(Arrays.asList("어깨동무 스터디 카페 서대문구점", "스터디 카페 서대문구점입니다.", "3718", "서울 서대문구 연희로 248", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 126.9364938, 37.5792596, 4L));
+        dataList.add(Arrays.asList("어깨동무 스터디 카페 용인점", "스터디 카페 용인점입니다.", "17019", "경기 용인시 처인구 중부대로 1199", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 127.1775117, 37.2408414, 5L));
+        dataList.add(Arrays.asList("어깨동무 스터디 카페 인천점", "스터디 카페 인천점입니다.", "21554", "인천 남동구 정각로 29", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 126.705206, 37.456255, 6L));
+        dataList.add(Arrays.asList("어깨동무 스터디 카페 대구점", "스터디 카페 대구점입니다.", "41939", "대구 중구 공평로10길 25", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 128.601256, 35.8686883, 7L));
+        dataList.add(Arrays.asList("어깨동무 스터디 카페 부산점", "스터디 카페 부산점입니다.", "47545", "부산 연제구 중앙대로 1001", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 129.0745963, 35.1800626, 8L));
+        dataList.add(Arrays.asList("어깨동무 스터디 카페 광주점", "스터디 카페 광주점입니다.", "61945", "광주 서구 내방로 111", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 126.8513072, 35.1599785, 9L));
+        dataList.add(Arrays.asList("어깨동무 스터디 카페 대전점", "스터디 카페 대전점입니다.", "35242", "대전 서구 둔산로 100", "https://kr.acrofan.com/news_images/2021/04/16/mark/2021041671633.jpg", 127.3848389, 36.3501707, 10L));
 
         dataList.forEach(data -> {
             Member member = memberRepository.findById((Long) data.get(7)).orElse(null);
