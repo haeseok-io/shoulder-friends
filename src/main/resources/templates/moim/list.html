@@ -1,143 +1,98 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<style>
-    .newMoim, .moimList {
-        display: inline-block;
-        border-collapse: collapse;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-    }
-</style>
-<script>
-    $(() => {
-        var positionSelect = $('#position');
-        var positionDetailSelect = $('#positionDetail');
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/layout}">
 
-        // 서버에서 직무 대분류 목록을 가져와서 positionSelect 업데이트
-        $.ajax({
-            url: '/position',
-            type: 'get',
-            dataType: 'json',
-            success: function (data) {
-                console.log('hahaha');
-                console.log(data);
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/moim/list.css}">
+</th:block>
+<th:block layout:fragment="js">
 
-                // 중복을 방지하기 위해 Set 사용
-                var uniquePositions = new Set(data.list.map(function (positionDetail) {
-                    return positionDetail.positionNo;
-                }));
+</th:block>
 
-                // 기존 옵션 제거
-                positionSelect.empty();
+<th:block layout:fragment="container">
+    <main>
+        <div class="container">
+            <div class="wrapper newMoim">
+                <div class="mainTitle">
+                    <div class="title">
+                        <p class="subject">신규 모임</p>
+                        <span class="desc">새롭게 등록된 모임을 확인해보세요!</span>
+                    </div>
+                </div>
+                <div class="content">
+                    <ul class="moimNewList">
+                        <li th:each="data : ${moimNewList}">
+                            <div class="thumbnail">
+                                <img th:src="${data.moimDetail.moimImg}" alt="">
+                            </div>
+                            <div class="wrap">
+                                <div class="label">
+                                    <div class="type">
+                                        <span class="badge badge-size-lg badge-project" th:if="${data.type eq 'project'}">프로젝트</span>
+                                        <span class="badge badge-size-lg badge-study" th:if="${data.type eq 'study'}">스터디</span>
+                                    </div>
+                                    <div class="category">
+                                        <span class="badge badge-size-lg badge-category" th:if="${data.moimDetail.category!=null}">[[${data.moimDetail.category.categoryName}]]</span>
+                                        <span class="badge badge-size-lg badge-category" th:if="${data.moimDetail.studyCategory!=null}">[[${data.moimDetail.studyCategory.studyCategoryName}]]</span>
+                                    </div>
+                                    <div class="like">
+                                        <i class="bi bi-heart"></i>
+                                        <span>[[${data.likeList.size()}]]</span>
+                                    </div>
+                                </div>
+                                <p class="subject">[[${data.subject}]]</p>
+                                <p class="shortDesc">[[${data.shortDesc}]]</p>
+                                <p class="detailDesc">[[${data.moimDetail.detailDesc}]]</p>
+                                <div class="etc">
+                                    <div class="language">
+                                        <ul class="languageList">
+                                            <li th:each="language : ${data.languageList}">
+                                                <div class="item" th:if="${language.path==null}">
+                                                    <span class="badge rounded-pill text-bg-secondary">[[${language.name}]]</span>
+                                                </div>
+                                                <div class="item" th:if="${language.path!=null}">
+                                                    <img th:src="${language.path}" alt="">
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="headcount">
+                                        <div class="headcountToggle">
+                                            <div class="toggleName">
+                                                <span>모집 인원</span>
+                                                <span class="totalApproval">[[${#aggregates.sum(data.headcountList.![participantApprovalList.size()])}]]</span>
+                                                <span class="totalPersonnel">[[${#aggregates.sum(data.headcountList.![personnel])}]]</span>
+                                            </div>
+                                            <div class="toggleIcon">
+                                                <i class="bi bi-chevron-down"></i>
+                                            </div>
+                                        </div>
+                                        <div class="headcountWrap">
+                                            <ul>
+                                                <li th:each="headcount : ${data.headcountList}">
+                                                    <div class="positionDetail">
+                                                        <p>[[${headcount.positionDetail.middleName}]]</p>
+                                                    </div>
+                                                    <div class="participant">
+                                                        <div class="approval">[[${headcount.participantApprovalList.size()}]]</div>
+                                                        <div class="personnel">[[${headcount.personnel}]]</div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
 
-                // 새로운 옵션 추가
-                uniquePositions.forEach(function (positionNo) {
-                    var position = data.list.find(function (positionDetail) {
-                        return positionDetail.positionNo == positionNo;
-                    });
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="wrapper moim">
 
-                    positionSelect.append($('<option>', {
-                        value: position.positionNo,
-                        text: position.bigName
-                    }));
-                });
-
-                // positionSelect 초기화 후 첫 번째 항목을 선택
-                positionSelect.val(data.list[0].positionNo);
-
-                // 초기값에 대한 positionDetail 업데이트
-                updatePositionDetailSelect(data.list[0]);
-            }
-        });
-
-        // positionSelect 변경 시에 호출되는 함수
-        positionSelect.on('change', function () {
-            var selectedPositionNo = $(this).val();
-
-            // 선택된 position에 대한 상세 정보로 positionDetail 업데이트
-            var selectedPosition = data.list.find(function (positionDetail) {
-                return positionDetail.positionNo == selectedPositionNo;
-            });
-
-            // 업데이트 함수 호출
-            updatePositionDetailSelect(selectedPosition);
-        });
-
-        // positionDetailSelect 업데이트 함수
-        function updatePositionDetailSelect(selectedPosition) {
-            // 기존 옵션 제거
-            positionDetailSelect.empty();
-            console.log(selectedPosition);
-            // 새로운 옵션 추가
-            $.each(selectedPosition, function (index, positionDetail) {
-                positionDetailSelect.append($('<option>', {
-                    value: positionDetail.positionDetailNo,
-                    text: positionDetail.middleName
-                }));
-            });
-        }
-    });
-</script>
-<body>
-<!--모임 리스트에 가져와야할 정보
-    Moim(type, category, subject, shortDesc), MoimLanguage, MoimHeadcount, MoimLike
-    검색기능 -> Position, PositionDetail, Moim(status)
--->
-<div class="container">
-    <div>
-        <h3>신규 모임</h3>
-        <div class="newMoim" th:each="moims : ${newMoims}">
-            <img th:src="${moims.moimDetail.moimImg}" alt="">
-            <p>모임 번호 : [[${moims.moimNo}]]</p>
-            <p>모임 유형 : [[${moims.type}]]</p>
-            <p>제목 : [[${moims.subject}]]</p>
-            <p>요약설명 : [[${moims.shortDesc}]]</p>
-            <th:block th:if="${moims.users!=null}">
-                <p>리더 이메일 : [[${moims.users.email}]]</p>
-                <p>리더 닉네임 : [[${moims.users.nickname}]]</p>
-            </th:block>
-            <hr>
+            </div>
         </div>
-    </div>
-    <div>
-        <h3>전체 모임</h3>
-        <div class="search">
-            <select name="selectMoim" id="selectMoim">
-                <option value="allMoim">모집 전체</option>
-                <option value="project">프로젝트</option>
-                <option value="study">스터디</option>
-            </select>
-            <select name="position" id="position">
-                <option>직무 대분류</option>
-            </select>
-            <select name="positionDetail" id="positionDetail">
-                <option>직무 중분류</option>
-            </select>
-        </div>
-        <div class="moimList" th:each="moim : ${moimList}">
-            <img th:src="${moim.moimDetail.moimImg}" alt="">
-            <p>모임 번호 : [[${moim.moimNo}]]</p>
-            <p>모임 유형 : [[${moim.type}]]</p>
-            <p>제목 : [[${moim.subject}]]</p>
-            <p>요약설명 : [[${moim.shortDesc}]]</p>
-            <th:block th:if="${moim.users!=null}">
-                <p>리더 이메일 : [[${moim.users.email}]]</p>
-                <p>리더 닉네임 : [[${moim.users.nickname}]]</p>
-            </th:block>
-            <hr>
-        </div>
-    </div>
-</div>
-</body>
+    </main>
+</th:block>
+
 </html>

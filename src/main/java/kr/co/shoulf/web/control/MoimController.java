@@ -1,5 +1,6 @@
 package kr.co.shoulf.web.control;
 
+import kr.co.shoulf.web.dto.PageRequestDTO;
 import kr.co.shoulf.web.entity.Moim;
 import kr.co.shoulf.web.service.MoimService;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +17,11 @@ import java.util.List;
 public class MoimController {
     private final MoimService moimService;
 
-    @GetMapping("/list")
-    public String moimList(Model model){
-        List<Moim> moimList = moimService.readAll();
-        List<Moim> newMoims = moimService.readNewMoim();
-        model.addAttribute("moimList", moimList);
-        model.addAttribute("newMoims", newMoims);
-        System.out.println(moimList);
-        System.out.println(newMoims);
-        return "moim/list";
+    @GetMapping("/")
+    public String list(PageRequestDTO pageRequestDto, Model model){
+        model.addAttribute("moimNewList", moimService.readNewList());
+        model.addAttribute("moimList", moimService.readMoimList(pageRequestDto));
 
+        return "moim/list";
     }
 }

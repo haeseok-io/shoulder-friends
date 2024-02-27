@@ -1,25 +1,22 @@
 package kr.co.shoulf.web.service;
 
-import kr.co.shoulf.web.dto.LanguageDTO;
-import kr.co.shoulf.web.dto.MoimDTO;
-import kr.co.shoulf.web.dto.MoimHeadcountDTO;
-import kr.co.shoulf.web.dto.MoimParticipantDTO;
-import kr.co.shoulf.web.entity.Moim;
-import kr.co.shoulf.web.entity.MoimParticipants;
-import kr.co.shoulf.web.entity.MoimParticipantsReject;
-import kr.co.shoulf.web.entity.PositionDetail;
+import kr.co.shoulf.web.dto.*;
+import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.repository.*;
 import kr.co.shoulf.web.util.LanguageImgPathConvert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class MoimService {
     private final MoimRepository moimRepository;
     private final MoimLikeRepository moimLikeRepository;
@@ -29,16 +26,30 @@ public class MoimService {
     private final MoimParticipantsRejectRepository moimParticipantsRejectRepository;
 
     public List<Moim> readAll() {
-        return moimRepository.findAll();
+        return null;
     }
 
-    public List<Moim> readNewMoim() { // 신규 모임 가져오기
-        return moimRepository.findTop2ByOrderByMoimNoDesc();
+    public PageResponseDTO<MoimDTO> readMoimList(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable("moimNo");
+
+        Page<Moim> pageList = moimRepository.findAll(pageable);
+        List<MoimDTO> moimList = getMoimData(pageList.toList());
+
+        PageResponseDTO<MoimDTO> resultList = PageResponseDTO.<MoimDTO>pageBuilder()
+                .pageRequestDTO(pageRequestDTO)
+                .dataList(moimList)
+                .total((int) pageList.getTotalElements())
+                .build();
+
+        return resultList;
+    }
+
+    public List<MoimDTO> readNewList() {
+        return getMoimData(moimRepository.findTop2ByOrderByMoimNoDesc());
     }
 
     public List<MoimDTO> readBestList() {
-        List<MoimDTO> list = getMoimData(moimRepository.findTop8ByOrderByHitsDesc());
-        return list;
+        return getMoimData(moimRepository.findTop8ByOrderByHitsDesc());
     }
 
     private List<MoimDTO> getMoimData(List<Moim> moimList) {
@@ -89,6 +100,7 @@ public class MoimService {
                         MoimHeadcountDTO.builder()
                                 .moimHeadcountNo(headcount.getMoimHeadcountNo())
                                 .personnel(headcount.getPersonnel())
+                                .positionDetail(headcount.getPositionDetail())
                                 .participantList(participantList)
                                 .participantApprovalList(participantApprovalList)
                                 .participantRejectedList(participantRejectedList)
