@@ -1,6 +1,7 @@
 package kr.co.shoulf.web.service;
 
 import jakarta.transaction.Transactional;
+import kr.co.shoulf.web.dto.StudycafeDTO;
 import kr.co.shoulf.web.entity.Studycafe;
 import kr.co.shoulf.web.entity.Studyroom;
 import kr.co.shoulf.web.entity.StudyroomDetail;
@@ -59,5 +60,21 @@ public class StudyService {
         Optional<Studyroom> result = studyroomRepository.findById(studyroomNo);
         Studyroom studyroom = result.orElseThrow();
         return studyroom;
+    }
+
+    //스터디룸 번호로 이미지 리스트 찾기
+    public List<StudyroomImage> oneRoomImg(Long studyroomNo) {
+        List<StudyroomImage> studyroomImageList = studyroomImageRepository.findByStudyroom_StudyroomNo(studyroomNo);
+        return studyroomImageList;
+    }
+
+    //카페 정보 저장
+    public void saveCafe(Studycafe studycafe) {
+        studycafeRepository.save(studycafe);
+    }
+
+    //카페 정보 수정
+    public void modifyCafe(Studycafe studycafe) {
+        studycafeRepository.save(studycafe);
     }
 }
