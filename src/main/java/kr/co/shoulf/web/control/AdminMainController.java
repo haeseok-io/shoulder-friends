@@ -17,7 +17,7 @@ public class AdminMainController {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         if(loggedInUser != null) {
             model.addAttribute("member", loggedInUser);
-            return "admin/main";
+            return "admin/index";
         }else {
             return "redirect:/admin/login/";
         }
