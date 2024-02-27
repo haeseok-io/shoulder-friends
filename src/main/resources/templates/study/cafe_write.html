@@ -103,7 +103,7 @@
     <main>
         <div class="container">
             <h2>카페 등록</h2>
-            <form action="/study/cafe_write" method="post" name="studycafeadd">
+            <form action="/study/cafe_write" method="post" name="studycafeadd" enctype="multipart/form-data">
             <div class="">
                 이미지 등록<input type="file" name="mainImg" id="mainImg">
             </div>
@@ -130,6 +130,7 @@
                 <div>
                     <div id="map" style="width:500px;height:400px;"></div>
                 </div>
+                담당 직원번호<input type="text" name="member" id="member">
                 <input type="hidden" name="x">
                 <input type="hidden" name="y">
             <input type="submit" value="등록">
