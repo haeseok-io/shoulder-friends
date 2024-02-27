@@ -24,12 +24,11 @@
 <th:block layout:fragment="container">
     <main>
         <div class="container">
-
             <div class="wrapper weekBest">
                 <div class="mainTitle">
                     <div class="title">
-                        <p class="subject">주간 인기 모임</p>
-                        <span class="desc">한주에 가장 인기있는 모임을 만나보세요!</span>
+                        <p class="subject">인기 모임</p>
+                        <span class="desc">현재 가장 인기있는 모임을 만나보세요!</span>
                     </div>
                     <div class="etc">
                         <a href="" class="more">전체 모임 보기</a>
@@ -39,10 +38,8 @@
                     <ul class="moimList">
                         <li th:each="data : ${moimBestList}" th:data-no="${data.moimNo}">
                             <div class="category">
-                                <span class="badge text-bg-dark">
-                                    <th:block th:if="${data.moimDetail.category!=null}">[[${data.moimDetail.category.categoryName}]]</th:block>
-                                    <th:block th:if="${data.moimDetail.studyCategory!=null}">[[${data.moimDetail.studyCategory.studyCategoryName}]]</th:block>
-                                </span>
+                                <span class="badge badge-size-sm badge-category" th:if="${data.moimDetail.category!=null}">[[${data.moimDetail.category.categoryName}]]</span>
+                                <span class="badge badge-size-sm badge-category" th:if="${data.moimDetail.studyCategory!=null}">[[${data.moimDetail.studyCategory.studyCategoryName}]]</span>
                             </div>
                             <div class="thumbnail">
                                 <img th:src="${data.moimDetail.moimImg}" alt="">
@@ -50,8 +47,8 @@
                             <div class="wrap">
                                 <div class="etc">
                                     <div class="type">
-                                        <span class="badge project" th:if="${data.type eq 'project'}">프로젝트</span>
-                                        <span class="badge study" th:if="${data.type eq 'study'}">스터디</span>
+                                        <span class="badge badge-size-sm badge-project" th:if="${data.type eq 'project'}">프로젝트</span>
+                                        <span class="badge badge-size-sm badge-study" th:if="${data.type eq 'study'}">스터디</span>
                                     </div>
                                     <div class="like">
                                         <i class="bi bi-heart"></i>
@@ -63,17 +60,12 @@
                                 <div class="language">
                                     <ul class="languageList">
                                         <li th:each="language : ${data.languageList}">
-                                            <th:block th:if="${language.path==null}">
-                                                <div class="item">
-                                                    <span class="badge rounded-pill text-bg-secondary">[[${language.name}]]</span>
-                                                </div>
-                                            </th:block>
-
-                                            <th:block th:if="${language.path!=null}">
-                                                <div class="item">
-                                                    <img th:src="${language.path}" alt="">
-                                                </div>
-                                            </th:block>
+                                            <div class="item" th:if="${language.path==null}">
+                                                <span class="badge rounded-pill text-bg-secondary">[[${language.name}]]</span>
+                                            </div>
+                                            <div class="item" th:if="${language.path!=null}">
+                                                <img th:src="${language.path}" alt="">
+                                            </div>
                                         </li>
                                     </ul>
                                 </div>
