@@ -15,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class MoimHeadcountDTO extends MoimHeadcount {
-    private String test;
     private List<MoimParticipantDTO> participantList;
     private List<MoimParticipantDTO> participantApprovalList;
     private List<MoimParticipantDTO> participantRejectedList;
