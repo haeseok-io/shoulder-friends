@@ -49,7 +49,7 @@ public class AdminLoginService {
         newMember.setPhone(member.getPhone());
         newMember.setPost(member.getPost());
         newMember.setAddr(member.getAddr());
-        newMember.setRole("ROLE_EMP");
+        newMember.setRole("ROLE_NONE");
 
         memberRepository.save(newMember);
     }
