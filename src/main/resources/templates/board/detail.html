@@ -1,0 +1,74 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/layout}">
+
+<th:block layout:fragment="css">
+    <style>
+        /* 추가된 스타일 부분 */
+        main .container {
+            width: 1000px;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .board {
+            width: 70%;
+        }
+
+        .detailSidebar {
+            width: 25%;
+        }
+    </style>
+</th:block>
+<th:block layout:fragment="js">
+
+</th:block>
+
+<th:block layout:fragment="container">
+    <main>
+        <div class="container">
+            <div class="board">
+                <div class="content">
+                    <div class="mainTitle">
+                        <div class="title">
+                            <p class="subject">[[${boardDetail.board.title}]]</p>
+                            <p class="boardDetailInfo">
+                                <span>작성일 : [[${boardDetail.board.regdate}]]</span>
+                                <span>조회수 : [[${boardDetail.board.hits}]]</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="wrap">
+                        <div class="cate">
+                                <span>
+                                    <th:block th:if="${boardDetail.board.cate == 1}">카테고리 : 자유</th:block>
+                                    <th:block th:if="${boardDetail.board.cate == 2}">카테고리 : 개발Q&A</th:block>
+                                </span>
+                        </div>
+                        <p class="desc">[[${boardDetail.board.contents}]]</p>
+                    </div>
+                </div>
+                <div class="wrap reply">
+                    <div class="mainTitle">
+                        <div class="title">
+                            <p class="subject">댓글</p>
+                        </div>
+                    </div>
+                    <div class="comments">
+                        <form action="reply/write" method="get">
+                            <input type="hidden" name="boardNo" th:value="${boardDetail.board.boardNo}">
+                            <input type="text" name="comments" id="comments">
+                            <input type="submit" value="작성">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <aside class="detailSidebar">
+                zsadfsdf
+            </aside>
+        </div>
+    </main>
+</th:block>
+
+</html>
