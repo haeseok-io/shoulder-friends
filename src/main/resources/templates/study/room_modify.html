@@ -3,17 +3,39 @@
       layout:decorate="~{fragment/layout}">
 
 <th:block layout:fragment="css">
-
+    <style>
+        img{
+            width: 500px;
+            height: 300px;
+            display: inline-block;
+        }
+    </style>
 </th:block>
 <th:block layout:fragment="js">
-
+    <script>
+        $("#img1").on("click",()=>{
+            $("#1").hide();
+        })
+        $("#img2").on("click",()=>{
+            $("#2").hide();
+        })
+        $("#img3").on("click",()=>{
+            $("#3").hide();
+        })
+    </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
         <div class="container">
             <h2>룸 수정</h2>
-            <form action="/study/room_modify" method="post">
+            <form action="/study/room_modify" method="post" enctype="multipart/form-data">
+                <div th:each="imgdto , i : ${studyroomimg}">
+                    <img th:src="${imgdto.path}" th:id="${i.count}">
+                </div>
+                이미지 변경<input type="file" id="img1" name="path">
+                이미지 변경<input type="file" id="img2" name="path">
+                이미지 변경<input type="file" id="img3" name="path">
                 룸 이름<input type="text" name="name" id="name" th:value="${oneRoom.name}">
                 룸 금액<input type="text" name="price" id="price" th:value="${oneRoom.price}">
                 최대 정원<input type="text" name="maxNum" id="maxNum" th:value="${oneRoom.studyroomDetail.maxNum}">
@@ -21,8 +43,7 @@
                 <input type="radio" name="beam" id="beamN">N
                 화이트보드<input type="radio" name="wboard" id="wboardY">Y
                 <input type="radio" name="wboard" id="wboardN">N
-                콘센트<input type="radio" name="socket" id="socketY">Y
-                <input type="radio" name="socket" id="socketN">
+                콘센트<input type="text" name="socket" id="socket" th:value="${oneRoom.studyroomDetail.socket}">
                 <input type="submit" value="등록">
             </form>
         </div>
