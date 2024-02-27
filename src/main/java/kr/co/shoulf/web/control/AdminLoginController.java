@@ -19,7 +19,7 @@ public class AdminLoginController {
 
     @GetMapping("/login/")
     public String adminLogin() {
-        return "/admin/login";
+        return "/admin/login/login";
     }
 
     @PostMapping("/loginProc")
@@ -33,13 +33,13 @@ public class AdminLoginController {
         } else {
             // 로그인 실패 시
             model.addAttribute("error", "존재하지 않는 아이디이거나 비밀번호를 다시 입력해주세요.");
-            return "/admin/login"; // 로그인 페이지로 다시 이동
+            return "/admin/login/login"; // 로그인 페이지로 다시 이동
         }
     }
 
     @GetMapping("/login/register")
     public String memberRegister() {
-        return "admin/register";
+        return "admin/login/register";
     }
 
     @PostMapping("/login/register")
