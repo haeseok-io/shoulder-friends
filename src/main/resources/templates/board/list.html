@@ -6,7 +6,19 @@
 
 </th:block>
 <th:block layout:fragment="js">
+    <script>
+        $(() => {
+            $(".wrap").on("click", function () {
+                let dataNo = $(this).data("no");
+                window.location.href = "/board/detail?boardNo=" + dataNo;
+            });
 
+            $(".wrap").on("mouseover", function () {
+                let dataNo = $(this).data("no");
+                $(this).css("cursor", "pointer"); // 커서 모양을 포인터로 변경
+            });
+        });
+    </script>
 </th:block>
 
 <th:block layout:fragment="container">
@@ -46,7 +58,7 @@
                 <div class="allContents">
                     <ul>
                         <li th:each="data : ${boardList}">
-                            <div class="wrap">
+                            <div class="wrap" th:data-no="${data.board.boardNo}">
                                 <div class="cate">
                                     <span>
                                         <th:block th:if="${data.board.cate == 1}">자유</th:block>
