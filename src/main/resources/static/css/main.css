@@ -31,7 +31,7 @@ footer .container p { font-weight: 300; color: #fff; }
 .container { width: 1440px; max-width: 1440px; margin: 0 auto; }
 .container .wrapper { margin-top: 50px; padding: 10px 0; }
 
-/* 공통 클래스 */
+/* 공통 타이틀 클래스 */
 .mainTitle { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .mainTitle .title {}
 .mainTitle .title .subject { margin-bottom: 10px; font-weight: 600; font-size: 1.4rem; color: #1F1926; }
@@ -39,3 +39,38 @@ footer .container p { font-weight: 300; color: #fff; }
 .mainTitle .etc {}
 .mainTitle .etc .more { font-size: .9rem; color: #888; }
 
+/* 공통 모임 리스트 */
+.moimList { display: flex; justify-content: flex-start; flex-wrap: wrap; }
+.moimList > li { position: relative; width: calc(25% - (60px / 4)); border: 1px solid #ccc; border-radius: 10px; margin-right: 20px; margin-bottom: 30px; overflow: hidden; }
+.moimList > li:nth-child(4n) { margin-right: 0; }
+
+.moimList > li .category { position: absolute; top: 10px; left: 10px; opacity: .7; }
+.moimList > li .category span { font-size: .8rem; font-weight: 400; }
+
+.moimList > li .thumbnail { width: 100%; height: 150px; }
+.moimList > li .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+
+.moimList > li .wrap { padding: 20px; cursor: pointer; }
+.moimList > li .wrap .etc { display: flex; justify-content: space-between; align-items: center; }
+.moimList > li .wrap .etc .like { display: flex; align-items: center; color: #888; }
+.moimList > li .wrap .etc .like span { margin-left: 5px; margin-top: -3px; }
+
+.moimList > li .wrap .subject { margin-top: 10px; font-weight: 600; font-size: 1rem; color: #1F1926; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.moimList > li .wrap .desc { margin-top: 5px; font-size: .8rem; color: #888; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+
+.moimList > li .wrap .language { margin-top: 10px; }
+.moimList > li .wrap .language .languageList { display: flex; align-items: center; height: 50px; }
+.moimList > li .wrap .language .languageList li {}
+.moimList > li .wrap .language .languageList li .item { text-align: center; margin-right: 10px; }
+.moimList > li .wrap .language .languageList li .item img { width: 25px; height: auto; }
+
+
+/* 부투스트랩 조정 */
+.badge { font-weight: 400; }
+
+.badge.badge-size-sm { font-size: .8rem; }
+.badge.badge-size-lg { font-size: 1.1em; }
+
+.badge.badge-category { background: rgba(0, 0, 0, .8); }
+.badge.badge-project { background: #7B27FF; }
+.badge.badge-study { background: #FF8911; }
