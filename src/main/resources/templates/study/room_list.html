@@ -3,7 +3,13 @@
       layout:decorate="~{fragment/layout}">
 
 <th:block layout:fragment="css">
-
+    <style>
+        img{
+            width: 500px;
+            height: 300px;
+            display: inline-block;
+        }
+    </style>
 </th:block>
 <th:block layout:fragment="js">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -16,7 +22,7 @@
 
             var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                 mapOption = {
-                    center: new kakao.maps.LatLng(xx, yy), // 지도의 중심좌표
+                    center: new kakao.maps.LatLng(yy, xx), // 지도의 중심좌표
                     level: 3 // 지도의 확대 레벨
                 };
 
@@ -29,7 +35,7 @@
             });
 
             var circle = new kakao.maps.Circle({
-                center : new kakao.maps.LatLng(xx, yy),  // 원의 중심좌표
+                center : new kakao.maps.LatLng(yy, xx),  // 원의 중심좌표
                 radius: 40, // 미터 단위의 원의 반지름
                 strokeWeight: 2, // 선의 두께
                 strokeColor: '#2D37C2', // 선의 색깔
@@ -52,6 +58,7 @@
             <div>
                 <div><a th:href="@{/study/cafe_modify(studycafeNo=${studycafeNo})}">카페수정</a></div>
                 <div><a th:href="@{/study/cafe_delete(studycafeNo=${studycafeNo})}">카페삭제</a></div>
+                <div><a th:href="@{/study/room_write(studycafeNo=${studycafeNo})}">방 등록</a></div>
             </div>
             <div>
                 <img th:src="${oneCafe.mainImg}">
@@ -66,21 +73,22 @@
                 <input type="hidden" name="y" id="y" th:value="${oneCafe.y}">
             </div>
             <div>
-                <div th:each="imgdto : ${roomImgList}">
                 <div th:each="dto : ${listRoom}">
-                    <div th:switch="${imgdto.studyroom.studyroomNo}">
-                    <span th:case="${dto.studyroomNo}"><img th:src="${imgdto.path}"></span>
-                    <p th:text="${dto.name}"></p>
-                    <p th:text="${dto.price}"></p>
-                    <div th:text="${dto.studyroomDetail.maxNum}"></div>
-                    <div th:text="${dto.studyroomDetail.beam}"></div>
-                    <div th:text="${dto.studyroomDetail.wboard}"></div>
-                    <div th:text="${dto.studyroomDetail.socket}"></div>
-                    <div><a th:href="@{/study/room_modify(studyroomNo=${dto.studyroomNo})}">수정</a></div>
-                    <div><a th:href="@{/study/room_delete(studyroomNo=${dto.studyroomNo})}">삭제</a></div>
+                    <div th:each="imgdto : ${roomImgList}">
+                        <div th:switch="${imgdto.studyroom.studyroomNo}">
+                        <span th:case="${dto.studyroomNo}"><img th:src="${imgdto.path}"></span>
+                        </div>
                     </div>
+                        <p th:text="${dto.name}"></p>
+                        <p th:text="${dto.price}"></p>
+                        <div th:text="${dto.studyroomDetail.maxNum}"></div>
+                        <div th:text="${dto.studyroomDetail.beam}"></div>
+                        <div th:text="${dto.studyroomDetail.wboard}"></div>
+                        <div th:text="${dto.studyroomDetail.socket}"></div>
+                        <div><a th:href="@{/study/room_modify(studyroomNo=${dto.studyroomNo})}">수정</a></div>
+                        <div><a th:href="@{/study/room_delete(studyroomNo=${dto.studyroomNo})}">삭제</a></div>
+                            <hr>
                 </div>
-            </div>
             </div>
         </div>
     </main>
