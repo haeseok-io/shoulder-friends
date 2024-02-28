@@ -90,7 +90,7 @@ public class StudyController {
     public String cafe_modifyOk(StudycafeDTO dto){
 
         String address = "";
-        if(dto.getAddrDetail() != null || dto.getAddr() != ""){
+        if(dto.getAddrDetail() != null || dto.getAddrDetail() != ""){
             address = dto.getAddr() + " " + dto.getAddrDetail();
         }else{
             address = dto.getAddr();
@@ -99,6 +99,17 @@ public class StudyController {
         MultipartFile file = dto.getMainImg();
 
         if(file.getSize() != 0){
+
+            Studycafe studycafe1 = studyService.oneCafe(dto.getStudycafeNo());
+            String cafeimgpath = studycafe1.getMainImg();
+            int imgindex = cafeimgpath.lastIndexOf("/");
+            String imgname =  cafeimgpath.substring(imgindex+1);
+
+            File files = new File(uploadPath+"\\"+imgname);
+
+            if(files.exists()){
+                files.delete();
+            }
 
             //파일 실제 이름
             String originalFilename = file.getOriginalFilename();
@@ -149,7 +160,20 @@ public class StudyController {
 
     //카페 삭제
     @PostMapping("/cafe_delete")
-    public String deleteCafe(){
+    public String deleteCafe(@RequestParam Long studycafeNo){
+
+        Studycafe studycafe1 = studyService.oneCafe(studycafeNo);
+        String cafeimgpath = studycafe1.getMainImg();
+        int imgindex = cafeimgpath.lastIndexOf("/");
+        String imgname =  cafeimgpath.substring(imgindex+1);
+
+        File files = new File(uploadPath+"\\"+imgname);
+
+        if(files.exists()){
+            files.delete();
+        }
+
+        studyService.deletecafe(studycafeNo);
         return "redirect:/study/cafe_list";
     }
 
@@ -256,6 +280,20 @@ public class StudyController {
         //파일이 비어 있지 않을 때만 저장
         if(files.get(0).getSize() != 0) {
 
+            List<StudyroomImage> studyroomImageList = studyService.oneRoomImg(dto.getStudyroomNo());
+
+            for(int i=0; i<studyroomImageList.size(); i++) {
+                String cafeimgpath = studyroomImageList.get(i).getPath();
+                int imgindex = cafeimgpath.lastIndexOf("/");
+                String imgname = cafeimgpath.substring(imgindex + 1);
+
+                File file1 = new File(uploadPath + "\\" + imgname);
+
+                if (file1.exists()) {
+                    file1.delete();
+                }
+            }
+
             studyService.deleteImg(studyroom);
 
             for (MultipartFile file : files) {
@@ -289,7 +327,37 @@ public class StudyController {
 
     //스터디룸 삭제
     @PostMapping("/room_delete")
-    public String deleteRoom(){
+    public String deleteRoom(@RequestParam Long studyroomNo){
+
+        Studyroom studyroom = studyService.oneRoom(studyroomNo);
+
+        List<StudyroomImage> studyroomImageList = studyService.oneRoomImg(studyroomNo);
+
+        for(int i=0; i<studyroomImageList.size(); i++) {
+            String cafeimgpath = studyroomImageList.get(i).getPath();
+            int imgindex = cafeimgpath.lastIndexOf("/");
+            String imgname = cafeimgpath.substring(imgindex + 1);
+
+            File file1 = new File(uploadPath + "\\" + imgname);
+
+            if (file1.exists()) {
+                file1.delete();
+            }
+        }
+        studyService.deleteImg(studyroom);
+
+        StudyroomDetail studyroomDetail = studyService.oneDetail(studyroomNo);
+        Studyroom studyroom1 = studyroomDetail.getStudyroom();
+        studyroom1.setStudyroomDetail(null);
+        studyService.saveroom(studyroom);
+
+        studyService.deleteDetail(studyroomNo);
+
+        studyService.deleteRoom(studyroomNo);
+
+        studyroom1.setStudyroomDetail(studyroomDetail);
+        studyService.saveroom(studyroom);
+
         return "redirect:/study/room_list";
     }
 }

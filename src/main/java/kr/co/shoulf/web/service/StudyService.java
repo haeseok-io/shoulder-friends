@@ -87,4 +87,21 @@ public class StudyService {
         studyroomImageRepository.deleteByStudyroom_StudyroomNo(studyroom.getStudyroomNo());
     }
 
+    public void deletecafe(Long studycafeNo) {
+        studycafeRepository.deleteById(studycafeNo);
+    }
+
+    public void deleteRoom(Long studyroomNo) {
+        studyroomRepository.deleteById(studyroomNo);
+    }
+
+    public void deleteDetail(Long studyroomNo) {
+        studyroomDetailRepository.deleteById(studyroomNo);
+    }
+
+    public StudyroomDetail oneDetail(Long studyroomNo) {
+        Optional<StudyroomDetail> result = studyroomDetailRepository.findById(studyroomNo);
+        StudyroomDetail studyroomDetail = result.orElseThrow();
+        return studyroomDetail;
+    }
 }
