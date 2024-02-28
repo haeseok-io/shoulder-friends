@@ -35,7 +35,7 @@ footer .container p { font-weight: 300; color: #fff; }
 .mainTitle { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .mainTitle .title {}
 .mainTitle .title .subject { margin-bottom: 10px; font-weight: 600; font-size: 1.4rem; color: #1F1926; }
-.mainTitle .title .des { color: #888; }
+.mainTitle .title .desc { color: #aaa; }
 .mainTitle .etc {}
 .mainTitle .etc .more { font-size: .9rem; color: #888; }
 
@@ -74,3 +74,8 @@ footer .container p { font-weight: 300; color: #fff; }
 .badge.badge-category { background: rgba(0, 0, 0, .8); }
 .badge.badge-project { background: #7B27FF; }
 .badge.badge-study { background: #FF8911; }
+
+.btn {}
+.btn.btn-custom-add,
+.btn.btn-custom-add:focus { background: #7B27FF; color: #fff; }
+.btn.btn-custom-add:focus { border: 1px solid #7B27FF; }
