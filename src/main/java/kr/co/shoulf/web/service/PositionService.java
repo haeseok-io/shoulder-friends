@@ -20,7 +20,7 @@ public class PositionService {
         return positionRepository.findAll();
     }
 
-    public Position readOne(Long no) {
+    public Position readOne(Integer no) {
         return positionRepository.findById(no).orElse(null);
     }
 }

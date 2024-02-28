@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface PositionDetailRepository extends JpaRepository<PositionDetail, Integer> {
-    List<PositionDetail> findByPosition_PositionNo(Long positionNo);
+    List<PositionDetail> findByPosition_PositionNo(Integer positionNo);
 
 }
