@@ -1,8 +1,8 @@
 package kr.co.shoulf.web.control;
 
 import kr.co.shoulf.web.dto.StudycafeDTO;
-import kr.co.shoulf.web.entity.Member;
-import kr.co.shoulf.web.entity.Studycafe;
+import kr.co.shoulf.web.dto.StudyroomDTO;
+import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -98,7 +98,7 @@ public class StudyController {
 
         MultipartFile file = dto.getMainImg();
 
-            if(file.getSize() != 0){
+        if(file.getSize() != 0){
 
             //파일 실제 이름
             String originalFilename = file.getOriginalFilename();
@@ -108,6 +108,7 @@ public class StudyController {
 
             Path savePath = Paths.get(uploadPath, uuid + "_" + originalFilename);
 
+            // 이미지 수정시 스터디 카페 정보 수정
             Studycafe studycafe = Studycafe.builder()
                     .studycafeNo(dto.getStudycafeNo())
                     .name(dto.getName())
@@ -119,7 +120,7 @@ public class StudyController {
                     .mainImg("http://localhost:8081/studycafeimg/"+uuid+"_"+originalFilename)
                     .member(dto.getMember())
                     .build();
-            studyService.modifyCafe(studycafe);
+            studyService.saveCafe(studycafe);
 
             try {
                 file.transferTo(savePath);
@@ -127,8 +128,8 @@ public class StudyController {
                 throw new RuntimeException(e);
             }
         }else {
+            // 이미지 수정 안했을때 스터디 카페 정보 수정
             Studycafe result = studyService.oneCafe(dto.getStudycafeNo());
-            System.out.println("아아아아아----------:"+result.getMainImg());
             Studycafe studycafe = Studycafe.builder()
                     .studycafeNo(dto.getStudycafeNo())
                     .name(dto.getName())
@@ -140,7 +141,7 @@ public class StudyController {
                     .mainImg(result.getMainImg())
                     .member(dto.getMember())
                     .build();
-            studyService.modifyCafe(studycafe);
+            studyService.saveCafe(studycafe);
         }
 
         return "redirect:/study/cafe_list";
@@ -163,13 +164,58 @@ public class StudyController {
 
     //스터디룸 등록 페이지 이동
     @GetMapping("/room_write")
-    public void room_write(Model model, @RequestParam Studycafe studycafeNo){
+    public void room_write(Model model, @RequestParam Long studycafeNo){
         model.addAttribute("studycafeNo",studycafeNo);
     }
 
     //스터디룸 등록
     @PostMapping("/room_write")
-    public String room_writeOk(){
+    public String room_writeOk(StudyroomDTO dto){
+        int seq = 1;
+        Studycafe studycafe = studyService.oneCafe(dto.getStudycafe().getStudycafeNo());
+        Studyroom studyroom = Studyroom.builder()
+                .name(dto.getName())
+                .price(dto.getPrice())
+                .studycafe(studycafe)
+                .build();
+        studyService.saveroom(studyroom);
+        StudyroomDetail studyroomDetail = StudyroomDetail.builder()
+                .maxNum(dto.getMaxNum())
+                .beam(dto.getBeam())
+                .wboard(dto.getWboard())
+                .socket(dto.getSocket())
+                .studyroom(studyroom)
+                .build();
+        studyService.saveroomDetail(studyroomDetail);
+
+        List<MultipartFile> files = dto.getPath(); //여러개
+
+        for(MultipartFile file : files) {
+
+            //파일 실제 이름
+            String originalFilename = file.getOriginalFilename();
+
+            //고유한 이름 만들기
+            String uuid = UUID.randomUUID().toString();
+
+            Path savePath = Paths.get(uploadPath, uuid + "_" + originalFilename);
+
+            StudyroomImage studyroomImage = StudyroomImage.builder()
+                    .studyroom(studyroom)
+                    .path("http://localhost:8081/studycafeimg/"+uuid+"_"+originalFilename)
+                    .seq(seq)
+                    .build();
+            seq++;
+
+            studyService.saveroomImg(studyroomImage);
+
+            try {
+                file.transferTo(savePath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
         return "redirect:/study/cafe_list";
     }
 
@@ -182,7 +228,62 @@ public class StudyController {
 
     //스터디룸 수정
     @PostMapping("/room_modify")
-    public String room_modifyOk(){
+    public String room_modifyOk(StudyroomDTO dto){
+        int seq = 1;
+        Studycafe studycafe = studyService.oneCafe(dto.getStudycafe().getStudycafeNo());
+
+        Studyroom studyroom = Studyroom.builder()
+                .studyroomNo(dto.getStudyroomNo())
+                .name(dto.getName())
+                .price(dto.getPrice())
+                .studycafe(studycafe)
+                .build();
+
+        StudyroomDetail studyroomDetail = StudyroomDetail.builder()
+                .maxNum(dto.getMaxNum())
+                .beam(dto.getBeam())
+                .wboard(dto.getWboard())
+                .socket(dto.getSocket())
+                .studyroom(studyroom)
+                .studyroomNo(studyroom.getStudyroomNo())
+                .build();
+
+        studyService.saveroom(studyroom);
+        studyService.saveroomDetail(studyroomDetail);
+
+        List<MultipartFile> files = dto.getPath(); //여러개
+
+        //파일이 비어 있지 않을 때만 저장
+        if(files.get(0).getSize() != 0) {
+
+            studyService.deleteImg(studyroom);
+
+            for (MultipartFile file : files) {
+
+                //파일 실제 이름
+                String originalFilename = file.getOriginalFilename();
+
+                //고유한 이름 만들기
+                String uuid = UUID.randomUUID().toString();
+
+                Path savePath = Paths.get(uploadPath, uuid + "_" + originalFilename);
+
+                StudyroomImage studyroomImage = StudyroomImage.builder()
+                        .studyroom(studyroom)
+                        .path("http://localhost:8081/studycafeimg/" + uuid + "_" + originalFilename)
+                        .seq(seq)
+                        .build();
+                seq++;
+
+                studyService.saveroomImg(studyroomImage);
+
+                try {
+                    file.transferTo(savePath);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
         return "redirect:/study/cafe_list";
     }
 
