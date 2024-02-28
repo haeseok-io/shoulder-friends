@@ -109,7 +109,7 @@
                 }).open();
             })
 
-            $("#mainImg").on("click",()=>{
+            $("#mainImg").on("click", () => {
                 $("#mainimgfile").hide();
             })
         })
@@ -121,7 +121,7 @@
         <div class="container">
             <h2>카페 수정</h2>
             <form action="/study/cafe_modify" method="post" name="studycafeadd" enctype="multipart/form-data">
-                    <img th:src="${oneCafe.mainImg}" id="mainimgfile">
+                <img th:src="${oneCafe.mainImg}" id="mainimgfile">
                 <div class="">
                     이미지 변경하기<input type="file" name="mainImg" id="mainImg">
                 </div>
@@ -129,7 +129,8 @@
                 카페 설명<input type="text" name="shortDesc" id="shortDesc" th:value="${oneCafe.shortDesc}">
                 <div class="">
                     <div class="">
-                        <input type="text" name="post" id="post" th:value="${oneCafe.post}" placeholder="우편번호" readonly />
+                        <input type="text" name="post" id="post" th:value="${oneCafe.post}" placeholder="우편번호"
+                               readonly/>
                     </div>
                     <div class="">
                         <button type="button" id="searchAddr">우편번호 찾기</button>
@@ -137,12 +138,12 @@
                 </div>
                 <div class="">
                     <div class="">
-                        <input type="text" name="addr" id="addr" th:value="${oneCafe.addr}" placeholder="주소" readonly />
+                        <input type="text" name="addr" id="addr" th:value="${oneCafe.addr}" placeholder="주소" readonly/>
                     </div>
                 </div>
                 <div class="">
                     <div class="">
-                        <input type="text" name="addrDetail" id="addrDetail" placeholder="상세주소" />
+                        <input type="text" name="addrDetail" id="addrDetail" placeholder="상세주소"/>
                     </div>
                 </div>
                 <div>
@@ -150,9 +151,9 @@
                 </div>
                 <input type="hidden" name="x" id="x" th:value="${oneCafe.x}">
                 <input type="hidden" name="y" id="y" th:value="${oneCafe.y}">
-                <input type="hidden" name="studycafeNo" id="studycafeNo" th:value="${oneCafe.studycafeNo}">
+                <input type="hidden" name="studycafeNo" id="studycafeNo" th:value="${studycafeNo}">
                     담당직원번호<input type="text" name="member" th:value="${oneCafe.member?.memberNo}">
-                <input type="submit" value="등록">
+                    <input type="submit" value="등록">
             </form>
         </div>
     </main>
