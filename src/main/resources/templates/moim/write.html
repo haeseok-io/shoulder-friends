@@ -1,0 +1,287 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.css">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+    <style>
+        main .container { width: 1280px; max-width: 970px; }
+        main .container .wrapper { margin-top: 30px; }
+
+        .wrapper .content .rowItem {}
+        .wrapper .content .rowItem .itemWrap { margin-top: 10px; }
+        .wrapper .content .rowItem .itemWrap:first-child { margin-top: 0; }
+
+        .wrapper .content .colItem { display: flex; justify-content: flex-start; align-items: center; margin-top: 10px; }
+        .wrapper .content .colItem .itemWrap {}
+
+        .wrapper input[type='text'] { width: 100%; height: 50px; border: 1px solid #e0e0e0; border-radius: 5px; padding: 0 10px; }
+        .wrapper input[type='text']::placeholder { color: #ccc; }
+
+        .wrapper .select2-selection--single,
+        .wrapper .select2-selection--multiple { display: flex; align-items: center; width: 100%; height: 50px; border: 1px solid #e0e0e0; padding: 0 10px; }
+        .wrapper .select2-selection--multiple .select2-search { display: flex; flex: 1; }
+
+        .wrapper .select2-selection--single .select2-selection__arrow { top: 50%; transform: translateY(-50%); right: 10px; }
+        .wrapper .select2-selection--single .select2-selection__rendered { padding-left: 0; padding-right: 0; }
+        .wrapper .select2 .select2-search__field::placeholder { color: #aaa; }
+
+        .wrapper.type {}
+        .wrapper.type input[type='radio'] { display: none; }
+        .wrapper.type label { display: inline-block; border: 1px solid #ccc; border-radius: 5px; padding: 10px 20px; margin-right: 10px; font-weight: 500; font-size: 1.1rem; cursor: pointer; }
+        .wrapper.type input[type='radio']:checked + label { color: #fff; border: none; }
+        .wrapper.type input[type='radio']:checked + label:nth-of-type(1) { background: #7B27FF; }
+        .wrapper.type input[type='radio']:checked + label:nth-of-type(2) { background: #FF8911; }
+
+        .wrapper.mainImg {}
+        .wrapper.mainImg .content { display: flex; justify-content: space-between; align-items: end; }
+        .wrapper.mainImg .thumbnail { position: relative; display: flex; justify-content: center; align-items: center; width: 400px; height: 230px; background: #e0e0e0; }
+        .wrapper.mainImg .thumbnail button { position: absolute; width: 100%; height: 100%; background: transparent; border: none; }
+        .wrapper.mainImg .thumbnail button img { width: 100%; height: 100%; object-fit: cover; }
+        .wrapper.mainImg .thumbnail i { font-size: 3rem; color: #aaa; }
+        .wrapper.mainImg .wrap { width: calc(100% - 430px); }
+        .wrapper.mainImg .wrap input[type='file'] { display: none; }
+        .wrapper.mainImg .wrap button { background: #fff; border: 1px solid #382B47; border-radius: 5px; padding: 10px 15px; font-size: .9rem; color: #888; }
+        .wrapper.mainImg .wrap p { margin-top: 10px; color: #aaa; }
+        .wrapper.mainImg .wrap p:nth-of-type(1) { margin-top: 20px; }
+
+        .wrapper.category {}
+        .wrapper.category .content { display: flex; justify-content: flex-start; flex-wrap: wrap; }
+        .wrapper.category .content .wrap { width: 20%; height: 50px; align-items: center; }
+        .wrapper.category input[type='radio'] { display: none; }
+        .wrapper.category label { position: relative; display: flex; padding-left: 30px; cursor: pointer; }
+        .wrapper.category label:after { position: absolute; top: 50%; left: 0; transform: translateY(-50%); content: ""; width: 20px; height: 20px; border: 1px solid #ccc; border-radius: 3px; }
+        .wrapper.category input[type='radio']:checked + label:after { background: #7B27FF; }
+
+        .wrapper.headcount {}
+        .wrapper.headcount .content .itemWrap.position { width: 80%; }
+        .wrapper.headcount .content .itemWrap.personnel { width: 20%; display: flex; justify-content: space-between; align-items: center; }
+        .wrapper.headcount .content .itemWrap.personnel button { width: 24%; height: 50px; background: transparent; border: none; }
+        .wrapper.headcount .content .itemWrap.personnel input[type='text'] { width: 50%; text-align: center; }
+
+        .formButton { margin-top: 50px; text-align: center; }
+    </style>
+</th:block>
+<th:block layout:fragment="js">
+    <script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.js"></script>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <script src="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        const Editor = toastui.Editor;
+        const colorSyntax = toastui.Editor.plugin['colorSyntax'];
+        $.fn.select2.defaults.set("minimumResultsForSearch", -1);
+        $.fn.select2.defaults.set("width", '100%');
+
+        let platformSelect, onlineSelect, positionSelect, positionDetailSelect, languageSelect, studyCategoryselect;
+        let detailDescEditor;
+
+        let mainImgFileInfo;
+
+        $(() => {
+            // 모집 유형 선택
+            $("input[name='type']").change(e => {
+                let type = $(e.currentTarget).val();
+                getHtmlTemplate(type);
+            });
+            $("input[name='type'][value='project']").trigger("change");
+
+            // 대표이미지 업로드 이벤트
+            $("input[name='mainImg']").click(e => {
+                mainImgFileInfo = e.target.files;
+            }).change(e => {
+                let target = $("#mainImg-thumbnail-btn");
+
+                if( e.target.files.length>0 ){
+                    let file = e.target.files[0];
+
+                    if( file!==mainImgFileInfo[0] ){
+                        let reader = new FileReader();
+
+                        reader.onload = e => {
+                            let imgElement = $("<img />");
+                            imgElement.attr('src', e.target.result);
+
+                            target.html('');
+                            target.append(imgElement);
+                        };
+
+                        reader.readAsDataURL(file);
+                    }
+                } else {
+                    $(e.currentTarget).prop("files", mainImgFileInfo);
+                }
+            });
+        });
+
+        // 모집인원 select 동적 플러그인 적용
+        function initializePositionSelect() {
+            positionSelect = $("select[name='position[]']").select2({width: '49%'});
+            positionDetailSelect = $("select[name='positionDetail[]'").select2({width: '49%'});
+        }
+        // 모집인원 플러그인 제거 후 코드복사
+        function copyToPositionSelect() {
+            if( positionSelect )        positionSelect.select2("destroy");
+            if( positionDetailSelect )  positionDetailSelect.select2("destroy");
+
+            let appendSel = $(".wrapper.headcount .content");
+            let cloneHtml = appendSel.find(".colItem").eq(0).html();
+
+            let cloneItem = $("<div class='colItem clone' />");
+
+            cloneItem.append(cloneHtml);
+            appendSel.append(cloneItem);
+
+            initializePositionSelect();
+            eventToPositionSelect(cloneItem.find("select[name='position[]']"));
+        }
+        function eventToPositionSelect(target) {
+            let positionTarget = target ? target : $("select[name='position[]']");
+
+            positionTarget.change(e => {
+                let positionNo = $(e.currentTarget).find("option:selected").val();
+                let changeTarget = $(e.currentTarget).siblings("select[name='positionDetail[]']");
+
+                getPositionDetail(positionNo, changeTarget)
+            }).trigger("change");
+        }
+
+        // 선택된 타입에 따라 html 템플릿 가져오기
+        function getHtmlTemplate(type) {
+            let appendTarget = $(".formWrapper");
+            let templateName = type=='project' ? 'moimProjectTemplate' : 'moimStudyTemplate';
+            let template = document.getElementById(templateName);
+
+            // 템플릿 교체
+            appendTarget.html('');
+            appendTarget.html(template.innerHTML);
+
+            // 사용하는 플러그인 재 정의
+            initializePositionSelect();
+            eventToPositionSelect();
+            onlineSelect = $("select[name='online']").select2();
+            languageSelect = $("select[name='language[]']").select2({
+                tags: true,
+                placeholder: '기술/언어를 입력해주세요.',
+                minimumResultsForSearch: 0
+            });
+
+            detailDescEditor = new Editor({
+                el: document.querySelector("#detailDesc"),
+                height: type=='project' ? '800px' : '500px',
+                previewStyle: 'tab',
+                initialEditType: 'markdown',
+                autofocus: false,
+                initialValue: template.content.getElementById("detailDescContent").innerHTML,
+                plugins: [colorSyntax]
+            });
+            detailDescEditor.getMarkdown();
+
+            if( type=='project' ) {
+                platformSelect = $("select[name='platform[]']").select2({
+                    placeholder: "출시할 플랫폼을 선택해주세요."
+                });
+            } else if( type=='study' ) {
+                studyCategoryselect = $("select[name='studyCategory']").select2();
+            }
+        }
+
+        // 직무 중분류 가져오기
+        function getPositionDetail(positionNo, changeTarget) {
+            if( positionNo ) {
+                changeTarget.html("");
+
+                $.get(`/position/${positionNo}/detail`, data => {
+                    data.forEach(detail => {
+                        let option = $("<option />");
+                        option.val(detail.positionDetailNo);
+                        option.text(detail.middleName);
+
+                        changeTarget.append(option);
+                    })
+                }, 'json');
+            }
+
+        }
+
+        // 대표이미지 업로드 클릭 트리거
+        function fileUploadTrigger() {
+            let file = $("input[name='mainImg']");
+            file.click();
+        }
+
+        // 모집인원 추가/제거
+        function headcountControl(type) {
+            if( type==='add' )  copyToPositionSelect();
+            else                $(".wrapper.headcount .content").find(".colItem.clone").eq(-1).remove();
+        }
+
+        // 모집인원 인원수 증감
+        function personnelControl(colElement, type) {
+            let personnelElement = $(colElement).parent().find("input[name='personnel[]']");
+            let personnel = parseInt(personnelElement.val());
+
+            if( type==='plus' )     personnel = personnel>=9 ? personnel : personnel+1;
+            else                    personnel = personnel<=1 ? personnel : personnel-1;
+
+            personnelElement.val(personnel);
+        }
+
+        // 참고링크 추가/제거
+        function linkControl(type) {
+            let appendSel = $(".wrapper.link .content .rowItem");
+
+            if( type==='add' ) {
+                let cloneHtml = appendSel.find(".itemWrap").eq(0).html();
+                let cloneItem = $("<div class='itemWrap clone' />");
+
+                cloneItem.append(cloneHtml);
+                appendSel.append(cloneItem);
+            } else {
+                appendSel.find(".itemWrap.clone").eq(-1).remove();
+            }
+        }
+    </script>
+</th:block>
+
+<th:block layout:fragment="container">
+    <main>
+        <div class="container">
+            <form action="/moim/write" method="post" enctype="multipart/form-data">
+                <div class="wrapper type">
+                    <div class="mainTitle">
+                        <div class="title">
+                            <p class="subject">모임 유형</p>
+                            <p class="desc">모집하려는 모임의 유형을 선택해주세요.</p>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <input type="radio" name="type" value="project" id="type-project" checked>
+                        <label for="type-project">프로젝트</label>
+                        <input type="radio" name="type" value="study" id="type-study">
+                        <label for="type-study">스터디</label>
+                    </div>
+                </div>
+                <div class="formWrapper"></div>
+
+                <div class="formButton">
+                    <button type="submit" class="btn btn-custom-add btn-lg">작성완료</button>
+                    <a href="/" class="btn btn-secondary btn-lg">다음에 하기</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+
+    <template id="moimProjectTemplate">
+        <th:block th:replace="fragment/moimProjectTemplate :: moimProjectTemplate"></th:block>
+    </template>
+    <template id="moimStudyTemplate">
+        <th:block th:replace="fragment/moimStudyTemplate :: moimStudyTemplate"></th:block>
+    </template>
+</th:block>
+
+</html>
