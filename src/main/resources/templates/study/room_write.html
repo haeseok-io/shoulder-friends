@@ -6,7 +6,17 @@
 
 </th:block>
 <th:block layout:fragment="js">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(function (){
+            $("#btn").on("click", function (){
+                let tag = "<div id=\"imglist\">\n" +
+                    "<div>이미지 등록<input type=\"file\" name=\"path\"></div>\n" +
+                    "</div>";
+                $("#imgfd").append(tag);
+            })
+        })
+    </script>
 </th:block>
 
 <th:block layout:fragment="container">
@@ -14,19 +24,22 @@
         <div class="container">
             <h2>룸 등록</h2>
             <form action="/study/room_write" method="post" enctype="multipart/form-data">
-                이미지 등록<input type="file" name="path">
-                이미지 등록<input type="file" name="path">
-                이미지 등록<input type="file" name="path">
+                <div id="imgfd">
+                    <div id="imglist">
+                        <div>이미지 등록<input type="file" name="path"></div>
+                    </div>
+                </div>
+                이미지 추가<input type="button" value="추가" id="btn">
                 룸 이름<input type="text" name="name" id="name">
                 룸 금액<input type="text" name="price" id="price">
                 최대 정원<input type="text" name="maxNum" id="maxNum">
-                빔프로젝트<input type="radio" name="beam" id="beamY">Y
-                <input type="radio" name="beam" id="beamN">N
-                화이트보드<input type="radio" name="wboard" id="wboardY">Y
-                <input type="radio" name="wboard" id="wboardN">N
+                빔프로젝트<input type="radio" name="beam" id="beamY" value="Y">Y
+                <input type="radio" name="beam" id="beamN" value="N">N
+                화이트보드<input type="radio" name="wboard" id="wboardY" value="Y">Y
+                <input type="radio" name="wboard" id="wboardN" value="N">N
                 콘센트<input type="text" name="socket" id="socket">
+                <input type="hidden" name="studycafe" th:value="${studycafeNo}">
                 <input type="submit" value="등록">
-                <input type="hidden" name="studycafeNo" th:value="${studycafeNo}">
             </form>
         </div>
     </main>
