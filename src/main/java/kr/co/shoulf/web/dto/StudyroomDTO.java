@@ -1,6 +1,7 @@
 package kr.co.shoulf.web.dto;
 
 import jakarta.persistence.Column;
+import kr.co.shoulf.web.entity.Studycafe;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,5 +24,6 @@ public class StudyroomDTO {
     private String beam;
     private String wboard;
     private Integer socket;
+    private Studycafe studycafe;
     List<MultipartFile> path;
 }
