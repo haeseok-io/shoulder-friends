@@ -127,9 +127,9 @@ public class TestDataInsert {
         dataList.add(Arrays.asList("작가/블로거", "인플루언서/스트리머", "법률/노무", "의료/의학", "요식업/쉐프", "프로듀서/CP", "작곡(사운드)", "영상", "운영", "QA", "기타"));
 
         positionList.forEach(position -> {
-            Long positionNo = position.getPositionNo() - 1L;
+            Integer positionNo = position.getPositionNo() - 1;
 
-            dataList.get(Integer.parseInt(positionNo.toString())).forEach(data -> {
+            dataList.get(positionNo).forEach(data -> {
                 positionDetailRepository.save(PositionDetail.builder().position(position).middleName(data).build());
             });
         });
