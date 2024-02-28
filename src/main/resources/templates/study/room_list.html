@@ -48,17 +48,24 @@
             // 지도에 원을 표시합니다
             circle.setMap(map);
         })
+
+        function goPost(){
+            let f = document.createElement('form');
+            f.setAttribute('method','post');
+            f.setAttribute('action',)
+        }
     </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
         <div class="container">
+            <form action="/study/cafe_delete" method="post">
             <h2>스터디 카페 상세</h2>
             <div>
-                <div><a th:href="@{/study/cafe_modify(studycafeNo=${studycafeNo})}">카페수정</a></div>
-                <div><a th:href="@{/study/cafe_delete(studycafeNo=${studycafeNo})}">카페삭제</a></div>
                 <div><a th:href="@{/study/room_write(studycafeNo=${studycafeNo})}">방 등록</a></div>
+                <div><a th:href="@{/study/cafe_modify(studycafeNo=${studycafeNo})}">카페수정</a></div>
+                <div><input type="submit" value="카페삭제"></div>
             </div>
             <div>
                 <img th:src="${oneCafe.mainImg}">
@@ -71,14 +78,18 @@
                 </div>
                 <input type="hidden" name="x" id="x" th:value="${oneCafe.x}">
                 <input type="hidden" name="y" id="y" th:value="${oneCafe.y}">
+                <input type="hidden" name="studycafeNo" th:value="${studycafeNo}">
             </div>
+            </form>
             <div>
                 <div th:each="dto : ${listRoom}">
+                    <form th:action="@{/study/room_delete(studyroomNo=${dto.studyroomNo})}" method="post" >
                     <div th:each="imgdto : ${roomImgList}">
                         <div th:switch="${imgdto.studyroom.studyroomNo}">
                         <span th:case="${dto.studyroomNo}"><img th:src="${imgdto.path}"></span>
                         </div>
                     </div>
+                    <div>
                         <p th:text="${dto.name}"></p>
                         <p th:text="${dto.price}"></p>
                         <div th:text="${dto.studyroomDetail.maxNum}"></div>
@@ -86,8 +97,10 @@
                         <div th:text="${dto.studyroomDetail.wboard}"></div>
                         <div th:text="${dto.studyroomDetail.socket}"></div>
                         <div><a th:href="@{/study/room_modify(studyroomNo=${dto.studyroomNo})}">수정</a></div>
-                        <div><a th:href="@{/study/room_delete(studyroomNo=${dto.studyroomNo})}">삭제</a></div>
+                        <div><input type="submit" value="삭제"></div>
                             <hr>
+                    </div>
+                    </form>
                 </div>
             </div>
         </div>
