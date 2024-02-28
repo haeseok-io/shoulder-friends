@@ -16,7 +16,6 @@ public class AdminLoginService {
     public Member adminLogin(Member member) {
         // 받아온 멤버의 ID로 해당 멤버의 정보 불러오기
         Member readMember = memberRepository.findById(member.getId());
-        System.out.println("readMember.getId() : " + readMember);
 
         // 조회된 멤버가 없을 경우 예외 발생
         if (readMember == null) {
