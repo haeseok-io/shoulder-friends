@@ -13,4 +13,6 @@ public interface StudyroomImageRepository extends JpaRepository<StudyroomImage, 
     List<StudyroomImage> findByStudyroom(Studyroom studyroom);
     //스터디룸 번호로 이미지 목록
     List<StudyroomImage> findByStudyroom_StudyroomNo(Long studyroomNo);
+    //스터디룸 번호로 이미지 삭제
+    void deleteByStudyroom_StudyroomNo(Long studyroomNo);
 }
