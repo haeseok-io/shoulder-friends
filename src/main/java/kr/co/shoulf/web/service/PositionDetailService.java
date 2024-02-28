@@ -20,7 +20,7 @@ public class PositionDetailService {
         return positionDetailRepository.findById(no).orElse(null);
     }
 
-    public List<PositionDetail> readPositionDetail(Long positionNo) {
+    public List<PositionDetail> readPositionDetail(Integer positionNo) {
         return positionDetailRepository.findByPosition_PositionNo(positionNo);
     }
 }

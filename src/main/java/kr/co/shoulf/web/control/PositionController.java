@@ -17,7 +17,7 @@ public class PositionController {
 
     @GetMapping(value = "/{positionNo}/detail", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<PositionDetail> getPositionDetailList(@PathVariable("positionNo") Long no) {
+    public List<PositionDetail> getPositionDetailList(@PathVariable("positionNo") Integer no) {
         return positionDetailService.readPositionDetail(no);
     }
 }
