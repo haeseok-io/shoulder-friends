@@ -24,11 +24,14 @@ public class AdminLoginController {
 
     @PostMapping("/loginProc")
     public String loginOk(@ModelAttribute Member member, Model model, HttpSession session) {
+        // 입력된 회원 정보를 이용하여 관리자 로그인 서비스 호출
         Member memberDetails = adminLoginService.adminLogin(member);
+
+        // 로그인 성공 시
         if(memberDetails != null) {
-            // 세션에 유저 정보 저장
+            // 세션에 로그인된 유저 정보 저장
             session.setAttribute("loggedInUser", memberDetails);
-            System.out.println("memberDetails : " + memberDetails);
+//            System.out.println("memberDetails : " + memberDetails);
             return "redirect:/admin/";
         } else {
             // 로그인 실패 시
@@ -44,6 +47,7 @@ public class AdminLoginController {
 
     @PostMapping("/login/register")
     public String memberRegisterOk(@ModelAttribute Member member) {
+        // 회원가입 메서드 호출
         adminLoginService.registerMember(member);
         return "redirect:/admin/login/";
     }

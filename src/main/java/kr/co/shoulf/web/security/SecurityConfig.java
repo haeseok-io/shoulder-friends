@@ -26,15 +26,17 @@ public class SecurityConfig{
         // 권한 설정
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login/**").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/", "/login/**").permitAll() // 로그인 페이지와 관련된 요청은 인증 없이 허용
+                        .anyRequest().permitAll() // 그 외의 요청은 모두 허용
                 );
+        // 로그인 설정
         http
                 .formLogin((auth) -> auth
-                        .loginPage("/login/")
-                        .loginProcessingUrl("/login/loginProc").permitAll()
-                        .defaultSuccessUrl("/")
+                        .loginPage("/login/") // 로그인 페이지 설정
+                        .loginProcessingUrl("/login/loginProc").permitAll() // 로그인 처리 URL 설정
+                        .defaultSuccessUrl("/") // 로그인 성공 시 기본 URL로 이동
                 );
+        // CSRF 보안 설정 비활성화
         http
                 .csrf((auth) -> auth.disable());
         return http.build();
