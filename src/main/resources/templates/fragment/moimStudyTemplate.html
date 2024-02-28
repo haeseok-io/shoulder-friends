@@ -1,0 +1,125 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="moimStudyTemplate">
+    <div class="wrapper">
+        <div class="mainTitle">
+            <div class="title">
+                <p class="subject">주제</p>
+                <p class="desc">원하는 스터디&네트워킹 주제를 적어주세요.</p>
+            </div>
+        </div>
+        <div class="content">
+            <input type="text" name="subject" placeholder="3~20글자로 적어주세요 예)블록체인 + 인공지능 스터디&네트워킹">
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="mainTitle">
+            <div class="title">
+                <p class="subject">간단한 설명</p>
+                <p class="desc">스터디에 대해 간단하게 설명해주세요.</p>
+            </div>
+        </div>
+        <div class="content">
+            <input type="text" name="shortDesc" placeholder="간단한 설명을 30 글자 이내로 적어주세요 에)승차거부하는 택시를 신고하는 앱입니다.">
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="mainTitle">
+            <div class="title">
+                <p class="subject">분야/키워드</p>
+                <p class="desc">스터디&네트워킹의 키워드를 입력해주세요. (최대 10개)</p>
+            </div>
+        </div>
+        <div class="content">
+            <div class="rowItem">
+                <div class="itemWrap">
+                    <select name="studyCategory">
+                        <option th:each="studyCategory : ${studyCategoryList}" th:value="${studyCategory.studyCategoryNo}">[[${studyCategory.studyCategoryName}]]</option>
+                    </select>
+                </div>
+                <div class="itemWrap">
+                    <select name="language[]" multiple></select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper online">
+        <div class="mainTitle">
+            <div class="title">
+                <p class="subject">지역</p>
+                <p class="desc">온/오프라인 여부와 장소를 선택해주세요.</p>
+            </div>
+        </div>
+        <div class="content">
+            <div class="rowItem">
+                <div class="itemWrap">
+                    <select name="online">
+                        <option th:each="online : ${onlineList}" th:value="${online.onlineNo}">[[${online.onlineName}]]</option>
+                    </select>
+                </div>
+                <div class="itemWrap">
+                    <input type="text" name="offAddr" placeholder="상세한 지역을 입력해주세요.">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper headcount">
+        <div class="mainTitle">
+            <div class="title">
+                <p class="subject">모집인원 // 누구나 추가해야함</p>
+                <p class="desc">3~4명을 추천합니다. (최대 9명, 추후변경가능)</p>
+            </div>
+            <div class="etc">
+                <button type="button" class="btn btn-secondary" onclick="headcountControl('drop')">제거</button>
+                <button type="button" class="btn btn-custom-add" onclick="headcountControl('add');">추가</button>
+            </div>
+        </div>
+        <div class="content">
+            <div class="colItem">
+                <div class="itemWrap position">
+                    <select name="position[]">
+                        <option th:each="position : ${positionList}" th:value="${position.positionNo}">[[${position.bigName}]]</option>
+                    </select>
+                    <select name="positionDetail[]"></select>
+                </div>
+                <div class="itemWrap personnel">
+                    <button type="button" onclick="personnelControl(this, 'minus');">
+                        <i class="bi bi-dash-lg"></i>
+                    </button>
+                    <input type="text" name="personnel[]" value="1" readonly>
+                    <button type="button" onclick="personnelControl(this, 'plus');">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="mainTitle">
+            <div class="title">
+                <p class="subject">스터디&네트워킹 설명</p>
+                <p class="desc">스터디&네트워킹 참여조건에 대해서 기재해주세요.</p>
+            </div>
+        </div>
+        <div class="content">
+            <input type="hidden" name="detailDesc">
+            <div id="detailDesc"></div>
+        </div>
+    </div>
+
+
+    <template id="detailDescContent">
+# 스터디/네트워킹 목표 및 진행방식
+[목표] : ( 예: 제이쿼리를 마스터하고자 합니다)
+[진행방식] : (예: 매주마다 다음주의 목표를 설정하고, 이에 대한 공부 후 실제 프로토타입)
+[장소/횟수] : (예: 정기적으로 오프라인 주말 1회 혹은 zoom 1회 토론 등)
+[기간] :  (예 : 3달 정도 진행하고자 합니다)
+
+# 참여 조건
+[지식수준] :  (예 :해당 언어에 대한 지식이 조금 있으셨으면 합니다. )
+[참여회비] (예 : 매 모임마다 1만원의 회비가 있습니다)
+[기타]  ( 예: 인천 거주하시는 분이시면 더욱 좋겠습니다)
+    </template>
+</th:block>
+
+</html>

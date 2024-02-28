@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragment/layout}">
+      layout:decorate="~{fragment/layout(title='어깨동무 - 모임')}">
 
 <th:block layout:fragment="css">
     <link rel="stylesheet" th:href="@{/css/moim/list.css}">
@@ -89,7 +89,17 @@
                 </div>
             </div>
             <div class="wrapper moim">
-
+                <div class="mainTitle">
+                    <div class="title">
+                        <p class="subject">전체 모임</p>
+                        <span class="desc">새롭게 등록된 모임을 확인해보세요!</span>
+                    </div>
+                </div>
+                <div class="search">
+                </div>
+                <div class="content">
+                    <th:block th:replace="fragment/moimList :: moimList(templateData=${moimList.dataList})"></th:block>
+                </div>
             </div>
         </div>
     </main>
