@@ -1,14 +1,9 @@
 package kr.co.shoulf.web.service;
 
 import jakarta.transaction.Transactional;
-import kr.co.shoulf.web.entity.Studycafe;
-import kr.co.shoulf.web.entity.Studyroom;
-import kr.co.shoulf.web.entity.StudyroomDetail;
-import kr.co.shoulf.web.entity.StudyroomImage;
-import kr.co.shoulf.web.repository.StudycafeRepository;
-import kr.co.shoulf.web.repository.StudyroomDetailRepository;
-import kr.co.shoulf.web.repository.StudyroomImageRepository;
-import kr.co.shoulf.web.repository.StudyroomRepository;
+import kr.co.shoulf.web.dto.StudycafeDTO;
+import kr.co.shoulf.web.entity.*;
+import kr.co.shoulf.web.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -60,4 +55,36 @@ public class StudyService {
         Studyroom studyroom = result.orElseThrow();
         return studyroom;
     }
+
+    //스터디룸 번호로 이미지 리스트 찾기
+    public List<StudyroomImage> oneRoomImg(Long studyroomNo) {
+        List<StudyroomImage> studyroomImageList = studyroomImageRepository.findByStudyroom_StudyroomNo(studyroomNo);
+        return studyroomImageList;
+    }
+
+    //카페 정보 저장,수정
+    public void saveCafe(Studycafe studycafe) {
+        studycafeRepository.save(studycafe);
+    }
+    
+    //스터디룸 정보 저장,수정
+    public void saveroom(Studyroom studyroom) {
+        studyroomRepository.save(studyroom);
+    }
+    
+    //스터디룸 디테일 저장,수정
+    public void saveroomDetail(StudyroomDetail studyroomDetail) {
+        studyroomDetailRepository.save(studyroomDetail);
+    }
+
+    //스터디룸 이미지 저장,수정
+    public void saveroomImg(StudyroomImage studyroomImage) {
+        studyroomImageRepository.save(studyroomImage);
+    }
+
+    //스터디룸 이미지 룸번호로 삭제
+    public void deleteImg(Studyroom studyroom) {
+        studyroomImageRepository.deleteByStudyroom_StudyroomNo(studyroom.getStudyroomNo());
+    }
+
 }

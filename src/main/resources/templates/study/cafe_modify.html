@@ -3,7 +3,13 @@
       layout:decorate="~{fragment/layout}">
 
 <th:block layout:fragment="css">
-
+    <style>
+        img{
+            width: 500px;
+            height: 300px;
+            display: inline-block;
+        }
+    </style>
 </th:block>
 <th:block layout:fragment="js">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -16,7 +22,7 @@
 
             var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                 mapOption = {
-                    center: new kakao.maps.LatLng(xx, yy), // 지도의 중심좌표
+                    center: new kakao.maps.LatLng(yy, xx), // 지도의 중심좌표
                     level: 3 // 지도의 확대 레벨
                 };
 
@@ -102,6 +108,10 @@
                     }
                 }).open();
             })
+
+            $("#mainImg").on("click", () => {
+                $("#mainimgfile").hide();
+            })
         })
     </script>
 </th:block>
@@ -110,36 +120,40 @@
     <main>
         <div class="container">
             <h2>카페 수정</h2>
-            <form action="/study/cafe_write" method="post">
-            <div class="">
-                이미지 등록<input type="file" name="mainImg" id="mainImg">
-            </div>
-            카페 이름<input type="text" name="name" id="name" th:value="${oneCafe.name}">
-            카페 설명<input type="text" name="shortDesc" id="shortDesc" th:value="${oneCafe.shortDesc}">
-            <div class="">
+            <form action="/study/cafe_modify" method="post" name="studycafeadd" enctype="multipart/form-data">
+                <img th:src="${oneCafe.mainImg}" id="mainimgfile">
                 <div class="">
-                    <input type="text" name="post" id="post" th:value="${oneCafe.post}" placeholder="우편번호" readonly />
+                    이미지 변경하기<input type="file" name="mainImg" id="mainImg">
+                </div>
+                카페 이름<input type="text" name="name" id="name" th:value="${oneCafe.name}">
+                카페 설명<input type="text" name="shortDesc" id="shortDesc" th:value="${oneCafe.shortDesc}">
+                <div class="">
+                    <div class="">
+                        <input type="text" name="post" id="post" th:value="${oneCafe.post}" placeholder="우편번호"
+                               readonly/>
+                    </div>
+                    <div class="">
+                        <button type="button" id="searchAddr">우편번호 찾기</button>
+                    </div>
                 </div>
                 <div class="">
-                    <button type="button" id="searchAddr">우편번호 찾기</button>
+                    <div class="">
+                        <input type="text" name="addr" id="addr" th:value="${oneCafe.addr}" placeholder="주소" readonly/>
+                    </div>
                 </div>
-            </div>
-            <div class="">
                 <div class="">
-                    <input type="text" name="addr" id="addr" th:value="${oneCafe.addr}" placeholder="주소" readonly />
+                    <div class="">
+                        <input type="text" name="addrDetail" id="addrDetail" placeholder="상세주소"/>
+                    </div>
                 </div>
-            </div>
-            <div class="">
-                <div class="">
-                    <input type="text" name="addr_detail" id="addr_detail" placeholder="상세주소" />
+                <div>
+                    <div id="map" style="width:500px;height:400px;"></div>
                 </div>
-            </div>
-            <div>
-                <div id="map" style="width:500px;height:400px;"></div>
-            </div>
-            <input type="hidden" name="x" id="x" th:value="${oneCafe.x}">
-            <input type="hidden" name="y" id="y" th:value="${oneCafe.y}">
-            <input type="submit" value="등록">
+                <input type="hidden" name="x" id="x" th:value="${oneCafe.x}">
+                <input type="hidden" name="y" id="y" th:value="${oneCafe.y}">
+                <input type="hidden" name="studycafeNo" id="studycafeNo" th:value="${studycafeNo}">
+                    담당직원번호<input type="text" name="member" th:value="${oneCafe.member?.memberNo}">
+                    <input type="submit" value="등록">
             </form>
         </div>
     </main>

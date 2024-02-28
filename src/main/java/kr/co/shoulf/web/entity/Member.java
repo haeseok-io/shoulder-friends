@@ -43,6 +43,6 @@ public class Member {
     private Date hiredate;
 
     @Column(length = 20, nullable = false)
-    @ColumnDefault("'ROLE_NONE'")
+    @ColumnDefault("ROLE_NONE")
     private String role;
 }
