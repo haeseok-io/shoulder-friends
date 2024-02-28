@@ -13,14 +13,17 @@
 </th:block>
 <th:block layout:fragment="js">
     <script>
-        $("#img1").on("click",()=>{
-            $("#1").hide();
-        })
-        $("#img2").on("click",()=>{
-            $("#2").hide();
-        })
-        $("#img3").on("click",()=>{
-            $("#3").hide();
+        $(function (){
+            $("#btn").on("click", function (){
+                let tag = "<div id=\"imglist\">\n" +
+                    "<div>이미지 등록<input type=\"file\" name=\"path\"></div>\n" +
+                    "</div>";
+                $("#imgfd").append(tag);
+            })
+
+            $("#filebtn").on("click",()=>{
+                $("#imgfiles").hide();
+            })
         })
     </script>
 </th:block>
@@ -30,20 +33,27 @@
         <div class="container">
             <h2>룸 수정</h2>
             <form action="/study/room_modify" method="post" enctype="multipart/form-data">
-                <div th:each="imgdto , i : ${studyroomimg}">
-                    <img th:src="${imgdto.path}" th:id="${i.count}">
+                <div id="imgfiles">
+                    <div th:each="imgdto : ${studyroomimg}">
+                        <img th:src="${imgdto.path}">
+                    </div>
                 </div>
-                이미지 변경<input type="file" id="img1" name="path">
-                이미지 변경<input type="file" id="img2" name="path">
-                이미지 변경<input type="file" id="img3" name="path">
+                <div id="imgfd">
+                    <div id="imglist">
+                        <div>이미지 변경<input type="file" name="path" id="filebtn"></div>
+                    </div>
+                </div>
+                이미지 추가<input type="button" value="추가" id="btn">
                 룸 이름<input type="text" name="name" id="name" th:value="${oneRoom.name}">
                 룸 금액<input type="text" name="price" id="price" th:value="${oneRoom.price}">
                 최대 정원<input type="text" name="maxNum" id="maxNum" th:value="${oneRoom.studyroomDetail.maxNum}">
-                빔프로젝트<input type="radio" name="beam" id="beamY">Y
-                <input type="radio" name="beam" id="beamN">N
-                화이트보드<input type="radio" name="wboard" id="wboardY">Y
-                <input type="radio" name="wboard" id="wboardN">N
+                빔프로젝트<input type="radio" name="beam" id="beamY" checked value="Y">Y
+                <input type="radio" name="beam" id="beamN" value="N">N
+                화이트보드<input type="radio" name="wboard" id="wboardY" checked value="Y">Y
+                <input type="radio" name="wboard" id="wboardN" value="N">N
                 콘센트<input type="text" name="socket" id="socket" th:value="${oneRoom.studyroomDetail.socket}">
+                <input type="hidden" name="studycafe" th:value="${oneRoom.studycafe.studycafeNo}">
+                <input type="hidden" name="studyroomNo" th:value="${oneRoom.studyroomNo}">
                 <input type="submit" value="등록">
             </form>
         </div>
