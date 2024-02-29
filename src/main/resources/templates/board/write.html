@@ -1,0 +1,90 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/layout}">
+
+<th:block layout:fragment="css">
+    <style>
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title {
+            margin-bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        select.selectCategory{
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input#title {
+            width: calc(90% - 10px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .content {
+            width: 100%;
+        }
+
+        .btn {
+            margin-top: 20px;
+            display: inline-block;
+            justify-content: space-around;
+        }
+    </style>
+</th:block>
+<th:block layout:fragment="js">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/lang/summernote-ko-KR.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            //여기 아래 부분
+            $('#summernote').summernote({
+                height: 400,                 // 에디터 높이
+                minHeight: 200,             // 최소 높이
+                maxHeight: null,             // 최대 높이
+                focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+                lang: "ko-KR",					// 한글 설정
+                placeholder: '최대 2048자까지 쓸 수 있습니다'	//placeholder 설정
+            });
+        });
+    </script>
+</th:block>
+
+<th:block layout:fragment="container">
+    <main>
+        <div class="container">
+            <div class="wrapper">
+                <form action="/board/write" method="post">
+                    <div class="title">
+                        <select class="selectCategory" name="cate">
+                            <option value="1">자유</option>
+                            <option value="2">개발Q&A</option>
+                        </select>
+                        <input type="text" name="title" id="title" placeholder="제목을 적어주세요.">
+                    </div>
+                    <div class="content">
+                        <textarea id="summernote" name="contents"></textarea>
+                    </div>
+                    <div class="btn">
+                        <a class="btn btn-outline-danger" href="/board/">취소</a>
+                        <input class="btn btn-outline-primary" type="submit" value="등록">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</th:block>
+
+</html>
