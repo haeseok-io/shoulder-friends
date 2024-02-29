@@ -55,4 +55,16 @@ public class UserService {
 
         return UserDetailDTO.builder().build();
     }
+
+    public UserDTO readOne(long userNo) {
+        Optional<Users> result = userRepository.findById(userNo);
+        Users users = result.get();
+        UserDTO dto = UserDTO.builder()
+                .userNo(users.getUserNo())
+                .email(users.getEmail())
+                .nickname(users.getNickname())
+                .pass(users.getPass())
+                .build();
+        return dto;
+    }
 }
