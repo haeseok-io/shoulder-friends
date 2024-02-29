@@ -366,7 +366,6 @@ public class StudyController {
                     file1.delete();
                 }
             }
-
             studyService.deleteImg(studyroom);
             studyService.deleteRoom(studyroomNo);
 
