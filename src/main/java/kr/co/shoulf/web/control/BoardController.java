@@ -22,7 +22,6 @@ public class BoardController {
 
     @GetMapping("/")
     public String boardList(@RequestParam(value = "cate", required = false) Integer cate, Model model, PageRequestDTO pageRequestDTO) {
-//        List<BoardDTO> boardList;
         BoardDTO boardBest = boardService.readBest();
         model.addAttribute("boardBest", boardBest);
         PageResponseDTO<Board> boardList;
@@ -42,20 +41,28 @@ public class BoardController {
         return "board/detail";
     }
 
+    @PostMapping("/plusHits")
+    @ResponseBody
+    public void plusHits(@RequestParam Long boardNo){
+        System.out.println("plusHits 호출");
+        BoardDTO boardDTO = boardService.readOne(boardNo);
+        Board board = boardDTO.getBoard();
+        board.setHits(board.getHits()+1);
+        boardService.add(board);
+//        boardDTO.setBoard(board);
+//        return boardDTO;
+    }
+
     @GetMapping("/write")
-    public String boardWrite(Model model) {
+    public String boardWrite() {
         return "board/write";
     }
 
     @PostMapping("/write")
     public String writeOk(@ModelAttribute Board board, HttpServletRequest req) {
         Users user = userService.readOne(1L);
-
-//        String contents = HtmlUtils.htmlEscape(board.getContents());
-
         board.setIp(req.getRemoteAddr());
         board.setCate(board.getCate());
-//        board.setContents(contents);
         board.setUsers(user);
         boardService.add(board);
         return "redirect:/board/";
