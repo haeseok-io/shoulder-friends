@@ -97,6 +97,7 @@
                         <div th:text="${dto.studyroomDetail.wboard}"></div>
                         <div th:text="${dto.studyroomDetail.socket}"></div>
                         <div><a th:href="@{/study/room_modify(studyroomNo=${dto.studyroomNo})}">수정</a></div>
+                        <input type="hidden" name="studycafeNo" th:value="${studycafeNo}">
                         <div><input type="submit" value="삭제"></div>
                             <hr>
                     </div>
