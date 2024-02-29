@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script th:inline="javascript">
+        $(()=>{
+            var message = [[${msg}]];
+            alert(message);
+            location.href=[[${url}]];
+        })
+    </script>
+</head>
+</html>
