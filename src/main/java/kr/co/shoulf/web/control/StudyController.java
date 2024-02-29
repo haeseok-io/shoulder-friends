@@ -5,17 +5,17 @@ import kr.co.shoulf.web.dto.StudyroomDTO;
 import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.service.StudyService;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.connector.Response;
+import org.hibernate.query.NativeQuery;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.nio.file.Files;
@@ -31,6 +31,11 @@ public class StudyController {
     private final StudyService studyService;
     @Value("D:\\dev\\jworkspace\\shoulder-friends\\src\\main\\resources\\static\\studycafeimg")
     String uploadPath;
+
+    @GetMapping("/alert")
+    public void alert(){
+
+    }
 
     //스터디 카페 리스트
     @GetMapping("/cafe_list")
@@ -155,31 +160,40 @@ public class StudyController {
             studyService.saveCafe(studycafe);
         }
 
-        return "redirect:/study/cafe_list";
+        return "redirect:/study/room_list?studycafeNo="+dto.getStudycafeNo();
     }
 
     //카페 삭제
     @PostMapping("/cafe_delete")
-    public String deleteCafe(@RequestParam Long studycafeNo){
+    public String deleteCafe(@RequestParam Long studycafeNo, Model model){
 
-        Studycafe studycafe1 = studyService.oneCafe(studycafeNo);
-        String cafeimgpath = studycafe1.getMainImg();
-        int imgindex = cafeimgpath.lastIndexOf("/");
-        String imgname =  cafeimgpath.substring(imgindex+1);
+        List<Studyroom> studyroom = studyService.listRoom(studycafeNo);
 
-        File files = new File(uploadPath+"\\"+imgname);
+        //스터디룸이 존재하는지 확인
+        if(studyroom.isEmpty() == true) {
 
-        if(files.exists()){
-            files.delete();
+            Studycafe studycafe1 = studyService.oneCafe(studycafeNo);
+            String cafeimgpath = studycafe1.getMainImg();
+            int imgindex = cafeimgpath.lastIndexOf("/");
+            String imgname = cafeimgpath.substring(imgindex + 1);
+
+            File files = new File(uploadPath + "\\" + imgname);
+            if (files.exists()) {
+                files.delete();
+            }
+            studyService.deletecafe(studycafeNo);
+
+        }else if (studyroom.isEmpty() == false){
+            model.addAttribute("msg","스터디룸을 먼저 삭제 해주세요");
+            model.addAttribute("url","/study/room_list?studycafeNo="+studycafeNo);
+            return "/study/alert";
         }
-
-        studyService.deletecafe(studycafeNo);
         return "redirect:/study/cafe_list";
     }
 
     //스터디 카페 디테일 & 스터디룸 목록
     @GetMapping("/room_list")
-    public void room_list(Model model, @RequestParam Long studycafeNo){
+    public void room_list(Model model, @RequestParam() Long studycafeNo){
         model.addAttribute("roomImgList",studyService.listRoomImg(studycafeNo));
         model.addAttribute("studycafeNo", studycafeNo);
         model.addAttribute("listRoom", studyService.listRoom(studycafeNo));
@@ -240,7 +254,7 @@ public class StudyController {
             }
 
         }
-        return "redirect:/study/cafe_list";
+        return "redirect:/study/room_list?studycafeNo="+dto.getStudycafe().getStudycafeNo();
     }
 
     //스터디룸 수정 페이지 이동
@@ -322,42 +336,46 @@ public class StudyController {
                 }
             }
         }
-        return "redirect:/study/cafe_list";
+        return "redirect:/study/room_list?studycafeNo="+dto.getStudycafe().getStudycafeNo();
     }
 
     //스터디룸 삭제
     @PostMapping("/room_delete")
-    public String deleteRoom(@RequestParam Long studyroomNo){
+    public String deleteRoom(@RequestParam Long studyroomNo, @RequestParam Long studycafeNo, Model model){
 
-        Studyroom studyroom = studyService.oneRoom(studyroomNo);
+        List<Reservation> reservationList = studyService.reservCheck(studyroomNo);
 
-        List<StudyroomImage> studyroomImageList = studyService.oneRoomImg(studyroomNo);
+        if(reservationList.isEmpty() == true) {
 
-        for(int i=0; i<studyroomImageList.size(); i++) {
-            String cafeimgpath = studyroomImageList.get(i).getPath();
-            int imgindex = cafeimgpath.lastIndexOf("/");
-            String imgname = cafeimgpath.substring(imgindex + 1);
+            studyService.deletereserv(studycafeNo);
 
-            File file1 = new File(uploadPath + "\\" + imgname);
 
-            if (file1.exists()) {
-                file1.delete();
+            Studyroom studyroom = studyService.oneRoom(studyroomNo);
+
+            List<StudyroomImage> studyroomImageList = studyService.oneRoomImg(studyroomNo);
+
+            //디렉토리 안에 파일 삭제
+            for(int i=0; i<studyroomImageList.size(); i++) {
+                String cafeimgpath = studyroomImageList.get(i).getPath();
+                int imgindex = cafeimgpath.lastIndexOf("/");
+                String imgname = cafeimgpath.substring(imgindex + 1);
+
+                File file1 = new File(uploadPath + "\\" + imgname);
+
+                if (file1.exists()) {
+                    file1.delete();
+                }
             }
+
+            studyService.deleteImg(studyroom);
+            studyService.deleteRoom(studyroomNo);
+
+        }else if (reservationList.isEmpty() == false){
+            model.addAttribute("msg","남아있는 예약이 있습니다");
+            model.addAttribute("url","/study/room_list?studycafeNo="+studycafeNo);
+            return "/study/alert";
         }
-        studyService.deleteImg(studyroom);
 
-        StudyroomDetail studyroomDetail = studyService.oneDetail(studyroomNo);
-        Studyroom studyroom1 = studyroomDetail.getStudyroom();
-        studyroom1.setStudyroomDetail(null);
-        studyService.saveroom(studyroom);
-
-        studyService.deleteDetail(studyroomNo);
-
-        studyService.deleteRoom(studyroomNo);
-
-        studyroom1.setStudyroomDetail(studyroomDetail);
-        studyService.saveroom(studyroom);
-
-        return "redirect:/study/room_list";
+        return "redirect:/study/room_list?studycafeNo="+studycafeNo;
     }
 }
