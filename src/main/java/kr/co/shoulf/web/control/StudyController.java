@@ -29,7 +29,7 @@ import java.util.UUID;
 @RequestMapping("/study")
 public class StudyController {
     private final StudyService studyService;
-    @Value("C:\\app\\JAEEUN\\jproject\\shoulder-friends\\src\\main\\resources\\static\\studycafeimg")
+    @Value("D:\\dev\\jworkspace\\shoulder-friends\\src\\main\\resources\\static\\studycafeimg")
     String uploadPath;
 
     @GetMapping("/alert")
