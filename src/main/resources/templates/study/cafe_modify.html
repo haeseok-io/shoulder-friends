@@ -5,9 +5,85 @@
 <th:block layout:fragment="css">
     <style>
         img{
-            width: 500px;
-            height: 300px;
+            width: 80%;
             display: inline-block;
+            border-radius: 5px;
+        }
+        .filebox .upload-name {
+            display: inline-block;
+            height: 50px;
+            padding: 0 10px;
+            vertical-align: middle;
+            border: 1px solid #CCCCCC;
+            width: 83%;
+            color: #999999;
+        }
+        .filebox label {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #8D57E1;
+            vertical-align: middle;
+            background-color: #fff;
+            cursor: pointer;
+            height: 50px;
+            margin-left: 10px;
+            border-radius: 5px;
+            border: 1px solid #8D57E1;
+        }
+        .filebox input[type="file"] {
+            position: absolute;
+            width: 0;
+            height: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 0;
+            border-radius: 5px;
+        }
+        input[type="text"] {
+            width: 750px;
+            height: 50px;
+            border-radius: 5px;
+        }
+        input[type="text"]::placeholder{
+            color: #999999;
+        }
+        input[type="text"]:focus, #shortDesc:focus {
+            outline: none;
+            border: 1px solid #8D57E1;
+            box-shadow: 0 0 10px #DFCAFF;
+        }
+        .btns{
+            background: #fff;
+            border: 1px solid #8D57E1;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 15px;
+            color: #8D57E1;
+            height: 50px;
+        }
+        .btnsub{
+            background: #fff;
+            border: 1px solid #8D57E1;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 19px;
+            color: #8D57E1;
+            height: 50px;
+            width: 130px;
+            float: right;
+        }
+        #in1, #in2, #in3, #in4, #in7, #in8, #in9{
+            padding-top: 50px;
+        }
+        #in9{
+            padding-top: 60px;
+            padding-bottom: 80px;
+        }
+        label{
+            font-weight: 600;
+            font-size: 22px;
+            color: #1F1926;
+            padding-bottom: 15px;
         }
     </style>
 </th:block>
@@ -109,51 +185,71 @@
                 }).open();
             })
 
-            $("#mainImg").on("click", () => {
+            $("#file").on('change',function(){
                 $("#mainimgfile").hide();
-            })
+                var fileName = $("#file").val();
+                $(".upload-name").val(fileName);
+            });
         })
     </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
-        <div class="container">
+        <div class="container" style="width: 775px">
             <h2>카페 수정</h2>
             <form action="/study/cafe_modify" method="post" name="studycafeadd" enctype="multipart/form-data">
-                <img th:src="${oneCafe.mainImg}" id="mainimgfile">
-                <div class="">
-                    이미지 변경하기<input type="file" name="mainImg" id="mainImg">
+                <div id="imgimg" style="padding-top: 80px; padding-bottom: 10px; text-align: center">
+                    <img th:src="${oneCafe.mainImg}" id="mainimgfile">
                 </div>
-                카페 이름<input type="text" name="name" id="name" th:value="${oneCafe.name}">
-                카페 설명<input type="text" name="shortDesc" id="shortDesc" th:value="${oneCafe.shortDesc}">
-                <div class="">
-                    <div class="">
-                        <input type="text" name="post" id="post" th:value="${oneCafe.post}" placeholder="우편번호"
-                               readonly/>
-                    </div>
-                    <div class="">
-                        <button type="button" id="searchAddr">우편번호 찾기</button>
+                <div class="mb-3" id="in1">
+                    <label for="files" class="form-label">메인 이미지</label>
+                    <div class="filebox" id="files">
+                        <input class="upload-name" value="첨부파일" placeholder="첨부파일" readonly>
+                        <label style="font-size: 17px; font-weight: normal" for="file">파일찾기</label>
+                        <input type="file" name="mainImg" accept="image/*" id="file">
                     </div>
                 </div>
-                <div class="">
-                    <div class="">
-                        <input type="text" name="addr" id="addr" th:value="${oneCafe.addr}" placeholder="주소" readonly/>
+                <div class="mb-3" id="in2">
+                    <label for="name" class="form-label">카페 이름</label>
+                    <input type="text" class="form-control" name="name" id="name" th:value="${oneCafe.name}">
+                </div>
+                <div class="mb-3" id="in3">
+                    <label for="shortDesc" class="form-label">카페 설명</label>
+                    <textarea class="form-control" name="shortDesc" id="shortDesc" rows="3" style="width: 750px; height: 200px" th:value="${oneCafe.shortDesc}">[[${oneCafe.shortDesc}]]</textarea>
+                </div>
+
+                <div class="mb-3" id="in4">
+                    <label for="inin" class="form-label">주소</label>
+                    <div class="mb-3 row" id="inin">
+                        <div class="col-auto">
+                            <input type="text" class="form-control" name="post" id="post" th:value="${oneCafe.post}" readonly style="width: 100%;">
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btns" id="searchAddr">우편번호 찾기</button>
+                        </div>
                     </div>
                 </div>
-                <div class="">
-                    <div class="">
-                        <input type="text" name="addrDetail" id="addrDetail" placeholder="상세주소"/>
-                    </div>
+                <div class="mb-3" id="in5">
+                    <input type="text" class="form-control" name="addr" id="addr" th:value="${oneCafe.addr}" readonly>
                 </div>
-                <div>
-                    <div id="map" style="width:500px;height:400px;"></div>
+                <div class="mb-3" id="in6">
+                    <input type="text" class="form-control"  name="addrDetail" id="addrDetail" placeholder="상세주소" >
+                </div>
+                <div id="in7">
+                    <label for="map" class="form-label">위치</label>
+                    <div id="map" style="width:750px;height:400px;"></div>
                 </div>
                 <input type="hidden" name="x" id="x" th:value="${oneCafe.x}">
                 <input type="hidden" name="y" id="y" th:value="${oneCafe.y}">
                 <input type="hidden" name="studycafeNo" id="studycafeNo" th:value="${oneCafe.studycafeNo}">
-                    담당직원번호<input type="text" name="member" th:value="${oneCafe.member?.memberNo}">
-                    <input type="submit" value="등록">
+                <div class="mb-3" id="in8">
+                    <label for="member" class="form-label">담당 직원 번호</label>
+                    <input type="text" class="form-control" name="member" id="member" th:value="${oneCafe.member?.memberNo}">
+                </div>
+                <div id="in9">
+                    <input type="submit" value="등록" class="btnsub" style="border-radius: 5px;">
+                </div>
             </form>
         </div>
     </main>
