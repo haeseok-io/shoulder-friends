@@ -347,9 +347,6 @@ public class StudyController {
 
         if(reservationList.isEmpty() == true) {
 
-            studyService.deletereserv(studycafeNo);
-
-
             Studyroom studyroom = studyService.oneRoom(studyroomNo);
 
             List<StudyroomImage> studyroomImageList = studyService.oneRoomImg(studyroomNo);

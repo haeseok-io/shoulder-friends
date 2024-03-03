@@ -102,8 +102,17 @@ public class StudyService {
     //스터디룸 삭제
     public void deleteRoom(Long studyroomNo) {
         Optional<Studyroom> result = studyroomRepository.findById(studyroomNo);
+        // 스터디룸 번호에 해당하는 예약 리스트 가져오기
+        List<Reservation> reservationList = reservationRepository.findByStudyroom_StudyroomNo(studyroomNo);
         if (result.isPresent()) {
             Studyroom studyroom = result.get();
+            // 스터디룸과 연관된 예약 데이터의 스터디룸 연관 관계 끊기
+            for (Reservation reservation : reservationList) {
+                if (reservation.getStudyroom() != null) {
+                    reservation.setStudyroom(null); // 스터디룸과의 연관 관계 끊기
+                    reservationRepository.save(reservation); // 변경된 예약 데이터 저장
+                }
+            }
             // 연관된 스터디룸디테일을 삭제
             if (studyroom.getStudyroomDetail() != null) {
                 studyroom.setStudyroomDetail(null); // 스터디룸과의 연관 관계를 끊음
@@ -137,18 +146,5 @@ public class StudyService {
             }
         }
         return list;
-    }
-
-    //예약 삭제
-    public void deletereserv(Long studyroomNo) {
-        List<Reservation> reservationList = reservationRepository.findByStudyroom_StudyroomNo(studyroomNo);
-
-        for(int i=0; i<reservationList.size(); i++) {
-            Reservation reservation = reservationList.get(i);
-            // 연관된 스터디룸디테일을 삭제
-            if (reservation.getStudyroom() != null) {
-                reservation.setStudyroom(null); // 스터디룸과의 연관 관계를 끊음
-            }
-        }
     }
 }
