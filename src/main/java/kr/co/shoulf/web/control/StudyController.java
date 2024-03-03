@@ -29,7 +29,7 @@ import java.util.UUID;
 @RequestMapping("/study")
 public class StudyController {
     private final StudyService studyService;
-    @Value("D:\\dev\\jworkspace\\shoulder-friends\\src\\main\\resources\\static\\studycafeimg")
+    @Value("C:\\app\\JAEEUN\\jproject\\shoulder-friends\\src\\main\\resources\\static\\studycafeimg")
     String uploadPath;
 
     @GetMapping("/alert")
@@ -346,9 +346,6 @@ public class StudyController {
         List<Reservation> reservationList = studyService.reservCheck(studyroomNo);
 
         if(reservationList.isEmpty() == true) {
-
-            studyService.deletereserv(studycafeNo);
-
 
             Studyroom studyroom = studyService.oneRoom(studyroomNo);
 
