@@ -12,7 +12,7 @@
             color: #6F6F6F;
             font-weight: bold;
         }
-        p{
+        .pp{
             width: 500px;
             padding-top: 100px;
             padding-bottom: 70px;
@@ -101,21 +101,37 @@
             padding-bottom: 20px;
             padding-top: 20px;
         }
-        #room-new, #btnbtn{
+        #room-new{
             display: inline-block;
             background-color: white;
-            color: #BAA5DC;
+            color: #BDA6DF;
             padding: 5px 10px;
             text-decoration: none;
             border-radius: 10px;
-            border: 1px solid #CABBE1;
+            border: 1px solid #BDA6DF;
             outline: none;
             line-height: 25px;
         }
-        #room-new:hover,
+        #room-new:hover {
+            background-color: #BDA6DF;
+            border-color: #BDA6DF;
+            color: white;
+        }
+        #btnbtn{
+            display: inline-block;
+            background-color: white;
+            color: #A0A0A0;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 10px;
+            border: 1px solid #A0A0A0;
+            outline: none;
+            line-height: 25px;
+        }
         #btnbtn:hover {
-            background-color: #D2C8E3;
-            border-color: #CABBE1;
+            background-color: #A0A0A0;
+            border-color: #A0A0A0;
+            color: white;
         }
         #btnli{
             padding-top: 10px;
@@ -217,7 +233,7 @@
                 <div id="cafedetail">
                     <div class="cafe-name" th:text="${oneCafe.name}"></div>
                     <img id="cafeimg" th:src="${oneCafe.mainImg}">
-                    <div id="sdesc"><p th:text="${oneCafe.shortDesc}"></p></div>
+                    <div id="sdesc"><p class="pp" th:text="${oneCafe.shortDesc}"></p></div>
                 </div>
                 <hr>
                 <div class="room-name">위치</div>
