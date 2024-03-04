@@ -36,27 +36,29 @@
         .wrapper.type input[type='radio']:checked + label:nth-of-type(1) { background: #7B27FF; }
         .wrapper.type input[type='radio']:checked + label:nth-of-type(2) { background: #FF8911; }
 
-        .wrapper.mainImg {}
-        .wrapper.mainImg .content { display: flex; justify-content: space-between; align-items: end; }
-        .wrapper.mainImg .thumbnail { position: relative; display: flex; justify-content: center; align-items: center; width: 400px; height: 230px; background: #e0e0e0; }
-        .wrapper.mainImg .thumbnail button { position: absolute; width: 100%; height: 100%; background: transparent; border: none; }
-        .wrapper.mainImg .thumbnail button img { width: 100%; height: 100%; object-fit: cover; }
-        .wrapper.mainImg .thumbnail i { font-size: 3rem; color: #aaa; }
-        .wrapper.mainImg .wrap { width: calc(100% - 430px); }
-        .wrapper.mainImg .wrap input[type='file'] { display: none; }
-        .wrapper.mainImg .wrap button { background: #fff; border: 1px solid #382B47; border-radius: 5px; padding: 10px 15px; font-size: .9rem; color: #888; }
-        .wrapper.mainImg .wrap p { margin-top: 10px; color: #aaa; }
-        .wrapper.mainImg .wrap p:nth-of-type(1) { margin-top: 20px; }
+        .wrapper.moimImg {}
+        .wrapper.moimImg .content { display: flex; justify-content: space-between; align-items: end; }
+        .wrapper.moimImg .thumbnail { position: relative; display: flex; justify-content: center; align-items: center; width: 400px; height: 230px; background: #e0e0e0; }
+        .wrapper.moimImg .thumbnail button { position: absolute; width: 100%; height: 100%; background: transparent; border: none; }
+        .wrapper.moimImg .thumbnail button img { width: 100%; height: 100%; object-fit: cover; }
+        .wrapper.moimImg .thumbnail i { font-size: 3rem; color: #aaa; }
+        .wrapper.moimImg .wrap { width: calc(100% - 430px); }
+        .wrapper.moimImg .wrap input[type='file'] { display: none; }
+        .wrapper.moimImg .wrap button { background: #fff; border: 1px solid #382B47; border-radius: 5px; padding: 10px 15px; font-size: .9rem; color: #888; }
+        .wrapper.moimImg .wrap p { margin-top: 10px; color: #aaa; }
+        .wrapper.moimImg .wrap p:nth-of-type(1) { margin-top: 20px; }
 
         .wrapper.category {}
-        .wrapper.category .content { display: flex; justify-content: flex-start; flex-wrap: wrap; }
-        .wrapper.category .content .wrap { width: 20%; height: 50px; align-items: center; }
-        .wrapper.category input[type='radio'] { display: none; }
-        .wrapper.category label { position: relative; display: flex; padding-left: 30px; cursor: pointer; }
-        .wrapper.category label:after { position: absolute; top: 50%; left: 0; transform: translateY(-50%); content: ""; width: 20px; height: 20px; border: 1px solid #ccc; border-radius: 3px; }
-        .wrapper.category input[type='radio']:checked + label:after { background: #7B27FF; }
+        .wrapper.category-project .content { display: flex; justify-content: flex-start; flex-wrap: wrap; }
+        .wrapper.category-project .content .wrap { width: 20%; height: 50px; align-items: center; }
+        .wrapper.category-project input[type='radio'] { display: none; }
+        .wrapper.category-project label { position: relative; display: flex; padding-left: 30px; cursor: pointer; }
+        .wrapper.category-project label:after { position: absolute; top: 50%; left: 0; transform: translateY(-50%); content: ""; width: 20px; height: 20px; border: 1px solid #ccc; border-radius: 3px; }
+        .wrapper.category-project input[type='radio']:checked + label:after { background: #7B27FF; }
 
         .wrapper.headcount {}
+        .wrapper.headcount input[name='everyone'] {}
+        .wrapper.headcount input[name='everyone'] + label { font-weight: 300; font-size: 1rem; }
         .wrapper.headcount .content .itemWrap.position { width: 80%; }
         .wrapper.headcount .content .itemWrap.personnel { width: 20%; display: flex; justify-content: space-between; align-items: center; }
         .wrapper.headcount .content .itemWrap.personnel button { width: 24%; height: 50px; background: transparent; border: none; }
@@ -76,29 +78,33 @@
         $.fn.select2.defaults.set("minimumResultsForSearch", -1);
         $.fn.select2.defaults.set("width", '100%');
 
+        let headcountHtml;
+        let moimImgFileInfo;
         let platformSelect, onlineSelect, positionSelect, positionDetailSelect, languageSelect, studyCategoryselect;
         let detailDescEditor;
-
-        let mainImgFileInfo;
 
         $(() => {
             // 모집 유형 선택
             $("input[name='type']").change(e => {
                 let type = $(e.currentTarget).val();
                 getHtmlTemplate(type);
+                setPageEvent();
             });
             $("input[name='type'][value='project']").trigger("change");
+        });
 
+        // 페이지 이벤트 처리 (동적태그 추가로 함수로 처리)
+        function setPageEvent() {
             // 대표이미지 업로드 이벤트
-            $("input[name='mainImg']").click(e => {
-                mainImgFileInfo = e.target.files;
+            $("input[name='moimImg']").click(e => {
+                moimImgFileInfo = e.target.files;
             }).change(e => {
-                let target = $("#mainImg-thumbnail-btn");
+                let target = $("#moimImg-thumbnail-btn");
 
                 if( e.target.files.length>0 ){
                     let file = e.target.files[0];
 
-                    if( file!==mainImgFileInfo[0] ){
+                    if( file!==moimImgFileInfo[0] ){
                         let reader = new FileReader();
 
                         reader.onload = e => {
@@ -112,38 +118,99 @@
                         reader.readAsDataURL(file);
                     }
                 } else {
-                    $(e.currentTarget).prop("files", mainImgFileInfo);
+                    $(e.currentTarget).prop("files", moimImgFileInfo);
                 }
             });
-        });
+
+            // 온/오프라인 변경 이벤트
+            $("select[name='onlineNo']").change(e => {
+                let onlineNo = $(e.currentTarget).val();
+                let hideTarget = $(".wrapper.fee");
+
+                if( onlineNo==2 ) {
+                    $("input[name='offAddr']").val('').hide();
+                    hideTarget.find("input[name='fee']").val('');
+                    hideTarget.hide();
+                } else {
+                    $("input[name='offAddr']").show();
+                    hideTarget.show();
+                }
+            });
+
+            // 직무구분 없음 체크
+            $("input[name='everyone']").change(e => {
+                let headcountWrapper = $(".wrapper.headcount");
+                let status = $(e.currentTarget).is(":checked");
+
+                if( status ) {
+                    dropToPositionSelect();
+                    headcountWrapper.find(".mainTitle .etc").hide();
+
+                    let colItem = $("<div class='colItem' />");
+                    let positionWrap = $("<div class='itemWrap position' />");
+                    let personnelWrap = $("<div class='itemWrap personnel' />");
+
+                    positionWrap.text("누구나 참여 가능");
+                    personnelWrap.append("<button type='button' onclick=\"personnelControl(this, 'minus');\"><i class='bi bi-dash-lg'></i></button>");
+                    personnelWrap.append("<input type='text' name='personnel' value='1' readonly />");
+                    personnelWrap.append("<button type='button' onclick=\"personnelControl(this, 'plus');\"><i class='bi bi-plus-lg'></i></button>");
+
+                    colItem.append(positionWrap)
+                    colItem.append(personnelWrap);
+                    headcountWrapper.find(".content").append(colItem);
+                } else {
+                    headcountWrapper.find(".content").html('');
+
+                    copyToPositionSelect();
+                    headcountWrapper.find(".mainTitle .etc").show();
+                }
+            });
+        }
 
         // 모집인원 select 동적 플러그인 적용
         function initializePositionSelect() {
-            positionSelect = $("select[name='position[]']").select2({width: '49%'});
-            positionDetailSelect = $("select[name='positionDetail[]'").select2({width: '49%'});
+            positionSelect = $("select[name='positionNo']").select2({width: '49%'});
+            positionDetailSelect = $("select[name='positionDetailNo']").select2({width: '49%'});
+        }
+        function destroyPositionSelect() {
+            if( positionSelect )        positionSelect.select2("destroy");
+            if( positionDetailSelect )  positionDetailSelect.select2("destroy");
         }
         // 모집인원 플러그인 제거 후 코드복사
         function copyToPositionSelect() {
-            if( positionSelect )        positionSelect.select2("destroy");
-            if( positionDetailSelect )  positionDetailSelect.select2("destroy");
-
+            let cloneItem, cloneHtml;
             let appendSel = $(".wrapper.headcount .content");
-            let cloneHtml = appendSel.find(".colItem").eq(0).html();
 
-            let cloneItem = $("<div class='colItem clone' />");
+            if( appendSel.find(".colItem").length>0 ) {
+                destroyPositionSelect();
+                cloneHtml = appendSel.find(".colItem").eq(0).html();
+                cloneItem = $("<div class='colItem clone' />");
+            } else {
+                cloneHtml = headcountHtml;
+                cloneItem = $("<div class='colItem' />");
+            }
 
             cloneItem.append(cloneHtml);
             appendSel.append(cloneItem);
 
             initializePositionSelect();
-            eventToPositionSelect(cloneItem.find("select[name='position[]']"));
+            eventToPositionSelect(cloneItem.find("select[name='positionNo']"));
         }
+        // 모집인원 영역 제거 (기존 틀은 전역변수에 저장)
+        function dropToPositionSelect() {
+            destroyPositionSelect();
+            let appendSel = $(".wrapper.headcount .content");
+            headcountHtml = appendSel.find(".colItem").eq(0).html();
+
+            appendSel.html('');
+        }
+
         function eventToPositionSelect(target) {
-            let positionTarget = target ? target : $("select[name='position[]']");
+            let positionTarget = target ? target : $("select[name='positionNo']");
 
             positionTarget.change(e => {
                 let positionNo = $(e.currentTarget).find("option:selected").val();
-                let changeTarget = $(e.currentTarget).siblings("select[name='positionDetail[]']");
+                let changeTarget = $(e.currentTarget).siblings("select[name='positionDetailNo']");
 
                 getPositionDetail(positionNo, changeTarget)
             }).trigger("change");
@@ -162,8 +229,8 @@
             // 사용하는 플러그인 재 정의
             initializePositionSelect();
             eventToPositionSelect();
-            onlineSelect = $("select[name='online']").select2();
-            languageSelect = $("select[name='language[]']").select2({
+            onlineSelect = $("select[name='onlineNo']").select2();
+            languageSelect = $("select[name='language']").select2({
                 tags: true,
                 placeholder: '기술/언어를 입력해주세요.',
                 minimumResultsForSearch: 0
@@ -181,11 +248,11 @@
             detailDescEditor.getMarkdown();
 
             if( type=='project' ) {
-                platformSelect = $("select[name='platform[]']").select2({
+                platformSelect = $("select[name='platformNo']").select2({
                     placeholder: "출시할 플랫폼을 선택해주세요."
                 });
             } else if( type=='study' ) {
-                studyCategoryselect = $("select[name='studyCategory']").select2();
+                studyCategoryselect = $("select[name='studyCategoryNo']").select2();
             }
         }
 
@@ -209,7 +276,7 @@
 
         // 대표이미지 업로드 클릭 트리거
         function fileUploadTrigger() {
-            let file = $("input[name='mainImg']");
+            let file = $("input[name='moimImg']");
             file.click();
         }
 
@@ -221,7 +288,7 @@
 
         // 모집인원 인원수 증감
         function personnelControl(colElement, type) {
-            let personnelElement = $(colElement).parent().find("input[name='personnel[]']");
+            let personnelElement = $(colElement).parent().find("input[name='personnel']");
             let personnel = parseInt(personnelElement.val());
 
             if( type==='plus' )     personnel = personnel>=9 ? personnel : personnel+1;
@@ -233,16 +300,58 @@
         // 참고링크 추가/제거
         function linkControl(type) {
             let appendSel = $(".wrapper.link .content .rowItem");
+            let selCount = $("input[name='link']").length;
 
             if( type==='add' ) {
-                let cloneHtml = appendSel.find(".itemWrap").eq(0).html();
-                let cloneItem = $("<div class='itemWrap clone' />");
+                if( selCount<5 ) {
+                    let cloneHtml = appendSel.find(".itemWrap").eq(0).html();
+                    let cloneItem = $("<div class='itemWrap clone' />");
 
-                cloneItem.append(cloneHtml);
-                appendSel.append(cloneItem);
+                    cloneItem.append(cloneHtml);
+                    appendSel.append(cloneItem);
+                }
             } else {
                 appendSel.find(".itemWrap.clone").eq(-1).remove();
             }
+        }
+
+        // 등록 폼 체크
+        function formCheck() {
+            let form = document.writeForm;
+            let languageValues = getMultipleValues("language");
+            let detailDesc = detailDescEditor.getHTML();
+
+            // Check
+            if( !form.subject.value ) {
+                requestToast("프로젝트명을 입력해주세요.", "danger", form.subject);
+                return false;
+            } else if( !form.shortDesc.value ) {
+                requestToast("프로젝트명을 입력해주세요.", "danger", form.shortDesc);
+                return false;
+            } else if( languageValues.length<=0 ) {
+                requestToast("사용언어/기술을 하나 이상 선택해주세요.", "danger", form.language);
+                return false;
+            } else if( form.onlineNo.value!=2 && !form.offAddr.value ) {
+                requestToast("오프라인 장소를 입력해주세요.", "danger", form.offAddr);
+                return false;
+            }
+
+            if( form.type.value==='project' ) {
+                let platformNoValues = getMultipleValues("platformNo");
+
+                if( !form.categoryNo.value ) {
+                    requestToast("분야를 선택해주세요.", "danger");
+                    $(document).scrollTop($(".wrapper.category-project").position().top);
+                    return false;
+                } else if( platformNoValues.length<=0 ) {
+                    requestToast("출시 플랫폼을 선택해주세요.", "danger", form.platformNo);
+                    return false;
+                }
+            }
+
+
+            // Data
+            form.detailDesc.value = detailDesc;
         }
     </script>
 </th:block>
@@ -250,7 +359,7 @@
 <th:block layout:fragment="container">
     <main>
         <div class="container">
-            <form action="/moim/write" method="post" enctype="multipart/form-data">
+            <form action="/moim/write" method="post" enctype="multipart/form-data" name="writeForm" onsubmit="return formCheck();" autocomplete="off">
                 <div class="wrapper type">
                     <div class="mainTitle">
                         <div class="title">
