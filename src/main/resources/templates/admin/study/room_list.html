@@ -201,28 +201,28 @@
 <th:block layout:fragment="container">
     <main>
         <div class="container">
-            <form action="/study/cafe_delete" method="post">
+            <form action="/study/cafe/delete" method="post">
                 <div style="padding-top: 40px; height: 50px;"></div>
                 <nav class="navbar navbar-expand-lg bg-transparent">
                     <div class="container-fluid">
                         <div>
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                    <a class="nav-link" th:href="@{/study/cafe_list}">목록으로</a>
+                                    <a class="nav-link" th:href="@{/study/cafe/list}">목록으로</a>
                                 </li>
                             </ul>
                         </div>
                         <div>
                             <ul class="navbar-nav mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                    <a class="nav-link" th:href="@{/study/room_write(studycafeNo=${studycafeNo})}">방 등록</a>
+                                    <a class="nav-link" th:href="@{/study/room/write(studycafeNo=${studycafeNo})}">방 등록</a>
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         관리
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" th:href="@{/study/cafe_modify(studycafeNo=${studycafeNo})}">카페수정</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/study/cafe/modify(studycafeNo=${studycafeNo})}">카페수정</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><input class="dropdown-item" type="submit" value="카페삭제"></li>
                                     </ul>
@@ -257,7 +257,7 @@
             <div class="caferoom">
                 <div th:each="dto : ${listRoom}" class="room">
                     <div class="room-name" th:text="${dto.name}"></div>
-                    <form th:action="@{/study/room_delete(studyroomNo=${dto.studyroomNo})}" method="post">
+                    <form th:action="@{/study/room/delete(studyroomNo=${dto.studyroomNo})}" method="post">
                         <div class="parent-container">
                         <div class="room-images">
                             <div th:each="imgdto : ${roomImgList}" th:if="${imgdto.studyroom.studyroomNo == dto.studyroomNo}" id="roomimg1">
@@ -274,7 +274,7 @@
                                 <li class="roomd" th:text="'빔프로젝트 : '+${dto.studyroomDetail.beam}+' (Y/N)'"></li>
                                 <li class="roomd" th:text="'화이트보드 : '+${dto.studyroomDetail.wboard}+' (Y/N)'"></li>
                                 <li class="roomd" th:text="'콘센트 : '+${dto.studyroomDetail.socket}+'개 가능'"></li>
-                                <li id="btnli"><a class="btn btn" id="room-new" th:href="@{/study/room_modify(studyroomNo=${dto.studyroomNo})}">수정</a>
+                                <li id="btnli"><a class="btn btn" id="room-new" th:href="@{/study/room/modify(studyroomNo=${dto.studyroomNo})}">수정</a>
                                 <input type="hidden" name="studycafeNo" th:value="${studycafeNo}">
                                 <input id="btnbtn" type="submit" value="삭제"></li>
                                 </ul>
