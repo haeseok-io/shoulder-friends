@@ -15,10 +15,14 @@
         .pp{
             width: 500px;
             padding-top: 100px;
-            padding-bottom: 70px;
+            padding-bottom: 80px;
             text-align: center;
             font-size: 30px;
             color: #6F6F6F;
+        }
+        #membername{
+            text-align: right;
+            font-size: 18px;
         }
         #sdesc{
             display: flex;
@@ -234,6 +238,7 @@
                     <div class="cafe-name" th:text="${oneCafe.name}"></div>
                     <img id="cafeimg" th:src="${oneCafe.mainImg}">
                     <div id="sdesc"><p class="pp" th:text="${oneCafe.shortDesc}"></p></div>
+                    <div id="membername"><p class="membername" th:text="'관리자 : '+${oneCafe.member.name}"></p></div>
                 </div>
                 <hr>
                 <div class="room-name">위치</div>
