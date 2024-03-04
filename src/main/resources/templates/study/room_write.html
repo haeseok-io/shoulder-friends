@@ -69,6 +69,13 @@
             color: #1F1926;
             padding-bottom: 15px;
         }
+        .main-title{
+            margin-top: 80px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 30px;
+            color: #312A38;
+        }
     </style>
 </th:block>
 <th:block layout:fragment="js">
@@ -89,16 +96,34 @@
                 appendSel.find(".filebox.clone").eq(-1).remove();
             }
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.querySelector('form[action="/study/room_write"]');
+
+            form.addEventListener('submit', function(event) {
+                var name = document.getElementById('name').value.trim();
+                var price = document.getElementById('price').value.trim();
+                var maxNum = document.getElementById('maxNum').value.trim();
+                var beam = document.querySelector('input[name="beam"]:checked');
+                var wboard = document.querySelector('input[name="wboard"]:checked');
+                var socket = document.getElementById('socket').value.trim();
+                var file = document.getElementById('file').files[0];
+
+                if (!name || !price || !maxNum || !beam || !wboard || !socket || !file) {
+                    event.preventDefault(); // 폼 제출을 막음
+                    alert('모든 필수 항목을 작성해주세요.');
+                }
+            });
+        });
     </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
         <div class="container" style="width: 775px">
-            <h2>룸 등록</h2>
+            <div class="main-title">방 등록</div>
             <form action="/study/room_write" method="post" enctype="multipart/form-data">
                 <div class="mb-3" id="in1">
-                    <label for="files" class="form-label">룸 이미지</label>
+                    <label for="files" class="form-label">방 이미지</label>
                     <div id="imglist">
                         <div class="filebox" id="files">
                             <input type="file" name="path" accept="image/*" id="file">
@@ -108,11 +133,11 @@
                 <button type="button" class="btnsubs" onclick="roomimgs('drop');" style="background-color: #B1B0B0;">제거</button>
                 <button type="button" class="btnsubs" onclick="roomimgs('add');" style="background-color: #996AE3;">추가</button>
                 <div class="mb-3" id="in2">
-                    <label for="name" class="form-label">룸 이름</label>
+                    <label for="name" class="form-label">방 이름</label>
                     <input type="text" class="form-control" name="name" id="name" placeholder="룸 이름을 적어주세요">
                 </div>
                 <div class="mb-3" id="in3">
-                    <label for="price" class="form-label">룸 금액</label>
+                    <label for="price" class="form-label">방 금액</label>
                     <input type="text" class="form-control" name="price" id="price" placeholder="룸 대여 가격을 적어주세요">
                 </div>
                 <div class="mb-3" id="in4">

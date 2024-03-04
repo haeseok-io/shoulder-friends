@@ -80,6 +80,13 @@
             color: #1F1926;
             padding-bottom: 15px;
         }
+        .main-title{
+            margin-top: 80px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 30px;
+            color: #312A38;
+        }
     </style>
 </th:block>
 <th:block layout:fragment="js">
@@ -179,13 +186,31 @@
                 $(".upload-name").val(fileName);
             });
         })
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.querySelector('form[name="studycafeadd"]');
+
+            form.addEventListener('submit', function(event) {
+                var mainImg = document.getElementById('file').files[0];
+                var name = document.getElementById('name').value.trim();
+                var shortDesc = document.getElementById('shortDesc').value.trim();
+                var post = document.getElementById('post').value.trim();
+                var addr = document.getElementById('addr').value.trim();
+                var addrDetail = document.getElementById('addrDetail').value.trim();
+
+                if (!mainImg || !name || !shortDesc || !post || !addr || !addrDetail) {
+                    event.preventDefault(); // 폼 제출을 막음
+                    alert('모든 필수 항목을 작성해주세요.');
+                }
+            });
+        });
     </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
         <div class="container" style="width: 775px">
-            <h2>카페 등록</h2>
+            <div class="main-title">카페 등록</div>
             <form action="/study/cafe_write" method="post" name="studycafeadd" enctype="multipart/form-data">
                 <div class="mb-3" id="in1">
                     <label for="files" class="form-label">메인 이미지</label>

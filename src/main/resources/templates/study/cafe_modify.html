@@ -20,7 +20,7 @@
         }
         .filebox label {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 14px 20px;
             color: #8D57E1;
             vertical-align: middle;
             background-color: #fff;
@@ -84,6 +84,13 @@
             font-size: 22px;
             color: #1F1926;
             padding-bottom: 15px;
+        }
+        .main-title{
+            margin-top: 80px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 30px;
+            color: #312A38;
         }
     </style>
 </th:block>
@@ -191,19 +198,34 @@
                 $(".upload-name").val(fileName);
             });
         })
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.querySelector('form[name="studycafeadd"]');
+
+            form.addEventListener('submit', function(event) {
+                var name = document.getElementById('name').value.trim();
+                var shortDesc = document.getElementById('shortDesc').value.trim();
+                var post = document.getElementById('post').value.trim();
+
+                if (!name || !shortDesc || !post) {
+                    event.preventDefault(); // 폼 제출을 막음
+                    alert('모든 필수 항목을 작성해주세요.');
+                }
+            });
+        });
     </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
         <div class="container" style="width: 775px">
-            <h2>카페 수정</h2>
+            <div class="main-title">카페 수정</div>
             <form action="/study/cafe_modify" method="post" name="studycafeadd" enctype="multipart/form-data">
                 <div id="imgimg" style="padding-top: 80px; padding-bottom: 10px; text-align: center">
                     <img th:src="${oneCafe.mainImg}" id="mainimgfile">
                 </div>
                 <div class="mb-3" id="in1">
-                    <label for="files" class="form-label">메인 이미지</label>
+                    <label for="files" class="form-label">메인 이미지 수정</label>
                     <div class="filebox" id="files">
                         <input class="upload-name" value="첨부파일" placeholder="첨부파일" readonly>
                         <label style="font-size: 17px; font-weight: normal" for="file">파일찾기</label>

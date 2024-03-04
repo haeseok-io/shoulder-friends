@@ -77,7 +77,7 @@
         #imgfiles{
             display: flex;
             overflow-x: auto;
-            padding-top: 80px;
+            padding-top: 50px;
         }
         .room-images {
             flex: 1;
@@ -86,6 +86,12 @@
             border-left: 10px;
             padding: 3px;
             border-radius: 10px;
+        }
+        .main-title{
+            margin-top: 80px;
+            font-weight: 600;
+            font-size: 30px;
+            color: #312A38;
         }
     </style>
 </th:block>
@@ -112,13 +118,30 @@
                 appendSel.find(".filebox.clone").eq(-1).remove();
             }
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.querySelector('form[action="/study/room_modify"]');
+
+            form.addEventListener('submit', function(event) {
+                var name = document.getElementById('name').value.trim();
+                var price = document.getElementById('price').value.trim();
+                var maxNum = document.getElementById('maxNum').value.trim();
+                var beam = document.querySelector('input[name="beam"]:checked');
+                var wboard = document.querySelector('input[name="wboard"]:checked');
+                var socket = document.getElementById('socket').value.trim();
+
+                if (!name || !price || !maxNum || !beam || !wboard || !socket) {
+                    event.preventDefault(); // 폼 제출을 막음
+                    alert('모든 필수 항목을 작성해주세요.');
+                }
+            });
+        });
     </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
         <div class="container" style="width: 775px">
-            <h2>룸 수정</h2>
+            <div class="main-title">방 수정</div>
             <form action="/study/room_modify" method="post" enctype="multipart/form-data">
                 <div id="imgfiles">
                     <div th:each="imgdto : ${studyroomimg}">
@@ -126,7 +149,7 @@
                     </div>
                 </div>
                 <div class="mb-3" id="in1">
-                    <label for="files" class="form-label">이미지 변경</label>
+                    <label for="files" class="form-label">방 이미지 변경</label>
                     <div id="imglist">
                         <div class="filebox" id="files">
                             <input type="file" name="path" accept="image/*" id="filebtn">
@@ -136,11 +159,11 @@
                 <button type="button" class="btnsubs" onclick="roomimgs('drop');" style="background-color: #B1B0B0;">제거</button>
                 <button type="button" class="btnsubs" onclick="roomimgs('add');" style="background-color: #996AE3;">추가</button>
                 <div class="mb-3" id="in2">
-                    <label for="name" class="form-label">룸 이름</label>
+                    <label for="name" class="form-label">방 이름</label>
                     <input type="text" class="form-control" name="name" id="name" th:value="${oneRoom.name}">
                 </div>
                 <div class="mb-3" id="in3">
-                    <label for="price" class="form-label">룸 금액</label>
+                    <label for="price" class="form-label">방 금액</label>
                     <input type="text" class="form-control" name="price" id="price" th:value="${oneRoom.price}">
                 </div>
                 <div class="mb-3" id="in4">
@@ -151,11 +174,11 @@
                     <label for="beamradio" class="form-label">빔 프로젝트</label>
                     <div id="beamradio">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="beam" id="beamY" value="Y">
+                            <input class="form-check-input" type="radio" name="beam" id="beamY" value="Y" th:checked="${oneRoom.studyroomDetail.beam == 'Y'}">
                             <label class="form-check-label" for="beamY" style="font-size: 18px;">YES</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="beam" id="beamN" value="N">
+                            <input class="form-check-input" type="radio" name="beam" id="beamN" value="N" th:checked="${oneRoom.studyroomDetail.beam == 'N'}">
                             <label class="form-check-label" for="beamN" style="font-size: 18px;">NO</label>
                         </div>
                     </div>
@@ -164,11 +187,11 @@
                     <label for="wboardradio" class="form-label">화이트보드</label>
                     <div id="wboardradio">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="wboard" id="wboardY" value="Y">
+                            <input class="form-check-input" type="radio" name="wboard" id="wboardY" value="Y" th:checked="${oneRoom.studyroomDetail.wboard == 'Y'}">
                             <label class="form-check-label" for="wboardY" style="font-size: 18px;">YES</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="wboard" id="wboardN" value="N">
+                            <input class="form-check-input" type="radio" name="wboard" id="wboardN" value="N" th:checked="${oneRoom.studyroomDetail.wboard == 'N'}">
                             <label class="form-check-label" for="wboardN" style="font-size: 18px;">NO</label>
                         </div>
                     </div>

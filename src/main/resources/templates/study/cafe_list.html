@@ -4,11 +4,6 @@
 
 <th:block layout:fragment="css">
     <style>
-        img{
-            width: 500px;
-            height: 280px;
-            display: inline-block;
-        }
         #cafebtn{
             color: #595959;
             padding: 10px 15px;
@@ -21,22 +16,36 @@
         }
         #btnbtn{
             text-align: right;
-            padding: 10px 80px;
+            padding: 10px 40px;
         }
         #cafecard{
-            width: 640px;
-            height: 420px;
+            width: 410px;
             display: inline-block;
-            padding-left: 70px;
+            padding-top: 40px;
+            padding-bottom: 80px;
+            padding-left: 60px;
         }
         #cafename{
             text-align: center;
             font-weight: bold;
-            font-size: 20px;
+            font-size: 17px;
             color: #5D5D5D;
         }
         .btnd{
-            padding: 50px 0;
+            padding-bottom: 40px;
+        }
+        .cafes{
+            width: 1250px;
+        }
+        .card-img-top{
+            height: 196px;
+        }
+        .main-title{
+            margin-top: 50px;
+            margin-left: 65px;
+            font-weight: 600;
+            font-size: 30px;
+            color: #312A38;
         }
     </style>
 </th:block>
@@ -48,15 +57,17 @@
 <th:block layout:fragment="container">
     <main>
         <div class="container">
-            <h1>스터디 카페</h1>
+            <div class="main-title">어깨동무 스터디 카페</div>
             <div class="btnd">
             <div id="btnbtn"><a th:href="@{/study/cafe_write}" id="cafebtn">스터디 카페 등록</a></div>
             </div>
-            <div th:each="dto:${listCafe}" id="cafecard">
-                <div class="card" style="width: 500px;">
-                    <a th:href="@{/study/room_list(studycafeNo=${dto.studycafeNo})}"><img class="card-img-top" th:src="${dto.mainImg}"></a>
-                    <div class="card-body">
-                    <p class="card-text" id="cafename" th:text="${dto.name}"></p>
+            <div class="cafes">
+                <div th:each="dto:${listCafe}" id="cafecard">
+                    <div class="card" style="width: 350px;">
+                        <a th:href="@{/study/room_list(studycafeNo=${dto.studycafeNo})}"><img class="card-img-top" th:src="${dto.mainImg}"></a>
+                        <div class="card-body">
+                        <p class="card-text" id="cafename" th:text="${dto.name}"></p>
+                        </div>
                     </div>
                 </div>
             </div>
