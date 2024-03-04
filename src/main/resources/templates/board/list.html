@@ -39,19 +39,19 @@
             margin-bottom: 20px;
             padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 10px;
         }
 
-        .search select, input{
+        .search select, .search input{
             padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 10px;
         }
 
         .selectCategory {
             padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 10px;
             margin-top: 10px;
         }
 
@@ -125,7 +125,7 @@
                 // Get the data-no attribute directly from the clicked ".wrap" element
                 let dataNo = $(this).data("no");
                 let hits = $(this).data("hits");
-                $.ajax({
+                $.ajax({ //클릭시 조회수 증가
                     type: "post",
                     url : "/board/plusHits",
                     data : {boardNo : dataNo},
@@ -143,7 +143,13 @@
                 $(this).css("cursor", "pointer");
             });
 
-            $(".catePaging")
+            $("#searchButton").on("click", function (){ //검색창 공백이 알림, 폼제출 방지
+                let keyword = $("#keyword").val().trim();
+                if (keyword === "") {
+                    alert("검색어를 입력해주세요.");
+                    event.preventDefault();
+                }
+            });
         });
     </script>
 </th:block>
@@ -187,13 +193,14 @@
                         <a class="btn btn-custom-add" href="/board/write">글쓰기</a>
                     </div>
                     <div class="search">
-                        <select name="">
-                            <option value="">제목</option>
-                            <option value="">작성자</option>
-                            <option value="">내용</option>
-                        </select>
-                        <input type="text" name="">
-                        <input type="submit" value="검색">
+                        <form action="/board/" name="searchForm">
+                            <select name="searchType">
+                                <option value="title">제목</option>
+                                <option value="contents">내용</option>
+                            </select>
+                            <input type="text" name="keyword" id="keyword">
+                            <input type="submit" id="searchButton" value="검색">
+                        </form>
                     </div>
                 </div>
                 <div class="allContents">
@@ -228,11 +235,14 @@
                         <li class="page-item"><a class="page-link" th:href="@{/board/(page=${boardList.start-1}, scale=${boardList.scale})}">이전</a></li>
                     </th:block>
                     <th:block th:each="i : ${#numbers.sequence(boardList.start, boardList.end)}">
-                        <th:block th:if="${param.cate == null}">
+                        <th:block th:if="${param.cate == null && param.keyword==null}">
                             <li class="page-item"><a class="page-link" th:href="@{/board/(page=${i},scale=${boardList.scale})}">[[${i}]]</a></li>
                         </th:block>
                         <th:block th:if="${param.cate != null}">
                             <li class="page-item"><a class="page-link" th:href="@{/board/(page=${i},scale=${boardList.scale},cate=${boardList.dataList[i].cate})}">[[${i}]]</a></li>
+                        </th:block>
+                        <th:block th:if="${param.keyword != null}">
+                            <li class="page-item"><a class="page-link" th:href="@{/board/(page=${i},scale=${boardList.scale},searchType=${param.searchType},keyword=${param.keyword})}">[[${i}]]</a></li>
                         </th:block>
                     </th:block>
                     <th:block th:if="${boardList.next}">
