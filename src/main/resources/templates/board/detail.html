@@ -17,6 +17,10 @@
         .titleReply{font-weight: bold}
         #comments{height: 38px;}
 
+        .title span{
+            justify-content: space-between;
+            margin-left: 5px;
+        }
         .board {
             width: 70%;
             background-color: #fff; /* 내용 영역 배경색 추가 */
@@ -72,6 +76,10 @@
                             <p class="boardDetailInfo">
                                 <span>작성일 : [[${#dates.format(boardDetail.board.regdate, 'yyyy년 MM월 dd일 HH:mm:ss')}]]</span>
                                 <span>조회수 : [[${boardDetail.board.hits}]]</span>
+                                <span class="wrapModify">
+                                    <a th:href="@{/board/delete(boardNo=${boardDetail.board.boardNo})}">삭제</a>
+                                    <a th:href="@{/board/modify(boardNo=${boardDetail.board.boardNo})}">수정</a>
+                                </span>
                             </p>
                         </div>
                     </div>
@@ -91,7 +99,7 @@
                         <p class="titleReply">댓글</p>
                     </div>
                     <div class="comments">
-                        <form action="reply/write" method="get">
+                        <form action="board/replyWrite" method="get">
                             <input type="hidden" name="boardNo" th:value="${boardDetail.board.boardNo}">
                             <input type="text" name="comments" id="comments">
                             <input type="submit" value="작성" class="btn btn-outline-primary">
