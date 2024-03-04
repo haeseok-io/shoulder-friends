@@ -1,5 +1,6 @@
 package kr.co.shoulf.web.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import kr.co.shoulf.web.dto.StudycafeDTO;
 import kr.co.shoulf.web.entity.*;
@@ -7,7 +8,12 @@ import kr.co.shoulf.web.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +25,7 @@ public class StudyService {
     private final StudyroomRepository studyroomRepository;
     private final StudyroomDetailRepository studyroomDetailRepository;
     private final StudyroomImageRepository studyroomImageRepository;
+    private final ReservationRepository reservationRepository;
 
     //스터디 카페 전체 목록
     public List<Studycafe> listCafe() {
@@ -87,4 +94,57 @@ public class StudyService {
         studyroomImageRepository.deleteByStudyroom_StudyroomNo(studyroom.getStudyroomNo());
     }
 
+    //스터디카페 삭제
+    public void deletecafe(Long studycafeNo) {
+        studycafeRepository.deleteById(studycafeNo);
+    }
+
+    //스터디룸 삭제
+    public void deleteRoom(Long studyroomNo) {
+        Optional<Studyroom> result = studyroomRepository.findById(studyroomNo);
+        // 스터디룸 번호에 해당하는 예약 리스트 가져오기
+        List<Reservation> reservationList = reservationRepository.findByStudyroom_StudyroomNo(studyroomNo);
+        if (result.isPresent()) {
+            Studyroom studyroom = result.get();
+            // 스터디룸과 연관된 예약 데이터의 스터디룸 연관 관계 끊기
+            for (Reservation reservation : reservationList) {
+                if (reservation.getStudyroom() != null) {
+                    reservation.setStudyroom(null); // 스터디룸과의 연관 관계 끊기
+                    reservationRepository.save(reservation); // 변경된 예약 데이터 저장
+                }
+            }
+            // 연관된 스터디룸디테일을 삭제
+            if (studyroom.getStudyroomDetail() != null) {
+                studyroom.setStudyroomDetail(null); // 스터디룸과의 연관 관계를 끊음
+            }
+            studyroomDetailRepository.deleteById(studyroomNo); // 스터디룸 디테일 삭제
+            studyroomRepository.delete(studyroom); // 스터디룸 삭제
+        }
+    }
+
+    //스터디룸에 남은 예약이 있는지 확인
+    public List<Reservation> reservCheck(Long studyroomNo) {
+        List<Reservation> list = new ArrayList<>();
+        List<Reservation> reservationList = reservationRepository.findByStudyroom_StudyroomNo(studyroomNo);
+        for (Reservation r : reservationList){
+            Date d1 = null;
+            Date d2 = null;
+
+            try {
+                Date d = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String datenow = sdf.format(d);
+                String ckin = sdf.format(r.getCheckin());
+                d1 = sdf.parse(datenow);
+                d2 = sdf.parse(ckin);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            //승인 상태이고 날짜가 안 지난 예약만 list에 넣기
+            if(r.getStatus() == 1 && d1.compareTo(d2) < 0){
+                list.add(r);
+            }
+        }
+        return list;
+    }
 }

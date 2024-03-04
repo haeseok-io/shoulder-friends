@@ -22,7 +22,6 @@ public class LoginService {
     public UserDetails login(Users users) {
         // 이메일로 사용자 정보 조회
         Users readUser = userRepository.findByEmail(users.getEmail());
-        System.out.println(readUser);
 
         // 조회된 사용자가 없을 경우 예외 발생
         if (readUser == null) {

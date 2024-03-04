@@ -3,19 +3,152 @@
       layout:decorate="~{fragment/layout}">
 
 <th:block layout:fragment="css">
+    <style>
+        body {
+            /*font-family: 'Noto Sans KR', sans-serif;*/
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            /*background-color: #fff;*/
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mainTitle {
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subject {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .content{
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        .search select, .search input{
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        .selectCategory {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .selectCategory a {
+            text-decoration: none;
+            color: #555;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-right: 10px;
+            background-color: #ecf0f1;
+        }
+
+        .selectCategory a:hover {
+            background-color: #7B27FF;
+            color: #fff;
+        }
+
+        .allContents ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .wrap {
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .wrap .cate span {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #7B27FF;
+            color: #fff;
+        }
+
+        .wrap .subject {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #2c3e50;
+        }
+
+        .wrap .etc {
+            display: flex;
+            align-items: center;
+            margin: 15px 15px 0 0;
+            color: #555;
+        }
+        .wrap .etc span {
+            margin-left: 15px;
+        }
+        .wrap .etc img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+        .search{margin-left: 15px;}
+    </style>
 </th:block>
 <th:block layout:fragment="js">
     <script>
         $(() => {
             $(".wrap").on("click", function () {
+                // Get the data-no attribute directly from the clicked ".wrap" element
                 let dataNo = $(this).data("no");
-                window.location.href = "/board/detail?boardNo=" + dataNo;
+                let hits = $(this).data("hits");
+                $.ajax({ //클릭시 조회수 증가
+                    type: "post",
+                    url : "/board/plusHits",
+                    data : {boardNo : dataNo},
+                    success : function (data){
+                        console.log(data);
+                        window.location.href = "/board/detail?boardNo=" + dataNo;
+                    }
+                })
+
             });
 
+
             $(".wrap").on("mouseover", function () {
-                let dataNo = $(this).data("no");
-                $(this).css("cursor", "pointer"); // 커서 모양을 포인터로 변경
+                // Change cursor to pointer for the hovered ".wrap" element
+                $(this).css("cursor", "pointer");
+            });
+
+            $("#searchButton").on("click", function (){ //검색창 공백이 알림, 폼제출 방지
+                let keyword = $("#keyword").val().trim();
+                if (keyword === "") {
+                    alert("검색어를 입력해주세요.");
+                    event.preventDefault();
+                }
             });
         });
     </script>
@@ -24,60 +157,99 @@
 <th:block layout:fragment="container">
     <main>
         <div class="container">
-            <div class="wrapper weekBest">
+            <div class="wrapperWeekBest">
                 <div class="mainTitle">
                     <div class="title">
                         <p class="subject">주간 인기 게시물</p>
                     </div>
                 </div>
                 <div class="content">
-                    <div class="wrap">
+                    <div class="wrap" th:data-no="${boardBest.board.boardNo}">
                         <div class="cate">
                             <span>
                                 <th:block th:if="${boardBest.board.cate == 1}">자유</th:block>
                                 <th:block th:if="${boardBest.board.cate == 2}">개발Q&A</th:block>
                             </span>
                         </div>
-                        <p class="subject">[[${boardBest.board.title}]]</p>
-                        <p class="desc">[[${boardBest.board.contents}]]</p>
+                        <p class="subject">[[${boardBest.board.title}]]</p> <br>
+                        <p class="boardDesc">
+                            [[${boardBest.board.contents}]] <br> <br>
+                            조회수 : [[${boardBest.board.hits}]]
+                        </p>
                     </div>
                 </div>
             </div>
-            <hr>
-            <div class="wrapper all">
-                <div class="mainTitle">
-                    <div class="title">
-                        <p class="subject">커뮤니티</p>
+            <div class="wrapperAll">
+                <div class="searchContainer">
+                    <div class="mainTitle">
+                        <div class="title">
+                            <p class="subject">커뮤니티</p>
+                            <div class="selectCategory">
+                                <a href="/board/">전체</a>
+                                <a href="/board/?cate=1">자유게시판</a>
+                                <a href="/board/?cate=2">개발Q&A</a>
+                            </div>
+                        </div>
+                        <a class="btn btn-custom-add" href="/board/write">글쓰기</a>
                     </div>
-                    <div class="selectCategory">
-                        <a href="/board/">전체</a>
-                        <a href="/board/?cate=1">자유게시판</a>
-                        <a href="/board/?cate=2">개발Q&A</a>
+                    <div class="search">
+                        <form action="/board/" name="searchForm">
+                            <select name="searchType">
+                                <option value="title">제목</option>
+                                <option value="contents">내용</option>
+                            </select>
+                            <input type="text" name="keyword" id="keyword">
+                            <input type="submit" id="searchButton" value="검색">
+                        </form>
                     </div>
                 </div>
                 <div class="allContents">
                     <ul>
-                        <li th:each="data : ${boardList}">
-                            <div class="wrap" th:data-no="${data.board.boardNo}">
+                        <li th:each="data : ${boardList.dataList}">
+                            <div class="wrap" th:data-no="${data.boardNo}">
                                 <div class="cate">
                                     <span>
-                                        <th:block th:if="${data.board.cate == 1}">자유</th:block>
-                                        <th:block th:if="${data.board.cate == 2}">개발Q&A</th:block>
+                                        <th:block th:if="${data.cate == 1}">자유</th:block>
+                                        <th:block th:if="${data.cate == 2}">개발Q&A</th:block>
                                     </span>
                                 </div>
-                                <p class="subject">[[${data.board.title}]]</p>
-                                <p class="desc">[[${data.board.contents}]]</p>
+                                <p class="subject">[[${data.title}]]</p> <br>
+                                <div class="boardDesc">
+                                    <th:block th:utext="${data.contents}"></th:block>
+                                </div>
                                 <div class="etc">
-                                    <img th:src="${data.board.users.userDetail.getProfileImg()}" alt="">
-                                    <span>[[${data.board.users.nickname}]]</span>
-                                    <span>조회수 : [[${data.board.hits}]]</span>
-                                    <span>작성일 : [[${data.board.regdate}]]</span>
+                                    <img th:src="${data.users.userDetail.profileImg}" alt="">
+                                    <p>[[${data.users.nickname}]]</p>
+                                    <span>조회수 : [[${data.hits}]]</span>
+                                    <span>작성일 : [[${#dates.format(data.regdate, 'yyyy년 MM월 dd일 HH:mm:ss')}]]</span>
                                 </div>
                             </div>
+                            <hr>
                         </li>
                     </ul>
                 </div>
             </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <th:block th:if="${boardList.prev}">
+                        <li class="page-item"><a class="page-link" th:href="@{/board/(page=${boardList.start-1}, scale=${boardList.scale})}">이전</a></li>
+                    </th:block>
+                    <th:block th:each="i : ${#numbers.sequence(boardList.start, boardList.end)}">
+                        <th:block th:if="${param.cate == null && param.keyword==null}">
+                            <li class="page-item"><a class="page-link" th:href="@{/board/(page=${i},scale=${boardList.scale})}">[[${i}]]</a></li>
+                        </th:block>
+                        <th:block th:if="${param.cate != null}">
+                            <li class="page-item"><a class="page-link" th:href="@{/board/(page=${i},scale=${boardList.scale},cate=${boardList.dataList[i].cate})}">[[${i}]]</a></li>
+                        </th:block>
+                        <th:block th:if="${param.keyword != null}">
+                            <li class="page-item"><a class="page-link" th:href="@{/board/(page=${i},scale=${boardList.scale},searchType=${param.searchType},keyword=${param.keyword})}">[[${i}]]</a></li>
+                        </th:block>
+                    </th:block>
+                    <th:block th:if="${boardList.next}">
+                         <li class="page-item"><a class="page-link" th:href="@{/board/(page=${boardList.end+1},scale=${boardList.scale})}">다음</a></li>
+                    </th:block>
+                </ul>
+            </nav>
         </div>
     </main>
 </th:block>

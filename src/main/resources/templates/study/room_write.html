@@ -3,43 +3,181 @@
       layout:decorate="~{fragment/layout}">
 
 <th:block layout:fragment="css">
-
+    <style>
+        input[type=file]::file-selector-button{
+            display: inline-block;
+            padding: 5px 6px;
+            color: #8D57E1;
+            vertical-align: middle;
+            background-color: #fff;
+            cursor: pointer;
+            height: 35px;
+            margin-left: 10px;
+            border-radius: 5px;
+            border: 1px solid #8D57E1;
+        }
+        input[type="text"] {
+            width: 750px;
+            height: 50px;
+            border-radius: 5px;
+        }
+        input[type="text"]::placeholder{
+            color: #999999;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border: 1px solid #8D57E1;
+            box-shadow: 0 0 10px #DFCAFF;
+        }
+        input[type="radio"]:checked{
+            outline: none;
+            border: 1px solid #8D57E1;
+            box-shadow: 0 0 10px #DFCAFF;
+            background-color: #8D57E1;
+        }
+        .btnsub{
+            background: #fff;
+            border: 1px solid #8D57E1;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 19px;
+            color: #8D57E1;
+            height: 50px;
+            width: 130px;
+            float: right;
+        }
+        .btnsubs{
+            background: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            color: white;
+            float: right;
+            margin-left: 8px;
+            border: none;
+        }
+        #in1, #in2, #in3, #in4, #in5, #in6, #in7, #in9{
+            padding-top: 50px;
+        }
+        #in9{
+            padding-top: 60px;
+            padding-bottom: 80px;
+        }
+        label{
+            font-weight: 600;
+            font-size: 22px;
+            color: #1F1926;
+            padding-bottom: 15px;
+        }
+        .main-title{
+            margin-top: 80px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 30px;
+            color: #312A38;
+        }
+    </style>
 </th:block>
 <th:block layout:fragment="js">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
-        $(function (){
-            $("#btn").on("click", function (){
-                let tag = "<div id=\"imglist\">\n" +
-                    "<div>이미지 등록<input type=\"file\" name=\"path\"></div>\n" +
-                    "</div>";
-                $("#imgfd").append(tag);
-            })
-        })
+        function roomimgs(type) {
+            let appendSel = $("#imglist");
+
+            if( type==='add' ) {
+                let cloneHtml = appendSel.find(".filebox").eq(0).html();
+                let cloneItem = $("<div class='filebox clone' />");
+
+                cloneItem.append(cloneHtml);
+                appendSel.append(cloneItem);
+            } else {
+                appendSel.find(".filebox.clone").eq(-1).remove();
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.querySelector('form[action="/study/room_write"]');
+
+            form.addEventListener('submit', function(event) {
+                var name = document.getElementById('name').value.trim();
+                var price = document.getElementById('price').value.trim();
+                var maxNum = document.getElementById('maxNum').value.trim();
+                var beam = document.querySelector('input[name="beam"]:checked');
+                var wboard = document.querySelector('input[name="wboard"]:checked');
+                var socket = document.getElementById('socket').value.trim();
+                var file = document.getElementById('file').files[0];
+
+                if (!name || !price || !maxNum || !beam || !wboard || !socket || !file) {
+                    event.preventDefault(); // 폼 제출을 막음
+                    alert('모든 필수 항목을 작성해주세요.');
+                }
+            });
+        });
     </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
-        <div class="container">
-            <h2>룸 등록</h2>
+        <div class="container" style="width: 775px">
+            <div class="main-title">방 등록</div>
             <form action="/study/room_write" method="post" enctype="multipart/form-data">
-                <div id="imgfd">
+                <div class="mb-3" id="in1">
+                    <label for="files" class="form-label">방 이미지</label>
                     <div id="imglist">
-                        <div>이미지 등록<input type="file" name="path"></div>
+                        <div class="filebox" id="files">
+                            <input type="file" name="path" accept="image/*" id="file">
+                        </div>
                     </div>
                 </div>
-                이미지 추가<input type="button" value="추가" id="btn">
-                룸 이름<input type="text" name="name" id="name">
-                룸 금액<input type="text" name="price" id="price">
-                최대 정원<input type="text" name="maxNum" id="maxNum">
-                빔프로젝트<input type="radio" name="beam" id="beamY" value="Y">Y
-                <input type="radio" name="beam" id="beamN" value="N">N
-                화이트보드<input type="radio" name="wboard" id="wboardY" value="Y">Y
-                <input type="radio" name="wboard" id="wboardN" value="N">N
-                콘센트<input type="text" name="socket" id="socket">
+                <button type="button" class="btnsubs" onclick="roomimgs('drop');" style="background-color: #B1B0B0;">제거</button>
+                <button type="button" class="btnsubs" onclick="roomimgs('add');" style="background-color: #996AE3;">추가</button>
+                <div class="mb-3" id="in2">
+                    <label for="name" class="form-label">방 이름</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="룸 이름을 적어주세요">
+                </div>
+                <div class="mb-3" id="in3">
+                    <label for="price" class="form-label">방 금액</label>
+                    <input type="text" class="form-control" name="price" id="price" placeholder="룸 대여 가격을 적어주세요">
+                </div>
+                <div class="mb-3" id="in4">
+                    <label for="maxNum" class="form-label">최대 정원</label>
+                    <input type="text" class="form-control" name="maxNum" id="maxNum" placeholder="가능한 최대 인원을 적어주세요">
+                </div>
+                <div class="mb-3" id="in5">
+                    <label for="beamradio" class="form-label">빔 프로젝트</label>
+                    <div id="beamradio">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="beam" id="beamY" value="Y">
+                            <label class="form-check-label" for="beamY" style="font-size: 18px;">YES</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="beam" id="beamN" value="N">
+                            <label class="form-check-label" for="beamN" style="font-size: 18px;">NO</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3" id="in6">
+                    <label for="wboardradio" class="form-label">화이트보드</label>
+                    <div id="wboardradio">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="wboard" id="wboardY" value="Y">
+                            <label class="form-check-label" for="wboardY" style="font-size: 18px;">YES</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="wboard" id="wboardN" value="N">
+                            <label class="form-check-label" for="wboardN" style="font-size: 18px;">NO</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3" id="in7">
+                    <label for="socket" class="form-label">콘센트</label>
+                    <input type="text" class="form-control" name="socket" id="socket" placeholder="콘센트 개수를 적어주세요">
+                </div>
                 <input type="hidden" name="studycafe" th:value="${studycafeNo}">
-                <input type="submit" value="등록">
+                <div id="in9">
+                    <input type="submit" value="등록" class="btnsub" style="border-radius: 5px;">
+                </div>
             </form>
         </div>
     </main>

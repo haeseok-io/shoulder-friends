@@ -15,7 +15,7 @@ public class MoimDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long moimNo;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String detailDesc;
     @Column(length = 200)
     private String moimImg;

@@ -4,10 +4,151 @@
 
 <th:block layout:fragment="css">
     <style>
-        img{
+        .cafe-name{
+            padding-top: 50px;
+            padding-bottom: 100px;
+            text-align: center;
+            font-size: 45px;
+            color: #6F6F6F;
+            font-weight: bold;
+        }
+        .pp{
             width: 500px;
-            height: 300px;
+            padding-top: 100px;
+            padding-bottom: 80px;
+            text-align: center;
+            font-size: 30px;
+            color: #6F6F6F;
+        }
+        #membername{
+            text-align: right;
+            font-size: 18px;
+        }
+        #sdesc{
+            display: flex;
+            justify-content: center;
+        }
+        .cafe-addr{
+            padding-bottom: 50px;
+            text-align: center;
+            font-size: 27px;
+            color: #6F6F6F;
+        }
+        .navbar-nav .nav-link {
+            font-weight: bold;
+            font-size: 26px;
+        }
+        #cafedetail{
+            width: 80%;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        #cafeimg{
+            width: 70%;
+            border-radius: 10px;
+        }
+        #cafemap{
+            width: 100%;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 230px;
+            padding-bottom: 230px;
+        }
+        .caferoom{
+            text-align: center;
+            margin: 0 auto;
+        }
+        .caferoomimg {
+            flex: 1;
+            width: 290px;
+            height: 170px;
+            border-radius: 10px;
+        }
+        #roomimg, #roomimg1{
+            width: 310px;
             display: inline-block;
+            text-align: center;
+            margin-right: 10px;
+            vertical-align: top;
+            transition: transform 0.1s ease-in-out;
+        }
+        #roomimg:hover {
+            transform: scale(1.1);
+        }
+
+        .room-images {
+            width: 70%;
+            overflow-x: auto;
+            white-space: nowrap;
+            text-align: center;
+            padding: 10px 10px;
+        }
+        .parent-container {
+            display: flex;
+            justify-content: center;
+        }
+        .room-name{
+            padding-top: 50px;
+            padding-bottom: 30px;
+            padding-left: 80px;
+            text-align: left;
+            font-size: 40px;
+        }
+        .room-detail{
+            width: 80%;
+            margin: 0 auto;
+            display: inline-block;
+            padding-bottom: 20px;
+            padding-top: 20px;
+        }
+        #room-new{
+            display: inline-block;
+            background-color: white;
+            color: #BDA6DF;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 10px;
+            border: 1px solid #BDA6DF;
+            outline: none;
+            line-height: 25px;
+        }
+        #room-new:hover {
+            background-color: #BDA6DF;
+            border-color: #BDA6DF;
+            color: white;
+        }
+        #btnbtn{
+            display: inline-block;
+            background-color: white;
+            color: #A0A0A0;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 10px;
+            border: 1px solid #A0A0A0;
+            outline: none;
+            line-height: 25px;
+        }
+        #btnbtn:hover {
+            background-color: #A0A0A0;
+            border-color: #A0A0A0;
+            color: white;
+        }
+        #btnli{
+            padding-top: 10px;
+            text-align: right;
+        }
+        .roomd{
+            font-size: 22px;
+            color: #6F6F6F;
+            padding: 8px 0;
+        }
+        .dropdown-item:focus,
+        .dropdown-item:hover {
+            background-color: #CABBE1;
         }
     </style>
 </th:block>
@@ -48,46 +189,98 @@
             // 지도에 원을 표시합니다
             circle.setMap(map);
         })
+
+        function goPost(){
+            let f = document.createElement('form');
+            f.setAttribute('method','post');
+            f.setAttribute('action',)
+        }
     </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
         <div class="container">
-            <h2>스터디 카페 상세</h2>
-            <div>
-                <div><a th:href="@{/study/cafe_modify(studycafeNo=${studycafeNo})}">카페수정</a></div>
-                <div><a th:href="@{/study/cafe_delete(studycafeNo=${studycafeNo})}">카페삭제</a></div>
-                <div><a th:href="@{/study/room_write(studycafeNo=${studycafeNo})}">방 등록</a></div>
-            </div>
-            <div>
-                <img th:src="${oneCafe.mainImg}">
-                <p th:text="${oneCafe.name}"></p>
-                <p th:text="${oneCafe.shortDesc}"></p>
-                <p th:text="${oneCafe.post}"></p>
-                <p th:text="${oneCafe.addr}"></p>
-                <div>
-                    <div id="map" style="width:500px;height:400px;"></div>
-                </div>
-                <input type="hidden" name="x" id="x" th:value="${oneCafe.x}">
-                <input type="hidden" name="y" id="y" th:value="${oneCafe.y}">
-            </div>
-            <div>
-                <div th:each="dto : ${listRoom}">
-                    <div th:each="imgdto : ${roomImgList}">
-                        <div th:switch="${imgdto.studyroom.studyroomNo}">
-                        <span th:case="${dto.studyroomNo}"><img th:src="${imgdto.path}"></span>
+            <form action="/study/cafe_delete" method="post">
+                <div style="padding-top: 40px; height: 50px;"></div>
+                <nav class="navbar navbar-expand-lg bg-transparent">
+                    <div class="container-fluid">
+                        <div>
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/study/cafe_list}">목록으로</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <ul class="navbar-nav mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/study/room_write(studycafeNo=${studycafeNo})}">방 등록</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        관리
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" th:href="@{/study/cafe_modify(studycafeNo=${studycafeNo})}">카페수정</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><input class="dropdown-item" type="submit" value="카페삭제"></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                        <p th:text="${dto.name}"></p>
-                        <p th:text="${dto.price}"></p>
-                        <div th:text="${dto.studyroomDetail.maxNum}"></div>
-                        <div th:text="${dto.studyroomDetail.beam}"></div>
-                        <div th:text="${dto.studyroomDetail.wboard}"></div>
-                        <div th:text="${dto.studyroomDetail.socket}"></div>
-                        <div><a th:href="@{/study/room_modify(studyroomNo=${dto.studyroomNo})}">수정</a></div>
-                        <div><a th:href="@{/study/room_delete(studyroomNo=${dto.studyroomNo})}">삭제</a></div>
-                            <hr>
+                </nav>
+            <div>
+            </div>
+            <div>
+                <div id="cafedetail">
+                    <div class="cafe-name" th:text="${oneCafe.name}"></div>
+                    <img id="cafeimg" th:src="${oneCafe.mainImg}">
+                    <div id="sdesc"><p class="pp" th:text="${oneCafe.shortDesc}"></p></div>
+                    <div th:if="${oneCafe?.member != null}">
+                        <div id="membername"><p class="membername" th:text="'관리자 : '+${oneCafe.member.name}"></p></div>
+                    </div>
+                </div>
+                <hr>
+                <div class="room-name">위치</div>
+                <div id="cafemap">
+                    <div id="map" style="width:600px;height:400px;"></div>
+                </div>
+                <div class="cafe-addr" style="text-align: center;" th:text="'주소 : '+${oneCafe.post}+' '+${oneCafe.addr}"></div>
+                <input type="hidden" name="x" id="x" th:value="${oneCafe.x}">
+                <input type="hidden" name="y" id="y" th:value="${oneCafe.y}">
+                <input type="hidden" name="studycafeNo" th:value="${studycafeNo}">
+            </div>
+                <hr>
+            </form>
+            <div class="caferoom">
+                <div th:each="dto : ${listRoom}" class="room">
+                    <div class="room-name" th:text="${dto.name}"></div>
+                    <form th:action="@{/study/room_delete(studyroomNo=${dto.studyroomNo})}" method="post">
+                        <div class="parent-container">
+                        <div class="room-images">
+                            <div th:each="imgdto : ${roomImgList}" th:if="${imgdto.studyroom.studyroomNo == dto.studyroomNo}" id="roomimg1">
+                                <div id="roomimg">
+                                    <img class="caferoomimg" th:src="${imgdto.path}">
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                            <div class="room-detail">
+                                <ul class="list-group">
+                                <li class="roomd" th:text="'대여가격 : '+${dto.price}+'원'"></li>
+                                <li class="roomd" th:text="'최대인원 : '+${dto.studyroomDetail.maxNum}+'명'"></li>
+                                <li class="roomd" th:text="'빔프로젝트 : '+${dto.studyroomDetail.beam}+' (Y/N)'"></li>
+                                <li class="roomd" th:text="'화이트보드 : '+${dto.studyroomDetail.wboard}+' (Y/N)'"></li>
+                                <li class="roomd" th:text="'콘센트 : '+${dto.studyroomDetail.socket}+'개 가능'"></li>
+                                <li id="btnli"><a class="btn btn" id="room-new" th:href="@{/study/room_modify(studyroomNo=${dto.studyroomNo})}">수정</a>
+                                <input type="hidden" name="studycafeNo" th:value="${studycafeNo}">
+                                <input id="btnbtn" type="submit" value="삭제"></li>
+                                </ul>
+                                <hr>
+                            </div>
+                    </form>
                 </div>
             </div>
         </div>

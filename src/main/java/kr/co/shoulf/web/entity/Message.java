@@ -26,7 +26,7 @@ public class Message {
     private Long messageNo;
     @Column(nullable = false)
     private Long groupNo;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String contents;
     @Column
     @ColumnDefault("1")
