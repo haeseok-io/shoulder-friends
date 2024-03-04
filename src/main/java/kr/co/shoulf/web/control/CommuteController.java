@@ -28,6 +28,8 @@ public class CommuteController {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         if(loggedInUser != null) {
             model.addAttribute("loggedInUser", loggedInUser);
+        }else{
+            return "redirect:/admin/login";
         }
 
         return "admin/commute/index";

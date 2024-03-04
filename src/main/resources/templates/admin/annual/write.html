@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>연차 신청</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</head>
+<body>
+<h2>연차 신청</h2>
+<div class="container">
+    <div class="content">
+        <form id="annualForm" action="/annual/writeOk" method="post">
+            <span>연차선택
+                <select name="annualNo" th:each="annualDetailList : ${annualDetailList}">
+                    <option th:value="${annualDetailList.memberAnnual.annualNo}"
+                            th:if="${annualDetailList.memberAnnual.type} == 1"
+                            th:text="일반"></option>
+                    <option th:value="${annualDetailList.memberAnnual.annualNo}"
+                            th:if="${annualDetailList.memberAnnual.type} == 2"
+                            th:text="대체공휴일"></option>
+                    <option th:value="${annualDetailList.memberAnnual.annualNo}"
+                            th:if="${annualDetailList.memberAnnual.type} == 3"
+                            th:text="기타"></option>
+                </select>
+            </span><br>
+            <span>사용구분
+                <select name="useCate">
+                    <option value="1">종일</option>
+                    <option value="2">오전 반차</option>
+                    <option value="3">오후 반차</option>
+                </select>
+            </span><br>
+            <span>시작일 <input type="date" name="startDate"></span><br>
+            <span>종료일 <input type="date" name="endDate"></span><br>
+            <input type="submit" value="신청하기">
+        </form>
+    </div>
+</div>
+<script>
+    // 폼 제출 이벤트 핸들러
+    document.getElementById("annualForm").addEventListener("submit", function (event) {
+        // 폼 제출을 중지하여 페이지 이동을 막는다.
+        event.preventDefault();
+        // POST 요청, 필요한 데이터는 FormData 객체로부터 가져올 수 있다.
+        fetch(this.action, {
+            method : this.method,
+            body : new FormData(this)
+        })
+        .then(response => {
+            // 응답 처리 : 응답이 성공적으로 수신되면 팝업창을 닫고 부모 창을 redirect
+            if (response.ok) {
+                // 부모창 redirect
+                window.opener.location.href = "/annual/myList"
+                // 닫기
+                window.close()
+            }else {
+                // 실패
+                throw new Error("응답이 성공하지 않았습니다.");
+            }
+        })
+        .catch(error => {
+            console.log("실패!", error)
+        });
+    })
+</script>
+</body>
+</html>
