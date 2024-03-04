@@ -39,19 +39,19 @@
             margin-bottom: 20px;
             padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 10px;
         }
 
-        .search select, input{
+        .search select, .search input{
             padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 10px;
         }
 
         .selectCategory {
             padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 10px;
             margin-top: 10px;
         }
 
@@ -105,7 +105,9 @@
             margin: 15px 15px 0 0;
             color: #555;
         }
-
+        .wrap .etc span {
+            margin-left: 15px;
+        }
         .wrap .etc img {
             width: 30px;
             height: 30px;
@@ -122,15 +124,32 @@
             $(".wrap").on("click", function () {
                 // Get the data-no attribute directly from the clicked ".wrap" element
                 let dataNo = $(this).data("no");
-                window.location.href = "/board/detail?boardNo=" + dataNo;
+                let hits = $(this).data("hits");
+                $.ajax({ //클릭시 조회수 증가
+                    type: "post",
+                    url : "/board/plusHits",
+                    data : {boardNo : dataNo},
+                    success : function (data){
+                        console.log(data);
+                        window.location.href = "/board/detail?boardNo=" + dataNo;
+                    }
+                })
+
             });
+
 
             $(".wrap").on("mouseover", function () {
                 // Change cursor to pointer for the hovered ".wrap" element
                 $(this).css("cursor", "pointer");
             });
 
-            $(".catePaging")
+            $("#searchButton").on("click", function (){ //검색창 공백이 알림, 폼제출 방지
+                let keyword = $("#keyword").val().trim();
+                if (keyword === "") {
+                    alert("검색어를 입력해주세요.");
+                    event.preventDefault();
+                }
+            });
         });
     </script>
 </th:block>
@@ -171,16 +190,17 @@
                                 <a href="/board/?cate=2">개발Q&A</a>
                             </div>
                         </div>
-                        <a class="btn btn-outline-primary" href="/board/write">글쓰기</a>
+                        <a class="btn btn-custom-add" href="/board/write">글쓰기</a>
                     </div>
                     <div class="search">
-                        <select name="">
-                            <option value="">제목</option>
-                            <option value="">작성자</option>
-                            <option value="">내용</option>
-                        </select>
-                        <input type="text" name="">
-                        <input type="submit" value="검색">
+                        <form action="/board/" name="searchForm">
+                            <select name="searchType">
+                                <option value="title">제목</option>
+                                <option value="contents">내용</option>
+                            </select>
+                            <input type="text" name="keyword" id="keyword">
+                            <input type="submit" id="searchButton" value="검색">
+                        </form>
                     </div>
                 </div>
                 <div class="allContents">
@@ -199,7 +219,7 @@
                                 </div>
                                 <div class="etc">
                                     <img th:src="${data.users.userDetail.profileImg}" alt="">
-                                    <span>[[${data.users.nickname}]]</span>
+                                    <p>[[${data.users.nickname}]]</p>
                                     <span>조회수 : [[${data.hits}]]</span>
                                     <span>작성일 : [[${#dates.format(data.regdate, 'yyyy년 MM월 dd일 HH:mm:ss')}]]</span>
                                 </div>
@@ -212,18 +232,21 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
                     <th:block th:if="${boardList.prev}">
-                        <li class="page-item"><a class="page-link" th:href="@{/board/(page=${boardList.start-1}, size=${boardList.scale})}">이전</a></li>
+                        <li class="page-item"><a class="page-link" th:href="@{/board/(page=${boardList.start-1}, scale=${boardList.scale})}">이전</a></li>
                     </th:block>
                     <th:block th:each="i : ${#numbers.sequence(boardList.start, boardList.end)}">
-                        <th:block th:if="${param.cate == null}">
-                            <li class="page-item"><a class="page-link" th:href="@{/board/(page=${i},size=${boardList.scale})}">[[${i}]]</a></li>
+                        <th:block th:if="${param.cate == null && param.keyword==null}">
+                            <li class="page-item"><a class="page-link" th:href="@{/board/(page=${i},scale=${boardList.scale})}">[[${i}]]</a></li>
                         </th:block>
                         <th:block th:if="${param.cate != null}">
-                            <li class="page-item"><a class="page-link" th:href="@{/board/(page=${i},size=${boardList.scale},cate=${boardList.dataList[i].cate})}">[[${i}]]</a></li>
+                            <li class="page-item"><a class="page-link" th:href="@{/board/(page=${i},scale=${boardList.scale},cate=${boardList.dataList[i].cate})}">[[${i}]]</a></li>
+                        </th:block>
+                        <th:block th:if="${param.keyword != null}">
+                            <li class="page-item"><a class="page-link" th:href="@{/board/(page=${i},scale=${boardList.scale},searchType=${param.searchType},keyword=${param.keyword})}">[[${i}]]</a></li>
                         </th:block>
                     </th:block>
                     <th:block th:if="${boardList.next}">
-                         <li class="page-item"><a class="page-link" th:href="@{/board/(page=${boardList.end+1},size=${boardList.scale})}">다음</a></li>
+                         <li class="page-item"><a class="page-link" th:href="@{/board/(page=${boardList.end+1},scale=${boardList.scale})}">다음</a></li>
                     </th:block>
                 </ul>
             </nav>
