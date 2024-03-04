@@ -21,12 +21,26 @@ public class BoardController {
     private final UserService userService;
 
     @GetMapping("/")
-    public String boardList(@RequestParam(value = "cate", required = false) Integer cate, Model model, PageRequestDTO pageRequestDTO) {
+    public String boardList(@RequestParam(value = "cate", required = false) Integer cate
+            , @RequestParam(value = "keyword", required = false) String keyword
+            , @RequestParam(value = "searchType", required = false) String searchType
+            , Model model
+            , PageRequestDTO pageRequestDTO) {
         BoardDTO boardBest = boardService.readBest();
         model.addAttribute("boardBest", boardBest);
-        PageResponseDTO<Board> boardList;
-        if (cate == null) boardList = boardService.readAll(pageRequestDTO); // 전체목록
-        else boardList = boardService.readCate(cate, pageRequestDTO); // 카테고리에 따른 목록
+
+        PageResponseDTO<Board> boardList = null;
+        if (cate == null && keyword == null) {
+            boardList = boardService.readAll(pageRequestDTO); // 전체목록
+        } else if (cate != null) {
+            boardList = boardService.readCate(cate, pageRequestDTO); // 카테고리에 따른 목록
+        } else if (keyword != null) {
+            if ("title".equals(searchType)) {
+                boardList = boardService.searchByTitle(keyword, pageRequestDTO);
+            } else if("contents".equals(searchType)){
+                boardList = boardService.searchByContents(keyword, pageRequestDTO);
+            }
+        }
 
         model.addAttribute("boardList", boardList);
         System.out.println(boardList);
@@ -43,11 +57,11 @@ public class BoardController {
 
     @PostMapping("/plusHits")
     @ResponseBody
-    public void plusHits(@RequestParam Long boardNo){
+    public void plusHits(@RequestParam Long boardNo) {
         System.out.println("plusHits 호출");
         BoardDTO boardDTO = boardService.readOne(boardNo);
         Board board = boardDTO.getBoard();
-        board.setHits(board.getHits()+1);
+        board.setHits(board.getHits() + 1);
         boardService.add(board);
 //        boardDTO.setBoard(board);
 //        return boardDTO;
@@ -68,8 +82,12 @@ public class BoardController {
         return "redirect:/board/";
     }
 
-    @PostMapping("/modify")
-    public void boardModify() {
+    @GetMapping("/modify")
+    public String modify(@RequestParam(value = "boardNo", required = false) Long boardNo, Model model) {
+        BoardDTO boardDetail = boardService.readOne(boardNo);
+        model.addAttribute("boardDetail", boardDetail);
+        System.out.println(boardDetail);
+        return "board/modify";
     }
 
     @PostMapping("/delete")
