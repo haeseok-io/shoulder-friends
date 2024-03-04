@@ -238,7 +238,9 @@
                     <div class="cafe-name" th:text="${oneCafe.name}"></div>
                     <img id="cafeimg" th:src="${oneCafe.mainImg}">
                     <div id="sdesc"><p class="pp" th:text="${oneCafe.shortDesc}"></p></div>
-                    <div id="membername"><p class="membername" th:text="'관리자 : '+${oneCafe.member.name}"></p></div>
+                    <div th:if="${oneCafe?.member != null}">
+                        <div id="membername"><p class="membername" th:text="'관리자 : '+${oneCafe.member.name}"></p></div>
+                    </div>
                 </div>
                 <hr>
                 <div class="room-name">위치</div>
