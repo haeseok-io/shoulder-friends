@@ -33,24 +33,25 @@ public class StudyController {
     String uploadPath;
 
     @GetMapping("/alert")
-    public void alert(){
-
+    public String alert(){
+        return "admin/study/alert";
     }
 
     //스터디 카페 리스트
-    @GetMapping("/cafe_list")
-    public void cafe_list(Model model){
+    @GetMapping("/cafe/list")
+    public String cafe_list(Model model){
         model.addAttribute("listCafe", studyService.listCafe());
+        return "admin/study/cafe_list";
     }
 
     //스터디 카페 등록 페이지이동
-    @GetMapping("/cafe_write")
-    public void cafe_write(){
-
+    @GetMapping("/cafe/write")
+    public String cafe_write(){
+        return "admin/study/cafe_write";
     }
 
     //스터디카페 등록
-    @PostMapping("/cafe_write")
+    @PostMapping("/cafe/write")
     public String cafe_writeOk(StudycafeDTO dto){
 
         MultipartFile file = dto.getMainImg();
@@ -81,17 +82,18 @@ public class StudyController {
             throw new RuntimeException(e);
         }
 
-        return "redirect:/study/cafe_list";
+        return "redirect:/study/cafe/list";
     }
 
     //스터디 카페 수정 페이지 이동
-    @GetMapping("/cafe_modify")
-    public void cafe_modify(Model model, @RequestParam Long studycafeNo){
+    @GetMapping("/cafe/modify")
+    public String cafe_modify(Model model, @RequestParam Long studycafeNo){
         model.addAttribute("oneCafe",studyService.oneCafe(studycafeNo));
+        return "admin/study/cafe_modify";
     }
 
     //스터디 카페 수정
-    @PostMapping("/cafe_modify")
+    @PostMapping("/cafe/modify")
     public String cafe_modifyOk(StudycafeDTO dto){
 
         String address = "";
@@ -160,11 +162,11 @@ public class StudyController {
             studyService.saveCafe(studycafe);
         }
 
-        return "redirect:/study/room_list?studycafeNo="+dto.getStudycafeNo();
+        return "redirect:/study/room/list?studycafeNo="+dto.getStudycafeNo();
     }
 
     //카페 삭제
-    @PostMapping("/cafe_delete")
+    @PostMapping("/cafe/delete")
     public String deleteCafe(@RequestParam Long studycafeNo, Model model){
 
         List<Studyroom> studyroom = studyService.listRoom(studycafeNo);
@@ -185,29 +187,31 @@ public class StudyController {
 
         }else if (studyroom.isEmpty() == false){
             model.addAttribute("msg","스터디룸을 먼저 삭제 해주세요");
-            model.addAttribute("url","/study/room_list?studycafeNo="+studycafeNo);
-            return "/study/alert";
+            model.addAttribute("url","/study/room/list?studycafeNo="+studycafeNo);
+            return "admin/study/alert";
         }
-        return "redirect:/study/cafe_list";
+        return "redirect:/study/cafe/list";
     }
 
     //스터디 카페 디테일 & 스터디룸 목록
-    @GetMapping("/room_list")
-    public void room_list(Model model, @RequestParam() Long studycafeNo){
+    @GetMapping("/room/list")
+    public String room_list(Model model, @RequestParam() Long studycafeNo){
         model.addAttribute("roomImgList",studyService.listRoomImg(studycafeNo));
         model.addAttribute("studycafeNo", studycafeNo);
         model.addAttribute("listRoom", studyService.listRoom(studycafeNo));
         model.addAttribute("oneCafe", studyService.oneCafe(studycafeNo));
+        return "admin/study/room_list";
     }
 
     //스터디룸 등록 페이지 이동
-    @GetMapping("/room_write")
-    public void room_write(Model model, @RequestParam Long studycafeNo){
+    @GetMapping("/room/write")
+    public String room_write(Model model, @RequestParam Long studycafeNo){
         model.addAttribute("studycafeNo",studycafeNo);
+        return "admin/study/room_write";
     }
 
     //스터디룸 등록
-    @PostMapping("/room_write")
+    @PostMapping("/room/write")
     public String room_writeOk(StudyroomDTO dto){
         int seq = 1;
         Studycafe studycafe = studyService.oneCafe(dto.getStudycafe().getStudycafeNo());
@@ -254,18 +258,19 @@ public class StudyController {
             }
 
         }
-        return "redirect:/study/room_list?studycafeNo="+dto.getStudycafe().getStudycafeNo();
+        return "redirect:/study/room/list?studycafeNo="+dto.getStudycafe().getStudycafeNo();
     }
 
     //스터디룸 수정 페이지 이동
-    @GetMapping("/room_modify")
-    public void room_modify(Model model, @RequestParam Long studyroomNo){
+    @GetMapping("/room/modify")
+    public String room_modify(Model model, @RequestParam Long studyroomNo){
         model.addAttribute("oneRoom",studyService.oneRoom(studyroomNo));
         model.addAttribute("studyroomimg",studyService.oneRoomImg(studyroomNo));
+        return "admin/study/room_modify";
     }
 
     //스터디룸 수정
-    @PostMapping("/room_modify")
+    @PostMapping("/room/modify")
     public String room_modifyOk(StudyroomDTO dto){
         int seq = 1;
         Studycafe studycafe = studyService.oneCafe(dto.getStudycafe().getStudycafeNo());
@@ -336,11 +341,11 @@ public class StudyController {
                 }
             }
         }
-        return "redirect:/study/room_list?studycafeNo="+dto.getStudycafe().getStudycafeNo();
+        return "redirect:/study/room/list?studycafeNo="+dto.getStudycafe().getStudycafeNo();
     }
 
     //스터디룸 삭제
-    @PostMapping("/room_delete")
+    @PostMapping("/room/delete")
     public String deleteRoom(@RequestParam Long studyroomNo, @RequestParam Long studycafeNo, Model model){
 
         List<Reservation> reservationList = studyService.reservCheck(studyroomNo);
@@ -368,10 +373,10 @@ public class StudyController {
 
         }else if (reservationList.isEmpty() == false){
             model.addAttribute("msg","남아있는 예약이 있습니다");
-            model.addAttribute("url","/study/room_list?studycafeNo="+studycafeNo);
-            return "/study/alert";
+            model.addAttribute("url","/study/room/list?studycafeNo="+studycafeNo);
+            return "admin/study/alert";
         }
 
-        return "redirect:/study/room_list?studycafeNo="+studycafeNo;
+        return "redirect:/study/room/list?studycafeNo="+studycafeNo;
     }
 }
