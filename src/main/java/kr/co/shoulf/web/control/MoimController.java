@@ -1,16 +1,14 @@
 package kr.co.shoulf.web.control;
 
-import kr.co.shoulf.web.dto.MoimDataInsertDTO;
+import kr.co.shoulf.web.dto.MoimDataRequestDTO;
 import kr.co.shoulf.web.dto.PageRequestDTO;
-import kr.co.shoulf.web.entity.Moim;
 import kr.co.shoulf.web.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,7 +36,14 @@ public class MoimController {
         model.addAttribute("platformList", platformService.readAll());
         model.addAttribute("onlineList", onlineService.readAll());
         model.addAttribute("positionList", positionService.readAll());
-
         return "moim/write";
+    }
+
+    @PostMapping(value = "/write")
+    public String writeOk(MoimDataRequestDTO moimDataRequestDTO) {
+        boolean status = moimService.addOne(moimDataRequestDTO);
+
+
+        return "redirect:/moim/";
     }
 }
