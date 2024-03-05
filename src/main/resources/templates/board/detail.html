@@ -3,63 +3,7 @@
       layout:decorate="~{fragment/layout}">
 
 <th:block layout:fragment="css">
-    <style>
-        main .container {
-            width: 1000px;
-            max-width: 1000px;
-            margin: 0 auto; /* 가운데 정렬을 위해 추가 */
-            display: flex;
-            justify-content: space-between;
-            background-color: #f2f2f2; /* 배경색 추가 */
-            padding: 20px; /* 내부 여백 추가 */
-        }
-
-        .titleReply{font-weight: bold}
-        #comments{height: 38px;}
-
-        .title span{
-            justify-content: space-between;
-            margin-left: 5px;
-        }
-        .board {
-            width: 70%;
-            background-color: #fff; /* 내용 영역 배경색 추가 */
-            padding: 20px; /* 내부 여백 추가 */
-            border-radius: 8px; /* 모서리를 둥글게 만듦 */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
-        }
-
-        .wrapReply {
-            margin-top: 100px; /* 위쪽 간격 조절 */
-            margin-bottom: 20px; /* 아래쪽 간격 조절 */
-        }
-
-        .wrapReply .title {
-            margin-bottom: 10px; /* 제목과 댓글 입력 창 사이의 간격 조절 */
-        }
-
-        .wrapReply .comments {
-            margin-bottom: 10px; /* 댓글 입력 창과 댓글 목록 사이의 간격 조절 */
-        }
-
-        .detailSidebar {
-            width: 25%;
-            background-color: #fff; /* 배경색 추가 */
-            padding: 20px; /* 내부 여백 추가 */
-            border-radius: 8px; /* 모서리를 둥글게 만듦 */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
-        }
-
-        .userProfile {
-            text-align: center; /* 텍스트 가운데 정렬 */
-        }
-
-        .userProfile img {
-            max-width: 100%; /* 이미지가 부모 요소를 넘어가지 않도록 함 */
-            border-radius: 50%; /* 이미지를 원형으로 만듦 */
-            margin-top: 10px; /* 이미지 위 여백 추가 */
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/board/detail.css}">
 </th:block>
 <th:block layout:fragment="js">
 

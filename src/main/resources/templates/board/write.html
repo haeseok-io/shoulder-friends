@@ -19,7 +19,7 @@
             align-items: center;
         }
 
-        select.selectCategory{
+        select.selectCategory {
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -32,7 +32,7 @@
             border-radius: 5px;
         }
 
-        input[type='submit']{
+        input[type='submit'] {
             border-radius: 5px;
         }
 
@@ -60,7 +60,19 @@
                 maxHeight: null,             // 최대 높이
                 focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
                 lang: "ko-KR",					// 한글 설정
-                placeholder: '최대 2048자까지 쓸 수 있습니다'	//placeholder 설정
+                placeholder: '궁금하신 내용이나 하고싶은 얘기를 작성해주세요.'	//placeholder 설정
+            });
+
+            $("#submitBtn").on("click", function () { //내용, 제목 없을시 알림 후 폼 제출방지
+                let title = $("#title").val().trim();
+                let content = $("#summernote").val().trim();
+                if (title === "") {
+                    alert("제목을 작성해주세요.");
+                    event.preventDefault();
+                } else if (content === "") {
+                    alert("내용을 작성해주세요.");
+                    event.preventDefault();
+                }
             });
         });
     </script>
@@ -83,7 +95,7 @@
                     </div>
                     <div class="btn">
                         <a class="btn btn-outline-danger" href="/board/">취소</a>
-                        <input class="btn btn-custom-add" type="submit" value="등록">
+                        <input class="btn btn-custom-add" type="submit" value="등록" id="submitBtn">
                     </div>
                 </form>
             </div>

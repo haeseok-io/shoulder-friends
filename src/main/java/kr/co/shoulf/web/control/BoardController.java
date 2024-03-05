@@ -89,6 +89,17 @@ public class BoardController {
         System.out.println(boardDetail);
         return "board/modify";
     }
+    @PostMapping("/modify")
+    public String modifyOk(@ModelAttribute Board board, @RequestParam(value = "userNo", required = false) Long userNo, HttpServletRequest req) {
+        Users user = userService.readOne(userNo);
+        board.setIp(req.getRemoteAddr());
+        board.setCate(board.getCate());
+        board.setUsers(user);
+        boardService.add(board);
+//        return "redirect:/board/detail?boardNo=" + board.getBoardNo();
+        return  null;
+    }
+
 
     @PostMapping("/delete")
     public void boardDelete() {
