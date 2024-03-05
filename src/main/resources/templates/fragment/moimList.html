@@ -41,6 +41,32 @@
                         </li>
                     </ul>
                 </div>
+                <div class="headcount">
+                    <div class="headcountToggle">
+                        <div class="toggleName">
+                            <span>모집 인원</span>
+                            <span class="totalApproval">[[${#aggregates.sum(data.headcountList.![participantApprovalList.size()])}]]</span>
+                            <span class="totalPersonnel">[[${#aggregates.sum(data.headcountList.![personnel])}]]</span>
+                        </div>
+                        <div class="toggleIcon">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="headcountWrap">
+                        <ul>
+                            <li th:each="headcount : ${data.headcountList}">
+                                <div class="positionDetail">
+                                    <p th:if="${headcount.positionDetail}">[[${headcount.positionDetail.middleName}]]</p>
+                                    <p th:unless="${headcount.positionDetail}">누구나 가능</p>
+                                </div>
+                                <div class="participant">
+                                    <div class="approval">[[${headcount.participantApprovalList.size()}]]</div>
+                                    <div class="personnel">[[${headcount.personnel}]]</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </li>
     </ul>

@@ -48,7 +48,6 @@
                                 </div>
                                 <p class="subject">[[${data.subject}]]</p>
                                 <p class="shortDesc">[[${data.shortDesc}]]</p>
-                                <p class="detailDesc">[[${data.moimDetail.detailDesc}]]</p>
                                 <div class="etc">
                                     <div class="language">
                                         <ul class="languageList">
@@ -77,7 +76,8 @@
                                             <ul>
                                                 <li th:each="headcount : ${data.headcountList}">
                                                     <div class="positionDetail">
-                                                        <p>[[${headcount.positionDetail.middleName}]]</p>
+                                                        <p th:if="${headcount.positionDetail}">[[${headcount.positionDetail.middleName}]]</p>
+                                                        <p th:unless="${headcount.positionDetail}">누구나 가능</p>
                                                     </div>
                                                     <div class="participant">
                                                         <div class="approval">[[${headcount.participantApprovalList.size()}]]</div>

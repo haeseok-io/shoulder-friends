@@ -48,6 +48,7 @@ public class MoimService {
     }
 
     public PageResponseDTO<MoimDTO> readMoimList(PageRequestDTO pageRequestDTO) {
+        pageRequestDTO.setScale(12);
         Pageable pageable = pageRequestDTO.getPageable("moimNo");
 
         Page<Moim> pageList = moimRepository.findAll(pageable);
@@ -144,6 +145,13 @@ public class MoimService {
                                 .build()
                 );
             }
+        } else {
+            moimHeadcountRepository.save(
+                    MoimHeadcount.builder()
+                            .personnel(dto.getPersonnel().get(0))
+                            .moim(insertData.getMoim())
+                            .build()
+            );
         }
 
         // 사용언어/기술 등록
@@ -169,7 +177,6 @@ public class MoimService {
                 );
             });
         }
-
 
         return true;
     }
