@@ -81,8 +81,6 @@ public class AnnualController {
             model.addAttribute("totalAnnualNum", totalAnnualNum);
             model.addAttribute("annualDetailList", annualDetailList);
 
-            System.out.println("totalAnnualNum = " + totalAnnualNum);
-
             return "admin/annual/myList";
         }else {
             return "redirect:/admin/login/";
