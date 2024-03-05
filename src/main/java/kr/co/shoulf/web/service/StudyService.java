@@ -147,4 +147,56 @@ public class StudyService {
         }
         return list;
     }
+
+    //스터디룸 예약 안된 남은 방찾기
+    public List<Studyroom> ckeckinlistRoom(Long studycafeNo, String ckeckin) {
+        List<Studyroom> studyroomList = studyroomRepository.findByStudycafe_StudycafeNo(studycafeNo);
+        List<Studyroom> studyroomLists = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = sdf.parse(ckeckin);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        List<Reservation> reservations = reservationRepository.findByCheckinAndStatus(date, 1);
+
+        Studyroom studyrooms = null;
+
+        for (Reservation reservation : reservations) {
+            if (reservation.getCheckin().equals(date)) {
+                // 예약 상태가 1이고 체크인 날짜와 미팅 요청 날짜가 겹치는 경우 해당 스터디룸 제외
+                studyrooms = reservation.getStudyroom();
+                continue;
+            } else {
+                // 예약 상태가 2이거나 체크인 날짜가 겹치지 않는 경우 해당 스터디룸 추가
+                reservations.add(reservation);
+            }
+        }
+
+        for(Studyroom studyroom : studyroomList){
+            if(studyrooms != null) {
+                if (studyroom.getStudyroomNo() != studyrooms.getStudyroomNo()) {
+                    studyroomLists.add(studyroom);
+                }
+            } else {
+                return studyroomList;
+            }
+        }
+
+        return studyroomLists;
+    }
+
+    //예약 안된 남은 방 이미지 목록 가져오기
+    public List<StudyroomImage> ckeckinlistRoomImg(Long studycafeNo, String ckeckin){
+        List<StudyroomImage> studyroomImageList = new ArrayList<>();
+        List<Studyroom> studyroomList = ckeckinlistRoom(studycafeNo, ckeckin);
+
+        studyroomList.forEach(studyroom -> {
+            studyroomImageRepository.findByStudyroom(studyroom).forEach(studyroomImage -> {
+                studyroomImageList.add(studyroomImage);
+            });
+        });
+        return studyroomImageList;
+    }
 }
