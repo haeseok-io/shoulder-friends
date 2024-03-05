@@ -71,16 +71,16 @@
                     <div class="mainTitle">
                         <div class="title">
                             <p class="subject">커뮤니티</p>
-                            <div class="selectCategory">
-                                <a href="/board/">전체</a>
-                                <a href="/board/?cate=1">자유게시판</a>
-                                <a href="/board/?cate=2">개발Q&A</a>
-                            </div>
                         </div>
-                        <a class="btn btn-custom-add" href="/board/write">글쓰기</a>
+
                     </div>
                     <div class="search">
-                        <form action="/board/" name="searchForm">
+                        <div class="selectCategory">
+                            <a href="/board/">전체</a>
+                            <a href="/board/?cate=1">자유게시판</a>
+                            <a href="/board/?cate=2">개발Q&A</a>
+                        </div>
+                        <form action="/board/" name="searchForm" class="searchForm">
                             <select name="searchType">
                                 <option value="title">제목</option>
                                 <option value="contents">내용</option>
@@ -88,6 +88,7 @@
                             <input type="text" name="keyword" id="keyword">
                             <input type="submit" id="searchButton" value="검색">
                         </form>
+                        <a class="btn btn-custom-add" href="/board/write">글쓰기</a>
                     </div>
                 </div>
                 <div class="allContents">
