@@ -3,16 +3,84 @@
       layout:decorate="~{fragment/layout}">
 
 <th:block layout:fragment="css">
-
+    <link rel="stylesheet" th:href="@{/css/board/detail.css}">
 </th:block>
 <th:block layout:fragment="js">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/lang/summernote-ko-KR.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            //여기 아래 부분
+            $('#summernote').summernote({
+                height: 400,                 // 에디터 높이
+                minHeight: 200,             // 최소 높이
+                maxHeight: null,             // 최대 높이
+                focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+                lang: "ko-KR",					// 한글 설정
+                placeholder: '궁금하신 내용이나 하고싶은 얘기를 작성해주세요.'	//placeholder 설정
+            });
 
+            $("#submitBtn").on("click", function () { //내용, 제목 없을시 알림 후 폼 제출방지
+                let title = $("#title").val().trim();
+                let content = $("#summernote").val().trim();
+                console.log("test");
+                if (title == null) {
+                    alert("제목을 작성해주세요.");
+                    event.preventDefault();
+                } else if (content == null) {
+                    alert("내용을 작성해주세요.");
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
         <div class="container">
-            여기다가 html 작성하세요
+            <div class="board">
+                <form action="/board/modify" method="post">
+                    <input type="hidden" name="userNo" th:value="${boardDetail.board.users.userNo}">
+                    <input type="hidden" name="cate" th:value="${boardDetail.board.cate}">
+                    <div class="content">
+                        <div class="mainTitle">
+                            <div class="title">
+                                <p class="subject">
+                                    제목 : <input type="text" name="title" id="title" th:value="${boardDetail.board.title}">
+                                </p>
+                                <p class="boardDetailInfo">
+                                    <span>작성일 : [[${#dates.format(boardDetail.board.regdate, 'yyyy년 MM월 dd일 HH:mm:ss')}]]</span>
+                                    <span>조회수 : [[${boardDetail.board.hits}]]</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="wrapContents">
+                            <div class="cate">
+                                    <span>
+                                        <th:block th:if="${boardDetail.board.cate == 1}">카테고리 : 자유</th:block>
+                                        <th:block th:if="${boardDetail.board.cate == 2}">카테고리 : 개발Q&A</th:block>
+                                    </span>
+                            </div>
+                            <div class="content">
+                                <textarea id="summernote" name="contents">[[${boardDetail.board.contents}]]</textarea>
+                            </div>
+                            <div class="btn">
+                                <a class="btn btn-outline-danger" th:href="@{/board/detail(boardNo=${boardDetail.board.boardNo})}">취소</a>
+                                <input class="btn btn-custom-add" type="submit" value="수정" id="submitBtn">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <br>
+            </div>
+            <aside class="detailSidebar">
+                <div class="userProfile">
+                    <p>[[${boardDetail.board.users.nickname}]]</p>
+                    <img th:src="${boardDetail.board.users.userDetail.profileImg}" alt="">
+                </div>
+            </aside>
         </div>
     </main>
 </th:block>
