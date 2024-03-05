@@ -44,7 +44,7 @@ public class AnnualController {
         Member member = memberRepository.findById(memberNo).orElse(null);
 
         List<MemberAnnual> annualList = annualService.getAnnualListByMemberNo(memberNo);
-        MemberAnnualDetail totalAnnualNum = annualService.totalAnnualNum(member, memberNo);
+        List<MemberAnnualDetail> totalAnnualNum = annualService.totalAnnualNum(member, memberNo);
         List<MemberAnnualDetail> annualDetailList =  annualService.getAnnualDetailListByMemberNo(member, memberNo);
 
         model.addAttribute("annualList", annualList);
@@ -74,12 +74,14 @@ public class AnnualController {
 
         if(loggedInUser != null) {
             List<MemberAnnual> annualList = annualService.getAnnualListByMemberNo(loggedInUser.getMemberNo());
-            MemberAnnualDetail totalAnnualNum = annualService.totalAnnualNum(loggedInUser, loggedInUser.getMemberNo());
+            List<MemberAnnualDetail> totalAnnualNum = annualService.totalAnnualNum(loggedInUser, loggedInUser.getMemberNo());
             List<MemberAnnualDetail> annualDetailList =  annualService.getAnnualDetailListByMemberNo(loggedInUser, loggedInUser.getMemberNo());
 
             model.addAttribute("annualList", annualList);
             model.addAttribute("totalAnnualNum", totalAnnualNum);
             model.addAttribute("annualDetailList", annualDetailList);
+
+            System.out.println("totalAnnualNum = " + totalAnnualNum);
 
             return "admin/annual/myList";
         }else {
