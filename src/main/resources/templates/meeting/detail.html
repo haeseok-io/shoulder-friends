@@ -32,20 +32,38 @@
 
 
     <script type="text/javascript">
+        var eventList = [];
+
+        $(()=>{
+            // 각 미팅에 대한 정보를 사용하여 이벤트를 생성합니다.
+            $("#meetinglist").each(function(index) {
+                var meeting = $(this).find("input[name='meetings']").val(); // 미팅 이름
+                var contents = $(this).find("input[name='contents']").val(); // 내용
+                var meetDate = $(this).find("input[name='meetDate']").val(); // 미팅 날짜
+                var addr = $(this).find("input[name='addr']").val(); // 주소
+
+                // 이벤트를 생성하여 eventList 배열에 추가합니다.
+                eventList.push({
+                    title: contents, // 이벤트 제목
+                    start: meetDate, // 시작 날짜
+                    end: '2024-04-01', // 종료 날짜
+                    description: addr, // 주소를 설명으로 추가
+                    color:'#7B27FF'
+                });
+            });
+        })
+
+        function opencafe(){
+            window.open("/meeting/cafelist?checkin="+$("#calendar_start_date").val(), "Studycafe", "top=50, left=250, width=1500, height=900");
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 timeZone: 'UTC',
                 initialView: 'dayGridMonth',
-                events:[ // 일정 데이터 추가 , DB의 event를 가져오려면 JSON 형식으로 변환해 events에 넣어주면된다.
-                    {
-                        title:'미팅',
-                        start:'2024-03-26 00:00:00',
-                        end:'2024-03-27 24:00:00',
-                        color:'#7B27FF'
-                        // color 값을 추가해 색상도 변경 가능 자세한 내용은 하단의 사이트 참조
-                    }
-                ], headerToolbar: {
+                events: eventList,
+                headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'addEventButton' // headerToolbar에 버튼을 추가
@@ -89,6 +107,11 @@
                 displayEventTime: false // 시간 표시 x
             });
             calendar.render();
+
+            calendar.on('dateClick', function(info) {
+                console.log("하하하");
+            });
+
         });
     </script>
 </th:block>
@@ -97,15 +120,17 @@
     <main>
         <div class="container">
             <h2>미팅내용</h2>
-            <div th:each="dto: ${meetinglist}">
-                <p th:text="${dto}"></p>
+            <div th:each="dto: ${meetinglist}" id="meetinglist">
+                <input type="hidden" name="meetings" id="meetings" th:value="${dto}">
+                <input type="hidden" name="contents" id="contents" th:value="${dto.contents}">
+                <input type="hidden" name="meetDate" id="meetDate" th:value="${dto.meetDate}">
+                <input type="hidden" name="addr" id="addr" th:value="${dto.addr}">
             </div>
             <div id="calendarBox">
                 <div id="calendar"></div>
             </div>
             <!-- modal 추가 -->
-            <div class="modal fade" id="calendarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
+            <div class="modal fade" id="calendarModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -113,7 +138,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="calendar_content" class="col-form-label">미팅 상세</label>
+                                <label for="calendar_content" class="col-form-label">미팅 내용</label>
                                 <input type="text" class="form-control" id="calendar_content" name="calendar_content">
                                 <label for="calendar_addr" class="col-form-label">미팅 주소</label>
                                 <input type="text" class="form-control" id="calendar_addr" name="calendar_addr">
@@ -121,20 +146,55 @@
                                 <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
                             </div>
                             <div class="form-group">
-                                <label for="taskId" class="col-form-label">어깨동무 스터디룸 예약</label>
-
+                                <label for="start_time">시작시간</label>
+                                <select class="form-control" id="start_time" name="start_time" onchange="startChange()">
+                                    <option value="09:00:00">09:00</option>
+                                    <option value="09:30:00">09:30</option>
+                                    <option value="10:00:00">10:00</option>
+                                    <option value="10:30:00">10:30</option>
+                                    <option value="11:00:00">11:00</option>
+                                    <option value="11:30:00">11:30</option>
+                                    <option value="12:00:00">12:00</option>
+                                    <option value="12:30:00">12:30</option>
+                                    <option value="13:00:00">13:00</option>
+                                    <option value="13:30:00">13:30</option>
+                                    <option value="14:00:00">14:00</option>
+                                    <option value="14:30:00">14:30</option>
+                                    <option value="15:00:00">15:00</option>
+                                    <option value="15:30:00">15:30</option>
+                                    <option value="16:00:00">16:00</option>
+                                    <option value="16:30:00">16:30</option>
+                                    <option value="17:00:00">17:00</option>
+                                    <option value="17:30:00">17:30</option>
+                                    <option value="18:00:00">18:00</option>
+                                    <option value="18:30:00">18:30</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="btnn" class="col-form-label">어깨동무 스터디룸</label>
+                                <p class="d-inline-flex gap-1">
+                                    <button class="btn btn-secondary" id="btnn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onclick="opencafe();">
+                                        이용하기
+                                    </button>
+                                </p>
+                                <div class="collapse" id="collapseExample">
+                                    <div class="card card-body">
+                                        <select class="form-control" id="studyCafe" name="studyCafe" onchange="startChange()">
+                                            <option value="">지점을 골라주세요</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn" id="addCalendar">추가</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                                    id="sprintSettingModalClose">취소</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="sprintSettingModalClose">취소</button>
                         </div>
-
                     </div>
                 </div>
             </div>
-        </div>
+
+
         </div>
     </main>
 </th:block>
