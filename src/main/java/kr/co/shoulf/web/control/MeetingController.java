@@ -1,13 +1,20 @@
 package kr.co.shoulf.web.control;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import kr.co.shoulf.web.service.MeetingService;
 import kr.co.shoulf.web.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,22 +27,31 @@ public class MeetingController {
     @GetMapping("/detail")
     public void detail(Model model, @RequestParam Long moimNo){
         model.addAttribute("meetinglist", meetingService.meetingList(moimNo));
+        model.addAttribute("moimNo", moimNo);
     }
 
     //카페 목록 페이지로 이동
     @GetMapping("/cafelist")
-    public void cafelist(Model model, @RequestParam String checkin){
+    public void cafelist(Model model, @RequestParam String checkin, @RequestParam Long moimNo){
         model.addAttribute("checkin", checkin);
+        model.addAttribute("moimNo", moimNo);
         model.addAttribute("cafeList",studyService.listCafe());
     }
 
     //룸 목록 페이지로 이동
     @GetMapping("/roomlist")
-    public void roomlist(Model model, @RequestParam String checkin, @RequestParam Long studycafeNo){
+    public void roomlist(Model model, @RequestParam String checkin, @RequestParam Long studycafeNo, @RequestParam Long moimNo){
         model.addAttribute("roomImgList",studyService.ckeckinlistRoomImg(studycafeNo, checkin));
         model.addAttribute("studycafeNo", studycafeNo);
         model.addAttribute("listRoom", studyService.ckeckinlistRoom(studycafeNo, checkin));
         model.addAttribute("oneCafe", studyService.oneCafe(studycafeNo));
         model.addAttribute("checkin", checkin);
+        model.addAttribute("moimNo", moimNo);
+    }
+
+    //meeting_ajax 처리
+    @GetMapping("/meeting_ajax")
+    public @ResponseBody List<Map<String,Object>> meeting_ajax(@RequestParam Long moimNo){
+        return meetingService.getEventList(moimNo);
     }
 }
