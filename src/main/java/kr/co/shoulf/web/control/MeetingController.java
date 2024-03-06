@@ -2,16 +2,15 @@ package kr.co.shoulf.web.control;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.co.shoulf.web.dto.MeetingDTO;
 import kr.co.shoulf.web.service.MeetingService;
 import kr.co.shoulf.web.service.StudyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -53,5 +52,12 @@ public class MeetingController {
     @GetMapping("/meeting_ajax")
     public @ResponseBody List<Map<String,Object>> meeting_ajax(@RequestParam Long moimNo){
         return meetingService.getEventList(moimNo);
+    }
+
+    //미팅 정보 받아서 저장
+    @PostMapping("/write")
+    public ResponseEntity<String> write(@RequestBody MeetingDTO meetingDTO){
+        meetingService.writeMeeting(meetingDTO);
+        return ResponseEntity.ok("전송성공");
     }
 }
