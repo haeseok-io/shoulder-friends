@@ -10,9 +10,11 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script src=" https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/lang/summernote-ko-KR.min.js"></script>
     <script>
+        let summernote;
+
         $(document).ready(function () {
             //여기 아래 부분
-            $('#summernote').summernote({
+            summernote = $('#summernote').summernote({
                 height: 400,                 // 에디터 높이
                 minHeight: 200,             // 최소 높이
                 maxHeight: null,             // 최대 높이
@@ -22,15 +24,13 @@
             });
 
             $("#submitBtn").on("click", function () { //내용, 제목 없을시 알림 후 폼 제출방지
-                let title = $("#title").val().trim();
-                let content = $("#summernote").val().trim();
-                console.log("test");
-                if (title == null) {
+                let title = $.trim($("#title").val());
+                if (title === "") {
                     alert("제목을 작성해주세요.");
-                    event.preventDefault();
-                } else if (content == null) {
+                    return false;
+                } else if ( summernote.summernote('isEmpty') ) {
                     alert("내용을 작성해주세요.");
-                    event.preventDefault();
+                    return false;
                 }
             });
         });
@@ -42,32 +42,33 @@
         <div class="container">
             <div class="board">
                 <form action="/board/modify" method="post">
-                    <input type="hidden" name="userNo" th:value="${boardDetail.board.users.userNo}">
-                    <input type="hidden" name="cate" th:value="${boardDetail.board.cate}">
+                    <input type="hidden" name="boardNo" th:value="${boardDetail.boardNo}">
+                    <input type="hidden" name="cate" th:value="${boardDetail.cate}">
+                    <input type="hidden" name="hits" th:value="${boardDetail.hits}">
                     <div class="content">
                         <div class="mainTitle">
                             <div class="title">
                                 <p class="subject">
-                                    제목 : <input type="text" name="title" id="title" th:value="${boardDetail.board.title}">
+                                    제목 : <input type="text" name="title" id="title" th:value="${boardDetail.title}">
                                 </p>
                                 <p class="boardDetailInfo">
-                                    <span>작성일 : [[${#dates.format(boardDetail.board.regdate, 'yyyy년 MM월 dd일 HH:mm:ss')}]]</span>
-                                    <span>조회수 : [[${boardDetail.board.hits}]]</span>
+                                    <span>작성일 : [[${#dates.format(boardDetail.regdate, 'yyyy년 MM월 dd일 HH:mm:ss')}]]</span>
+                                    <span>조회수 : [[${boardDetail.hits}]]</span>
                                 </p>
                             </div>
                         </div>
                         <div class="wrapContents">
                             <div class="cate">
                                     <span>
-                                        <th:block th:if="${boardDetail.board.cate == 1}">카테고리 : 자유</th:block>
-                                        <th:block th:if="${boardDetail.board.cate == 2}">카테고리 : 개발Q&A</th:block>
+                                        <th:block th:if="${boardDetail.cate == 1}">카테고리 : 자유</th:block>
+                                        <th:block th:if="${boardDetail.cate == 2}">카테고리 : 개발Q&A</th:block>
                                     </span>
                             </div>
                             <div class="content">
-                                <textarea id="summernote" name="contents">[[${boardDetail.board.contents}]]</textarea>
+                                <textarea id="summernote" name="contents">[[${boardDetail.contents}]]</textarea>
                             </div>
                             <div class="btn">
-                                <a class="btn btn-outline-danger" th:href="@{/board/detail(boardNo=${boardDetail.board.boardNo})}">취소</a>
+                                <a class="btn btn-outline-danger" th:href="@{/board/detail(boardNo=${boardDetail.boardNo})}">취소</a>
                                 <input class="btn btn-custom-add" type="submit" value="수정" id="submitBtn">
                             </div>
                         </div>
@@ -77,8 +78,8 @@
             </div>
             <aside class="detailSidebar">
                 <div class="userProfile">
-                    <p>[[${boardDetail.board.users.nickname}]]</p>
-                    <img th:src="${boardDetail.board.users.userDetail.profileImg}" alt="">
+                    <p>[[${boardDetail.users.nickname}]]</p>
+                    <img th:src="${boardDetail.users.userDetail.profileImg}" alt="">
                 </div>
             </aside>
         </div>
