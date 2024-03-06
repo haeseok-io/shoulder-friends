@@ -132,6 +132,7 @@
                                 let studyroomNo = $("#studyroomNo").val();
                                 let price = $("#price").val();
                                 let start_time = $("#start_time").val();
+                                let moimNo = $("#moimNo").val();
 
                                 //내용 입력 여부 확인
                                 if(content == null || content == ""){
@@ -143,16 +144,46 @@
                                 }else{
                                     let obj = {
                                         "title" : content,
-                                        "start_date" : start_date,
-                                        "end_date" : start_date,
+                                        "startDate" : start_date,
+                                        "endDate" : start_date,
                                         "addr" : addr,
                                         "studycafeNo":studycafeNo,
                                         "studyroomNo":studyroomNo,
                                         "price":price,
-                                        "start_time":start_time
+                                        "startTime":start_time,
+                                        "moimNo":moimNo
                                     }//전송할 객체 생성
 
-                                    console.log(obj); //서버로 해당 객체를 전달해서 DB 연동 가능
+                                    let meetingOnly = {
+                                        "title" : content,
+                                        "startDate" : start_date,
+                                        "endDate" : start_date,
+                                        "addr" : addr,
+                                        "startTime":start_time,
+                                        "moimNo":moimNo
+                                    }//전송할 객체 생성
+
+                                    if(studycafeNo == '' || studycafeNo == null){
+
+                                        $.ajax({
+                                            url: "/meeting/write",
+                                            method: "POST",
+                                            contentType: "application/json",
+                                            data: JSON.stringify(meetingOnly),
+                                            success: function(response) {
+                                                console.log(response);
+                                                $("#calendarModal").modal("hide");
+                                                location.reload();
+                                            },
+                                            error: function(xhr, status, error) {
+                                                alert("오류발생 다시 시도해주세요");
+                                                console.log(error);
+                                            }
+                                        });
+
+                                    }else{
+                                        console.log("결제창 켜야해");
+                                    }
                                 }
                             });
 
