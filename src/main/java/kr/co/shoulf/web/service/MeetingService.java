@@ -1,7 +1,9 @@
 package kr.co.shoulf.web.service;
 
 import jakarta.transaction.Transactional;
+import kr.co.shoulf.web.dto.MeetingDTO;
 import kr.co.shoulf.web.entity.Meeting;
+import kr.co.shoulf.web.entity.Moim;
 import kr.co.shoulf.web.repository.MeetingRepository;
 import kr.co.shoulf.web.repository.MoimRepository;
 import kr.co.shoulf.web.repository.PaymentRepository;
@@ -9,6 +11,8 @@ import kr.co.shoulf.web.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -48,5 +52,21 @@ public class MeetingService {
         });
 
         return eventList;
+    }
+
+    //미팅 정보 추가
+    public void writeMeeting(MeetingDTO meetingDTO) {
+        String meetingDate = meetingDTO.getStartDate() + " " + meetingDTO.getStartTime();
+        Optional<Moim> result = moimRepository.findById(meetingDTO.getMoimNo());
+        Moim moim = result.orElseThrow();
+
+        Meeting meeting = Meeting.builder()
+                .contents(meetingDTO.getTitle())
+                .addr(meetingDTO.getAddr())
+                .meetDate(Timestamp.valueOf(meetingDate))
+                .moim(moim)
+                .build();
+
+        meetingRepository.save(meeting);
     }
 }
