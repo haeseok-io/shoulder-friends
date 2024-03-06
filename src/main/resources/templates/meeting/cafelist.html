@@ -45,12 +45,13 @@
     <div class="cafes">
         <div th:each="dto:${cafeList}" id="cafecard">
             <div class="card" style="width: 350px;">
-                <a th:href="@{/meeting/roomlist(studycafeNo=${dto.studycafeNo}, checkin=${checkin})}"><img class="card-img-top" th:src="${dto.mainImg}"></a>
+                <a th:href="@{/meeting/roomlist(studycafeNo=${dto.studycafeNo}, checkin=${checkin}, moimNo=${moimNo})}"><img class="card-img-top" th:src="${dto.mainImg}"></a>
                 <div class="card-body">
                     <p class="card-text" id="cafename" th:text="${dto.name}"></p>
                 </div>
             </div>
             <input type="hidden" name="checkin" th:value="${checkin}">
+            <input type="hidden" name="moimNo" th:value="${moimNo}">
         </div>
     </div>
 </div>
