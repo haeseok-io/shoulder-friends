@@ -175,6 +175,28 @@
             // 지도에 원을 표시합니다
             circle.setMap(map);
         })
+
+        function goreservation(){
+            let cafe_name = $("#cafe-name").val();
+            let cafe_no = $("#cafeno").val();
+            let room_name = $("#room-name").val();
+            let room_no = $("#roomno").val();
+            let room_price = $("#room-price").val();
+            let addrs = $("#addr").val();
+
+            let selectedData = {
+                cafename: cafe_name,
+                cafeno: cafe_no,
+                roomname: room_name,
+                roomno: room_no,
+                price: room_price,
+                addrs : addrs
+            };
+            console.log(selectedData);
+            window.opener.postMessage(JSON.stringify(selectedData),'*');
+            console.log(JSON.stringify(selectedData));
+            window.close();
+        }
     </script>
 </head>
 <body>
@@ -196,6 +218,7 @@
         <div>
             <div id="cafedetail">
                 <div class="cafe-name" th:text="${oneCafe.name}"></div>
+                <input type="hidden" id="cafe-name" th:value="${oneCafe.name}">
                 <img id="cafeimg" th:src="${oneCafe.mainImg}">
                 <div id="sdesc"><p class="pp" th:text="${oneCafe.shortDesc}"></p></div>
                 <div th:if="${oneCafe?.member != null}">
@@ -210,14 +233,17 @@
             <div class="cafe-addr" style="text-align: center;" th:text="'주소 : '+${oneCafe.post}+' '+${oneCafe.addr}"></div>
             <input type="hidden" name="x" id="x" th:value="${oneCafe.x}">
             <input type="hidden" name="y" id="y" th:value="${oneCafe.y}">
-            <input type="hidden" name="studycafeNo" th:value="${studycafeNo}">
-            <input type="hidden" name="checkin" th:value="${checkin}">
+            <input type="hidden" name="studycafeNo" id="studycafeNo" th:value="${studycafeNo}">
+            <input type="hidden" name="checkin" id="checkin" th:value="${checkin}">
+            <input type="hidden" name="moimNo" id="moimNo" th:value="${moimNo}">
+            <input type="hidden" name="addr" id="addr" th:value="${oneCafe.post}+' '+${oneCafe.addr}">
         </div>
         <hr>
     </form>
     <div class="caferoom">
         <div th:each="dto : ${listRoom}" class="room">
             <div class="room-name" th:text="${dto.name}"></div>
+            <input type="hidden" id="room-name" th:value="${dto.name}">
             <div class="parent-container">
                 <div class="room-images">
                     <div th:each="imgdto : ${roomImgList}" th:if="${imgdto.studyroom.studyroomNo == dto.studyroomNo}" id="roomimg1">
@@ -230,12 +256,14 @@
             <div class="room-detail">
                 <ul class="list-group">
                     <li class="roomd" th:text="'대여가격 : '+${dto.price}+'원'"></li>
+                    <input type="hidden" id="room-price" th:value="${dto.price}">
+                    <input type="hidden" name="roomno" id="roomno" th:value="${dto.studyroomNo}">
                     <li class="roomd" th:text="'최대인원 : '+${dto.studyroomDetail.maxNum}+'명'"></li>
                     <li class="roomd" th:text="'빔프로젝트 : '+${dto.studyroomDetail.beam}+' (Y/N)'"></li>
                     <li class="roomd" th:text="'화이트보드 : '+${dto.studyroomDetail.wboard}+' (Y/N)'"></li>
                     <li class="roomd" th:text="'콘센트 : '+${dto.studyroomDetail.socket}+'개 가능'"></li>
-                    <li id="btnli"><a class="btn btn" id="room-new" th:href="@{/meeting/ok(studyroomNo=${dto.studyroomNo})}">선택</a>
-                        <input type="hidden" name="studycafeNo" th:value="${studycafeNo}">
+                    <li id="btnli"><a class="btn btn" id="room-new" onclick="goreservation();">선택하기</a>
+                        <input type="hidden" name="studycafeNo" id="cafeno" th:value="${studycafeNo}">
                 </ul>
                 <hr>
             </div>

@@ -13,6 +13,9 @@
             background-color: #7B27FF;
             color: white;
         }
+        #btnn{
+            background-color: #7B27FF;
+        }
     </style>
 </th:block>
 
@@ -32,37 +35,85 @@
 
 
     <script type="text/javascript">
-        var eventList = [];
 
+        function opencafe() {
+            let moimNo = $("#moimNo").val(); // 모임 번호 가져오기
+            let checkin = $("#calendar_start_date").val(); // 체크인 날짜 가져오기
+            let start_date = $("#calendar_start_date").val();
+
+            var collapseElement = document.getElementById('collapseExample');
+            var isCollapsed = collapseElement.classList.contains('show');
+            if (isCollapsed) {
+                collapseElement.classList.remove('show');
+            } else {
+                collapseElement.classList.add('show');
+            }
+
+            if (start_date == "") {
+                alert("날짜를 입력하세요.");
+            }else {
+                // 새 창 열기
+                window.open("/meeting/cafelist?checkin=" + checkin + "&moimNo=" + moimNo, "Studycafe", "top=50, left=250, width=1500, height=900");
+            }
+        }
         $(()=>{
-            // 각 미팅에 대한 정보를 사용하여 이벤트를 생성합니다.
-            $("#meetinglist").each(function(index) {
-                var meeting = $(this).find("input[name='meetings']").val(); // 미팅 이름
-                var contents = $(this).find("input[name='contents']").val(); // 내용
-                var meetDate = $(this).find("input[name='meetDate']").val(); // 미팅 날짜
-                var addr = $(this).find("input[name='addr']").val(); // 주소
-
-                // 이벤트를 생성하여 eventList 배열에 추가합니다.
-                eventList.push({
-                    title: contents, // 이벤트 제목
-                    start: meetDate, // 시작 날짜
-                    end: '2024-04-01', // 종료 날짜
-                    description: addr, // 주소를 설명으로 추가
-                    color:'#7B27FF'
-                });
-            });
+            window.addEventListener('message',function (event){
+                let jsonData = JSON.parse(event.data);
+                let cafe_name = $("#studycafename");
+                let room_name = $("#studyroomname");
+                let prices = $("#price");
+                cafe_name.val(jsonData.cafename);
+                room_name.val(jsonData.roomname);
+                prices.val(jsonData.price);
+                $("#studycafeNo").val(jsonData.cafeno);
+                $("#studyroomNo").val(jsonData.roomno);
+                $("#calendar_addr").val(jsonData.addrs);
+            })
         })
 
-        function opencafe(){
-            window.open("/meeting/cafelist?checkin="+$("#calendar_start_date").val(), "Studycafe", "top=50, left=250, width=1500, height=900");
-        }
 
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
+            let moimNos = $("#moimNo").val();
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 timeZone: 'UTC',
                 initialView: 'dayGridMonth',
-                events: eventList,
+                eventSources: [{
+                    events: function(info, successCallback, failureCallback) {
+                        $.ajax({
+                            url: "/meeting/meeting_ajax",
+                            method: "GET",
+                            dataType: 'json',
+                            data:{
+                                moimNo: moimNos
+                            },
+                            success: function(data) {
+                                let events = [];
+                                if (data.length === 0) {
+                                    events.push({
+                                        title: '어깨동무',
+                                        start: '1996-11-02',
+                                        end: '1996-11-02'
+                                    })
+                                } else {
+                                    data.forEach(function (eventData) {
+                                        events.push({
+                                            title: eventData.title,
+                                            start: eventData.start,
+                                            end: eventData.end,
+                                            description: eventData.description,
+                                            color: eventData.color
+                                        });
+                                    });
+                                    successCallback(events);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                alert("오류발생 새로고침 해주세요");
+                            }
+                        });
+                    }
+                }],
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
@@ -74,9 +125,13 @@
                             $("#calendarModal").modal("show"); // modal 나타내기
 
                             $("#addCalendar").on("click",function(){  // modal의 추가 버튼 클릭 시
-                                var content = $("#calendar_content").val();
-                                var start_date = $("#calendar_start_date").val();
-                                var addr = $("#calendar_addr").val();
+                                let content = $("#calendar_content").val();
+                                let start_date = $("#calendar_start_date").val();
+                                let addr = $("#calendar_addr").val();
+                                let studycafeNo = $("#studycafeNo").val();
+                                let studyroomNo = $("#studyroomNo").val();
+                                let price = $("#price").val();
+                                let start_time = $("#start_time").val();
 
                                 //내용 입력 여부 확인
                                 if(content == null || content == ""){
@@ -86,11 +141,15 @@
                                 }else if(start_date == ""){
                                     alert("날짜를 입력하세요.");
                                 }else{
-                                    var obj = {
+                                    let obj = {
                                         "title" : content,
                                         "start_date" : start_date,
                                         "end_date" : start_date,
-                                        "addr" : addr
+                                        "addr" : addr,
+                                        "studycafeNo":studycafeNo,
+                                        "studyroomNo":studyroomNo,
+                                        "price":price,
+                                        "start_time":start_time
                                     }//전송할 객체 생성
 
                                     console.log(obj); //서버로 해당 객체를 전달해서 DB 연동 가능
@@ -120,12 +179,7 @@
     <main>
         <div class="container">
             <h2>미팅내용</h2>
-            <div th:each="dto: ${meetinglist}" id="meetinglist">
-                <input type="hidden" name="meetings" id="meetings" th:value="${dto}">
-                <input type="hidden" name="contents" id="contents" th:value="${dto.contents}">
-                <input type="hidden" name="meetDate" id="meetDate" th:value="${dto.meetDate}">
-                <input type="hidden" name="addr" id="addr" th:value="${dto.addr}">
-            </div>
+            <input type="hidden" name="moimNo" id="moimNo" th:value="${moimNo}">
             <div id="calendarBox">
                 <div id="calendar"></div>
             </div>
@@ -147,7 +201,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="start_time">시작시간</label>
-                                <select class="form-control" id="start_time" name="start_time" onchange="startChange()">
+                                <select class="form-control" id="start_time" name="start_time">
                                     <option value="09:00:00">09:00</option>
                                     <option value="09:30:00">09:30</option>
                                     <option value="10:00:00">10:00</option>
@@ -177,11 +231,16 @@
                                         이용하기
                                     </button>
                                 </p>
-                                <div class="collapse" id="collapseExample">
+                                <div class="collapse show" id="collapseExample">
                                     <div class="card card-body">
-                                        <select class="form-control" id="studyCafe" name="studyCafe" onchange="startChange()">
-                                            <option value="">지점을 골라주세요</option>
-                                        </select>
+                                        <label for="calendar_content" class="col-form-label">스터디 카페 지점</label>
+                                        <input type="text" class="form-control" id="studycafename" name="studycafename" readonly>
+                                        <label for="calendar_content" class="col-form-label">스터디 룸</label>
+                                        <input type="text" class="form-control" id="studyroomname" name="studyroomname" readonly>
+                                        <label for="calendar_content" class="col-form-label">가격</label>
+                                        <input type="text" class="form-control" id="price" name="price" readonly>
+                                        <input type="hidden" name="studycafeNo" id="studycafeNo">
+                                        <input type="hidden" name="studyroomNo" id="studyroomNo">
                                     </div>
                                 </div>
                             </div>
@@ -193,8 +252,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </main>
 </th:block>
