@@ -93,6 +93,11 @@ footer .container p { font-weight: 300; color: #fff; }
 .badge.badge-study { background: #FF8911; }
 
 .btn {}
+
 .btn.btn-custom-add,
 .btn.btn-custom-add:focus { background: #7B27FF; color: #fff; }
 .btn.btn-custom-add:focus { border: 1px solid #7B27FF; }
+
+.btn.btn-custom-default,
+.btn.btn-custom-default:focus { background: #382B47; color: #fff; }
+.btn.btn-custom-default:focus { border: 1px solid #382B47; }
