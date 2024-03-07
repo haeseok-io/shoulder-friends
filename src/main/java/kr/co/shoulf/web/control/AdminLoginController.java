@@ -31,7 +31,6 @@ public class AdminLoginController {
         if(memberDetails != null) {
             // 세션에 로그인된 유저 정보 저장
             session.setAttribute("loggedInUser", memberDetails);
-//            System.out.println("memberDetails : " + memberDetails);
             return "redirect:/admin/";
         } else {
             // 로그인 실패 시
