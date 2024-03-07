@@ -46,15 +46,36 @@
         .newMoim .moimNewList > li .wrap .etc .headcount .headcountToggle:hover + .headcountWrap { display: block; }
 
         .moim {}
-        .moim .search {}
+        .moim .search { margin-bottom: 50px; }
         .moim .search form { display: flex; justify-content: flex-start; align-items: center; }
+
+        .moim .search .type { width: 10%; margin-right: 10px; }
+        .moim .search .position { width: 15%; margin-right: 10px; }
+        .moim .search .positionDetail { width: 20%; margin-right: 10px; }
+        .moim .search .searchField { display: flex; justify-content: space-between; width: calc(55% - 30px); }
+        .moim .search .searchField input[type='text'] { width: calc(100% - 110px); height: 50px; border: 1px solid #e0e0e0; border-radius: 5px; padding-left: 10px; }
+        .moim .search .searchField button { width: 100px; }
+
+
+        .moim .search .select2-selection--single { display: flex; align-items: center; height: 50px; border: 1px solid #e0e0e0; padding: 0 10px; }
+        .moim .search .select2-selection--single .select2-selection__arrow { top: 50%; transform: translateY(-50%); right: 10px; }
+        .moim .search .select2-selection--single .select2-selection__rendered { padding-left: 0; padding-right: 0; }
     </style>
 </th:block>
 <th:block layout:fragment="js">
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        let moreDataStatus;
+        let typeSelect, positionSelect, positionDetailSelect;
+        $.fn.select2.defaults.set("minimumResultsForSearch", -1);
+        $.fn.select2.defaults.set("width", "100%");
+
         $(() => {
             callList();
+
+            typeSelect = $("select[name='type']").select2();
+            positionSelect = $("select[name='positionNo']").select2();
+            positionDetailSelect = $("select[name='positionDetailNo']").select2();
 
             // 직무 대분류 선택
             $("select[name='positionNo']").change(e => {
@@ -76,10 +97,27 @@
                 } else {
                     positionDetail.append(`<option value="">대분류를 선택해주세요.</option>`)
                 }
-
-
             });
 
+            // 페이지 스크롤 이벤트
+            $(document).scroll(e => {
+                let windowHeight = window.innerHeight;
+                let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                let documentHeight = Math.max(
+                    document.body.scrollHeight, document.documentElement.scrollHeight,
+                    document.body.offsetHeight, document.documentElement.offsetHeight,
+                    document.body.clientHeight, document.documentElement.clientHeight
+                );
+
+                if( scrollTop+windowHeight >= documentHeight ) {
+                    if( moreDataStatus && $(".moimList").find("li").length>0 ) {
+                        let currentPage = $("input[name='pageRequestDTO.page']").val();
+                        let nextPage = parseInt(currentPage) + 1;
+
+                        callList(nextPage);
+                    }
+                }
+            });
         });
 
 
@@ -90,9 +128,8 @@
             let appendSel = $(".moim .content .moimList");
             let appendHtml = $("#moimListTemplate").html();
 
-            appendSel.empty();
-
-            if( !page )     $("input[name='page']", form).val(1);
+            page = page ? page : 1;
+            $("input[name='pageRequestDTO.page']", form).val(page);
 
             $.ajax({
                 type: "get",
@@ -100,18 +137,26 @@
                 data: form.serialize(),
                 dataType: "json",
                 success: data => {
+                    // 추가 데이터 여부
+                    moreDataStatus = data.page===data.end ? false : true;
+
+                    // 기존 데이터 제거
+                    if( data.page==1 || data.dataList==null )  appendSel.empty();
+
+                    // 보여줄 데이터가 없는 경우
                     if( data.total===0 ) {
 
                     } else {
                         data.dataList.forEach(obj => {
                             let append = $(appendHtml);
+                            let newThunbnailPath = thumbnailPath;
 
                             // 타입명
                             let typeName = obj.type=="project" ? "프로젝트" : "스터디";
 
                             // 썸네일 이미지 조정 ( 이미지가 없을경우 기본 이미지로 대체 )
                             if( obj.moimDetail.moimImg!="" && obj.moimDetail.moimImg!=thumbnailPath ) {
-                                thumbnailPath = "/upload/moim/"+obj.moimDetail.moimImg;
+                                newThunbnailPath = "/upload/moim/"+obj.moimDetail.moimImg;
                             }
 
                             // 카테고리명
@@ -119,7 +164,7 @@
                         .studyCategoryName;
 
                             // 데이터 담기
-                            append.find(".thumbnail img").attr("src", thumbnailPath);
+                            append.find(".thumbnail img").attr("src", newThunbnailPath);
                             append.find(".category span").text(categoryName);
                             append.find(".etc .type span").addClass("badge-"+obj.type).text(typeName);
                             append.find(".etc .like span").text(obj.likeList.length);
@@ -269,7 +314,7 @@
                         <input type="hidden" name="pageRequestDTO.page" value="1">
                         <input type="hidden" name="pageRequestDTO.scale" value="12">
 
-                        <div class="cate">
+                        <div class="type">
                             <select name="type" onchange="callList();">
                                 <option value="">모집 전체</option>
                                 <option value="project">프로젝트</option>
@@ -289,7 +334,7 @@
                         </div>
                         <div class="searchField">
                             <input type="text" name="keyword" placeholder="ex) 프로젝트 및 스터디명, 분야, 사용언어">
-                            <button type="submit">검색</button>
+                            <button type="submit" class="btn btn-custom-default">검색</button>
                         </div>
                     </form>
                 </div>
