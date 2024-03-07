@@ -1,10 +1,15 @@
 package kr.co.shoulf.web.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+
+import java.util.List;
 
 @Entity
 @Table(name = "moim")
@@ -40,6 +45,12 @@ public class Moim {
     @JoinColumn(name = "user_no", nullable = false)
     @ToString.Exclude
     private Users users;
+
+    @OneToMany(mappedBy = "moim", fetch = FetchType.LAZY)
+    private List<MoimHeadcount> moimHeadcountList;
+
+    @OneToMany(mappedBy = "moim", fetch = FetchType.LAZY)
+    private List<MoimLanguage> moimLanguageList;
 }
 
 
