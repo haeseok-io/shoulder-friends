@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:fragment="moimList">
-    <ul class="moimList" th:if="${templateData!=null}">
+    <ul class="moimList" th:unless="${templateData==null}">
         <li th:each="data : ${templateData}" th:data-no="${data.moimNo}">
             <div class="category">
                 <span class="badge badge-size-sm badge-category" th:if="${data.moimDetail.category!=null}">[[${data.moimDetail.category.categoryName}]]</span>
@@ -41,11 +41,37 @@
                         </li>
                     </ul>
                 </div>
+                <div class="headcount">
+                    <div class="headcountToggle">
+                        <div class="toggleName">
+                            <span>모집 인원</span>
+                            <span class="totalApproval">[[${#aggregates.sum(data.headcountList.![participantApprovalList.size()])}]]</span>
+                            <span class="totalPersonnel">[[${#aggregates.sum(data.headcountList.![personnel])}]]</span>
+                        </div>
+                        <div class="toggleIcon">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="headcountWrap">
+                        <ul>
+                            <li th:each="headcount : ${data.headcountList}">
+                                <div class="positionDetail">
+                                    <p th:if="${headcount.positionDetail}">[[${headcount.positionDetail.middleName}]]</p>
+                                    <p th:unless="${headcount.positionDetail}">누구나 가능</p>
+                                </div>
+                                <div class="participant">
+                                    <div class="approval">[[${headcount.participantApprovalList.size()}]]</div>
+                                    <div class="personnel">[[${headcount.personnel}]]</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </li>
     </ul>
 
-    <ul class="moimList" th:if="${templateData==null}">
+    <th:block class="moimList" th:if="${templateData==null}">
         <li data-no="">
             <div class="category">
                 <span class="badge badge-size-sm badge-category"></span>
@@ -72,9 +98,34 @@
                         </li>
                     </ul>
                 </div>
+                <div class="headcount">
+                    <div class="headcountToggle">
+                        <div class="toggleName">
+                            <span>모집 인원</span>
+                            <span class="totalApproval"></span>
+                            <span class="totalPersonnel"></span>
+                        </div>
+                        <div class="toggleIcon">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="headcountWrap">
+                        <ul>
+                            <li>
+                                <div class="positionDetail">
+                                    <p></p>
+                                </div>
+                                <div class="participant">
+                                    <div class="approval"></div>
+                                    <div class="personnel"></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </li>
-    </ul>
+    </th:block>
 </th:block>
 
 </html>

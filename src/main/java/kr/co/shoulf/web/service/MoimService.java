@@ -18,7 +18,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -47,14 +46,14 @@ public class MoimService {
         return null;
     }
 
-    public PageResponseDTO<MoimDTO> readMoimList(PageRequestDTO pageRequestDTO) {
-        Pageable pageable = pageRequestDTO.getPageable("moimNo");
+    public PageResponseDTO<MoimDTO> readMoimList(MoimListRequestDTO moimListRequestDTO) {
+        Pageable pageable = moimListRequestDTO.getPageRequestDTO().getPageable("moimNo");
 
-        Page<Moim> pageList = moimRepository.findAll(pageable);
+        Page<Moim> pageList = moimRepository.selectByTypeAndPositionAndKeyword(moimListRequestDTO.getType(), moimListRequestDTO.getPositionNo(), moimListRequestDTO.getPositionDetailNo(), moimListRequestDTO.getKeyword(), pageable);
         List<MoimDTO> moimList = getMoimData(pageList.toList());
 
         PageResponseDTO<MoimDTO> resultList = PageResponseDTO.<MoimDTO>pageBuilder()
-                .pageRequestDTO(pageRequestDTO)
+                .pageRequestDTO(moimListRequestDTO.getPageRequestDTO())
                 .dataList(moimList)
                 .total((int) pageList.getTotalElements())
                 .build();
@@ -144,6 +143,13 @@ public class MoimService {
                                 .build()
                 );
             }
+        } else {
+            moimHeadcountRepository.save(
+                    MoimHeadcount.builder()
+                            .personnel(dto.getPersonnel().get(0))
+                            .moim(insertData.getMoim())
+                            .build()
+            );
         }
 
         // 사용언어/기술 등록
@@ -169,7 +175,6 @@ public class MoimService {
                 );
             });
         }
-
 
         return true;
     }
