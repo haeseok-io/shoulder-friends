@@ -36,7 +36,13 @@ body {
     border: 1px solid #ccc;
     border-radius: 10px;
 }
-
+.search {
+    display: flex;
+    align-items: center;
+}
+.searchForm, .search a{
+    margin-left: 15px;
+}
 .search select, .search input{
     padding: 10px;
     border: 1px solid #ccc;
@@ -47,7 +53,6 @@ body {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 10px;
-    margin-top: 10px;
 }
 
 .selectCategory a {
