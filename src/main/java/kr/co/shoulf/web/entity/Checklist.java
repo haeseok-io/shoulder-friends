@@ -1,5 +1,6 @@
 package kr.co.shoulf.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -29,6 +30,7 @@ public class Checklist {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moimNo", nullable = false)
     @ToString.Exclude
+    @JsonIgnore
     private Moim moim;
 
     @ManyToOne(fetch = FetchType.LAZY)
