@@ -8,18 +8,36 @@ main .container {
     background-color: #f2f2f2; /* 배경색 추가 */
     padding: 20px; /* 내부 여백 추가 */
 }
-
-.titleReply {
-    font-weight: bold
+.content{padding: 20px;}
+#reply{
+    border-radius: 8px; /* 모서리를 둥글게 만듦 */
+    width: 500px;
+    height: 50px;
+    padding-left: 10px;
+}
+#recomment {
+    border-radius: 8px; /* 모서리를 둥글게 만듦 */
+    width: 400px;
+    height: 50px;
+    margin-top: 10px;
+    padding-left: 10px;
 }
 
-#comments {
-    height: 38px;
+.reply {
+    align-items: center;
 }
 
-.title span {
-    justify-content: space-between;
+.replyForm input[type='submit'] {
+    margin-bottom: 60px;
     margin-left: 5px;
+    height: 45px;
+}
+.recommentWrite{margin-left: 10px;}
+.recommentForm{display: none; align-items: center}
+.recommentForm input[type='submit']{
+    margin-bottom: 60px;
+    margin-left: 5px;
+    height: 40px;
 }
 
 .board {
@@ -36,7 +54,8 @@ main .container {
 }
 
 .wrapReply .title {
-    margin-bottom: 10px; /* 제목과 댓글 입력 창 사이의 간격 조절 */
+    font-weight: bold;
+    margin-bottom: 5px; /* 제목과 댓글 입력 창 사이의 간격 조절 */
 }
 
 .wrapReply .comments {
@@ -60,16 +79,21 @@ main .container {
     border-radius: 50%; /* 이미지를 원형으로 만듦 */
     margin-top: 10px; /* 이미지 위 여백 추가 */
 }
-.wrapModify a{
-    border-radius: 5px;
-    border-color: #7B27FF;
-    text-decoration: none;
-}
-input[type='submit'] {
-    border-radius: 5px;
-}
-.btn {
-    margin-top: 20px;
-    display: inline-block;
-    justify-content: right;
-}
+
+.wrapModify a {border-radius: 5px; border-color: #7B27FF; text-decoration: none;}
+input[type='submit'] {border-radius: 5px;}
+
+.btn {margin-top: 20px; display: inline-block; justify-content: right;}
+.desc {margin-top: 30px;}
+
+.commentWrap{ margin-top: 30px;}
+.commentsHeader{display: flex; align-items: center; margin-bottom: 10px; line-height: normal; }
+.commentsHeader a {display: flex; align-items: center;}
+.commentRegdate{margin-left: 10px;}
+.commentsBody{margin-top: 20px; margin-left: 10px;}
+.commentsBottom{align-items: center; margin-left: 10px;}
+.btnPlusComments{height: 30px; font-size: 15px; line-height: normal;}
+.btnViewComments{height: 30px; font-size: 15px; line-height: normal;}
+.writerProfile img {width: 30px; height: 30px;  border-radius: 50%; /* 이미지를 원형으로 만듦 */}
+
+.recommentWrap{margin-top: 30px; display: none; margin-left: 20px;}
