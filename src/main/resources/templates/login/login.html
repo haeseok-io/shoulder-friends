@@ -8,7 +8,6 @@
     <h2>login</h2>
     <div class="loginModal">
         <p>로그인</p>
-        <button class="closeBtn"></button>
         <label>
             <form action="/login/loginProc" method="post">
                 ID : <input type="text" name="username" id="username"/>
@@ -18,11 +17,12 @@
                 [[${error}]]
             </form>
         </label>
-        <button class="loginBtn naver">네이버 아이디로 로그인</button>
-        <button class="loginBtn kakao">카카오 아이디로 로그인</button>
-        <button class="loginBtn google">구글 아이디로 로그인</button>
+        <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">구글 로그인</a><br>
+        <a href="/oauth2/authorization/naver" class="btn btn-sm btn-success active" role="button">네이버 로그인</a><br>
+        <a href="/oauth2/authorization/kakao" class="btn btn-sm btn-success active" role="button">카카오 로그인</a><br>
         <a href="/login/find" class="findBtn">비밀번호 찾기</a>
         <a href="/login/register" class="registerBtn">회원 가입하기</a>
+        <a href="/logout" class="logout">로그아웃</a>
     </div>
 </body>
 </html>
