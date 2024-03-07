@@ -1,9 +1,8 @@
 package kr.co.shoulf.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Entity
 @Table(name = "user_detail")
@@ -31,5 +30,6 @@ public class UserDetail {
     @MapsId
     @JoinColumn(name = "user_no")
     @ToString.Exclude
+    @JsonIgnore
     private Users users;
 }

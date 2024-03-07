@@ -41,13 +41,13 @@ footer .container p { font-weight: 300; color: #fff; }
 
 /* 공통 모임 리스트 */
 .moimList { display: flex; justify-content: flex-start; flex-wrap: wrap; }
-.moimList > li { position: relative; width: calc(25% - (60px / 4)); border: 1px solid #ccc; border-radius: 10px; margin-right: 20px; margin-bottom: 30px; overflow: hidden; cursor: pointer; }
+.moimList > li { position: relative; width: calc(25% - (60px / 4)); border: 1px solid #ccc; border-radius: 10px; margin-right: 20px; margin-bottom: 30px; cursor: pointer; }
 .moimList > li:nth-child(4n) { margin-right: 0; }
 
 .moimList > li .category { position: absolute; top: 10px; left: 10px; opacity: .7; }
 .moimList > li .category span { font-size: .8rem; font-weight: 400; }
 
-.moimList > li .thumbnail { width: 100%; height: 150px; }
+.moimList > li .thumbnail { width: 100%; height: 150px; border-radius: 10px; overflow: hidden; }
 .moimList > li .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
 
 .moimList > li .wrap { padding: 20px; }
@@ -63,6 +63,23 @@ footer .container p { font-weight: 300; color: #fff; }
 .moimList > li .wrap .language .languageList li {}
 .moimList > li .wrap .language .languageList li .item { text-align: center; margin-right: 10px; }
 .moimList > li .wrap .language .languageList li .item img { width: 25px; height: auto; }
+
+.moimList > li .wrap .headcount { position: relative; border-top: 1px solid #e0e0e0; margin-top: 5px; padding-top: 15px; }
+.moimList > li .wrap .headcount .headcountToggle { display: flex; justify-content: flex-end; align-items: center; color: #aaa; }
+.moimList > li .wrap .headcount .headcountToggle .toggleName { display: flex; margin-right: 10px; font-size: .9rem; }
+.moimList > li .wrap .headcount .headcountToggle .toggleName .totalApproval { position: relative; margin-left: 3px; margin-right: 6px; }
+.moimList > li .wrap .headcount .headcountToggle .toggleName .totalApproval:after { position: absolute; top: 0; right: -6px; content: "/"; }
+
+
+.moimList > li .wrap .headcount .headcountWrap { position: absolute; top: 130%; right: 0; z-index: 2; display: none; width: 60%; background: #fff; border: 1px solid #ccc; border-radius: 5px; padding: 10px; }
+.moimList > li .wrap .headcount .headcountWrap ul {}
+.moimList > li .wrap .headcount .headcountWrap ul li { display: flex; justify-content: space-between; align-items: center; font-size: .9rem; color: #888; }
+.moimList > li .wrap .headcount .headcountWrap ul li .positionDetail {}
+.moimList > li .wrap .headcount .headcountWrap ul li .participant { display: flex; }
+.moimList > li .wrap .headcount .headcountWrap ul li .participant .approval { position: relative; margin-right: 6px; }
+.moimList > li .wrap .headcount .headcountWrap ul li .participant .approval:after { position: absolute; top: 0; right: -6px; content: "/"; }
+
+.moimList > li .wrap .headcount .headcountToggle:hover + .headcountWrap { display: block; }
 
 
 /* 부투스트랩 조정 */

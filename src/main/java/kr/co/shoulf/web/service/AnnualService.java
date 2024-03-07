@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +49,7 @@ public class AnnualService {
 
                 memberAnnualDetail.setUseNum(useNum);
             }
-                memberAnnualDetailList.add(memberAnnualDetail);
+            memberAnnualDetailList.add(memberAnnualDetail);
         }
         return memberAnnualDetailList;
     }
@@ -73,24 +73,28 @@ public class AnnualService {
         memberAnnualDetailRepository.save(memberAnnualDetail);
     }
 
-    public MemberAnnualDetail totalAnnualNum(Member member, Long memberNo) {
-        List<MemberAnnualDetail> memberAnnualDetails = memberAnnualDetailRepository.findByMemberAnnual_MemberAndMember_MemberNo(member, memberNo);
-        MemberAnnualDetail result = null;
-        Set<Long> annualNos = new HashSet<>();
+    public List<MemberAnnualDetail> totalAnnualNum(Member member, Long memberNo) {
+        List<MemberAnnualDetail> memberAnnualDetails = getAnnualDetailListByMemberNo(member, memberNo);
+
+        Map<Long, MemberAnnualDetail> resultMap = new HashMap<>(); // 연차 번호를 키로 사용하여 누적된 결과를 저장하는 맵
 
         for (MemberAnnualDetail memberAnnualDetail : memberAnnualDetails) {
-            if (!annualNos.contains(memberAnnualDetail.getMemberAnnual().getAnnualNo())) {
-                annualNos.add(memberAnnualDetail.getMemberAnnual().getAnnualNo());
-                if (result == null) {
-                    result = memberAnnualDetail;
-                }else {
-                    result.getMemberAnnual().setNum(result.getMemberAnnual().getNum() + memberAnnualDetail.getMemberAnnual().getNum());
-                    result.setUseNum(result.getUseNum() + memberAnnualDetail.getUseNum());
-                }
+            Long annualNo = memberAnnualDetail.getMemberAnnual().getAnnualNo();
+
+            // 맵에 해당 연차 번호가 존재하지 않으면 새로운 결과를 추가하고 초기화
+            if (!resultMap.containsKey(annualNo)) {
+                MemberAnnualDetail result = new MemberAnnualDetail();
+                result.setUseNum(0);
+                result.setMemberAnnual(memberAnnualDetail.getMemberAnnual());
+                resultMap.put(annualNo, result);
             }
+
+            // 현재 연차 상세 정보의 사용갯수를 누적
+            MemberAnnualDetail result = resultMap.get(annualNo);
+            result.setUseNum(result.getUseNum() + memberAnnualDetail.getUseNum());
         }
 
-        return result;
+        return new ArrayList<>(resultMap.values());
     }
 
     public void approveAnnual(Long annualDetailNo,Long memberNo) {

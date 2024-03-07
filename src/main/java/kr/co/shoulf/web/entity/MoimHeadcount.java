@@ -1,5 +1,6 @@
 package kr.co.shoulf.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -19,6 +20,7 @@ public class MoimHeadcount {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moim_no", nullable = false)
     @ToString.Exclude
+    @JsonIgnore
     private Moim moim;
 
     @ManyToOne(fetch = FetchType.LAZY)

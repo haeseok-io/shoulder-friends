@@ -43,9 +43,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                            <td th:text="${totalAnnualNum.memberAnnual.num}"></td>
-                            <td th:text="${totalAnnualNum.useNum}"></td>
-                            <td th:text="${totalAnnualNum.memberAnnual.num - totalAnnualNum.useNum}"></td>
+                    <tr th:each="result : ${totalAnnualNum}">
+                        <td th:text="${result.memberAnnual.num}"></td>
+                        <td th:text="${result.useNum}"></td>
+                        <td th:text="${result.memberAnnual.num - result.useNum}"></td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -81,6 +83,7 @@
 <!--                <input type="submit" value="연차 신청하기">-->
 <!--            </form>-->
             <button id="openPopup">연차 신청하기</button>
+            <button><a href="/annual/">연차 메인</a></button>
         </div>
     </div>
     <script>

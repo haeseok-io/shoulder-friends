@@ -25,11 +25,17 @@
                     <tr th:each="annualList : ${annualList}">
                         <td th:text="${annualList.type}"></td>
                         <td th:text="${annualList.num}"></td>
-                        <td th:text="${annualList.num - totalAnnualNum.useNum}"></td>
+                        <td th:text="${annualList.num - totalAnnualNum[0].useNum}"></td>
                         <td th:text="${annualList.reason}"></td>
                         <td th:text="${annualList.issueDate}"></td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4"></td>
+                        <td><a class="btn btn-primary" href="/annual/list">목록으로</a></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

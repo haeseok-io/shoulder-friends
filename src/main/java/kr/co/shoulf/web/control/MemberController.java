@@ -30,7 +30,6 @@ public class MemberController {
     @GetMapping("/")
     public String member(Model model) {
         List<Member> memberList = memberService.memberList();
-        System.out.println(memberList.get(0).getRole());
 
         // 각 회원의 studycafe 정보를 저장할 리스트
         List<List<Studycafe>> memberStudyCafesList = new ArrayList<>();

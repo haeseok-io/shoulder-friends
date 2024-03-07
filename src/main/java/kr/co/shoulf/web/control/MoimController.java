@@ -1,14 +1,16 @@
 package kr.co.shoulf.web.control;
 
-import kr.co.shoulf.web.dto.MoimDataRequestDTO;
-import kr.co.shoulf.web.dto.PageRequestDTO;
+import jakarta.transaction.Transactional;
+import kr.co.shoulf.web.dto.*;
 import kr.co.shoulf.web.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,13 +23,19 @@ public class MoimController {
     private final OnlineService onlineService;
     private final PositionService positionService;
 
-    @GetMapping(value = "/")
+    @GetMapping(value = {"/", "/list"})
     public String list(PageRequestDTO pageRequestDto, Model model){
         model.addAttribute("moimNewList", moimService.readNewList());
-        model.addAttribute("moimList", moimService.readMoimList(pageRequestDto));
-
+        model.addAttribute("positionList", positionService.readAll());
         return "moim/list";
     }
+
+    @GetMapping(value = "/list/json", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<PageResponseDTO<MoimDTO>> listJsonData(MoimListRequestDTO moimListRequestDTO) {
+        return ResponseEntity.ok().body(moimService.readMoimList(moimListRequestDTO));
+    }
+
 
     @GetMapping(value = "/write")
     public String write(Model model) {

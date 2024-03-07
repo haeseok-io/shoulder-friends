@@ -1,5 +1,6 @@
 package kr.co.shoulf.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,5 +21,6 @@ public class MoimProjectLink {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "moim_no", nullable = false)
     @ToString.Exclude
+    @JsonIgnore
     private Moim moim;
 }

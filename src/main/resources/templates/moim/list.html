@@ -3,10 +3,173 @@
       layout:decorate="~{fragment/layout(title='어깨동무 - 모임')}">
 
 <th:block layout:fragment="css">
-    <link rel="stylesheet" th:href="@{/css/moim/list.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+    <style>
+        .newMoim .moimNewList { display: flex; justify-content: space-between; }
+        .newMoim .moimNewList > li { display: flex; justify-content: space-between; align-items: center; width: calc(50% - 15px); border: 1px solid #ccc; border-radius: 10px; padding: 30px; cursor: pointer; }
+
+        .newMoim .moimNewList > li .thumbnail { width: 200px; height: 200px; border: 1px solid #ccc; border-radius: 10px; overflow: hidden; }
+        .newMoim .moimNewList > li .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+
+        .newMoim .moimNewList > li .wrap { width: calc(100% - 230px); }
+        .newMoim .moimNewList > li .wrap .label { display: flex; align-items: center; }
+        .newMoim .moimNewList > li .wrap .label .type { margin-right: 10px; }
+        .newMoim .moimNewList > li .wrap .label .category {}
+        .newMoim .moimNewList > li .wrap .label .like { margin-left: auto; color: #aaa; }
+
+        .newMoim .moimNewList > li .wrap .subject { margin-top: 20px; font-size: 1.3rem; font-weight: 600; color: #1F1926; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+        .newMoim .moimNewList > li .wrap .shortDesc { margin-top: 10px; font-size: 1.1rem; color: #888; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+        .newMoim .moimNewList > li .wrap .detailDesc { margin-top: 5px; font-size: .9rem; color: #888; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+
+        .newMoim .moimNewList > li .wrap .etc { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
+        .newMoim .moimNewList > li .wrap .etc .language {}
+        .newMoim .moimNewList > li .wrap .etc .language .languageList { display: flex; align-items: center; height: 50px; }
+        .newMoim .moimNewList > li .wrap .etc .language .languageList li {}
+        .newMoim .moimNewList > li .wrap .etc .language .languageList li .item { text-align: center; margin-right: 10px; }
+        .newMoim .moimNewList > li .wrap .etc .language .languageList li .item img { width: 30px; height: auto; }
+
+
+        .newMoim .moimNewList > li .wrap .etc .headcount { position: relative; }
+        .newMoim .moimNewList > li .wrap .etc .headcount .headcountToggle { display: flex; align-items: center; color: #aaa; }
+        .newMoim .moimNewList > li .wrap .etc .headcount .headcountToggle .toggleName { display: flex; margin-right: 10px; }
+        .newMoim .moimNewList > li .wrap .etc .headcount .headcountToggle .toggleName .totalApproval { position: relative; margin-left: 3px; margin-right: 6px; }
+        .newMoim .moimNewList > li .wrap .etc .headcount .headcountToggle .toggleName .totalApproval:after { position: absolute; top: 0; right: -6px; content: "/"; }
+
+        .newMoim .moimNewList > li .wrap .etc .headcount .headcountWrap { position: absolute; top: 130%; right: 0; z-index: 2; display: none; width: 150%; background: #fff; border: 1px solid #ccc; border-radius: 5px; padding: 10px; }
+        .newMoim .moimNewList > li .wrap .etc .headcount .headcountWrap ul {}
+        .newMoim .moimNewList > li .wrap .etc .headcount .headcountWrap ul li { display: flex; justify-content: space-between; align-items: center; font-size: .9rem; color: #888; }
+        .newMoim .moimNewList > li .wrap .etc .headcount .headcountWrap ul li .positionDetail {}
+        .newMoim .moimNewList > li .wrap .etc .headcount .headcountWrap ul li .participant { display: flex; }
+        .newMoim .moimNewList > li .wrap .etc .headcount .headcountWrap ul li .participant .approval { position: relative; margin-right: 6px; }
+        .newMoim .moimNewList > li .wrap .etc .headcount .headcountWrap ul li .participant .approval:after { position: absolute; top: 0; right: -6px; content: "/"; }
+
+        .newMoim .moimNewList > li .wrap .etc .headcount .headcountToggle:hover + .headcountWrap { display: block; }
+
+        .moim {}
+        .moim .search {}
+        .moim .search form { display: flex; justify-content: flex-start; align-items: center; }
+    </style>
 </th:block>
 <th:block layout:fragment="js">
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(() => {
+            callList();
 
+            // 직무 대분류 선택
+            $("select[name='positionNo']").change(e => {
+                let positionNo = $(e.currentTarget).val();
+                let positionDetail = $("select[name='positionDetailNo']");
+
+                // 기존 중분류 옵션 제거
+                positionDetail.find("option").remove();
+
+                // 직무 중분류 추가
+                if( positionNo ) {
+                    positionDetail.append(`<option value="">직무 중분류 전체</option>`);
+
+                    $.get(`/position/${positionNo}/detail`, data => {
+                        data.forEach(detail => {
+                            positionDetail.append(`<option value="${detail.positionDetailNo}">${detail.middleName}</option>`);
+                        })
+                    }, 'json');
+                } else {
+                    positionDetail.append(`<option value="">대분류를 선택해주세요.</option>`)
+                }
+
+
+            });
+
+        });
+
+
+        // 리스트 조회
+        function callList(page) {
+            let form = $("form[name='searchForm']");
+            let thumbnailPath = "https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png";
+            let appendSel = $(".moim .content .moimList");
+            let appendHtml = $("#moimListTemplate").html();
+
+            appendSel.empty();
+
+            if( !page )     $("input[name='page']", form).val(1);
+
+            $.ajax({
+                type: "get",
+                url: "/moim/list/json",
+                data: form.serialize(),
+                dataType: "json",
+                success: data => {
+                    if( data.total===0 ) {
+
+                    } else {
+                        data.dataList.forEach(obj => {
+                            let append = $(appendHtml);
+
+                            // 타입명
+                            let typeName = obj.type=="project" ? "프로젝트" : "스터디";
+
+                            // 썸네일 이미지 조정 ( 이미지가 없을경우 기본 이미지로 대체 )
+                            if( obj.moimDetail.moimImg!="" && obj.moimDetail.moimImg!=thumbnailPath ) {
+                                thumbnailPath = "/upload/moim/"+obj.moimDetail.moimImg;
+                            }
+
+                            // 카테고리명
+                            let categoryName = obj.type=="project" ? obj.moimDetail.category.categoryName : obj.moimDetail.studyCategory
+                        .studyCategoryName;
+
+                            // 데이터 담기
+                            append.find(".thumbnail img").attr("src", thumbnailPath);
+                            append.find(".category span").text(categoryName);
+                            append.find(".etc .type span").addClass("badge-"+obj.type).text(typeName);
+                            append.find(".etc .like span").text(obj.likeList.length);
+                            append.find(".subject").text(obj.subject);
+                            append.find(".desc").text(obj.shortDesc);
+                            append.find(".totalApproval").text(obj.headcountList.reduce((sum, o) => sum + o.participantApprovalList.length, 0));
+                            append.find(".totalPersonnel").text(obj.headcountList.reduce((sum, o) => sum + o.personnel, 0));
+
+                            // 사용언어
+                            let languageSel = append.find(".languageList");
+                            let languageHtml = languageSel.html();
+                            languageSel.html('');
+                            obj.languageList.forEach(language => {
+                                let languageAppend = $(languageHtml);
+
+                                if( language.path )     languageAppend.find(".item").append("<img src='"+language.path+"' alt='"+language.name+"'>");
+                                else                    languageAppend.find(".item").append("<span class='badge rounded-pill text-bg-secondary'>"+language.name+"</span>")
+
+                                languageSel.append(languageAppend);
+                            });
+
+                            // 모집 인원
+                            let headcountSel = append.find(".headcountWrap ul");
+                            let headcountHtml = headcountSel.html();
+                            headcountSel.html('');
+                            obj.headcountList.forEach(headcount => {
+                                let headcountAppend = $(headcountHtml);
+
+                                if( headcount.positionDetail!=null ) {
+                                    headcountAppend.find(".positionDetail p").text(headcount.positionDetail.middleName);
+                                } else {
+                                    headcountAppend.find(".positionDetail p").text("누구나 참여가능");
+                                }
+
+                                headcountAppend.find(".approval").text(headcount.participantApprovalList.length);
+                                headcountAppend.find(".personnel").text(headcount.personnel);
+
+                                headcountSel.append(headcountAppend);
+                            });
+
+                            appendSel.append(append);
+                        })
+                    }
+                }
+            });
+
+            // form 제출 막기
+            return false;
+        }
+    </script>
 </th:block>
 
 <th:block layout:fragment="container">
@@ -48,7 +211,6 @@
                                 </div>
                                 <p class="subject">[[${data.subject}]]</p>
                                 <p class="shortDesc">[[${data.shortDesc}]]</p>
-                                <p class="detailDesc">[[${data.moimDetail.detailDesc}]]</p>
                                 <div class="etc">
                                     <div class="language">
                                         <ul class="languageList">
@@ -77,7 +239,8 @@
                                             <ul>
                                                 <li th:each="headcount : ${data.headcountList}">
                                                     <div class="positionDetail">
-                                                        <p>[[${headcount.positionDetail.middleName}]]</p>
+                                                        <p th:if="${headcount.positionDetail}">[[${headcount.positionDetail.middleName}]]</p>
+                                                        <p th:unless="${headcount.positionDetail}">누구나 가능</p>
                                                     </div>
                                                     <div class="participant">
                                                         <div class="approval">[[${headcount.participantApprovalList.size()}]]</div>
@@ -102,13 +265,44 @@
                     </div>
                 </div>
                 <div class="search">
+                    <form name="searchForm" onsubmit="return callList();">
+                        <input type="hidden" name="pageRequestDTO.page" value="1">
+                        <input type="hidden" name="pageRequestDTO.scale" value="12">
+
+                        <div class="cate">
+                            <select name="type" onchange="callList();">
+                                <option value="">모집 전체</option>
+                                <option value="project">프로젝트</option>
+                                <option value="study">스터디</option>
+                            </select>
+                        </div>
+                        <div class="position">
+                            <select name="positionNo" onchange="callList();">
+                                <option value="">직무 대분류 전체</option>
+                                <option th:each="position : ${positionList}" th:value="${position.positionNo}">[[${position.bigName}]]</option>
+                            </select>
+                        </div>
+                        <div class="positionDetail">
+                            <select name="positionDetailNo" onchange="callList();">
+                                <option value="">대분류를 선택해주세요.</option>
+                            </select>
+                        </div>
+                        <div class="searchField">
+                            <input type="text" name="keyword" placeholder="ex) 프로젝트 및 스터디명, 분야, 사용언어">
+                            <button type="submit">검색</button>
+                        </div>
+                    </form>
                 </div>
                 <div class="content">
-                    <th:block th:replace="fragment/moimList :: moimList(templateData=${moimList.dataList})"></th:block>
+                    <ul class="moimList"></ul>
                 </div>
             </div>
         </div>
     </main>
+
+    <template id="moimListTemplate">
+        <th:block th:replace="fragment/moimList :: moimList"></th:block>
+    </template>
 </th:block>
 
 </html>

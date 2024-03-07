@@ -12,7 +12,7 @@ import lombok.*;
 public class PositionDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer PositionDetailNo;
+    private Integer positionDetailNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_no", nullable = false)

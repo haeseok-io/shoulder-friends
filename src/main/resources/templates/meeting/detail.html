@@ -1,10 +1,290 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/layout}">
 
-</body>
+<th:block layout:fragment="css">
+    <style>
+        #calendar {
+            max-width: 1400px;
+            min-height: 500px;
+            margin: 0 auto;
+        }
+        #addCalendar{
+            background-color: #7B27FF;
+            color: white;
+        }
+        #btnn{
+            background-color: #7B27FF;
+        }
+    </style>
+</th:block>
+
+<th:block layout:fragment="js">
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- bootstrap 4 -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- fullcalendar -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js"></script>
+
+
+    <script type="text/javascript">
+
+        function opencafe() {
+            let moimNo = $("#moimNo").val(); // 모임 번호 가져오기
+            let checkin = $("#calendar_start_date").val(); // 체크인 날짜 가져오기
+            let start_date = $("#calendar_start_date").val();
+
+            var collapseElement = document.getElementById('collapseExample');
+            var isCollapsed = collapseElement.classList.contains('show');
+            if (isCollapsed) {
+                collapseElement.classList.remove('show');
+            } else {
+                collapseElement.classList.add('show');
+            }
+
+            if (start_date == "") {
+                alert("날짜를 입력하세요.");
+            }else {
+                // 새 창 열기
+                window.open("/meeting/cafelist?checkin=" + checkin + "&moimNo=" + moimNo, "Studycafe", "top=50, left=250, width=1500, height=900");
+            }
+        }
+        $(()=>{
+            window.addEventListener('message',function (event){
+                let jsonData = JSON.parse(event.data);
+                let cafe_name = $("#studycafename");
+                let room_name = $("#studyroomname");
+                let prices = $("#price");
+                cafe_name.val(jsonData.cafename);
+                room_name.val(jsonData.roomname);
+                prices.val(jsonData.price);
+                $("#studycafeNo").val(jsonData.cafeno);
+                $("#studyroomNo").val(jsonData.roomno);
+                $("#calendar_addr").val(jsonData.addrs);
+            })
+        })
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            let moimNos = $("#moimNo").val();
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                timeZone: 'UTC',
+                initialView: 'dayGridMonth',
+                eventSources: [{
+                    events: function(info, successCallback, failureCallback) {
+                        $.ajax({
+                            url: "/meeting/meeting_ajax",
+                            method: "GET",
+                            dataType: 'json',
+                            data:{
+                                moimNo: moimNos
+                            },
+                            success: function(data) {
+                                let events = [];
+                                if (data.length === 0) {
+                                    events.push({
+                                        title: '어깨동무',
+                                        start: '1996-11-02',
+                                        end: '1996-11-02'
+                                    })
+                                } else {
+                                    data.forEach(function (eventData) {
+                                        events.push({
+                                            title: eventData.title,
+                                            start: eventData.start,
+                                            end: eventData.end,
+                                            description: eventData.description,
+                                            color: eventData.color
+                                        });
+                                    });
+                                    successCallback(events);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                alert("오류발생 새로고침 해주세요");
+                            }
+                        });
+                    }
+                }],
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'addEventButton' // headerToolbar에 버튼을 추가
+                }, customButtons: {
+                    addEventButton: { // 추가한 버튼 설정
+                        text : "미팅 등록",  // 버튼 내용
+                        click : function(){ // 버튼 클릭 시 이벤트 추가
+                            $("#calendarModal").modal("show"); // modal 나타내기
+
+                            $("#addCalendar").on("click",function(){  // modal의 추가 버튼 클릭 시
+                                let content = $("#calendar_content").val();
+                                let start_date = $("#calendar_start_date").val();
+                                let addr = $("#calendar_addr").val();
+                                let studycafeNo = $("#studycafeNo").val();
+                                let studyroomNo = $("#studyroomNo").val();
+                                let price = $("#price").val();
+                                let start_time = $("#start_time").val();
+                                let moimNo = $("#moimNo").val();
+
+                                //내용 입력 여부 확인
+                                if(content == null || content == ""){
+                                    alert("내용을 입력하세요.");
+                                }else if(addr == ""){
+                                    alert("주소를 입력하세요.");
+                                }else if(start_date == ""){
+                                    alert("날짜를 입력하세요.");
+                                }else{
+                                    let obj = {
+                                        "title" : content,
+                                        "startDate" : start_date,
+                                        "endDate" : start_date,
+                                        "addr" : addr,
+                                        "studycafeNo":studycafeNo,
+                                        "studyroomNo":studyroomNo,
+                                        "price":price,
+                                        "startTime":start_time,
+                                        "moimNo":moimNo
+                                    }//전송할 객체 생성
+
+                                    let meetingOnly = {
+                                        "title" : content,
+                                        "startDate" : start_date,
+                                        "endDate" : start_date,
+                                        "addr" : addr,
+                                        "startTime":start_time,
+                                        "moimNo":moimNo
+                                    }//전송할 객체 생성
+
+                                    if(studycafeNo == '' || studycafeNo == null){
+
+                                        $.ajax({
+                                            url: "/meeting/write",
+                                            method: "POST",
+                                            contentType: "application/json",
+                                            data: JSON.stringify(meetingOnly),
+                                            success: function(response) {
+                                                console.log(response);
+                                                $("#calendarModal").modal("hide");
+                                                location.reload();
+                                            },
+                                            error: function(xhr, status, error) {
+                                                alert("오류발생 다시 시도해주세요");
+                                                console.log(error);
+                                            }
+                                        });
+
+                                    }else{
+                                        console.log("결제창 켜야해");
+                                    }
+                                }
+                            });
+
+                            $("#sprintSettingModalClose").on("click",function(){
+                                $("#calendarModal").modal("hide");
+                            })
+                        }
+                    }
+                },
+                editable: true, // false로 변경 시 draggable 작동 x
+                displayEventTime: false // 시간 표시 x
+            });
+            calendar.render();
+
+            calendar.on('dateClick', function(info) {
+                console.log("하하하");
+            });
+
+        });
+    </script>
+</th:block>
+
+<th:block layout:fragment="container">
+    <main>
+        <div class="container">
+            <h2>미팅내용</h2>
+            <input type="hidden" name="moimNo" id="moimNo" th:value="${moimNo}">
+            <div id="calendarBox">
+                <div id="calendar"></div>
+            </div>
+            <!-- modal 추가 -->
+            <div class="modal fade" id="calendarModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">미팅을 추가하세요.</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="calendar_content" class="col-form-label">미팅 내용</label>
+                                <input type="text" class="form-control" id="calendar_content" name="calendar_content">
+                                <label for="calendar_addr" class="col-form-label">미팅 주소</label>
+                                <input type="text" class="form-control" id="calendar_addr" name="calendar_addr">
+                                <label for="calendar_start_date" class="col-form-label">미팅 날짜</label>
+                                <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
+                            </div>
+                            <div class="form-group">
+                                <label for="start_time">시작시간</label>
+                                <select class="form-control" id="start_time" name="start_time">
+                                    <option value="09:00:00">09:00</option>
+                                    <option value="09:30:00">09:30</option>
+                                    <option value="10:00:00">10:00</option>
+                                    <option value="10:30:00">10:30</option>
+                                    <option value="11:00:00">11:00</option>
+                                    <option value="11:30:00">11:30</option>
+                                    <option value="12:00:00">12:00</option>
+                                    <option value="12:30:00">12:30</option>
+                                    <option value="13:00:00">13:00</option>
+                                    <option value="13:30:00">13:30</option>
+                                    <option value="14:00:00">14:00</option>
+                                    <option value="14:30:00">14:30</option>
+                                    <option value="15:00:00">15:00</option>
+                                    <option value="15:30:00">15:30</option>
+                                    <option value="16:00:00">16:00</option>
+                                    <option value="16:30:00">16:30</option>
+                                    <option value="17:00:00">17:00</option>
+                                    <option value="17:30:00">17:30</option>
+                                    <option value="18:00:00">18:00</option>
+                                    <option value="18:30:00">18:30</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="btnn" class="col-form-label">어깨동무 스터디룸</label>
+                                <p class="d-inline-flex gap-1">
+                                    <button class="btn btn-secondary" id="btnn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onclick="opencafe();">
+                                        이용하기
+                                    </button>
+                                </p>
+                                <div class="collapse show" id="collapseExample">
+                                    <div class="card card-body">
+                                        <label for="calendar_content" class="col-form-label">스터디 카페 지점</label>
+                                        <input type="text" class="form-control" id="studycafename" name="studycafename" readonly>
+                                        <label for="calendar_content" class="col-form-label">스터디 룸</label>
+                                        <input type="text" class="form-control" id="studyroomname" name="studyroomname" readonly>
+                                        <label for="calendar_content" class="col-form-label">가격</label>
+                                        <input type="text" class="form-control" id="price" name="price" readonly>
+                                        <input type="hidden" name="studycafeNo" id="studycafeNo">
+                                        <input type="hidden" name="studyroomNo" id="studyroomNo">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn" id="addCalendar">추가</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="sprintSettingModalClose">취소</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</th:block>
+
 </html>
