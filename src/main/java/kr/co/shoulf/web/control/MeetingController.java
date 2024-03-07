@@ -3,6 +3,7 @@ package kr.co.shoulf.web.control;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.co.shoulf.web.dto.MeetingDTO;
+import kr.co.shoulf.web.dto.ReservPaymentDTO;
 import kr.co.shoulf.web.service.MeetingService;
 import kr.co.shoulf.web.service.StudyService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class MeetingController {
     public void detail(Model model, @RequestParam Long moimNo){
         model.addAttribute("meetinglist", meetingService.meetingList(moimNo));
         model.addAttribute("moimNo", moimNo);
+        model.addAttribute("userList", meetingService.getUsers(moimNo));
     }
 
     //카페 목록 페이지로 이동
@@ -58,6 +60,22 @@ public class MeetingController {
     @PostMapping("/write")
     public ResponseEntity<String> write(@RequestBody MeetingDTO meetingDTO){
         meetingService.writeMeeting(meetingDTO);
-        return ResponseEntity.ok("전송성공");
+        return ResponseEntity.ok(" ");
     }
+
+    //미팅 일반 결제 예약 결제 저장
+    @PostMapping("/reservPayment")
+    public ResponseEntity<String> reservPayment(@RequestBody ReservPaymentDTO reservPaymentDTO){
+        System.out.println(reservPaymentDTO);
+        meetingService.writeReservPayment(reservPaymentDTO);
+        return ResponseEntity.ok(" ");
+    }
+
+    //미팅 정보로 스터디룸 정보 보내기
+    @GetMapping("/ckeckmeeting")
+    public @ResponseBody Map<String,Object> ckeckmeeting(@RequestBody MeetingDTO meetingDTO){
+        System.out.println(meetingDTO);
+        return meetingService.getStudyroom(meetingDTO);
+    }
+
 }
