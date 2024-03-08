@@ -6,10 +6,12 @@ import kr.co.shoulf.web.dto.ReservPaymentDTO;
 import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
+import java.security.Principal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -41,7 +43,7 @@ public class MeetingService {
 
         List<Map<String, Object>> eventList = new ArrayList<Map<String, Object>>();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         meetingList.forEach(meeting -> {
             Map<String, Object> event = new HashMap<String, Object>(); // 맵 객체를 반복문 내에서 생성
@@ -75,18 +77,19 @@ public class MeetingService {
     }
 
     //모임번호로 등록 회원 정보 가져오기
-    public Users getUsers(Long moimNo) {
-        Optional<Moim> result = moimRepository.findById(moimNo);
-        Moim moim = result.orElseThrow();
-        Optional<Users> userResult = userRepository.findById(moim.getUsers().getUserNo());
-        Users users = userResult.orElseThrow();
+    public Users getUsers(Authentication authentication) {
+//        Optional<Moim> result = moimRepository.findById(moimNo);
+//        Moim moim = result.orElseThrow();
+        Users users = (Users) authentication.getPrincipal();
         return users;
     }
 
     //일반 결제 미팅 예약 결제 등록
-    public void writeReservPayment(ReservPaymentDTO reservPaymentDTO) {
-        Optional<Users> userss = userRepository.findById(reservPaymentDTO.getUserNo());
-        Users users = userss.orElseThrow();
+    public void writeReservPayment(ReservPaymentDTO reservPaymentDTO, Authentication authentication) {
+//        Optional<Users> userss = userRepository.findById(reservPaymentDTO.getUserNo());
+//        Users users = userss.orElseThrow();
+
+        Users users = (Users) authentication.getPrincipal();
 
         String meetingDate = reservPaymentDTO.getStartDate() + " " + reservPaymentDTO.getStartTime();
 
@@ -138,31 +141,33 @@ public class MeetingService {
     public Map<String, Object> getStudyroom(MeetingDTO meetingDTO) {
         String startDate = meetingDTO.getStartDate();
 
-        System.out.println(startDate);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        Date date;
+        java.util.Date utilDate = null;
         try {
-            date = (Date) sdf.parse(startDate);
+            utilDate = sdf.parse(startDate);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+        java.sql.Timestamp timestamp = new java.sql.Timestamp(utilDate.getTime());
 
-        System.out.println(date);
+        Meeting meeting = meetingRepository.findByMeetDateAndMoim_MoimNo(timestamp, meetingDTO.getMoimNo());
 
-        Meeting meeting = meetingRepository.findByMeetDateAndMoim_MoimNo(date, meetingDTO.getMoimNo());
+        Map<String, Object> event = null;
 
         Reservation reservation = reservationRepository.findByMeeting_MeetingNo(meeting.getMeetingNo());
 
-        Optional<Studyroom> result = studyroomRepository.findById(reservation.getStudyroom().getStudyroomNo());
-        Studyroom studyroom = result.orElseThrow();
+        if (reservation != null) {
 
-        Optional<Studycafe> result2 = studycafeRepository.findById(studyroom.getStudyroomNo());
-        Studycafe studycafe = result2.orElseThrow();
+            Studyroom studyroom = reservation.getStudyroom();
 
-        Map<String, Object> event = new HashMap<String, Object>();
-        event.put("studycafeName", studycafe.getName());
-        event.put("studyroomName", studyroom.getName());
+            Studycafe studycafe = studyroom.getStudycafe();
+
+            event = new HashMap<String, Object>();
+            event.put("studycafeName", studycafe.getName());
+            event.put("studyroomName", studyroom.getName());
+
+        }
 
         return event;
     }

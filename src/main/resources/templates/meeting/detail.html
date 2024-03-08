@@ -4,17 +4,95 @@
 
 <th:block layout:fragment="css">
     <style>
-        #calendar {
-            max-width: 1400px;
-            min-height: 500px;
-            margin: 0 auto;
-        }
         #addCalendar, #modifyCalendar{
             background-color: #7B27FF;
             color: white;
         }
         #btnn{
-            background-color: #7B27FF;
+            background-color: #4E3C62;
+            width: 80px;
+            font-size: 14px;
+            margin-left: 20px;
+            padding: 7px 0;
+            border: none;
+        }
+        .fc .fc-button-primary{
+            background-color: #4E3C62 !important;
+            box-shadow: none !important;
+        }
+        .fc .fc-button{
+            border: none !important;
+        }
+        .fc-direction-ltr .fc-button-group>.fc-button:not(:last-child), .fc-direction-ltr .fc-button-group>.fc-button:not(:first-child){
+            padding: 5px 5px !important;
+            background: none !important;
+            box-shadow: none !important;
+            color: #595959 !important;
+            font-size: 18px !important;
+        }
+        .fc-direction-ltr .fc-button-group>.fc-button:not(:last-child):hover, .fc-direction-ltr .fc-button-group>.fc-button:not(:first-child):hover{
+            color: #999999 !important;
+        }
+        .fc-direction-ltr .fc-toolbar>*>:not(:first-child){
+            border: none !important;
+            color: black !important;
+            font-size: 18px !important;
+            font-weight: 500 !important;
+            background: none !important;
+            box-shadow: none !important;
+        }
+        .fc-direction-ltr .fc-toolbar>*>:not(:first-child):hover{
+            color: #999999 !important;
+        }
+        .fc-daygrid-dot-event .fc-event-title{
+            font-size: 1rem !important;
+            font-weight: 400 !important;
+        }
+        .fc-daygrid-event-dot{
+            display: none !important;
+        }
+        .fc-daygrid-dot-event .fc-event-title{
+            background-color: #7B27FF !important;
+            color: white !important;
+            border-radius: 2px !important;
+            padding: 0 8px !important;
+        }
+        .fc .fc-toolbar-title{
+            font-size: 30px !important;
+        }
+        input[type="text"]{
+            border-radius: 4px !important;
+        }
+        input[type="text"], input[type="radio"],input[type="date"], #start_time{
+            margin-bottom: 10px;
+        }
+        input[type="text"]:focus, input[type="radio"]:focus,input[type="date"]:focus, #start_time:focus, button[type="button"]:focus{
+            border: 1px solid #CCCCCC;
+            box-shadow: none !important;
+        }
+        #btncard{
+            color:black;
+            background-color: white;
+            padding: 5px 5px;
+            margin-left: 8px;
+            font-size: 15px;
+        }
+        #btnkakao{
+            color:black;
+            background-color: white;
+            padding: 5px 5px;
+            margin-left: 70px;
+            font-size: 15px;
+        }
+        #btnnaver{
+            color:black;
+            background-color: white;
+            padding: 5px 5px;
+            margin-left: 70px;
+            font-size: 15px;
+        }
+        #paymentRadio:checked{
+            border-color: #4E3C62;
         }
     </style>
 </th:block>
@@ -58,34 +136,6 @@
                 // 새 창 열기
                 window.open("/meeting/cafelist?checkin=" + checkin + "&moimNo=" + moimNo, "Studycafe", "top=50, left=250, width=1500, height=900");
             }
-        }
-
-        function timetostring(date){
-            let m = date.getHours();
-            let s = date.getMinutes();
-
-            if(m<10){m='0'+m} if(s<10){s='0'+s}
-            m = m.toString();
-            s = s.toString();
-
-            let s1 = m+":"+s;
-            return s1;
-        }
-
-        function datetostring(date){
-            let month = date.getMonth() + 1;
-            let day = date.getDate();
-            let hour = date.getHours();
-            let minute = date.getMinutes();
-            let second = date.getSeconds();
-
-            month = month >= 10 ? month : '0' + month;
-            day = day >= 10 ? day : '0' + day;
-            hour = hour >= 10 ? hour : '0' + hour;
-            minute = minute >= 10 ? minute : '0' + minute;
-            second = second >= 10 ? second : '0' + second;
-
-            return date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
         }
 
         $(()=>{
@@ -139,7 +189,7 @@
                                             start: eventData.start,
                                             end: eventData.end,
                                             description: eventData.description,
-                                            color: eventData.color
+                                            color: eventData.color,
                                         });
                                     });
                                     successCallback(events);
@@ -154,36 +204,35 @@
                 eventClick: function (info, jsEvent, view){
                     $("#cafeonly").hide();
                     $("#content").val(info.event.title);
-                    $("#start_date").val(info.event.startStr);
+                    $("#start_date").val((info.event.startStr).substring(0, (info.event.startStr).indexOf("T")));
                     $("#addr").val(info.event._def.extendedProps.description);
-                    $("#time").val(timetostring(info.event.start))
+                    $("#time").val((info.event.startStr).substring(((info.event.startStr).indexOf("T"))+1, (info.event.startStr).lastIndexOf(':')));
                     let moimNo = $("#moimNo").val();
-
-                    let obj = {
-                        moimNo : moimNo,
-                        startDate : datetostring(info.event.start)
-                    };
 
                     $.ajax({
                         url:"/meeting/ckeckmeeting",
                         method: "GET",
-                        contentType: "application/json",
-                        data: JSON.stringify(obj),
+                        data: {
+                            moimNo : moimNo,
+                            startDate : $("#start_date").val()+" "+$("#time").val()+":00"
+                        },
                         success: function(response) {
                             if(response){
-                                console.log(response);
+                                $("#cafename").val(response.studycafeName);
+                                $("#roomname").val(response.studyroomName);
+
+                                $("#cafeonly").show();
                             }else {
-                                console.log("데이터 없음");
+
                             }
                         },
                         error: function(xhr, status, error) {
                             alert("오류발생 다시 시도해주세요");
                             console.log(error);
                         }
-                    })
+                    });
 
                     $("#ckeckmodal").modal("show");
-                    console.log(info);
 
                     return false;
                 },
@@ -208,10 +257,13 @@
                                 //내용 입력 여부 확인
                                 if(content == null || content == ""){
                                     alert("내용을 입력하세요.");
+                                    return;
                                 }else if(addr == ""){
                                     alert("주소를 입력하세요.");
+                                    return;
                                 }else if(start_date == ""){
                                     alert("날짜를 입력하세요.");
+                                    return;
                                 }else{
 
                                     let meetingOnly = {
@@ -248,20 +300,21 @@
 
                                         if(name === "" || name === null){
                                             alert("이름을 입력해주세요");
+                                            return;
                                         }else if(phone === "" || phone === null){
                                             alert("전화번호를 입력해주세요");
+                                            return;
                                         }else {
                                             //결제 선택에 따라서 결제창 다르게 띄우기
                                             if (checkPayment === "1") {
-                                                let message = requestPay();
                                                 console.log("일반결제");
-                                                requestPay();
-                                                if(message === "성공") {
+
+                                                if (requestPay()) {
                                                     $("#calendarModal").modal("hide");
                                                     location.reload();
-                                                }else {
-                                                    alert("결제를 다시 시도해주세요")
+                                                    console.log("성공성공임");
                                                 }
+
                                             } else if (checkPayment === "2") {
                                                 console.log("카카오 페이");
                                             } else if (checkPayment === "3") {
@@ -274,6 +327,7 @@
 
                             $("#sprintSettingModalClose").on("click",function(){
                                 $("#calendarModal").modal("hide");
+                                location.reload();
                             })
                         }
                     }
@@ -289,7 +343,7 @@
         function requestPay() {
             IMP.init('imp06672844');
 
-            let message = "실패";
+            let message;
             let price = $("#price").val();
             let studycafename = $("#studycafename").val();
             let name = $("#name").val();
@@ -325,60 +379,52 @@
 
                     console.log(msg);
 
-                    let reservPayments = {
-                        "approvalNum" : rsp.merchant_uid,
-                        "cardNum" : rsp.card_number,
-                        "name" : name,
-                        "productName":studycafename,
-                        "email":email,
-                        "price":price,
-                        "checkin":checkin,
-                        "userNo":userNo,
-                        "moimNo":moimNo,
-                        "studyroomNo":studyroomNo,
-                        "title" : content,
-                        "startDate" : start_date,
-                        "endDate" : start_date,
-                        "addr" : addr,
-                        "startTime":start_time,
-                    }//전송할 객체 생성
-
                     $.ajax({
                         url: "/meeting/reservPayment",
                         method: "POST",
-                        contentType: "application/json",
-                        data: JSON.stringify(reservPayments),
+                        data: {
+                            "approvalNum" : rsp.merchant_uid,
+                            "cardNum" : rsp.card_number,
+                            "name" : name,
+                            "productName":studycafename,
+                            "email":email,
+                            "price":price,
+                            "checkin":checkin,
+                            "userNo":userNo,
+                            "moimNo":moimNo,
+                            "studyroomNo":studyroomNo,
+                            "title" : content,
+                            "startDate" : start_date,
+                            "endDate" : start_date,
+                            "addr" : addr,
+                            "startTime":start_time
+                        },
                         success: function(response) {
-                            console.log(response);
+                            console.log("저장 성공 : "+response);
+                            alert("예약이 완료되었습니다.");
+                            message = true;
+                            return message;
                         },
                         error: function(xhr, status, error) {
                             alert("정보 저장 실패 다시 시도해주세요");
                             console.log(error);
-                            rsp.success == false;
+                            rsp.success = false;
                         }
                     });
-
-                    alert("예약이 완료되었습니다.");
-                    message = "성공";
-                    return message;
 
                 } else {
                     var msg = '결제에 실패하였습니다.';
                     msg += '에러내용 : ' + rsp.error_msg;
                     alert(msg);
                 }
-
             });
-
-            return message;
         }
     </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
-        <div class="container">
-            <h2>미팅내용</h2>
+        <div class="container" style="margin-top: 80px; margin-bottom: 80px;">
             <input type="hidden" name="moimNo" id="moimNo" th:value="${moimNo}">
             <div id="calendarBox">
                 <div id="calendar"></div>
@@ -388,7 +434,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">미팅을 추가하세요.</h5>
+                            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: 500;font-size: 1.4rem;">미팅을 추가하세요.</h5>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
@@ -443,13 +489,13 @@
                                             <label for="paymentRadio" class="col-form-label" style="font-size: 17px;font-weight: 600;">결제 방법 선택</label>
                                             <div id="paymentRadio">
                                                 <input type="radio" class="btn-check" name="options" id="option1" value="1" autocomplete="off" checked>
-                                                <label class="btn btn-secondary" for="option1">일반 결제</label>
+                                                <label class="btn btn" id="btncard" for="option1">일반 결제</label>
 
                                                 <input type="radio" class="btn-check" name="options" id="option2" value="2" autocomplete="off">
-                                                <label class="btn btn-secondary" for="option2">카카오 페이</label>
+                                                <label class="btn btn" id="btnkakao" for="option2">카카오 페이</label>
 
                                                 <input type="radio" class="btn-check" name="options" id="option3" value="3" autocomplete="off">
-                                                <label class="btn btn-secondary" for="option3">네이버 페이</label>
+                                                <label class="btn btn" id="btnnaver" for="option3">네이버 페이</label>
                                             </div>
                                         </div>
                                         <div id="paymentName">
@@ -469,7 +515,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn" id="addCalendar">추가</button>
+                            <button type="button" class="btn btn" id="addCalendar">등록</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="sprintSettingModalClose">취소</button>
                         </div>
                     </div>
@@ -480,7 +526,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">미팅 상세</h5>
+                            <h5 class="modal-title" style="font-weight: 500;font-size: 1.4rem;">미팅 상세</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -503,7 +549,7 @@
                             <div class="form-group" id="cafeonly">
                                 <label for="cafename" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 카페</label>
                                 <input type="text" class="form-control-plaintext" id="cafename" name="cafename" readonly style="border:none;">
-                                <label for="roomname" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 룸</label>
+                                <label for="roomname" class="col-form-label" style="font-size: 17px;font-weight: 600;margin-top: 16px;">스터디 룸</label>
                                 <input type="text" class="form-control-plaintext" id="roomname" name="roomname" readonly style="border:none;">
                             </div>
                         </div>
