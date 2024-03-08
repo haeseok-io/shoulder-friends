@@ -1,13 +1,19 @@
 package kr.co.shoulf.web.service;
 
 import jakarta.transaction.Transactional;
+import kr.co.shoulf.web.dto.KakaopayDTO;
 import kr.co.shoulf.web.dto.MeetingDTO;
 import kr.co.shoulf.web.dto.ReservPaymentDTO;
 import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
@@ -23,6 +29,8 @@ import java.util.*;
 @RequiredArgsConstructor
 @Transactional
 public class MeetingService {
+    private static final String cid = "TC0ONETIME"; // 가맹점 테스트 코드
+    private static final String admin_Key = "DEV7E26398A88DF32D8A3C6C7C9D84D93C607D91"; // 공개 조심! 본인 애플리케이션의 어드민 키를 넣어주세요
     private final MoimRepository moimRepository;
     private final MeetingRepository meetingRepository;
     private final ReservationRepository reservationRepository;
@@ -30,6 +38,7 @@ public class MeetingService {
     private final UserRepository userRepository;
     private final StudyroomRepository studyroomRepository;
     private final StudycafeRepository studycafeRepository;
+    private KakaopayDTO kakaopayDTO;
 
     //모임번호로 미팅 리스트 불러오기
     public List<Meeting> meetingList(Long moimNo) {
@@ -170,5 +179,66 @@ public class MeetingService {
         }
 
         return event;
+    }
+
+    public KakaopayDTO kakaoPay(ReservPaymentDTO reservPaymentDTO) {
+        // 카카오페이 요청 양식
+        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+        parameters.add("cid", cid);
+        parameters.add("partner_order_id", "가맹점 주문 번호");
+        parameters.add("partner_user_id", "가맹점 회원 ID");
+        parameters.add("item_name", reservPaymentDTO.getProductName());
+        parameters.add("quantity", "1");
+        parameters.add("total_amount", String.valueOf(reservPaymentDTO.getPrice()));
+        parameters.add("approval_url", "http://localhost:8081/meeting/kakaosuccess"); // 성공 시 redirect url
+        parameters.add("cancel_url", "http://localhost:8081/meeting/kakaocancel"); // 취소 시 redirect url
+        parameters.add("fail_url", "http://localhost:8081/meeting/kakaofail"); // 실패 시 redirect url
+
+        // 파라미터, 헤더
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
+
+        // 외부에 보낼 url
+        RestTemplate restTemplate = new RestTemplate();
+
+        kakaopayDTO = restTemplate.postForObject(
+                "https://kapi.kakao.com/v1/payment/ready",
+                requestEntity,
+                KakaopayDTO.class);
+
+        return kakaopayDTO;
+    }
+
+    private HttpHeaders getHeaders() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+
+        String auth = "KakaoAK " + admin_Key;
+
+        httpHeaders.set("Authorization", auth);
+        httpHeaders.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        return httpHeaders;
+    }
+
+    public KakaopayDTO approveResponse(String pgToken) {
+        // 카카오 요청
+        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+        parameters.add("cid", cid);
+        parameters.add("tid", kakaopayDTO.getTid());
+        parameters.add("partner_order_id", "가맹점 주문 번호");
+        parameters.add("partner_user_id", "가맹점 회원 ID");
+        parameters.add("pg_token", pgToken);
+
+        // 파라미터, 헤더
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
+
+        // 외부에 보낼 url
+        RestTemplate restTemplate = new RestTemplate();
+
+        KakaopayDTO approveResponse = restTemplate.postForObject(
+                "https://kapi.kakao.com/v1/payment/approve",
+                requestEntity,
+                KakaopayDTO.class);
+
+        return approveResponse;
     }
 }
