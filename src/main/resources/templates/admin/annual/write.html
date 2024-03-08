@@ -13,17 +13,20 @@
     <div class="content">
         <form id="annualForm" action="/annual/writeOk" method="post">
             <span>연차선택
-                <select name="annualNo" th:each="annualDetailList : ${annualDetailList}">
-                    <option th:value="${annualDetailList.memberAnnual.annualNo}"
-                            th:if="${annualDetailList.memberAnnual.type} == 1"
-                            th:text="일반"></option>
-                    <option th:value="${annualDetailList.memberAnnual.annualNo}"
-                            th:if="${annualDetailList.memberAnnual.type} == 2"
-                            th:text="대체공휴일"></option>
-                    <option th:value="${annualDetailList.memberAnnual.annualNo}"
-                            th:if="${annualDetailList.memberAnnual.type} == 3"
-                            th:text="기타"></option>
-                </select>
+                <span th:each="annualList : ${annualList}">
+                    <input type="radio" name="annualNo"
+                           th:value="${annualList.annualNo}"
+                           th:if="${annualList.type} == 1"
+                           th:text="일반">
+                    <input type="radio" name="annualNo"
+                           th:value="${annualList.annualNo}"
+                           th:if="${annualList.type} == 2"
+                           th:text="대체공휴일">
+                    <input type="radio" name="annualNo"
+                           th:value="${annualList.annualNo}"
+                           th:if="${annualList.type} == 3"
+                           th:text="기타">
+                </span>
             </span><br>
             <span>사용구분
                 <select name="useCate">

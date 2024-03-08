@@ -93,7 +93,10 @@ public class AnnualController {
 
         if(loggedInUser != null) {
             List<MemberAnnualDetail> annualDetailList =  annualService.getAnnualDetailListByMemberNo(loggedInUser, loggedInUser.getMemberNo());
+            List<MemberAnnual> annualList = annualService.getAnnualListByMemberNo(loggedInUser.getMemberNo());
+
             model.addAttribute("annualDetailList", annualDetailList);
+            model.addAttribute("annualList", annualList);
         }
         return "admin/annual/write";
     }
