@@ -120,6 +120,7 @@
             background-color: #BDA6DF;
             border-color: #BDA6DF;
             color: white;
+            cursor: pointer;
         }
         #btnli{
             padding-top: 10px;
@@ -137,6 +138,12 @@
             background: #e9e9e9;
             height: 1px;
             border: 0;
+        }
+        #goback{
+            color: #4D4358;
+        }
+        #goback:hover{
+            text-decoration: none;
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -207,7 +214,7 @@
                 <div>
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/meeting/cafelist(checkin=${checkin})}">목록으로</a>
+                            <a class="nav-link" id="goback" th:href="@{/meeting/cafelist(moimNo=${moimNo},checkin=${checkin})}">목록으로</a>
                         </li>
                     </ul>
                 </div>
