@@ -2,11 +2,13 @@ package kr.co.shoulf.web.control;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.co.shoulf.web.dto.KakaopayDTO;
 import kr.co.shoulf.web.dto.MeetingDTO;
 import kr.co.shoulf.web.dto.ReservPaymentDTO;
 import kr.co.shoulf.web.service.MeetingService;
 import kr.co.shoulf.web.service.StudyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -81,5 +83,31 @@ public class MeetingController {
         meetingDTO.setStartDate(startDate);
         return meetingService.getStudyroom(meetingDTO);
     }
+
+    //미팅 카카오페이 결제 요청
+    @PostMapping("/kakaopaypayment")
+    public ResponseEntity<String> kakaopaypayment(ReservPaymentDTO reservPaymentDTO){
+        System.out.println(reservPaymentDTO);
+        meetingService.kakaoPay(reservPaymentDTO);
+        return ResponseEntity.ok(" ");
+    }
+
+    @GetMapping("/kakaosuccess")
+    public ResponseEntity afterPayRequest(@RequestParam("pg_token") String pgToken) {
+
+        KakaopayDTO kakaopayDTO = meetingService.approveResponse(pgToken);
+
+        return new ResponseEntity<>(kakaopayDTO, HttpStatus.OK);
+    }
+
+//    @GetMapping("/kakaocancel")
+//    public void cancel() {
+//        throw new BusinessLogicException(ExceptionCode.PAY_CANCEL);
+//    }
+//
+//    @GetMapping("/kakaofail")
+//    public void fail() {
+//        throw new BusinessLogicException(ExceptionCode.PAY_FAILED);
+//    }
 
 }
