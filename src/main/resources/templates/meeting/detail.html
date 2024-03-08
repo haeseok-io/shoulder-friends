@@ -12,7 +12,7 @@
             background-color: #4E3C62;
             width: 80px;
             font-size: 14px;
-            margin-left: 20px;
+            margin-left: 15px;
             padding: 7px 0;
             border: none;
         }
@@ -73,23 +73,18 @@
         #btncard{
             color:black;
             background-color: white;
-            padding: 5px 5px;
+            padding: 12px 23px;
             margin-left: 8px;
             font-size: 15px;
+            font-weight: 600;
         }
         #btnkakao{
-            color:black;
-            background-color: white;
-            padding: 5px 5px;
-            margin-left: 70px;
-            font-size: 15px;
+            padding: 5px 0;
+            margin-left: 30px;
         }
         #btnnaver{
-            color:black;
-            background-color: white;
-            padding: 5px 5px;
-            margin-left: 70px;
-            font-size: 15px;
+            padding: 7px 5px;
+            margin-left: 30px;
         }
         #paymentRadio:checked{
             border-color: #4E3C62;
@@ -113,7 +108,6 @@
 
     <!--iamport 간편결제-->
     <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
-
 
     <script type="text/javascript">
 
@@ -317,6 +311,8 @@
 
                                             } else if (checkPayment === "2") {
                                                 console.log("카카오 페이");
+
+                                                kakaopayment();
                                             } else if (checkPayment === "3") {
                                                 console.log("네이버 페이");
                                             }
@@ -419,6 +415,54 @@
                 }
             });
         }
+
+        //카카오 결제
+        function kakaopayment(){
+            let price = $("#price").val();
+            let studycafename = $("#studycafename").val();
+            let name = $("#name").val();
+            let email = $("#email").val();
+            let phone = $("#phone").val();
+            let checkin = $("#calendar_start_date").val();
+            let userNo = $("#userNo").val();
+            let moimNo = $("#moimNo").val();
+            let studyroomNo = $("#studyroomNo").val();
+            let content = $("#calendar_content").val();
+            let start_date = $("#calendar_start_date").val();
+            let addr = $("#calendar_addr").val();
+            let studycafeNo = $("#studycafeNo").val();
+            let start_time = $("#start_time").val();
+
+            $.ajax({
+                url:"/meeting/kakaopaypayment",
+                method: "POST",
+                data:{
+                    "name" : name,
+                    "productName":studycafename,
+                    "email":email,
+                    "price":price,
+                    "checkin":checkin,
+                    "userNo":userNo,
+                    "moimNo":moimNo,
+                    "studyroomNo":studyroomNo,
+                    "title" : content,
+                    "startDate" : start_date,
+                    "endDate" : start_date,
+                    "addr" : addr,
+                    "startTime":start_time
+                },
+                success: function(response) {
+                    console.log("저장 성공 : "+response);
+                    alert("예약이 완료되었습니다.");
+                    message = true;
+                    return message;
+                },
+                error: function(xhr, status, error) {
+                    alert("정보 저장 실패 다시 시도해주세요");
+                    console.log(error);
+                }
+            });
+        };
     </script>
 </th:block>
 
@@ -446,7 +490,7 @@
                                 <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
                             </div>
                             <div class="form-group">
-                                <label for="start_time" style="font-size: 17px;font-weight: 600;">시작시간</label>
+                                <label for="start_time" style="font-size: 17px;font-weight: 600;">시작 시간</label>
                                 <select class="form-control" id="start_time" name="start_time">
                                     <option value="09:00:00">09:00</option>
                                     <option value="09:30:00">09:30</option>
@@ -471,7 +515,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="btnn" class="col-form-label" style="font-size: 17px;font-weight: 600;">어깨동무 스터디룸</label>
+                                <label for="btnn" class="col-form-label" style="font-size: 17px;font-weight: 600;">어깨동무 스터디 카페</label>
                                 <p class="d-inline-flex gap-1">
                                     <button class="btn btn-secondary" id="btnn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onclick="opencafe();">
                                         이용하기
@@ -492,10 +536,10 @@
                                                 <label class="btn btn" id="btncard" for="option1">일반 결제</label>
 
                                                 <input type="radio" class="btn-check" name="options" id="option2" value="2" autocomplete="off">
-                                                <label class="btn btn" id="btnkakao" for="option2">카카오 페이</label>
+                                                <label class="btn btn" id="btnkakao" for="option2"><img src="/images/kakaopay.png" readonly style="width: 110px;"></label>
 
                                                 <input type="radio" class="btn-check" name="options" id="option3" value="3" autocomplete="off">
-                                                <label class="btn btn" id="btnnaver" for="option3">네이버 페이</label>
+                                                <label class="btn btn" id="btnnaver" for="option3"><img src="/images/naverpay.png" readonly style="width: 100px;"></label>
                                             </div>
                                         </div>
                                         <div id="paymentName">
@@ -515,7 +559,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <form name="kakaoform">
                             <button type="button" class="btn btn" id="addCalendar">등록</button>
+                            </form>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="sprintSettingModalClose">취소</button>
                         </div>
                     </div>
