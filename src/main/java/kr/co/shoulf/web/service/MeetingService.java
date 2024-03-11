@@ -1,28 +1,23 @@
 package kr.co.shoulf.web.service;
 
 import jakarta.transaction.Transactional;
-import kr.co.shoulf.web.dto.KakaopayDTO;
 import kr.co.shoulf.web.dto.MeetingDTO;
 import kr.co.shoulf.web.dto.ReservPaymentDTO;
 import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
-import java.security.Principal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -181,64 +176,28 @@ public class MeetingService {
         return event;
     }
 
-    public KakaopayDTO kakaoPay(ReservPaymentDTO reservPaymentDTO) {
-        // 카카오페이 요청 양식
-        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
-        parameters.add("cid", cid);
-        parameters.add("partner_order_id", "가맹점 주문 번호");
-        parameters.add("partner_user_id", "가맹점 회원 ID");
-        parameters.add("item_name", reservPaymentDTO.getProductName());
-        parameters.add("quantity", "1");
-        parameters.add("total_amount", String.valueOf(reservPaymentDTO.getPrice()));
-        parameters.add("approval_url", "http://localhost:8081/meeting/kakaosuccess"); // 성공 시 redirect url
-        parameters.add("cancel_url", "http://localhost:8081/meeting/kakaocancel"); // 취소 시 redirect url
-        parameters.add("fail_url", "http://localhost:8081/meeting/kakaofail"); // 실패 시 redirect url
+    //미팅 정보 수정 추가
+    public void modifyMeeting(MeetingDTO meetingDTO) {
+        Optional<Moim> result = moimRepository.findById(meetingDTO.getMoimNo());
+        Moim moim = result.orElseThrow();
 
-        // 파라미터, 헤더
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
+        LocalDateTime date = LocalDateTime.now();
+        DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String nowtime = date.format(sdf);
 
-        // 외부에 보낼 url
-        RestTemplate restTemplate = new RestTemplate();
+        String meetingDate = meetingDTO.getStartDate()+" "+meetingDTO.getStartTime();
 
-        kakaopayDTO = restTemplate.postForObject(
-                "https://kapi.kakao.com/v1/payment/ready",
-                requestEntity,
-                KakaopayDTO.class);
+        Meeting meetings = meetingRepository.findByMeetDateAndMoim_MoimNo(Timestamp.valueOf(meetingDTO.getEndDate()), meetingDTO.getMoimNo());
 
-        return kakaopayDTO;
-    }
+        Meeting meeting = Meeting.builder()
+                .meetingNo(meetings.getMeetingNo())
+                .moim(moim)
+                .contents(meetingDTO.getTitle())
+                .addr(meetingDTO.getAddr())
+                .meetDate(Timestamp.valueOf(meetingDate))
+                .regdate(Timestamp.valueOf(nowtime))
+                .build();
 
-    private HttpHeaders getHeaders() {
-        HttpHeaders httpHeaders = new HttpHeaders();
-
-        String auth = "KakaoAK " + admin_Key;
-
-        httpHeaders.set("Authorization", auth);
-        httpHeaders.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        return httpHeaders;
-    }
-
-    public KakaopayDTO approveResponse(String pgToken) {
-        // 카카오 요청
-        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
-        parameters.add("cid", cid);
-        parameters.add("tid", kakaopayDTO.getTid());
-        parameters.add("partner_order_id", "가맹점 주문 번호");
-        parameters.add("partner_user_id", "가맹점 회원 ID");
-        parameters.add("pg_token", pgToken);
-
-        // 파라미터, 헤더
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
-
-        // 외부에 보낼 url
-        RestTemplate restTemplate = new RestTemplate();
-
-        KakaopayDTO approveResponse = restTemplate.postForObject(
-                "https://kapi.kakao.com/v1/payment/approve",
-                requestEntity,
-                KakaopayDTO.class);
-
-        return approveResponse;
+        meetingRepository.save(meeting);
     }
 }
