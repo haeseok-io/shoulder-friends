@@ -1,25 +1,21 @@
 package kr.co.shoulf.web.control;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import kr.co.shoulf.web.dto.KakaopayDTO;
 import kr.co.shoulf.web.dto.MeetingDTO;
 import kr.co.shoulf.web.dto.ReservPaymentDTO;
 import kr.co.shoulf.web.service.MeetingService;
 import kr.co.shoulf.web.service.StudyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/meeting")
@@ -84,30 +80,10 @@ public class MeetingController {
         return meetingService.getStudyroom(meetingDTO);
     }
 
-    //미팅 카카오페이 결제 요청
-    @PostMapping("/kakaopaypayment")
-    public ResponseEntity<String> kakaopaypayment(ReservPaymentDTO reservPaymentDTO){
-        System.out.println(reservPaymentDTO);
-        meetingService.kakaoPay(reservPaymentDTO);
-        return ResponseEntity.ok(" ");
+    //미팅 정보 수정
+    @PostMapping("/modify")
+    public String modify(MeetingDTO meetingDTO){
+        meetingService.modifyMeeting(meetingDTO);
+        return "redirect:/meeting/detail?moimNo="+meetingDTO.getMoimNo();
     }
-
-    @GetMapping("/kakaosuccess")
-    public ResponseEntity afterPayRequest(@RequestParam("pg_token") String pgToken) {
-
-        KakaopayDTO kakaopayDTO = meetingService.approveResponse(pgToken);
-
-        return new ResponseEntity<>(kakaopayDTO, HttpStatus.OK);
-    }
-
-//    @GetMapping("/kakaocancel")
-//    public void cancel() {
-//        throw new BusinessLogicException(ExceptionCode.PAY_CANCEL);
-//    }
-//
-//    @GetMapping("/kakaofail")
-//    public void fail() {
-//        throw new BusinessLogicException(ExceptionCode.PAY_FAILED);
-//    }
-
 }
