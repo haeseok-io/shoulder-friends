@@ -33,7 +33,6 @@ public class MeetingService {
     private final UserRepository userRepository;
     private final StudyroomRepository studyroomRepository;
     private final StudycafeRepository studycafeRepository;
-    private KakaopayDTO kakaopayDTO;
 
     //모임번호로 미팅 리스트 불러오기
     public List<Meeting> meetingList(Long moimNo) {
