@@ -103,4 +103,8 @@ public class BoardService {
     public void add(Board board) {
         boardRepository.save(board);
     }
+
+    public void remove(Long boardNo) {
+        boardRepository.deleteById(boardNo);
+    }
 }

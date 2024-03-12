@@ -12,4 +12,6 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     List<Users> findTop12ByOrderByUserNoDesc();
 
     boolean existsByEmail(String email);
+
+    Users findByNickname(String nickName);
 }

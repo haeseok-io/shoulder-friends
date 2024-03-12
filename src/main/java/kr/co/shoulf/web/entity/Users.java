@@ -27,6 +27,8 @@ public class Users {
     private String pass;
     @Column(length = 100)
     private String nickname;
+    @Column
+    private String Oauth2Where;
 
     @Column(length = 50)
     @ColumnDefault("'ROLE_USER'")

@@ -63,7 +63,7 @@
                 placeholder: '궁금하신 내용이나 하고싶은 얘기를 작성해주세요.'	//placeholder 설정
             });
 
-            $("#submitBtn").on("click", function () { //내용, 제목 없을시 알림 후 폼 제출방지
+            $("#submitBtn").on("click", function (event) { //내용, 제목 없을시 알림 후 폼 제출방지
                 let title = $("#title").val().trim();
                 let content = $("#summernote").val().trim();
                 if (title === "") {
