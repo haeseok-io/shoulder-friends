@@ -6,6 +6,7 @@ import kr.co.shoulf.web.service.MeetingService;
 import kr.co.shoulf.web.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.validator.PublicClassValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -85,5 +86,19 @@ public class MeetingController {
     public String modify(MeetingDTO meetingDTO){
         meetingService.modifyMeeting(meetingDTO);
         return "redirect:/meeting/detail?moimNo="+meetingDTO.getMoimNo();
+    }
+
+    //미팅 정보 삭제
+    @PostMapping("/delete")
+    public String delete(@RequestParam Long moimNo,@RequestParam String meetingdate){
+        meetingService.deleteMeeting(moimNo, meetingdate);
+        return "redirect:/meeting/detail?moimNo="+moimNo;
+    }
+
+    //스터디룸 예약 취소
+    @PostMapping("/cancel")
+    public String cancel(@RequestParam String endDate, @RequestParam Long roomNo2, @RequestParam Long moimNo){
+        meetingService.cancelRoom(endDate, roomNo2);
+        return "redirect:/meeting/detail?moimNo="+moimNo;
     }
 }
