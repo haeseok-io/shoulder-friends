@@ -5,6 +5,7 @@ import kr.co.shoulf.web.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,5 +23,9 @@ public class ReplyService {
 
     public void write(Reply reply) {
         replyRepository.save(reply);
+    }
+
+    public List<Reply> readRecomments(Long replyNo) {
+        return replyRepository.findReplyWithChildrenByReplyNo(replyNo);
     }
 }
