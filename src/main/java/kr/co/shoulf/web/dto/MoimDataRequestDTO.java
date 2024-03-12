@@ -19,16 +19,18 @@ public class MoimDataRequestDTO {
     private String shortDesc;
     private String detailDesc;
     private MultipartFile moimImg;
+    private String moimImgPath;
     private Long categoryNo;
     private Long studyCategoryNo;
     private List<Integer> platformNo;
     private Long onlineNo;
     private String offAddr;
     private Integer fee;
-    private List<Integer> headcountNo;
+    private List<Long> headcountNo;
     private List<Integer> positionNo;
     private List<Integer> positionDetailNo;
     private List<Integer> personnel;
     private List<String> language;
+    private List<Long> linkNo;
     private List<String> link;
 }
