@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -59,9 +60,9 @@ public class BoardController {
         //System.out.println(boardDetail.getBoard().getUsers());
 
         List<Reply> replyList = replyService.readAll(boardNo);
-        System.out.println("-------------------------------------------------"+replyList);
+//        System.out.println("-------------------------------------------------"+replyList);
         List<Reply> childReply = replyService.readChild(boardNo);
-        System.out.println("-------------------------------------------------childReply"+childReply);
+//        System.out.println("-------------------------------------------------childReply"+childReply);
         model.addAttribute("replyList", replyList);
         model.addAttribute("childReply", childReply);
 
@@ -81,6 +82,13 @@ public class BoardController {
         return "redirect:/board/detail?boardNo=" + board.getBoardNo();
     }
 
+    @GetMapping("/getChild")
+    @ResponseBody
+    public List<Reply> getChild(@RequestParam Long replyNo){
+        List<Reply> list = replyService.readRecomments(replyNo);
+        System.out.println("--------------------------------"+ list);
+        return list;
+    }
     @PostMapping("/plusHits")
     @ResponseBody
     public void plusHits(@RequestParam Long boardNo) {
