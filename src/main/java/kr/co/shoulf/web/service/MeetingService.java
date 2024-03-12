@@ -152,7 +152,7 @@ public class MeetingService {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        java.sql.Timestamp timestamp = new java.sql.Timestamp(utilDate.getTime());
+        Timestamp timestamp = new Timestamp(utilDate.getTime());
 
         Meeting meeting = meetingRepository.findByMeetDateAndMoim_MoimNo(timestamp, meetingDTO.getMoimNo());
 
@@ -162,14 +162,16 @@ public class MeetingService {
 
         if (reservation != null) {
 
-            Studyroom studyroom = reservation.getStudyroom();
+            if(reservation.getStatus()==1) {
+                Studyroom studyroom = reservation.getStudyroom();
 
-            Studycafe studycafe = studyroom.getStudycafe();
+                Studycafe studycafe = studyroom.getStudycafe();
 
-            event = new HashMap<String, Object>();
-            event.put("studycafeName", studycafe.getName());
-            event.put("studyroomName", studyroom.getName());
-
+                event = new HashMap<String, Object>();
+                event.put("studycafeName", studycafe.getName());
+                event.put("studyroomName", studyroom.getName());
+                event.put("studyroomNo", studyroom.getStudyroomNo());
+            }
         }
 
         return event;
@@ -198,5 +200,30 @@ public class MeetingService {
                 .build();
 
         meetingRepository.save(meeting);
+    }
+
+    //미팅 삭제
+    public void deleteMeeting(Long moimNo, String meetingdate) {
+        Meeting meetings = meetingRepository.findByMeetDateAndMoim_MoimNo(Timestamp.valueOf(meetingdate), moimNo);
+        meetingRepository.delete(meetings);
+    }
+
+    //스터디룸 예약 취소
+    public void cancelRoom(String endDate, Long roomNo2) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date date;
+        try {
+            date = sdf.parse(endDate);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        Reservation reservation = reservationRepository.findByCheckinAndStudyroom_StudyroomNo(date, roomNo2);
+        Payment payment = paymentRepository.findByReservation_ReservationNo(reservation.getReservationNo());
+
+        reservation.setStatus(2);
+        payment.setStatus(2);
+
+        reservationRepository.save(reservation);
+        paymentRepository.save(payment);
     }
 }
