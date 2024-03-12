@@ -41,6 +41,27 @@ function getMultipleValues(elementName) {
     return valueArray;
 }
 
+// 직무 중분류 가져오기
+function getPositionDetail(positionTarget, detailTarget, placeholder) {
+    let positionNo = positionTarget.find("option:selected").val();
+
+    detailTarget.find("option").remove();
+
+    if( placeholder ) {
+        detailTarget.append(`<option value="">${placeholder}</option>`);
+    }
+
+    if( positionNo ) {
+        $.get(`/position/${positionNo}/detail`, data => {
+            data.forEach(detail => {
+                detailTarget.append(`<option value="${detail.positionDetailNo}">${detail.middleName}</option>`);
+            });
+
+            if(typeof getPositionDetailCallback==='function' ) getPositionDetailCallback(detailTarget);
+        }, 'json');
+    }
+}
+
 // toast 알림창 노출
 function requestToast(message, bgClass = "primary", focusElement) {
     let toastElement = $("#siteNotice");
