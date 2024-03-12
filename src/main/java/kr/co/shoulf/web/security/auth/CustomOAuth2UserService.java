@@ -1,6 +1,7 @@
 package kr.co.shoulf.web.security.auth;
 
 import jakarta.servlet.http.HttpSession;
+import kr.co.shoulf.web.entity.UserDetail;
 import kr.co.shoulf.web.entity.Users;
 import kr.co.shoulf.web.repository.UserRepository;
 import kr.co.shoulf.web.security.auth.dto.*;
@@ -63,6 +64,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user2.setRole(role);
             user2.setPass(sb.toString());
             user2.setOauth2Where(oAuth2Response.getProvider());
+            user2.setUserDetail(new UserDetail());
 
             userRepository.save(user2);
         }
