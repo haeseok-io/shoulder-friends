@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 @DynamicInsert
+@DynamicUpdate
 public class Moim {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
