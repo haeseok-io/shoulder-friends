@@ -868,7 +868,7 @@ public class TestDataInsert {
     void insertMeeting() {
         List<List<Object>> dataList = new ArrayList<>();
         // 미팅일, 미팅장소, 미팅사유, 미팅고유번호
-        dataList.add(Arrays.asList("2024-03-20 14:30:22", "서울 종로구", "회의", 1L));
+        dataList.add(Arrays.asList("2024-03-20 14:30:00", "서울 종로구", "회의", 1L));
 
         dataList.forEach(data -> {
             Moim moim = moimRepository.findById((Long) data.get(3)).orElse(null);
@@ -1259,7 +1259,7 @@ public class TestDataInsert {
     void insertReservation() {
         List<List<Object>> dataList = new ArrayList<>();
         // 입실일, ip, 예약자번호, 미팅번호, 스터디룸번호
-        dataList.add(Arrays.asList("2024-01-20", "111.111.1.1", 1L, 1L, 1L));
+        dataList.add(Arrays.asList("2024-03-20", "111.111.1.1", 1L, 1L, 1L));
 
         dataList.forEach(data -> {
             Users users = userRepository.findById((Long) data.get(2)).orElse(null);
