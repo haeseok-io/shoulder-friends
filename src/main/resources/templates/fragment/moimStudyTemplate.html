@@ -32,12 +32,12 @@
         </div>
         <div class="content">
             <div class="thumbnail">
-                <button type="button" id="moimImg-thumbnail-btn" onclick="fileUploadTrigger()"></button>
+                <button type="button" id="moimImg-thumbnail-btn" onclick="moimImgUploadTrigger()"></button>
                 <i class="bi bi-camera"></i>
             </div>
             <div class="wrap">
                 <input type="file" name="moimImg">
-                <button type="button" onclick="fileUploadTrigger();">이미지 업로드</button>
+                <button type="button" onclick="moimImgUploadTrigger();">이미지 업로드</button>
                 <p>- 가로/세로의 비율이 3:2일 때 썸네일이 가장 예쁩니다.</p>
                 <p>- 저작권에 위배되지 않는 파일만 업로드해주세요.</p>
             </div>
@@ -108,13 +108,14 @@
                 <p class="desc">3~4명을 추천합니다. (최대 9명, 추후변경가능)</p>
             </div>
             <div class="etc">
-                <button type="button" class="btn btn-secondary" onclick="headcountControl('drop')">제거</button>
-                <button type="button" class="btn btn-custom-add" onclick="headcountControl('add');">추가</button>
+                <button type="button" class="btn btn-secondary" onclick="positionAddToDrop('drop')">제거</button>
+                <button type="button" class="btn btn-custom-add" onclick="positionAddToDrop('add');">추가</button>
             </div>
         </div>
         <div class="content">
             <div class="colItem">
                 <div class="itemWrap position">
+                    <input type="hidden" name="headcountNo">
                     <select name="positionNo">
                         <option th:each="position : ${positionList}" th:value="${position.positionNo}">[[${position.bigName}]]</option>
                     </select>

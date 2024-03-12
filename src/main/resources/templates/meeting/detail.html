@@ -4,17 +4,94 @@
 
 <th:block layout:fragment="css">
     <style>
-        #calendar {
-            max-width: 1400px;
-            min-height: 500px;
-            margin: 0 auto;
-        }
-        #addCalendar{
+        #addCalendar, #modifyCalendar, #modify{
             background-color: #7B27FF;
             color: white;
         }
-        #btnn{
-            background-color: #7B27FF;
+        #btnn, #btnn1{
+            background-color: #4E3C62;
+            width: 80px;
+            font-size: 14px;
+            margin-left: 15px;
+            padding: 7px 0;
+            border: none;
+        }
+        #deletebtn{
+            background-color: #8D4D8A;
+            color: white;
+        }
+        .fc .fc-button-primary{
+            background-color: #4E3C62 !important;
+            box-shadow: none !important;
+        }
+        .fc .fc-button{
+            border: none !important;
+        }
+        .fc-direction-ltr .fc-button-group>.fc-button:not(:last-child), .fc-direction-ltr .fc-button-group>.fc-button:not(:first-child){
+            padding: 5px 5px !important;
+            background: none !important;
+            box-shadow: none !important;
+            color: #595959 !important;
+            font-size: 18px !important;
+        }
+        .fc-direction-ltr .fc-button-group>.fc-button:not(:last-child):hover, .fc-direction-ltr .fc-button-group>.fc-button:not(:first-child):hover{
+            color: #999999 !important;
+        }
+        .fc-direction-ltr .fc-toolbar>*>:not(:first-child){
+            border: none !important;
+            color: black !important;
+            font-size: 18px !important;
+            font-weight: 500 !important;
+            background: none !important;
+            box-shadow: none !important;
+        }
+        .fc-direction-ltr .fc-toolbar>*>:not(:first-child):hover{
+            color: #999999 !important;
+        }
+        .fc-daygrid-dot-event .fc-event-title{
+            font-size: 1rem !important;
+            font-weight: 400 !important;
+        }
+        .fc-daygrid-event-dot{
+            display: none !important;
+        }
+        .fc-daygrid-dot-event .fc-event-title{
+            background-color: #7B27FF !important;
+            color: white !important;
+            border-radius: 2px !important;
+            padding: 0 8px !important;
+        }
+        .fc .fc-toolbar-title{
+            font-size: 30px !important;
+        }
+        input[type="text"]{
+            border-radius: 4px !important;
+        }
+        input[type="text"], input[type="radio"],input[type="date"], #start_time, #start_time2{
+            margin-bottom: 10px;
+        }
+        input[type="text"]:focus, input[type="radio"]:focus,input[type="date"]:focus, #start_time:focus, #start_time2:focus, button[type="button"]:focus{
+            border: 1px solid #CCCCCC;
+            box-shadow: none !important;
+        }
+        #btncard{
+            color:black;
+            background-color: white;
+            padding: 12px 23px;
+            margin-left: 8px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+        #btnkakao{
+            padding: 5px 0;
+            margin-left: 30px;
+        }
+        #btnnaver{
+            padding: 7px 5px;
+            margin-left: 30px;
+        }
+        #paymentRadio:checked{
+            border-color: #4E3C62;
         }
     </style>
 </th:block>
@@ -33,6 +110,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js"></script>
 
+    <!--iamport 간편결제-->
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 
     <script type="text/javascript">
 
@@ -56,7 +135,44 @@
                 window.open("/meeting/cafelist?checkin=" + checkin + "&moimNo=" + moimNo, "Studycafe", "top=50, left=250, width=1500, height=900");
             }
         }
+
+        //예약 취소 함수
+        function offCafe(){
+            let roomNo2 = $("#roomNo").val();
+            let endDate = $("#start_date").val();
+
+            if(confirm("예약을 취소하시겠습니까?")) {
+                let form = $("#modifyform");
+                form.attr("method", "POST");
+                form.attr("action", "/meeting/cancel");
+                form.submit();
+            }
+        }
+
+        //일정 삭제 함수
+        function deletemeeting(){
+            if($("#cafename2").val() == null || $("#cafename2").val() == ""){
+                let start_date = $("#start_date").val();
+                let time = $("#time").val();
+                let meetingdate = start_date+" "+time+":00";
+                $("#meetingdate").val(meetingdate);
+
+                if(confirm("일정을 삭제하시겠습니까?")) {
+                    let form = $("#modifyform");
+                    form.attr("method", "POST");
+                    form.attr("action", "/meeting/delete");
+                    form.submit();
+                }
+
+            }else {
+                alert("스터디 룸 예약을 먼저 취소해주세요");
+            }
+        }
+
         $(()=>{
+            $("#payment").hide();
+            $("#paymentName").hide();
+
             window.addEventListener('message',function (event){
                 let jsonData = JSON.parse(event.data);
                 let cafe_name = $("#studycafename");
@@ -68,17 +184,28 @@
                 $("#studycafeNo").val(jsonData.cafeno);
                 $("#studyroomNo").val(jsonData.roomno);
                 $("#calendar_addr").val(jsonData.addrs);
+                $("#payment").show();
+                $("#paymentName").show();
+            })
+
+            $("#modifyCalendar").on("click",()=>{
+                $("#body1").hide();
+                $("#body2").show();
+            })
+
+            $("#modifyx").on("click",()=>{
+                location.reload();
             })
         })
 
-
+        //캘린더 이벤트
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
             let moimNos = $("#moimNo").val();
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 timeZone: 'UTC',
                 initialView: 'dayGridMonth',
-                eventSources: [{
+                eventSources: [{ //db에서 meeting 날짜 가지고 오기
                     events: function(info, successCallback, failureCallback) {
                         $.ajax({
                             url: "/meeting/meeting_ajax",
@@ -88,6 +215,7 @@
                                 moimNo: moimNos
                             },
                             success: function(data) {
+                                $("#body2").hide();
                                 let events = [];
                                 if (data.length === 0) {
                                     events.push({
@@ -102,7 +230,7 @@
                                             start: eventData.start,
                                             end: eventData.end,
                                             description: eventData.description,
-                                            color: eventData.color
+                                            color: eventData.color,
                                         });
                                     });
                                     successCallback(events);
@@ -114,6 +242,54 @@
                         });
                     }
                 }],
+                eventClick: function (info, jsEvent, view){
+                    $("#cafeonly").hide();
+                    $("#cafeonly2").hide();
+                    $("#content").val(info.event.title);
+                    $("#content2").val(info.event.title);
+                    $("#start_date").val((info.event.startStr).substring(0, (info.event.startStr).indexOf("T")));
+                    $("#addr").val(info.event._def.extendedProps.description);
+                    $("#addr2").val(info.event._def.extendedProps.description);
+                    $("#time").val((info.event.startStr).substring(((info.event.startStr).indexOf("T"))+1, (info.event.startStr).lastIndexOf(':')));
+                    $("#start_time2").select().val($("#time").val()+":00");
+                    $("#calendar_start_date2").val((info.event.startStr).substring(0, (info.event.startStr).indexOf("T")))
+                    $("#endDate2").val((info.event.startStr).substring(0, (info.event.startStr).indexOf("T"))+" "+$("#time").val()+":00");
+                    let moimNo = $("#moimNo").val();
+
+                    $.ajax({
+                        url:"/meeting/ckeckmeeting",
+                        method: "GET",
+                        data: {
+                            moimNo : moimNo,
+                            startDate : $("#start_date").val()+" "+$("#time").val()+":00"
+                        },
+                        success: function(response) {
+
+                            if(!response){
+                                $("#cafeonly").hide();
+                                $("#cafeonly2").hide();
+                            }else {
+                                $("#cafename").val(response.studycafeName);
+                                $("#cafename2").val(response.studycafeName);
+                                $("#roomname").val(response.studyroomName);
+                                $("#roomname2").val(response.studyroomName);
+                                $("#roomNo").val(response.studyroomNo);
+                                $("#roomNo2").val(response.studyroomNo);
+
+                                $("#cafeonly").show();
+                                $("#cafeonly2").show();
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert("오류발생 다시 시도해주세요");
+                            console.log(error);
+                        }
+                    });
+
+                    $("#ckeckmodal").modal("show");
+
+                    return false;
+                },
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
@@ -129,30 +305,20 @@
                                 let start_date = $("#calendar_start_date").val();
                                 let addr = $("#calendar_addr").val();
                                 let studycafeNo = $("#studycafeNo").val();
-                                let studyroomNo = $("#studyroomNo").val();
-                                let price = $("#price").val();
                                 let start_time = $("#start_time").val();
                                 let moimNo = $("#moimNo").val();
 
                                 //내용 입력 여부 확인
                                 if(content == null || content == ""){
                                     alert("내용을 입력하세요.");
+                                    return;
                                 }else if(addr == ""){
                                     alert("주소를 입력하세요.");
+                                    return;
                                 }else if(start_date == ""){
                                     alert("날짜를 입력하세요.");
+                                    return;
                                 }else{
-                                    let obj = {
-                                        "title" : content,
-                                        "startDate" : start_date,
-                                        "endDate" : start_date,
-                                        "addr" : addr,
-                                        "studycafeNo":studycafeNo,
-                                        "studyroomNo":studyroomNo,
-                                        "price":price,
-                                        "startTime":start_time,
-                                        "moimNo":moimNo
-                                    }//전송할 객체 생성
 
                                     let meetingOnly = {
                                         "title" : content,
@@ -163,8 +329,9 @@
                                         "moimNo":moimNo
                                     }//전송할 객체 생성
 
+                                    //스터디룸 번호 입력값 유무 확인
                                     if(studycafeNo == '' || studycafeNo == null){
-
+                                        //룸 번호가 없으면 일정만 등록
                                         $.ajax({
                                             url: "/meeting/write",
                                             method: "POST",
@@ -180,15 +347,43 @@
                                                 console.log(error);
                                             }
                                         });
-
                                     }else{
-                                        console.log("결제창 켜야해");
+                                        let checkPayment = $("input[name='options']:checked").val();
+                                        let name = $("#name").val();
+                                        let phone = $("#phone").val();
+
+                                        if(name === "" || name === null){
+                                            alert("이름을 입력해주세요");
+                                            return;
+                                        }else if(phone === "" || phone === null){
+                                            alert("전화번호를 입력해주세요");
+                                            return;
+                                        }else {
+                                            //결제 선택에 따라서 결제창 다르게 띄우기
+                                            if (checkPayment === "1") {
+                                                console.log("일반결제");
+
+                                                if (requestPay()) {
+                                                    $("#calendarModal").modal("hide");
+                                                    location.reload();
+                                                    console.log("성공성공임");
+                                                }
+
+                                            } else if (checkPayment === "2") {
+                                                console.log("카카오 페이");
+
+                                                kakaopayment();
+                                            } else if (checkPayment === "3") {
+                                                console.log("네이버 페이");
+                                            }
+                                        }
                                     }
                                 }
                             });
 
                             $("#sprintSettingModalClose").on("click",function(){
                                 $("#calendarModal").modal("hide");
+                                location.reload();
                             })
                         }
                     }
@@ -198,18 +393,100 @@
             });
             calendar.render();
 
-            calendar.on('dateClick', function(info) {
-                console.log("하하하");
-            });
-
         });
+
+        //일반 결제
+        function requestPay() {
+            IMP.init('imp06672844');
+
+            let message;
+            let price = $("#price").val();
+            let studycafename = $("#studycafename").val();
+            let name = $("#name").val();
+            let email = $("#email").val();
+            let phone = $("#phone").val();
+            let checkin = $("#calendar_start_date").val();
+            let userNo = $("#userNo").val();
+            let moimNo = $("#moimNo").val();
+            let studyroomNo = $("#studyroomNo").val();
+            let content = $("#calendar_content").val();
+            let start_date = $("#calendar_start_date").val();
+            let addr = $("#calendar_addr").val();
+            let studycafeNo = $("#studycafeNo").val();
+            let start_time = $("#start_time").val();
+
+            IMP.request_pay({
+                pg: "inicis.shoulf",
+                pay_method: "card",
+                merchant_uid : 'm_'+new Date().getTime(),
+                amount: price,
+                name : studycafename,
+                buyer_email : email,
+                buyer_name : name,
+                buyer_tel : phone,
+            }, function (rsp) {
+                console.log(rsp);
+                if (rsp.success) {
+                    var msg = '결제가 완료되었습니다.';
+                    msg += "고유ID", rsp.imp_uid;
+                    msg += "상점 거래 ID : "+rsp.merchant_uid;
+                    msg += "결제 금액 : "+rsp.paid_amount;
+                    msg += "카드 승인 번호 : "+rsp.apply_num;
+
+                    console.log(msg);
+
+                    $.ajax({
+                        url: "/meeting/reservPayment",
+                        method: "POST",
+                        data: {
+                            "approvalNum" : rsp.merchant_uid,
+                            "cardNum" : rsp.card_number,
+                            "name" : name,
+                            "productName":studycafename,
+                            "email":email,
+                            "price":price,
+                            "checkin":checkin,
+                            "userNo":userNo,
+                            "moimNo":moimNo,
+                            "studyroomNo":studyroomNo,
+                            "title" : content,
+                            "startDate" : start_date,
+                            "endDate" : start_date,
+                            "addr" : addr,
+                            "startTime":start_time
+                        },
+                        success: function(response) {
+                            console.log("저장 성공 : "+response);
+                            alert(response.next_redirect_pc_url);
+                            location.href = response.next_redirect_pc_url;
+                            message = true;
+                            return message;
+                        },
+                        error: function(xhr, status, error) {
+                            alert("정보 저장 실패 다시 시도해주세요");
+                            console.log(error);
+                            rsp.success = false;
+                        }
+                    });
+
+                } else {
+                    var msg = '결제에 실패하였습니다.';
+                    msg += '에러내용 : ' + rsp.error_msg;
+                    alert(msg);
+                }
+            });
+        }
+
+        //카카오 결제
+        function kakaopayment(){
+
+        };
     </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
-        <div class="container">
-            <h2>미팅내용</h2>
+        <div class="container" style="margin-top: 80px; margin-bottom: 80px;">
             <input type="hidden" name="moimNo" id="moimNo" th:value="${moimNo}">
             <div id="calendarBox">
                 <div id="calendar"></div>
@@ -219,19 +496,19 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">미팅을 추가하세요.</h5>
+                            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: 500;font-size: 1.4rem;">미팅을 추가하세요.</h5>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="calendar_content" class="col-form-label">미팅 내용</label>
+                                <label for="calendar_content" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 내용</label>
                                 <input type="text" class="form-control" id="calendar_content" name="calendar_content">
-                                <label for="calendar_addr" class="col-form-label">미팅 주소</label>
+                                <label for="calendar_addr" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 주소</label>
                                 <input type="text" class="form-control" id="calendar_addr" name="calendar_addr">
-                                <label for="calendar_start_date" class="col-form-label">미팅 날짜</label>
+                                <label for="calendar_start_date" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 날짜</label>
                                 <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
                             </div>
                             <div class="form-group">
-                                <label for="start_time">시작시간</label>
+                                <label for="start_time" style="font-size: 17px;font-weight: 600;">시작 시간</label>
                                 <select class="form-control" id="start_time" name="start_time">
                                     <option value="09:00:00">09:00</option>
                                     <option value="09:30:00">09:30</option>
@@ -256,7 +533,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="btnn" class="col-form-label">어깨동무 스터디룸</label>
+                                <label for="btnn" class="col-form-label" style="font-size: 17px;font-weight: 600;">어깨동무 스터디 카페</label>
                                 <p class="d-inline-flex gap-1">
                                     <button class="btn btn-secondary" id="btnn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onclick="opencafe();">
                                         이용하기
@@ -264,22 +541,166 @@
                                 </p>
                                 <div class="collapse show" id="collapseExample">
                                     <div class="card card-body">
-                                        <label for="calendar_content" class="col-form-label">스터디 카페 지점</label>
+                                        <label for="studycafename" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 카페 지점</label>
                                         <input type="text" class="form-control" id="studycafename" name="studycafename" readonly>
-                                        <label for="calendar_content" class="col-form-label">스터디 룸</label>
+                                        <label for="studyroomname" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 룸</label>
                                         <input type="text" class="form-control" id="studyroomname" name="studyroomname" readonly>
-                                        <label for="calendar_content" class="col-form-label">가격</label>
+                                        <label for="price" class="col-form-label" style="font-size: 17px;font-weight: 600;">가격</label>
                                         <input type="text" class="form-control" id="price" name="price" readonly>
+                                        <div id="payment">
+                                            <label for="paymentRadio" class="col-form-label" style="font-size: 17px;font-weight: 600;">결제 방법 선택</label>
+                                            <div id="paymentRadio">
+                                                <input type="radio" class="btn-check" name="options" id="option1" value="1" autocomplete="off" checked>
+                                                <label class="btn btn" id="btncard" for="option1">일반 결제</label>
+
+                                                <input type="radio" class="btn-check" name="options" id="option2" value="2" autocomplete="off">
+                                                <label class="btn btn" id="btnkakao" for="option2"><img src="/images/kakaopay.png" readonly style="width: 110px;"></label>
+
+                                                <input type="radio" class="btn-check" name="options" id="option3" value="3" autocomplete="off">
+                                                <label class="btn btn" id="btnnaver" for="option3"><img src="/images/naverpay.png" readonly style="width: 100px;"></label>
+                                            </div>
+                                        </div>
+                                        <div id="paymentName">
+                                            <label for="name" class="col-form-label" style="font-size: 17px;font-weight: 600;">결제자 이름</label>
+                                            <input type="text" class="form-control" id="name" name="name">
+                                            <label for="phone" class="col-form-label" style="font-size: 17px;font-weight: 600;">결제자 전화번호</label>
+                                            <input type="text" class="form-control" id="phone" name="phone">
+                                        </div>
                                         <input type="hidden" name="studycafeNo" id="studycafeNo">
                                         <input type="hidden" name="studyroomNo" id="studyroomNo">
+                                        <div th:each="dto:${userList}">
+                                            <input type="hidden" name="email" id="email" th:value="${dto.email}">
+                                            <input type="hidden" name="userNo" id="userNo" th:value="${dto.userNo}">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn" id="addCalendar">추가</button>
+                            <form name="kakaoform">
+                            <button type="button" class="btn btn" id="addCalendar">등록</button>
+                            </form>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="sprintSettingModalClose">취소</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="ckeckmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div id="body1">
+                            <div class="modal-header">
+                                <h5 class="modal-title" style="font-weight: 500;font-size: 1.4rem;">미팅 상세</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="content" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 내용</label>
+                                    <input type="text" class="form-control-plaintext" id="content" name="content" readonly style="border:none;" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="addr" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 주소</label>
+                                    <input type="text" class="form-control-plaintext" id="addr" name="addr" readonly style="border:none;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="start_date" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 날짜</label>
+                                    <input type="text" class="form-control-plaintext" id="start_date" name="start_date" readonly style="border:none;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="time" class="col-form-label" style="font-size: 17px;font-weight: 600;">시작 시간</label>
+                                    <input type="text" class="form-control-plaintext" id="time" name="time" readonly style="border:none;">
+                                </div>
+                                <div class="form-group" id="cafeonly">
+                                    <label for="collapseExample2" class="col-form-label" style="font-size: 17px;font-weight: 600; margin-bottom: 12px;">어깨동무 스터디 카페</label>
+                                    <div class="collapse show" id="collapseExample2">
+                                        <div class="card card-body" style="padding: 10px 15px;">
+                                            <label for="cafename" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 카페</label>
+                                            <input type="text" class="form-control-plaintext" id="cafename" name="cafename" readonly style="border:none;">
+                                            <label for="roomname" class="col-form-label" style="font-size: 17px;font-weight: 600;margin-top: 16px;">스터디 룸</label>
+                                            <input type="text" class="form-control-plaintext" id="roomname" name="roomname" readonly style="border:none;">
+                                            <input type="hidden" name="roomNo" id="roomNo">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn" id="modifyCalendar">일정 수정</button>
+                            </div>
+                        </div>
+
+                        <form action="/meeting/modify" method="post" name="modifyform" id="modifyform">
+                        <div id="body2">
+                            <div class="modal-header">
+                                <h5 class="modal-title" style="font-weight: 500;font-size: 1.4rem;">미팅 수정</h5>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="content2" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 내용</label>
+                                    <input type="text" class="form-control" id="content2" name="title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="addr2" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 주소</label>
+                                    <input type="text" class="form-control" id="addr2" name="addr">
+                                </div>
+                                <div class="form-group">
+                                    <label for="calendar_start_date2" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 날짜</label>
+                                    <input type="date" class="form-control" id="calendar_start_date2" name="startDate">
+                                    <input type="hidden" name="moimNo" th:value="${moimNo}">
+                                    <input type="hidden" name="endDate" id="endDate2">
+                                    <input type="hidden" name="meetingdate" id="meetingdate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="start_time2" style="font-size: 17px;font-weight: 600;">시작 시간</label>
+                                    <select class="form-control" id="start_time2" name="startTime">
+                                        <option value="09:00:00">09:00</option>
+                                        <option value="09:30:00">09:30</option>
+                                        <option value="10:00:00">10:00</option>
+                                        <option value="10:30:00">10:30</option>
+                                        <option value="11:00:00">11:00</option>
+                                        <option value="11:30:00">11:30</option>
+                                        <option value="12:00:00">12:00</option>
+                                        <option value="12:30:00">12:30</option>
+                                        <option value="13:00:00">13:00</option>
+                                        <option value="13:30:00">13:30</option>
+                                        <option value="14:00:00">14:00</option>
+                                        <option value="14:30:00">14:30</option>
+                                        <option value="15:00:00">15:00</option>
+                                        <option value="15:30:00">15:30</option>
+                                        <option value="16:00:00">16:00</option>
+                                        <option value="16:30:00">16:30</option>
+                                        <option value="17:00:00">17:00</option>
+                                        <option value="17:30:00">17:30</option>
+                                        <option value="18:00:00">18:00</option>
+                                        <option value="18:30:00">18:30</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="cafeonly2">
+                                    <label for="btnn1" class="col-form-label" style="font-size: 17px;font-weight: 600;">어깨동무 스터디 카페</label>
+                                    <p class="d-inline-flex gap-1">
+                                        <button class="btn btn-secondary" id="btnn1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onclick="offCafe();">
+                                            예약 취소
+                                        </button>
+                                    </p>
+                                    <div class="collapse show" id="collapseExample3">
+                                        <div class="card card-body">
+                                            <label for="cafename" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 카페</label>
+                                            <input type="text" class="form-control-plaintext" id="cafename2" name="cafename" readonly>
+                                            <label for="roomname" class="col-form-label" style="font-size: 17px;font-weight: 600;margin-top: 16px;">스터디 룸</label>
+                                            <input type="text" class="form-control-plaintext" id="roomname2" name="roomname" readonly>
+                                            <input type="hidden" name="roomNo2" id="roomNo2">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn" id="modify" style="box-shadow: none;">저장</button>
+                                <button type="button" class="btn btn" id="deletebtn" onclick="deletemeeting();">삭제</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modifyx">취소</button>
+                            </div>
+                        </div>
+                        </form>
                     </div>
                 </div>
             </div>

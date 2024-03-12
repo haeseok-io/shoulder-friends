@@ -44,14 +44,33 @@ public class MoimController {
         model.addAttribute("platformList", platformService.readAll());
         model.addAttribute("onlineList", onlineService.readAll());
         model.addAttribute("positionList", positionService.readAll());
+
+        model.addAttribute("processType", "write");
         return "moim/write";
     }
 
     @PostMapping(value = "/write")
     public String writeOk(MoimDataRequestDTO moimDataRequestDTO) {
         boolean status = moimService.addOne(moimDataRequestDTO);
+        return "redirect:/moim/";
+    }
 
+    @GetMapping(value = "/modify")
+    public String modify(@RequestParam("no") Long moimNo, Model model) {
+        model.addAttribute("categoryList", categoryService.readAll());
+        model.addAttribute("studyCategoryList", studyCategoryService.readAll());
+        model.addAttribute("platformList", platformService.readAll());
+        model.addAttribute("onlineList", onlineService.readAll());
+        model.addAttribute("positionList", positionService.readAll());
 
+        model.addAttribute("processType", "modify");
+        model.addAttribute("moimData", moimService.readModifyOne(moimNo));
+        return "moim/write";
+    }
+
+    @PostMapping(value = "/modify")
+    public String modifyOk(MoimDataRequestDTO moimDataRequestDTO) {
+        moimService.addOne(moimDataRequestDTO);
         return "redirect:/moim/";
     }
 }
