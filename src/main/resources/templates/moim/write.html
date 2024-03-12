@@ -7,351 +7,99 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.css">
     <link rel="stylesheet" href="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
-    <style>
-        main .container { width: 1280px; max-width: 970px; }
-        main .container .wrapper { margin-top: 30px; }
-
-        .wrapper .content .rowItem {}
-        .wrapper .content .rowItem .itemWrap { margin-top: 10px; }
-        .wrapper .content .rowItem .itemWrap:first-child { margin-top: 0; }
-
-        .wrapper .content .colItem { display: flex; justify-content: flex-start; align-items: center; margin-top: 10px; }
-        .wrapper .content .colItem .itemWrap {}
-
-        .wrapper input[type='text'] { width: 100%; height: 50px; border: 1px solid #e0e0e0; border-radius: 5px; padding: 0 10px; }
-        .wrapper input[type='text']::placeholder { color: #ccc; }
-
-        .wrapper .select2-selection--single,
-        .wrapper .select2-selection--multiple { display: flex; align-items: center; width: 100%; height: 50px; border: 1px solid #e0e0e0; padding: 0 10px; }
-        .wrapper .select2-selection--multiple .select2-search { display: flex; flex: 1; }
-
-        .wrapper .select2-selection--single .select2-selection__arrow { top: 50%; transform: translateY(-50%); right: 10px; }
-        .wrapper .select2-selection--single .select2-selection__rendered { padding-left: 0; padding-right: 0; }
-        .wrapper .select2 .select2-search__field::placeholder { color: #aaa; }
-
-        .wrapper.type {}
-        .wrapper.type input[type='radio'] { display: none; }
-        .wrapper.type label { display: inline-block; border: 1px solid #ccc; border-radius: 5px; padding: 10px 20px; margin-right: 10px; font-weight: 500; font-size: 1.1rem; cursor: pointer; }
-        .wrapper.type input[type='radio']:checked + label { color: #fff; border: none; }
-        .wrapper.type input[type='radio']:checked + label:nth-of-type(1) { background: #7B27FF; }
-        .wrapper.type input[type='radio']:checked + label:nth-of-type(2) { background: #FF8911; }
-
-        .wrapper.moimImg {}
-        .wrapper.moimImg .content { display: flex; justify-content: space-between; align-items: end; }
-        .wrapper.moimImg .thumbnail { position: relative; display: flex; justify-content: center; align-items: center; width: 400px; height: 230px; background: #e0e0e0; }
-        .wrapper.moimImg .thumbnail button { position: absolute; width: 100%; height: 100%; background: transparent; border: none; }
-        .wrapper.moimImg .thumbnail button img { width: 100%; height: 100%; object-fit: cover; }
-        .wrapper.moimImg .thumbnail i { font-size: 3rem; color: #aaa; }
-        .wrapper.moimImg .wrap { width: calc(100% - 430px); }
-        .wrapper.moimImg .wrap input[type='file'] { display: none; }
-        .wrapper.moimImg .wrap button { background: #fff; border: 1px solid #382B47; border-radius: 5px; padding: 10px 15px; font-size: .9rem; color: #888; }
-        .wrapper.moimImg .wrap p { margin-top: 10px; color: #aaa; }
-        .wrapper.moimImg .wrap p:nth-of-type(1) { margin-top: 20px; }
-
-        .wrapper.category {}
-        .wrapper.category-project .content { display: flex; justify-content: flex-start; flex-wrap: wrap; }
-        .wrapper.category-project .content .wrap { width: 20%; height: 50px; align-items: center; }
-        .wrapper.category-project input[type='radio'] { display: none; }
-        .wrapper.category-project label { position: relative; display: flex; padding-left: 30px; cursor: pointer; }
-        .wrapper.category-project label:after { position: absolute; top: 50%; left: 0; transform: translateY(-50%); content: ""; width: 20px; height: 20px; border: 1px solid #ccc; border-radius: 3px; }
-        .wrapper.category-project input[type='radio']:checked + label:after { background: #7B27FF; }
-
-        .wrapper.headcount {}
-        .wrapper.headcount input[name='everyone'] {}
-        .wrapper.headcount input[name='everyone'] + label { font-weight: 300; font-size: 1rem; }
-        .wrapper.headcount .content .itemWrap.position { width: 80%; }
-        .wrapper.headcount .content .itemWrap.personnel { width: 20%; display: flex; justify-content: space-between; align-items: center; }
-        .wrapper.headcount .content .itemWrap.personnel button { width: 24%; height: 50px; background: transparent; border: none; }
-        .wrapper.headcount .content .itemWrap.personnel input[type='text'] { width: 50%; text-align: center; }
-
-        .formButton { margin-top: 50px; text-align: center; }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/moim/write.css}">
 </th:block>
 <th:block layout:fragment="js">
     <script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.min.js"></script>
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
     <script src="https://uicdn.toast.com/editor-plugin-color-syntax/latest/toastui-editor-plugin-color-syntax.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:src="@{/js/moim/write.js}"></script>
+
+    <script th:inline="javascript">
+        let moimData = [[${moimData}]];
+    </script>
     <script>
-        const Editor = toastui.Editor;
-        const colorSyntax = toastui.Editor.plugin['colorSyntax'];
-        $.fn.select2.defaults.set("minimumResultsForSearch", -1);
-        $.fn.select2.defaults.set("width", '100%');
-
-        let headcountHtml;
-        let moimImgFileInfo;
-        let platformSelect, onlineSelect, positionSelect, positionDetailSelect, languageSelect, studyCategoryselect;
-        let detailDescEditor;
-
         $(() => {
-            // 모집 유형 선택
-            $("input[name='type']").change(e => {
-                let type = $(e.currentTarget).val();
-                getHtmlTemplate(type);
-                setPageEvent();
-            });
-            $("input[name='type'][value='project']").trigger("change");
+            let moimType = moimData!=null ? moimData.type : 'project';
+            $("input[name='type'][value='"+moimType+"']").prop("checked", true).trigger("change");
         });
 
-        // 페이지 이벤트 처리 (동적태그 추가로 함수로 처리)
-        function setPageEvent() {
-            // 대표이미지 업로드 이벤트
-            $("input[name='moimImg']").click(e => {
-                moimImgFileInfo = e.target.files;
-            }).change(e => {
-                let target = $("#moimImg-thumbnail-btn");
+        function templateLoadCallback(type) {
+            if( moimData ) {
+                $("input[name='moimNo']").val(moimData.moimNo);
+                $("input[name='subject']").val(moimData.subject);
+                $("input[name='shortDesc']").val(moimData.shortDesc);
 
-                if( e.target.files.length>0 ){
-                    let file = e.target.files[0];
+                // 대표 이미지
+                moimImgLoader(moimData.moimImgPath);
 
-                    if( file!==moimImgFileInfo[0] ){
-                        let reader = new FileReader();
+                // 온/오프라인
+                onlineSelect.find("option[value='"+moimData.onlineNo+"']").prop("selected", true).trigger("change");
+                if( moimData.onlineNo!=2 ) {
+                    $("input[name='offAddr']").val(moimData.offAddr);
+                    $("input[name='fee']").val(moimData.fee);
+                }
 
-                        reader.onload = e => {
-                            let imgElement = $("<img />");
-                            imgElement.attr('src', e.target.result);
+                // 사용 언어
+                if( moimData.language.length>0 ) {
+                    moimData.language.forEach(language => {
+                        languageSelect.append(`<option value="${language}" selected>${language}</option>`).trigger("change");
+                    })
+                }
 
-                            target.html('');
-                            target.append(imgElement);
-                        };
+                // 모집인원
+                moimData.headcountNo.forEach((headcountNo, idx) => {
+                    if( moimData.positionNo[idx]!=null ) {
+                        if( idx!=0 ) {
+                            positionAddToDrop("add");
+                            $(positionSelect[idx]).find("option[value='"+moimData.positionNo[idx]+"']").prop("selected", true).trigger("change");
+                        }
 
-                        reader.readAsDataURL(file);
+                        $(positionSelect[idx]).siblings("input[name='headcountNo']").val(headcountNo);
+                        $(positionSelect[idx]).parent().siblings().find("input[name='personnel']").val(moimData.personnel[idx]);
+                    } else {
+                        $("input[name='everyone']").prop("checked", true);
+                        positionEveryoneEvent();
+                        $("input[name='personnel']").val(moimData.personnel[0]);
+                    }
+                });
+
+                // 모임 상세설명
+                detailDescEditor.setMarkdown(moimData.detailDesc, false);
+                $(document).scrollTop(0);
+
+                // 프로젝트
+                if( type=='project' ) {
+                    // 분야
+                    $("input[name='categoryNo'][value='"+moimData.categoryNo+"']").prop("checked", true);
+
+                    // 출시 플랫폼
+                    if( moimData.platformNo.length>0 ) {
+                        moimData.platformNo.forEach(p => {
+                            platformSelect.find("option[value='"+p+"']").prop("selected", true).trigger("change");
+                        })
+                    }
+
+                    // 참고 링크
+                    if( moimData.link.length>0 ) {
+                        moimData.link.forEach((link, idx) => {
+                            if( idx!=0 )    linkControl("add");
+                            $("input[name='linkNo']").eq(idx).val(moimData.linkNo[idx]);
+                            $("input[name='link']").eq(idx).val(link);
+                        });
                     }
                 } else {
-                    $(e.currentTarget).prop("files", moimImgFileInfo);
-                }
-            });
-
-            // 온/오프라인 변경 이벤트
-            $("select[name='onlineNo']").change(e => {
-                let onlineNo = $(e.currentTarget).val();
-                let hideTarget = $(".wrapper.fee");
-
-                if( onlineNo==2 ) {
-                    $("input[name='offAddr']").val('').hide();
-                    hideTarget.find("input[name='fee']").val('');
-                    hideTarget.hide();
-                } else {
-                    $("input[name='offAddr']").show();
-                    hideTarget.show();
-                }
-            });
-
-            // 직무구분 없음 체크
-            $("input[name='everyone']").change(e => {
-                let headcountWrapper = $(".wrapper.headcount");
-                let status = $(e.currentTarget).is(":checked");
-
-                if( status ) {
-                    dropToPositionSelect();
-                    headcountWrapper.find(".mainTitle .etc").hide();
-
-                    let colItem = $("<div class='colItem' />");
-                    let positionWrap = $("<div class='itemWrap position' />");
-                    let personnelWrap = $("<div class='itemWrap personnel' />");
-
-                    positionWrap.text("누구나 참여 가능");
-                    personnelWrap.append("<button type='button' onclick=\"personnelControl(this, 'minus');\"><i class='bi bi-dash-lg'></i></button>");
-                    personnelWrap.append("<input type='text' name='personnel' value='1' readonly />");
-                    personnelWrap.append("<button type='button' onclick=\"personnelControl(this, 'plus');\"><i class='bi bi-plus-lg'></i></button>");
-
-                    colItem.append(positionWrap)
-                    colItem.append(personnelWrap);
-                    headcountWrapper.find(".content").append(colItem);
-                } else {
-                    headcountWrapper.find(".content").html('');
-
-                    copyToPositionSelect();
-                    headcountWrapper.find(".mainTitle .etc").show();
-                }
-            });
-        }
-
-        // 모집인원 select 동적 플러그인 적용
-        function initializePositionSelect() {
-            positionSelect = $("select[name='positionNo']").select2({width: '49%'});
-            positionDetailSelect = $("select[name='positionDetailNo']").select2({width: '49%'});
-        }
-        function destroyPositionSelect() {
-            if( positionSelect )        positionSelect.select2("destroy");
-            if( positionDetailSelect )  positionDetailSelect.select2("destroy");
-        }
-        // 모집인원 플러그인 제거 후 코드복사
-        function copyToPositionSelect() {
-            let cloneItem, cloneHtml;
-            let appendSel = $(".wrapper.headcount .content");
-
-            if( appendSel.find(".colItem").length>0 ) {
-                destroyPositionSelect();
-                cloneHtml = appendSel.find(".colItem").eq(0).html();
-                cloneItem = $("<div class='colItem clone' />");
-            } else {
-                cloneHtml = headcountHtml;
-                cloneItem = $("<div class='colItem' />");
-            }
-
-            cloneItem.append(cloneHtml);
-            appendSel.append(cloneItem);
-
-            initializePositionSelect();
-            eventToPositionSelect(cloneItem.find("select[name='positionNo']"));
-        }
-        // 모집인원 영역 제거 (기존 틀은 전역변수에 저장)
-        function dropToPositionSelect() {
-            destroyPositionSelect();
-            let appendSel = $(".wrapper.headcount .content");
-            headcountHtml = appendSel.find(".colItem").eq(0).html();
-
-            appendSel.html('');
-        }
-
-        function eventToPositionSelect(target) {
-            let positionTarget = target ? target : $("select[name='positionNo']");
-
-            positionTarget.change(e => {
-                let positionNo = $(e.currentTarget).find("option:selected").val();
-                let changeTarget = $(e.currentTarget).siblings("select[name='positionDetailNo']");
-
-                getPositionDetail(positionNo, changeTarget)
-            }).trigger("change");
-        }
-
-        // 선택된 타입에 따라 html 템플릿 가져오기
-        function getHtmlTemplate(type) {
-            let appendTarget = $(".formWrapper");
-            let templateName = type=='project' ? 'moimProjectTemplate' : 'moimStudyTemplate';
-            let template = document.getElementById(templateName);
-
-            // 템플릿 교체
-            appendTarget.html('');
-            appendTarget.html(template.innerHTML);
-
-            // 사용하는 플러그인 재 정의
-            initializePositionSelect();
-            eventToPositionSelect();
-            onlineSelect = $("select[name='onlineNo']").select2();
-            languageSelect = $("select[name='language']").select2({
-                tags: true,
-                placeholder: '기술/언어를 입력해주세요.',
-                minimumResultsForSearch: 0
-            });
-
-            detailDescEditor = new Editor({
-                el: document.querySelector("#detailDesc"),
-                height: type=='project' ? '800px' : '500px',
-                previewStyle: 'tab',
-                initialEditType: 'markdown',
-                autofocus: false,
-                initialValue: template.content.getElementById("detailDescContent").innerHTML,
-                plugins: [colorSyntax]
-            });
-            detailDescEditor.getMarkdown();
-
-            if( type=='project' ) {
-                platformSelect = $("select[name='platformNo']").select2({
-                    placeholder: "출시할 플랫폼을 선택해주세요."
-                });
-            } else if( type=='study' ) {
-                studyCategoryselect = $("select[name='studyCategoryNo']").select2();
-            }
-        }
-
-        // 직무 중분류 가져오기
-        function getPositionDetail(positionNo, changeTarget) {
-            if( positionNo ) {
-                changeTarget.html("");
-
-                $.get(`/position/${positionNo}/detail`, data => {
-                    data.forEach(detail => {
-                        let option = $("<option />");
-                        option.val(detail.positionDetailNo);
-                        option.text(detail.middleName);
-
-                        changeTarget.append(option);
-                    })
-                }, 'json');
-            }
-
-        }
-
-        // 대표이미지 업로드 클릭 트리거
-        function fileUploadTrigger() {
-            let file = $("input[name='moimImg']");
-            file.click();
-        }
-
-        // 모집인원 추가/제거
-        function headcountControl(type) {
-            if( type==='add' )  copyToPositionSelect();
-            else                $(".wrapper.headcount .content").find(".colItem.clone").eq(-1).remove();
-        }
-
-        // 모집인원 인원수 증감
-        function personnelControl(colElement, type) {
-            let personnelElement = $(colElement).parent().find("input[name='personnel']");
-            let personnel = parseInt(personnelElement.val());
-
-            if( type==='plus' )     personnel = personnel>=9 ? personnel : personnel+1;
-            else                    personnel = personnel<=1 ? personnel : personnel-1;
-
-            personnelElement.val(personnel);
-        }
-
-        // 참고링크 추가/제거
-        function linkControl(type) {
-            let appendSel = $(".wrapper.link .content .rowItem");
-            let selCount = $("input[name='link']").length;
-
-            if( type==='add' ) {
-                if( selCount<5 ) {
-                    let cloneHtml = appendSel.find(".itemWrap").eq(0).html();
-                    let cloneItem = $("<div class='itemWrap clone' />");
-
-                    cloneItem.append(cloneHtml);
-                    appendSel.append(cloneItem);
-                }
-            } else {
-                appendSel.find(".itemWrap.clone").eq(-1).remove();
-            }
-        }
-
-        // 등록 폼 체크
-        function formCheck() {
-            let form = document.writeForm;
-            let languageValues = getMultipleValues("language");
-            let detailDesc = detailDescEditor.getHTML();
-
-            // Check
-            if( !form.subject.value ) {
-                requestToast("프로젝트명을 입력해주세요.", "danger", form.subject);
-                return false;
-            } else if( !form.shortDesc.value ) {
-                requestToast("프로젝트명을 입력해주세요.", "danger", form.shortDesc);
-                return false;
-            } else if( languageValues.length<=0 ) {
-                requestToast("사용언어/기술을 하나 이상 선택해주세요.", "danger", form.language);
-                return false;
-            } else if( form.onlineNo.value!=2 && !form.offAddr.value ) {
-                requestToast("오프라인 장소를 입력해주세요.", "danger", form.offAddr);
-                return false;
-            }
-
-            if( form.type.value==='project' ) {
-                let platformNoValues = getMultipleValues("platformNo");
-
-                if( !form.categoryNo.value ) {
-                    requestToast("분야를 선택해주세요.", "danger");
-                    $(document).scrollTop($(".wrapper.category-project").position().top);
-                    return false;
-                } else if( platformNoValues.length<=0 ) {
-                    requestToast("출시 플랫폼을 선택해주세요.", "danger", form.platformNo);
-                    return false;
+                    studyCategoryselect.find("option[value='"+moimData.studyCategoryNo+"']").prop("selected", true).trigger("change");
                 }
             }
+        }
 
-
-            // Data
-            form.detailDesc.value = detailDesc;
+        function getPositionDetailCallback(detailTarget) {
+            if( moimData ) {
+                let idx = detailTarget.parents(".colItem").index();
+                detailTarget.find("option[value='"+moimData.positionDetailNo[idx]+"']").prop("selected", true);
+            }
         }
     </script>
 </th:block>
@@ -359,7 +107,9 @@
 <th:block layout:fragment="container">
     <main>
         <div class="container">
-            <form action="/moim/write" method="post" enctype="multipart/form-data" name="writeForm" onsubmit="return formCheck();" autocomplete="off">
+            <form th:action="'/moim/' + ${processType}" method="post" enctype="multipart/form-data" name="writeForm" onsubmit="return formCheck();" autocomplete="off">
+                <input type="hidden" name="moimNo">
+
                 <div class="wrapper type">
                     <div class="mainTitle">
                         <div class="title">
@@ -386,10 +136,10 @@
 
 
     <template id="moimProjectTemplate">
-        <th:block th:replace="fragment/moimProjectTemplate :: moimProjectTemplate"></th:block>
+        <th:block th:replace="fragment/moimProjectTemplate :: moimProjectTemplate(moimData=${moimData})"></th:block>
     </template>
     <template id="moimStudyTemplate">
-        <th:block th:replace="fragment/moimStudyTemplate :: moimStudyTemplate"></th:block>
+        <th:block th:replace="fragment/moimStudyTemplate :: moimStudyTemplate(moimData=${moimData})"></th:block>
     </template>
 </th:block>
 
