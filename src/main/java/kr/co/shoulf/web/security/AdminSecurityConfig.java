@@ -62,7 +62,7 @@ public class AdminSecurityConfig {
                         .failureUrl("/admin/login/?error") // 로그인 실패 시 이동할 URL 설정
                         .defaultSuccessUrl("/admin/") // 로그인 성공 시 기본 URL로 이동
                 )
-                 // 로그아웃 설정
+                // 로그아웃 설정
                 .logout(logout -> logout
                         .logoutUrl("/admin/logout") // 로그아웃 URL 설정
                         .logoutSuccessUrl("/admin/login/") // 로그아웃 성공 시 리다이렉트 URL 설정
