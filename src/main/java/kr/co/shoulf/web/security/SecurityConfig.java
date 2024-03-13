@@ -34,8 +34,8 @@ public class SecurityConfig{
         // 권한 설정
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login/**", "/user/", "/moim/", "/moim/detail/").permitAll() // 로그인 페이지와 관련된 요청은 인증 없이 허용
-                        .requestMatchers("/user/**", "/moim/**", "moimLike/**", "/message", "/board/write", "/board/modify").hasRole("USER")
+                        .requestMatchers("/", "/login/**", "/moim/detail/").permitAll() // 로그인 페이지와 관련된 요청은 인증 없이 허용
+                        .requestMatchers("moimLike/**", "/message", "/board/write", "/board/modify").hasRole("USER")
                         .anyRequest().permitAll() // 그 외의 요청은 모두 허용
                 );
         // 로그인 설정
