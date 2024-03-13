@@ -12,4 +12,5 @@ import java.util.List;
 public interface MoimParticipantsRepository extends JpaRepository<MoimParticipants, Long> {
     List<MoimParticipants> findByMoimHeadcount(MoimHeadcount moimHeadcount);
     List<MoimParticipants> findByMoimHeadcountAndStatus(MoimHeadcount moimHeadcount, Integer status);
+    List<MoimParticipants> findByUsersAndStatus(Users users, Integer status);
 }

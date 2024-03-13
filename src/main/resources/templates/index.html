@@ -66,12 +66,12 @@
                                     </span>
                                     </th:block>
                                 </p>
-
-                                <th:block th:unless="${data.userJob eq null}">
-                                <p class="positionDetail" th:unless="${data.userJob.positionDetail eq null}">
-                                    [[${data.userJob.positionDetail.middleName}]]
+                                <p class="positionDetail">
+                                    <th:block th:if="${data.userJob==null}">미입력</th:block>
+                                    <th:block th:if="${data.userJob!=null && data.userJob.positionDetail!=null}">
+                                        [[${data.userJob.positionDetail.middleName}]]
+                                    </th:block>
                                 </p>
-                                </th:block>
                             </div>
                             <div class="message">
                                 <i class="bi bi-envelope"></i>

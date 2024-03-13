@@ -1,6 +1,7 @@
 package kr.co.shoulf.web.repository;
 
 import kr.co.shoulf.web.entity.Moim;
+import kr.co.shoulf.web.entity.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,7 @@ import java.util.List;
 public interface MoimRepository extends JpaRepository<Moim,Long> {
     List<Moim> findTop2ByOrderByMoimNoDesc();
     List<Moim> findTop8ByOrderByHitsDesc();
+    Moim findByMoimHeadcountList_MoimHeadcountNo(Long moimHeadcountNo);
 
     @Query("Select m From Moim m " +
             "Left Join fetch m.moimDetail md " +

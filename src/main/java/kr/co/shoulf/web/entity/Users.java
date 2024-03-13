@@ -6,8 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "users")
@@ -29,6 +33,10 @@ public class Users {
     private String nickname;
     @Column
     private String Oauth2Where;
+
+    @Column(name = "last_login_date", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp lastLoginDate;
 
     @Column(length = 50)
     @ColumnDefault("'ROLE_USER'")

@@ -3,7 +3,32 @@
       layout:decorate="~{fragment/layout}">
 
 <th:block layout:fragment="css">
+    <style>
+        main .container { max-width: 1000px; }
 
+        .profile > div { margin-top: 50px; }
+        .profile .profileTitle { border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 10px; }
+        .profile .profileTitle p { font-weight: 600; font-size: 1.2rem; color: #1F1926; }
+
+        .profile .profileList li { display: flex; line-height: 2rem; }
+        .profile .profileList li .name { width: 120px; font-weight: 600; }
+
+        .profile .profileDataBlank { background: #f1f1f1; padding: 20px; }
+        .profile .profileDataBlank p { color: #aaa; }
+
+        .profile .content { padding: 10px; }
+
+        .profile .img { text-align: center; }
+        .profile .img img { width: 200px; height: 200px; object-fit: cover; border-radius: 100%; }
+
+        .profile .info { text-align: center; }
+        .profile .info .nickname { font-weight: 600; font-size: 1.5rem; color: #1F1926; }
+        .profile .info .lastLogin { margin-top: 10px; font-size: .9rem; color: #888; }
+        .profile .info .community { margin-top: 20px; }
+
+        .profile .progressMoim .moimList .headcount { display: none; }
+        .profile .progressMoim .moimList > li { width: calc(33.3333% - (60px / 3)); margin-right: 20px; }
+    </style>
 </th:block>
 <th:block layout:fragment="js">
 
@@ -12,7 +37,122 @@
 <th:block layout:fragment="container">
     <main>
         <div class="container">
-            여기다가 html 작성하세요
+            <div class="wrapper profile">
+                <div class="img">
+                    <img th:src="${userData.userDetail.profileImg!=null ? userData.userDetail.profileImg : 'https://letspl.me/assets/images/prof-no-img.png'}" alt="">
+                </div>
+
+                <div class="info">
+                    <p class="nickname">[[${userData.nickname}]]</p>
+                    <p class="lastLogin">
+                        마지막 로그인 :
+                        <span th:text="${userData.lastLoginDate==null ? '기록없음' : userData.lastLoginDate}"></span>
+                    </p>
+                    <div class="community">
+                        <button type="button" class="btn btn-custom-default btn-lg">1:1 대화</button>
+                        <button type="button" class="btn btn-custom-add btn-lg">모임 초대</button>
+                    </div>
+                </div>
+
+                <div class="job">
+                    <div class="profileTitle">
+                        <p>직무</p>
+                    </div>
+                    <div class="content">
+                        <div class="profileDataBlank" th:if="${userData.userJob==null}">
+                            <p>직무정보를 선택하지 않았습니다.</p>
+                        </div>
+                        <ul class="profileList" th:if="${userData.userJob!=null}">
+                            <li>
+                                <span class="name">직무</span>
+                                <span class="item">[[${userData.userJob.positionDetail.position.bigName}]] > [[${userData.userJob.positionDetail.middleName}]]</span>
+                            </li>
+                            <li>
+                                <span class="name">직무 레벨</span>
+                                <span class="item">[[${userData.userJob.level}]]레벨</span>
+                            </li>
+                            <li>
+                                <span class="name">경력</span>
+                                <span class="item">[[${userData.userJob.career}]]년차</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="online">
+                    <div class="profileTitle">
+                        <p>온/오프라인 여부</p>
+                    </div>
+                    <div class="content">
+                        <div class="profileDataBlank" th:if="${userData.userOnline==null}">
+                            <p>온/오프라인 여부 정보가 없습니다.</p>
+                        </div>
+                        <ul class="profileList" th:if="${userData.userOnline!=null}">
+                            <li>
+                                <span class="name">온/오프라인</span>
+                                <span class="item">[[${userData.userOnline.online.onlineName}]]</span>
+                            </li>
+                            <li>
+                                <span class="name">선호 장소</span>
+                                <span class="item">[[${userData.userDetail.preferArea}]]</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="introduce">
+                    <div class="profileTitle">
+                        <p>소개</p>
+                    </div>
+                    <div class="content">
+                        <div class="profileDataBlank" th:if="${userData.userDetail.introduce==null}">
+                            <p>입력된 소개가 없습니다.</p>
+                        </div>
+                        <p th:if="${userData.userDetail.introduce!=null}">
+                            [[${userData.userDetail.introduce}]]
+                        </p>
+                    </div>
+                </div>
+                <div class="interest">
+                    <div class="profileTitle">
+                        <p>관심분야</p>
+                    </div>
+                    <div class="content">
+                        <div class="profileDataBlank" th:if="${userData.interestCategoryList.isEmpty()}">
+                            <p>관심분야를 정보가 없습니다.</p>
+                        </div>
+                        <ul class="interestList" th:if="${not userData.interestCategoryList.isEmpty()}">
+                            <li th:each="data : ${userData.interestCategoryList}">
+                                [[${data.category.categoryName}]]
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="portfolio">
+                    <div class="profileTitle">
+                        <p>포트폴리오</p>
+                    </div>
+                    <div class="content">
+                        <div class="profileDataBlank" th:if="${userData.portfolioList.isEmpty()}">
+                            <p>입력한 포트폴리오가 없습니다.</p>
+                        </div>
+                        <ul class="portfolioList" th:if="${not userData.portfolioList.isEmpty()}">
+                            <li th:each="data : ${userData.portfolioList}">
+                                [[${data.url}]]
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="progressMoim">
+                    <div class="profileTitle">
+                        <p>진행중인 모임</p>
+                    </div>
+                    <div class="content">
+                        <div class="profileDataBlank" th:if="${userData.progressMoim.isEmpty()}">
+                            <p>진행중인 모임이 없습니다.</p>
+                        </div>
+                        <th:block th:if="${not userData.progressMoim.isEmpty()}" th:replace="fragment/moimList :: moimList(templateData=${userData.progressMoim})"></th:block>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 </th:block>

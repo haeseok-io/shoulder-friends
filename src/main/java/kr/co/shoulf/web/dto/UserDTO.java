@@ -21,4 +21,7 @@ public class UserDTO extends Users {
     private List<UserInterestCategory> interestCategoryList;
     private UserOnline userOnline;
     private List<MoimLike> moimLikeList;
+
+    private List<MoimDTO> progressMoim; // 진행중인 모임
+
 }
