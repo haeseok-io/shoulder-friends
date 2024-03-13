@@ -78,17 +78,13 @@
             color:black;
             background-color: white;
             padding: 12px 23px;
-            margin-left: 8px;
+            margin-left: 40px;
             font-size: 15px;
             font-weight: 600;
         }
         #btnkakao{
             padding: 5px 0;
-            margin-left: 30px;
-        }
-        #btnnaver{
-            padding: 7px 5px;
-            margin-left: 30px;
+            margin-left: 110px;
         }
         #paymentRadio:checked{
             border-color: #4E3C62;
@@ -113,6 +109,8 @@
     <!--iamport 간편결제-->
     <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 
+    <script src="https://js.tosspayments.com/v1/payment-widget"></script>
+
     <script type="text/javascript">
 
         function opencafe() {
@@ -132,7 +130,7 @@
                 alert("날짜를 입력하세요.");
             }else {
                 // 새 창 열기
-                window.open("/meeting/cafelist?checkin=" + checkin + "&moimNo=" + moimNo, "Studycafe", "top=50, left=250, width=1500, height=900");
+                window.open("/meeting/cafelist?checkin=" + checkin + "&moimNo=" + moimNo, "Studycafe", "top=50, left=250, width=1400, height=800");
             }
         }
 
@@ -373,8 +371,6 @@
                                                 console.log("카카오 페이");
 
                                                 kakaopayment();
-                                            } else if (checkPayment === "3") {
-                                                console.log("네이버 페이");
                                             }
                                         }
                                     }
@@ -425,7 +421,7 @@
                 buyer_name : name,
                 buyer_tel : phone,
             }, function (rsp) {
-                console.log(rsp);
+
                 if (rsp.success) {
                     var msg = '결제가 완료되었습니다.';
                     msg += "고유ID", rsp.imp_uid;
@@ -457,8 +453,6 @@
                         },
                         success: function(response) {
                             console.log("저장 성공 : "+response);
-                            alert(response.next_redirect_pc_url);
-                            location.href = response.next_redirect_pc_url;
                             message = true;
                             return message;
                         },
@@ -479,8 +473,35 @@
 
         //카카오 결제
         function kakaopayment(){
+            let message;
+            let price = $("#price").val();
+            let studycafename = $("#studycafename").val();
+            let name = $("#name").val();
+            let email = $("#email").val();
+            let phone = $("#phone").val();
+            let checkin = $("#calendar_start_date").val();
+            let userNo = $("#userNo").val();
+            let moimNo = $("#moimNo").val();
+            let studyroomNo = $("#studyroomNo").val();
+            let content = $("#calendar_content").val();
+            let start_date = $("#calendar_start_date").val();
+            let addr = $("#calendar_addr").val();
+            let studycafeNo = $("#studycafeNo").val();
+            let start_time = $("#start_time").val();
 
-        };
+            var clientKey = 'test_ck_DnyRpQWGrN261P2kgAOOrKwv1M9E'
+            var tossPayments = TossPayments(clientKey)
+
+            tossPayments.requestPayment('카드', {
+                amount: price,
+                orderId: 'm_'+new Date().getTime(),
+                orderName: studycafename,
+                customerName: name,
+                successUrl: 'http://localhost:8080/meeting/payment',
+                failUrl: 'http://localhost:8080/meeting/paymentfail',
+            })
+
+        }
     </script>
 </th:block>
 
@@ -555,9 +576,6 @@
 
                                                 <input type="radio" class="btn-check" name="options" id="option2" value="2" autocomplete="off">
                                                 <label class="btn btn" id="btnkakao" for="option2"><img src="/images/kakaopay.png" readonly style="width: 110px;"></label>
-
-                                                <input type="radio" class="btn-check" name="options" id="option3" value="3" autocomplete="off">
-                                                <label class="btn btn" id="btnnaver" for="option3"><img src="/images/naverpay.png" readonly style="width: 100px;"></label>
                                             </div>
                                         </div>
                                         <div id="paymentName">
