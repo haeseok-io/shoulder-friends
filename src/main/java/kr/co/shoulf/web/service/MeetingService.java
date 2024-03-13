@@ -24,8 +24,6 @@ import java.util.*;
 @RequiredArgsConstructor
 @Transactional
 public class MeetingService {
-    private static final String cid = "TC0ONETIME"; // 가맹점 테스트 코드
-    private static final String admin_Key = "DEV7E26398A88DF32D8A3C6C7C9D84D93C607D91"; // 공개 조심! 본인 애플리케이션의 어드민 키를 넣어주세요
     private final MoimRepository moimRepository;
     private final MeetingRepository meetingRepository;
     private final ReservationRepository reservationRepository;
