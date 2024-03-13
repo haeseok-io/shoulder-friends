@@ -5,8 +5,6 @@ import kr.co.shoulf.web.entity.Users;
 import kr.co.shoulf.web.repository.UserDetailRepository;
 import kr.co.shoulf.web.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,20 +17,17 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
 
     // 사용자 로그인 처리 메서드
-    public UserDetails login(Users users) {
+    public boolean login(String username, String password) {
         // 이메일로 사용자 정보 조회
-        Users readUser = userRepository.findByEmail(users.getEmail());
+        Users user = userRepository.findByEmail(username);
 
         // 조회된 사용자가 없을 경우 예외 발생
-        if (readUser == null) {
-            throw new UsernameNotFoundException("가입된 이메일을 찾을 수 없습니다. " + users.getEmail());
+        if (user == null) {
+            throw new UsernameNotFoundException("가입된 이메일을 찾을 수 없습니다. " + username);
         }
 
         // UserDetails 객체를 생성하여 반환
-        return User.withUsername(readUser.getEmail())
-                .password(readUser.getPass())
-                .roles(readUser.getRole()) // 사용자 권한 설정
-                .build();
+        return passwordEncoder.matches(password, user.getPass());
     }
 
     // 사용자 회원가입 처리 메서드

@@ -4,10 +4,8 @@ import kr.co.shoulf.web.entity.Users;
 import kr.co.shoulf.web.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,19 +18,18 @@ public class LoginController {
         return "login/login";
     }
 
-//    @PostMapping("/loginProc")
-//    public String loginOk(@ModelAttribute Users users, Model model, HttpSession session) {
-//        UserDetails userDetails = loginService.login(users);
-//        if(userDetails != null) {
-//            // 세션에 유저 정보 저장
-//            session.setAttribute("loggedInUser", userDetails);
-//            return "redirect:/";
-//        } else {
-//            // 로그인 실패 시
-//            model.addAttribute("error", "존재하지 않는 아이디이거나 비밀번호를 다시 입력해주세요.");
-//            return "login/login"; // 로그인 페이지로 다시 이동
-//        }
-//    }
+    @PostMapping("/loginProc")
+    public String loginOk(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
+        boolean user = loginService.login(username, password);
+        if(user) {
+            // 세션에 유저 정보 저장
+            return "redirect:/";
+        } else {
+            // 로그인 실패 시
+            model.addAttribute("error", "존재하지 않는 아이디이거나 비밀번호를 다시 입력해주세요.");
+            return "redirect:/login/"; // 로그인 페이지로 다시 이동
+        }
+    }
 
     @GetMapping("/find")
     public String find() {
