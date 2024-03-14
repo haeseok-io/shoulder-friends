@@ -82,7 +82,7 @@
             font-size: 15px;
             font-weight: 600;
         }
-        #btnkakao{
+        #btnpay{
             padding: 5px 0;
             margin-left: 110px;
         }
@@ -368,9 +368,9 @@
                                                 }
 
                                             } else if (checkPayment === "2") {
-                                                console.log("카카오 페이");
+                                                console.log("토스 페이");
 
-                                                kakaopayment();
+                                                payment();
                                             }
                                         }
                                     }
@@ -471,8 +471,8 @@
             });
         }
 
-        //카카오 결제
-        function kakaopayment(){
+        //토스페이먼츠 결제
+        function payment(){
             let message;
             let price = $("#price").val();
             let studycafename = $("#studycafename").val();
@@ -493,14 +493,20 @@
             var tossPayments = TossPayments(clientKey)
 
             tossPayments.requestPayment('카드', {
-                amount: price,
+                amount: 1,
                 orderId: 'm_'+new Date().getTime(),
                 orderName: studycafename,
                 customerName: name,
+                customerEmail: email,
                 successUrl: 'http://localhost:8080/meeting/payment',
                 failUrl: 'http://localhost:8080/meeting/paymentfail',
+            }).catch(function (error) {
+                if (error.code === 'USER_CANCEL') {
+                    // 결제 고객이 결제창을 닫았을 때 에러 처리
+                } else if (error.code === 'INVALID_CARD_COMPANY') {
+                    // 유효하지 않은 카드 코드에 대한 에러 처리
+                }
             })
-
         }
     </script>
 </th:block>
@@ -575,7 +581,7 @@
                                                 <label class="btn btn" id="btncard" for="option1">일반 결제</label>
 
                                                 <input type="radio" class="btn-check" name="options" id="option2" value="2" autocomplete="off">
-                                                <label class="btn btn" id="btnkakao" for="option2"><img src="/images/kakaopay.png" readonly style="width: 110px;"></label>
+                                                <label class="btn btn" id="btnpay" for="option2">토스 페이먼츠</label>
                                             </div>
                                         </div>
                                         <div id="paymentName">
