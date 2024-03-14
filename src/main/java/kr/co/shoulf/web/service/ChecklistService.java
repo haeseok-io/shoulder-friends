@@ -44,4 +44,29 @@ public class ChecklistService {
                 .build();
         checklistRepository.save(checklist);
     }
+
+    //체크리스트 미완료
+    public void checkdo(Long checklistNo) {
+        Optional<Checklist> result = checklistRepository.findById(checklistNo);
+        Checklist checklist = result.orElseThrow();
+
+        checklist.setStatus(1);
+
+        checklistRepository.save(checklist);
+    }
+
+    //체크리스트 완료
+    public void checkdone(Long checklistNo) {
+        Optional<Checklist> result = checklistRepository.findById(checklistNo);
+        Checklist checklist = result.orElseThrow();
+
+        checklist.setStatus(2);
+
+        checklistRepository.save(checklist);
+    }
+
+    //체크리스트 삭제
+    public void deleteChecklist(Long checklistNo) {
+        checklistRepository.deleteById(checklistNo);
+    }
 }

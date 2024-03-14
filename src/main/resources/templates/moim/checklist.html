@@ -3,29 +3,143 @@
       layout:decorate="~{fragment/layout}">
 
 <th:block layout:fragment="css">
-
+    <style>
+        .mini-title{
+            font-weight: 600;
+            font-size: 22px;
+            color: #1F1926;
+            padding: 25px 0;
+        }
+        #checkbtn{
+            background-color: #382B47;
+            color: white;
+            width: 130px;
+        }
+        .form-check-input:checked{
+            /* 선택된 상태의 배경색 및 테두리 색을 여기에 지정합니다 */
+            background-color: #7B27FF;
+            border-color: #DEE2E6;
+            box-shadow: none;
+        }
+        .form-check-input:focus{
+            border-color: #DEE2E6;
+            box-shadow: none;
+        }
+        .form-check{
+            padding-bottom: 6px;
+        }
+        .form-check-input[type=checkbox]{
+            width: 17px;
+            height: 17px;
+            margin-top : 10px;
+        }
+        button:not(:disabled){
+            border: none;
+            height: 28px;
+            margin-bottom: 15px;;
+            padding-bottom: 5px;
+        }
+        .form-check-label{
+            font-size: 18px;
+            padding: 0 8px;
+        }
+    </style>
 </th:block>
 <th:block layout:fragment="js">
+    <script>
+        $(()=>{
+            let checkboxes = document.querySelectorAll('.form-check-input');
+            let moimNo = $("#moimNo").val();
 
+            checkboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function(event) {
+                    if (event.target.checked) {
+                        // 체크박스가 선택된 경우에 수행할 동작을 여기에 추가
+                        let value = event.target.value; // 체크박스의 값 가져오기
+                        var label = event.target.nextElementSibling;
+                        $.ajax({
+                            url:'/moim/checklist/done',
+                            method:'post',
+                            data:{
+                                checklistNo : value,
+                                moimNo : moimNo
+                            },
+                            success: function (data){
+                                alert("완료");
+                            },
+                            error: function(xhr, status, error) {
+                                alert("오류발생 새로고침 해주세요");
+                            }
+                        })
+
+                        label.style.textDecoration = 'line-through';
+
+
+                    } else {
+                        // 체크박스가 선택 해제된 경우에 수행할 동작을 여기에 추가
+                        let value = event.target.value; // 체크박스의 값 가져오기
+                        var label = event.target.nextElementSibling;
+                        $.ajax({
+                            url:'/moim/checklist/do',
+                            method:'post',
+                            data:{
+                                checklistNo : value,
+                                moimNo : moimNo
+                            },
+                            success: function (data){
+                            },
+                            error: function(xhr, status, error) {
+                                alert("오류발생 새로고침 해주세요");
+                            }
+                        })
+
+                        label.style.textDecoration = 'none';
+                    }
+                });
+            });
+        })
+    </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
         <div class="container">
             <form action="/moim/checklist/write" method="post">
-            <div class="input-group mb-3" style="width: 600px;">
-                <input type="text" class="form-control" name="contents" aria-label="Recipient's username" aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">등록하기</button>
-                <input type="hidden" name="moimNo" th:value="${moimNo}">
-            </div>
-            <div th:each="dto : ${list}">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                <label class="form-check-label" for="defaultCheck1">
-                    [[${dto.contents}]]
-                </label>
-            </div>
-            </div>
+                <div class="title">
+                    <p class="mini-title">할일 등록하기</p>
+                </div>
+                <div class="input-group mb-3" style="width: 600px;">
+                    <input type="text" class="form-control" name="contents" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <input class="btn btn-outline-secondary" id="checkbtn" type="submit" value="등록하기" />
+                    <input type="hidden" id="moimNo" name="moimNo" th:value="${moimNo}">
+                </div>
+                <div class="title">
+                    <p class="mini-title">할일 목록</p>
+                </div>
+                <div th:each="dto : ${list}">
+                <div class="form-check">
+                    <div th:if="${dto.status == 2}">
+                        <input class="form-check-input" type="checkbox" th:value="${dto.checklistNo}" th:name="${dto.checklistNo}" id="defaultCheck1" checked>
+                        <label class="form-check-label" for="defaultCheck1" style="text-decoration: line-through;">
+                            [[${dto.contents}]]
+                        </label>
+                        <button class="btn btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/moim/checklist/delete(checklistNo=${dto.checklistNo}, moimNo=${moimNo})}">삭제</a></li>
+                        </ul>
+                    </div>
+                    <div th:if="${dto.status == 1}">
+                        <input class="form-check-input" type="checkbox" th:value="${dto.checklistNo}" th:name="${dto.checklistNo}" id="defaultCheck2">
+                        <label class="form-check-label" for="defaultCheck2">
+                            [[${dto.contents}]]
+                        </label>
+                        <button class="btn btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/moim/checklist/delete(checklistNo=${dto.checklistNo}, moimNo=${moimNo})}">삭제</a></li>
+                        </ul>
+                    </div>
+                </div>
+                </div>
             </form>
         </div>
     </main>
