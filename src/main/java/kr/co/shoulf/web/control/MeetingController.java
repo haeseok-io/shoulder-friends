@@ -1,5 +1,6 @@
 package kr.co.shoulf.web.control;
 
+import jakarta.servlet.http.PushBuilder;
 import kr.co.shoulf.web.dto.MeetingDTO;
 import kr.co.shoulf.web.dto.ReservPaymentDTO;
 import kr.co.shoulf.web.service.MeetingService;
@@ -101,4 +102,13 @@ public class MeetingController {
         meetingService.cancelRoom(endDate, roomNo2);
         return "redirect:/meeting/detail?moimNo="+moimNo;
     }
+
+    //페이 임시 추가
+    @GetMapping("/payment")
+    public ResponseEntity payment(@RequestParam int amount, @RequestParam String paymentKey, @RequestParam String orderId){
+        System.out.println(amount+" : "+paymentKey+" : "+orderId);
+        meetingService.payment(amount, paymentKey, orderId);
+        return ResponseEntity.ok().build();
+    }
+
 }

@@ -9,8 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.net.Inet4Address;
+import java.net.URI;
 import java.net.UnknownHostException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -24,6 +29,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Transactional
 public class MeetingService {
+    private final String str = "test_sk_LlDJaYngroo0B6YyxbGnrezGdRpX:";
     private final MoimRepository moimRepository;
     private final MeetingRepository meetingRepository;
     private final ReservationRepository reservationRepository;
@@ -223,5 +229,26 @@ public class MeetingService {
 
         reservationRepository.save(reservation);
         paymentRepository.save(payment);
+    }
+
+    //페이 임시 추가
+    public void payment(int amount, String paymentKey, String orderId) {
+        String encodedStr = Base64.getEncoder().encodeToString(str.getBytes());
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.tosspayments.com/v1/payments/confirm"))
+                .header("Authorization", "Basic "+encodedStr)
+                .header("Content-Type", "application/json")
+                .method("POST", HttpRequest.BodyPublishers.ofString("{\"paymentKey\":\""+paymentKey+"\",\"amount\":"+amount+",\"orderId\":\""+orderId+"\"}"))
+                .build();
+        HttpResponse<String> response = null;
+        try {
+            response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(response.body());
     }
 }
