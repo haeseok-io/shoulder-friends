@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.Console;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -34,19 +36,22 @@ public class ChecklistController {
 
     //체크리스트 미완료처리
     @PostMapping("/checklist/do")
-    public String checklistDo(@RequestParam Long moimNo){
+    public String checklistDo(@RequestParam Long moimNo, @RequestParam Long checklistNo){
+        checklistService.checkdo(checklistNo);
         return "redirect:/moim/checklist?moimNo="+moimNo;
     }
     
     //체크리스트 완료처리
     @PostMapping("/checklist/done")
-    public String checklistDone(@RequestParam Long moimNo){
+    public String checklistDone(@RequestParam Long moimNo, @RequestParam Long checklistNo){
+        checklistService.checkdone(checklistNo);
         return "redirect:/moim/checklist?moimNo="+moimNo;
     }
 
     //체크리스트 삭제
-    @PostMapping("/checklist/delete")
-    public String checklistDelete(@RequestParam Long moimNo){
+    @GetMapping("/checklist/delete")
+    public String checklistDelete(@RequestParam Long moimNo, @RequestParam Long checklistNo){
+        checklistService.deleteChecklist(checklistNo);
         return "redirect:/moim/checklist?moimNo="+moimNo;
     }
 }
