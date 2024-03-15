@@ -31,9 +31,13 @@
                     <span th:if="${#lists.isEmpty(memberStudyCafesList[idx.index])}">미지정</span>
                 </td>
                 <td>
-                    <a th:href="@{/member/modify(memberNo=${member.memberNo})}" class="btn btn-primary">수정</a>
+                    <a th:href="@{/member/modify(memberNo=${member.memberNo})}" class="btn btn-primary"
+                       th:if="${loggedInUser.role == 'ROLE_ADMIN'}">수정</a>
+                    <button class="btn btn-success openPopup"
+                            th:if="${loggedInUser.role == 'ROLE_ADMIN'}"
+                            th:data-memberNo="${member.memberNo}">연차 지급</button>
                     <form th:if="${member.role == 'ROLE_NONE'}" method="post" th:action="@{/member/approval}">
-                        <input type="hidden" name="memberNo" th:value="${member.memberNo}" />
+                        <input type="hidden" name="memberNo" th:attr="data-memberNo=${member.memberNo}" />
                         <button type="submit" class="btn btn-success">가입 승인</button>
                     </form>
                 </td>
@@ -48,4 +52,21 @@
         </table>
     </div>
 </body>
+<script>
+    const buttons = document.querySelectorAll(".openPopup");
+
+    buttons.forEach(button => {
+        button.addEventListener("click", function () {
+            const memberNo = button.getAttribute("data-memberNo");
+            const leftPosition = (window.screen.width - 400) / 2;
+            const topPosition = (window.screen.height - 300) / 2;
+            const url = "/annual/grantLeave?memberNo=" + memberNo;
+
+            window.open(url, "popupWindow",
+                "width=400, height=200,"
+                + "left=" + leftPosition
+                + ", top=" + topPosition);
+        })
+    })
+</script>
 </html>
