@@ -87,6 +87,7 @@
                                 moimNo : moimNo
                             },
                             success: function (data){
+                                alert("취소");
                             },
                             error: function(xhr, status, error) {
                                 alert("오류발생 새로고침 해주세요");
@@ -112,6 +113,7 @@
                     <input type="text" class="form-control" name="contents" aria-label="Recipient's username" aria-describedby="button-addon2">
                     <input class="btn btn-outline-secondary" id="checkbtn" type="submit" value="등록하기" />
                     <input type="hidden" id="moimNo" name="moimNo" th:value="${moimNo}">
+                    <input type="hidden" id="userName" name="userName" th:value="${userName}">
                 </div>
                 <div class="title">
                     <p class="mini-title">할일 목록</p>
@@ -120,6 +122,7 @@
                 <div class="form-check">
                     <div th:if="${dto.status == 2}">
                         <input class="form-check-input" type="checkbox" th:value="${dto.checklistNo}" th:name="${dto.checklistNo}" id="defaultCheck1" checked>
+                        <input type="hidden" name="useremail" th:value="${dto.Users.email}">
                         <label class="form-check-label" for="defaultCheck1" style="text-decoration: line-through;">
                             [[${dto.contents}]]
                         </label>
@@ -130,6 +133,7 @@
                     </div>
                     <div th:if="${dto.status == 1}">
                         <input class="form-check-input" type="checkbox" th:value="${dto.checklistNo}" th:name="${dto.checklistNo}" id="defaultCheck2">
+                        <input type="hidden" name="useremail" th:value="${dto.Users.email}">
                         <label class="form-check-label" for="defaultCheck2">
                             [[${dto.contents}]]
                         </label>
