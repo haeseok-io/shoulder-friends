@@ -30,4 +30,8 @@ public class MemberService {
 
         return memberList;
     }
+
+    public Member loginMember(String id) {
+        return memberRepository.findById(id);
+    }
 }

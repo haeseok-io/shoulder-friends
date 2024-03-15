@@ -1,8 +1,8 @@
 package kr.co.shoulf.web.security.auth;
 
-import jakarta.servlet.http.HttpSession;
 import kr.co.shoulf.web.entity.UserDetail;
 import kr.co.shoulf.web.entity.Users;
+import kr.co.shoulf.web.repository.UserDetailRepository;
 import kr.co.shoulf.web.repository.UserRepository;
 import kr.co.shoulf.web.security.auth.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.security.SecureRandom;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
-    private final HttpSession httpSession;
+    private final UserDetailRepository userDetailRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -64,9 +64,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user2.setRole(role);
             user2.setPass(sb.toString());
             user2.setOauth2Where(oAuth2Response.getProvider());
-            user2.setUserDetail(new UserDetail());
 
-            userRepository.save(user2);
+            UserDetail userDetail = UserDetail.builder()
+                    .users(user2)
+                    .build();
+
+            userDetailRepository.save(userDetail);
         }
 
         return new CustomOAuth2User(oAuth2Response, role);

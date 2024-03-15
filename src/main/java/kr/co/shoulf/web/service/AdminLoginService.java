@@ -52,7 +52,7 @@ public class AdminLoginService {
         newMember.setPhone(member.getPhone());
         newMember.setPost(member.getPost());
         newMember.setAddr(member.getAddr());
-        newMember.setRole("ROLE_NONE");
+        newMember.setRole("ROLE_EMP");
 
         memberRepository.save(newMember);
     }

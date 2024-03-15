@@ -28,16 +28,16 @@ public class MainController {
 
         // 현재 사용자의 인증 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("id", authentication.getName());
+        if (authentication != null) {
+            // 현재 사용자의 권한 정보 가져오기
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
 
-        // 현재 사용자의 권한 정보 가져오기
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
+            GrantedAuthority auth = iterator.next();
+            String role = auth.getAuthority();
 
-        GrantedAuthority auth = iterator.next();
-        String role = auth.getAuthority();
-
-        model.addAttribute("role", role);
+            model.addAttribute("role", role);
+        }
 
         return "index";
     }

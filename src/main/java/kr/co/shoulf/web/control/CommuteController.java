@@ -29,7 +29,7 @@ public class CommuteController {
         if(loggedInUser != null) {
             model.addAttribute("loggedInUser", loggedInUser);
         }else{
-            return "redirect:/admin/login";
+            return "redirect:/admin/login/";
         }
 
         return "admin/commute/index";
