@@ -360,12 +360,16 @@
                                         let checkPayment = $("input[name='options']:checked").val();
                                         let name = $("#name").val();
                                         let phone = $("#phone").val();
+                                        let email = $("#email").val();
 
                                         if(name === "" || name === null){
                                             alert("이름을 입력해주세요");
                                             return;
                                         }else if(phone === "" || phone === null){
                                             alert("전화번호를 입력해주세요");
+                                            return;
+                                        }else if(email === "" || email === null){
+                                            alert("이메일을 입력해주세요");
                                             return;
                                         }else {
                                             //결제 선택에 따라서 결제창 다르게 띄우기
@@ -413,7 +417,6 @@
             let email = $("#email").val();
             let phone = $("#phone").val();
             let checkin = $("#calendar_start_date").val();
-            let userNo = $("#userNo").val();
             let moimNo = $("#moimNo").val();
             let studyroomNo = $("#studyroomNo").val();
             let content = $("#calendar_content").val();
@@ -453,7 +456,6 @@
                             "email":email,
                             "price":price,
                             "checkin":checkin,
-                            "userNo":userNo,
                             "moimNo":moimNo,
                             "studyroomNo":studyroomNo,
                             "title" : content,
@@ -491,7 +493,6 @@
             let email = $("#email").val();
             let phone = $("#phone").val();
             let checkin = $("#calendar_start_date").val();
-            let userNo = $("#userNo").val();
             let moimNo = $("#moimNo").val();
             let studyroomNo = $("#studyroomNo").val();
             let content = $("#calendar_content").val();
@@ -600,13 +601,11 @@
                                             <input type="text" class="form-control" id="name" name="name">
                                             <label for="phone" class="col-form-label" style="font-size: 17px;font-weight: 600;">결제자 전화번호</label>
                                             <input type="text" class="form-control" id="phone" name="phone">
+                                            <label for="email" class="col-form-label" style="font-size: 17px;font-weight: 600;">결제자 이메일</label>
+                                            <input type="text" class="form-control" id="email" name="email">
                                         </div>
                                         <input type="hidden" name="studycafeNo" id="studycafeNo">
                                         <input type="hidden" name="studyroomNo" id="studyroomNo">
-                                        <div th:each="dto:${userList}">
-                                            <input type="hidden" name="email" id="email" th:value="${dto.email}">
-                                            <input type="hidden" name="userNo" id="userNo" th:value="${dto.userNo}">
-                                        </div>
                                     </div>
                                 </div>
                             </div>
