@@ -78,7 +78,7 @@ public class SecurityConfig {
                 // 로그인 설정
                 .formLogin((auth) -> auth
                         .loginPage("/login") // 로그인 페이지 설정
-                        .loginProcessingUrl("/loginProc") // 로그인 처리 URL 설정
+                        .loginProcessingUrl("/login/loginProc") // 로그인 처리 URL 설정
                         .failureUrl("/login?error") // 로그인 실패 시 이동할 URL 설정
                         .defaultSuccessUrl("/")
                 )
