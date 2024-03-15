@@ -27,10 +27,9 @@ public class MeetingController {
 
     // 미팅 디테일로 이동
     @GetMapping("/detail")
-    public void detail(Model model, @RequestParam Long moimNo, Authentication authentication){
+    public void detail(Model model, @RequestParam Long moimNo){
         model.addAttribute("meetinglist", meetingService.meetingList(moimNo));
         model.addAttribute("moimNo", moimNo);
-//        model.addAttribute("userList", meetingService.getUsers(authentication));
     }
 
     //카페 목록 페이지로 이동
