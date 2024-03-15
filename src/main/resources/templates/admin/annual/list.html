@@ -35,13 +35,16 @@
                         <td th:text="${memberAnnualDetail.useNum}"></td>
                         <td th:if="${memberAnnualDetail.status == 1}">
                             <button class="btn btn-success"
+                                    th:if="${loggedInUser.role == 'ROLE_ADMIN'}"
                                     th:data-memberNo="${memberAnnualDetail.member.memberNo}"
                                     th:data-annualDetailNo="${memberAnnualDetail.annualDetailNo}"
                                     onclick="approveAnnual(this)">승인</button>
                             <button class="btn btn-danger"
+                                    th:if="${loggedInUser.role == 'ROLE_ADMIN'}"
                                     th:data-memberNo="${memberAnnualDetail.member.memberNo}"
                                     th:data-annualDetailNo="${memberAnnualDetail.annualDetailNo}"
                                     onclick="rejectAnnual(this)">반려</button>
+                            <span th:if="${loggedInUser.role == 'ROLE_EMP'}">승인 대기 중</span>
                         </td>
                         <td th:if="${memberAnnualDetail.status == 2}" th:text="승인됨"></td>
                         <td th:if="${memberAnnualDetail.status == 3}" th:text="반려됨"></td>
