@@ -77,12 +77,11 @@ public class SecurityConfig {
                 // 권한 설정
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/admin/login/**","/admin/loginProc").permitAll()
-                        .requestMatchers("/admin/**").hasAnyRole("ADMIN","EMP") // admin 및 emp 역할이 있는 사용자만 해당 URL에 접근 가능
-                        //.anyRequest().permitAll() // 그 외의 요청은 모두 허용
-
+                        .requestMatchers("/admin/**", "/member/**", "/commute/**",
+                                "/annual/**","/study/**", "/reservation/**").hasAnyRole("ADMIN","EMP") // admin 및 emp 역할이 있는 사용자만 해당 URL에 접근 가능
+                        .anyRequest().authenticated() // 그 외의 요청은 인증된 사용자만
                 )
                 // 로그인 설정
-
                 .formLogin((auth) -> auth
                         .loginPage("/admin/login/") // 로그인 페이지 설정
                         .loginProcessingUrl("/admin/loginProc") // 로그인 처리 URL 설정
@@ -107,27 +106,21 @@ public class SecurityConfig {
         http
                 .securityMatcher("/login/**", "/oauth2/**", "/logout")
                 // CSRF 보안 설정 비활성화
-//                .csrf(AbstractHttpConfigurer::disable
                 .csrf((csrf)->csrf.disable())
-
                 .authenticationProvider(userDaoAuthenticationProvider())
-//                .authorizeHttpRequests(auth -> auth
-//                        .anyRequest().permitAll()
-//                )
+                // 로그인 설정
                 .formLogin((auth) -> auth
                         .loginPage("/login") // 로그인 페이지 설정
                         .loginProcessingUrl("/loginProc") // 로그인 처리 URL 설정
                         .failureUrl("/login?error") // 로그인 실패 시 이동할 URL 설정
                         .defaultSuccessUrl("/")
                 )
-
+                // 권한 설정
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login/**","/oauth2/**").permitAll()
                         .anyRequest().authenticated()
                 )
-
-//                .oauth2Login(Customizer.withDefaults())
-
+                // Oauth2 로그인 설정
                 .oauth2Login(
                         (oauth2Login) -> oauth2Login
                         .loginPage("/login") // 로그인 페이지 설정
@@ -136,7 +129,6 @@ public class SecurityConfig {
                                 userInfo.userService(customOAuth2UserService) // 사용자 정보 서비스 지정
                         )
                 )
-
                 //로그아웃 설정
                 .logout((logout) -> logout
                 .logoutUrl("/logout") // 로그아웃 URL 설정
