@@ -4,6 +4,10 @@
 
 <th:block layout:fragment="css">
     <style>
+        #calendar {
+            max-width: 1000px;
+            margin: 40px auto;
+        }
         #addCalendar, #modifyCalendar, #modify{
             background-color: #7B27FF;
             color: white;
@@ -66,12 +70,14 @@
         }
         input[type="text"]{
             border-radius: 4px !important;
+            padding-left: 12px;
         }
         input[type="text"], input[type="radio"],input[type="date"], #start_time, #start_time2{
+            border: 1px solid #DEE2E6;
             margin-bottom: 10px;
         }
         input[type="text"]:focus, input[type="radio"]:focus,input[type="date"]:focus, #start_time:focus, #start_time2:focus, button[type="button"]:focus{
-            border: 1px solid #CCCCCC;
+            border: 1px solid #DEE2E6;
             box-shadow: none !important;
         }
         #btncard{
@@ -89,6 +95,12 @@
         #paymentRadio:checked{
             border-color: #4E3C62;
         }
+        .card-body{
+            margin-top: 9px;
+        }
+        .col-form-label{
+            padding: 9px 0;
+        }
     </style>
 </th:block>
 
@@ -97,7 +109,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- bootstrap 4 -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -527,15 +538,15 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="calendar_content" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 내용</label>
-                                <input type="text" class="form-control" id="calendar_content" name="calendar_content">
-                                <label for="calendar_addr" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 주소</label>
-                                <input type="text" class="form-control" id="calendar_addr" name="calendar_addr">
-                                <label for="calendar_start_date" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 날짜</label>
+                                <label for="calendar_content" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 내용</label>
+                                <input type="text" class="form-control" id="calendar_content" name="calendar_content" placeholder="미팅 내용을 적어주세요.">
+                                <label for="calendar_addr" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 주소</label>
+                                <input type="text" class="form-control" id="calendar_addr" name="calendar_addr" placeholder="미팅 장소의 주소를 상세하게 적어주세요.">
+                                <label for="calendar_start_date" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 날짜</label>
                                 <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
                             </div>
                             <div class="form-group">
-                                <label for="start_time" style="font-size: 17px;font-weight: 600;">시작 시간</label>
+                                <label for="start_time" style="font-size: 18px;font-weight: 600; padding: 9px 0;">시작 시간</label>
                                 <select class="form-control" id="start_time" name="start_time">
                                     <option value="09:00:00">09:00</option>
                                     <option value="09:30:00">09:30</option>
@@ -560,7 +571,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="btnn" class="col-form-label" style="font-size: 17px;font-weight: 600;">어깨동무 스터디 카페</label>
+                                <label for="btnn" class="col-form-label" style="font-size: 18px;font-weight: 600;">어깨동무 스터디 카페</label>
                                 <p class="d-inline-flex gap-1">
                                     <button class="btn btn-secondary" id="btnn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onclick="opencafe();">
                                         이용하기
@@ -621,23 +632,23 @@
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label for="content" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 내용</label>
+                                    <label for="content" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 내용</label>
                                     <input type="text" class="form-control-plaintext" id="content" name="content" readonly style="border:none;" >
                                 </div>
                                 <div class="form-group">
-                                    <label for="addr" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 주소</label>
+                                    <label for="addr" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 주소</label>
                                     <input type="text" class="form-control-plaintext" id="addr" name="addr" readonly style="border:none;">
                                 </div>
                                 <div class="form-group">
-                                    <label for="start_date" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 날짜</label>
+                                    <label for="start_date" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 날짜</label>
                                     <input type="text" class="form-control-plaintext" id="start_date" name="start_date" readonly style="border:none;">
                                 </div>
                                 <div class="form-group">
-                                    <label for="time" class="col-form-label" style="font-size: 17px;font-weight: 600;">시작 시간</label>
+                                    <label for="time" class="col-form-label" style="font-size: 18px;font-weight: 600;">시작 시간</label>
                                     <input type="text" class="form-control-plaintext" id="time" name="time" readonly style="border:none;">
                                 </div>
                                 <div class="form-group" id="cafeonly">
-                                    <label for="collapseExample2" class="col-form-label" style="font-size: 17px;font-weight: 600; margin-bottom: 12px;">어깨동무 스터디 카페</label>
+                                    <label for="collapseExample2" class="col-form-label" style="font-size: 18px;font-weight: 600;">어깨동무 스터디 카페</label>
                                     <div class="collapse show" id="collapseExample2">
                                         <div class="card card-body" style="padding: 10px 15px;">
                                             <label for="cafename" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 카페</label>
@@ -661,22 +672,22 @@
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label for="content2" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 내용</label>
+                                    <label for="content2" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 내용</label>
                                     <input type="text" class="form-control" id="content2" name="title">
                                 </div>
                                 <div class="form-group">
-                                    <label for="addr2" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 주소</label>
+                                    <label for="addr2" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 주소</label>
                                     <input type="text" class="form-control" id="addr2" name="addr">
                                 </div>
                                 <div class="form-group">
-                                    <label for="calendar_start_date2" class="col-form-label" style="font-size: 17px;font-weight: 600;">미팅 날짜</label>
+                                    <label for="calendar_start_date2" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 날짜</label>
                                     <input type="date" class="form-control" id="calendar_start_date2" name="startDate">
                                     <input type="hidden" name="moimNo" th:value="${moimNo}">
                                     <input type="hidden" name="endDate" id="endDate2">
                                     <input type="hidden" name="meetingdate" id="meetingdate">
                                 </div>
                                 <div class="form-group">
-                                    <label for="start_time2" style="font-size: 17px;font-weight: 600;">시작 시간</label>
+                                    <label for="start_time2" style="font-size: 18px;font-weight: 600; padding: 9px 0;">시작 시간</label>
                                     <select class="form-control" id="start_time2" name="startTime">
                                         <option value="09:00:00">09:00</option>
                                         <option value="09:30:00">09:30</option>
@@ -701,7 +712,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group" id="cafeonly2">
-                                    <label for="btnn1" class="col-form-label" style="font-size: 17px;font-weight: 600;">어깨동무 스터디 카페</label>
+                                    <label for="btnn1" class="col-form-label" style="font-size: 18px;font-weight: 600;">어깨동무 스터디 카페</label>
                                     <p class="d-inline-flex gap-1">
                                         <button class="btn btn-secondary" id="btnn1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onclick="offCafe();">
                                             예약 취소
