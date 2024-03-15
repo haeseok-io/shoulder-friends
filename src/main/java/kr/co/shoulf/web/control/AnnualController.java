@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import kr.co.shoulf.web.entity.Member;
 import kr.co.shoulf.web.entity.MemberAnnual;
 import kr.co.shoulf.web.entity.MemberAnnualDetail;
+import kr.co.shoulf.web.repository.MemberAnnualRepository;
 import kr.co.shoulf.web.repository.MemberRepository;
 import kr.co.shoulf.web.service.AnnualService;
 import lombok.RequiredArgsConstructor;
@@ -13,18 +14,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/annual")
 public class AnnualController {
     private final MemberRepository memberRepository;
+    private final MemberAnnualRepository memberAnnualRepository;
     private final AnnualService annualService;
 
     @GetMapping("/")
     public String annualMain(HttpSession session, Model model) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         if (loggedInUser != null) {
+            System.out.println("annual main : " + loggedInUser);
             model.addAttribute("loggedInUser", loggedInUser);
             return "admin/annual/index";
         } else {
@@ -33,9 +37,12 @@ public class AnnualController {
     }
 
     @GetMapping("/list")
-    public String annualList(Model model) {
+    public String annualList(HttpSession session, Model model) {
         List<MemberAnnualDetail> memberAnnualDetailList = annualService.getAnnualDetailList();
         model.addAttribute("memberAnnualDetailList", memberAnnualDetailList);
+
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        model.addAttribute("loggedInUser", loggedInUser);
         return "admin/annual/list";
     }
 
@@ -110,5 +117,29 @@ public class AnnualController {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         annualService.insertAnnualDetail(loggedInUser, useCate, startDate, endDate, annualDate);
         return "redirect:/annual/write";
+    }
+
+    @GetMapping("/grantLeave")
+    public String annualGrant(@RequestParam("memberNo") Long memberNo,
+                              Model model) {
+        Optional<Member> member = memberRepository.findById(memberNo);
+
+        if(member.isPresent()) {
+            String memberName = member.get().getName();
+            model.addAttribute("memberName", memberName);
+        }
+        model.addAttribute("memberNo", memberNo);
+
+        return "/admin/annual/grant";
+    }
+
+    @PostMapping("/grantLeaveOk")
+    public String annualGrantOk(@RequestParam("type") int type,
+                                @RequestParam("num") int num,
+                                @RequestParam("reason") String reason,
+                                @RequestParam("memberNo") Long memberNo) {
+        annualService.insertMemberAnnual(type, num, reason, memberNo);
+
+        return "redirect:/member/";
     }
 }

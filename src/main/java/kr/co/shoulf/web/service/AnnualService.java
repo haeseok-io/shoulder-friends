@@ -6,21 +6,20 @@ import kr.co.shoulf.web.entity.MemberAnnualDetail;
 import kr.co.shoulf.web.repository.MemberAnnualDetailRepository;
 import kr.co.shoulf.web.repository.MemberAnnualRejectedRepository;
 import kr.co.shoulf.web.repository.MemberAnnualRepository;
+import kr.co.shoulf.web.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class AnnualService {
     private final MemberAnnualRepository memberAnnualRepository;
     private final MemberAnnualDetailRepository memberAnnualDetailRepository;
+    private final MemberRepository memberRepository;
     private final MemberAnnualRejectedRepository memberAnnualRejectedRepository;
     private final MemberService memberService;
     public List<MemberAnnualDetail> getAnnualDetailList() {
@@ -30,6 +29,20 @@ public class AnnualService {
     public List<MemberAnnual> getAnnualListByMemberNo(Long memberNo) {
         return memberAnnualRepository.findByMember_MemberNo(memberNo);
     }
+
+    public void insertMemberAnnual(int type, int num, String reason, Long memberNo) {
+        Member member = memberRepository.findById(memberNo).orElse(null);
+
+        MemberAnnual memberAnnual = MemberAnnual.builder()
+                .type(type)
+                .num(num)
+                .reason(reason)
+                .member(member)
+                .build();
+
+        memberAnnualRepository.save(memberAnnual);
+    }
+
     public List<MemberAnnualDetail> getAnnualDetailListByMemberNo(Member member, Long memberNo) {
         List<MemberAnnualDetail> memberAnnualDetails = memberAnnualDetailRepository.findByMemberAnnual_MemberAndMember_MemberNo(member, memberNo);
 
