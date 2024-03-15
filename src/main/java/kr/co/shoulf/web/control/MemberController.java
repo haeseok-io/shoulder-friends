@@ -1,5 +1,6 @@
 package kr.co.shoulf.web.control;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.shoulf.web.entity.Member;
 import kr.co.shoulf.web.entity.Studycafe;
 import kr.co.shoulf.web.repository.MemberRepository;
@@ -28,7 +29,7 @@ public class MemberController {
     private final StudycafeRepository studycafeRepository;
 
     @GetMapping("/")
-    public String member(Model model) {
+    public String member(Model model, HttpSession session) {
         List<Member> memberList = memberService.memberList();
 
         // 각 회원의 studycafe 정보를 저장할 리스트
@@ -42,6 +43,10 @@ public class MemberController {
 
         model.addAttribute("memberList", memberList);
         model.addAttribute("memberStudyCafesList", memberStudyCafesList);
+
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+
+        model.addAttribute("loggedInUser", loggedInUser);
 
         return "admin/member/list";
     }
