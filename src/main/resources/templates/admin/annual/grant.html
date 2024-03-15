@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <title>Annual Grant</title>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h2>연차 지급</h2>
+            <h3>직원 이름 : [[${memberName}]]</h3>
+            <form action="/annual/grantLeaveOk" method="post">
+                <input type="hidden" name="memberNo" th:value="${memberNo}">
+                <span>
+                    <select name="type">
+                        지급 유형 :
+                        <option value="1">일반</option>
+                        <option value="2">대체공휴일</option>
+                        <option value="3">기타</option>
+                    </select>
+                </span><br>
+                <span>지급 갯수 : <input type="number" name="num">개</span><br>
+                <span>지급 사유 : <input type="text" name="reason"></span><br>
+                <span><input type="submit" value="확인"></span>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
