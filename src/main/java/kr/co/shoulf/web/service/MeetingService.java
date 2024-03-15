@@ -83,14 +83,6 @@ public class MeetingService {
         meetingRepository.save(meeting);
     }
 
-    //모임번호로 등록 회원 정보 가져오기
-    public Users getUsers(Authentication authentication) {
-//        Optional<Moim> result = moimRepository.findById(moimNo);
-//        Moim moim = result.orElseThrow();
-        Users users = (Users) authentication.getPrincipal();
-        return users;
-    }
-
     //일반 결제 미팅 예약 결제 등록
     public void writeReservPayment(ReservPaymentDTO reservPaymentDTO, Authentication authentication) {
 //        Optional<Users> userss = userRepository.findById(reservPaymentDTO.getUserNo());
