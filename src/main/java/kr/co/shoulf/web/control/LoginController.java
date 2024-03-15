@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/login")
+//@RequestMapping("/login")
 public class LoginController {
     private final LoginService loginService;
 
-    @GetMapping("/")
+    @GetMapping("/login")
     public String login() {
         return "login/login";
     }
 
-    @PostMapping("/loginProc")
+    @PostMapping("/login/loginProc")
     public String loginOk(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
         boolean user = loginService.login(username, password);
         if(user) {
@@ -27,23 +27,23 @@ public class LoginController {
         } else {
             // 로그인 실패 시
             model.addAttribute("error", "존재하지 않는 아이디이거나 비밀번호를 다시 입력해주세요.");
-            return "redirect:/login/"; // 로그인 페이지로 다시 이동
+            return "redirect:/login"; // 로그인 페이지로 다시 이동
         }
     }
 
-    @GetMapping("/find")
+    @GetMapping("/login/find")
     public String find() {
         return "login/find";
     }
 
-    @GetMapping("/register")
+    @GetMapping("/login/register")
     public String register() {
         return "login/register";
     }
 
-    @PostMapping("/register")
+    @PostMapping("/login/register")
     public String registerOk(@ModelAttribute Users users) {
         loginService.registerUser(users);
-        return "redirect:/login/";
+        return "redirect:/login";
     }
 }
