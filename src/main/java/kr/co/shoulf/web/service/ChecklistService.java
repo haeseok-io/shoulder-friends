@@ -1,13 +1,16 @@
 package kr.co.shoulf.web.service;
 
+import jakarta.websocket.Session;
 import kr.co.shoulf.web.entity.Checklist;
 import kr.co.shoulf.web.entity.Moim;
 import kr.co.shoulf.web.entity.Users;
 import kr.co.shoulf.web.repository.ChecklistRepository;
 import kr.co.shoulf.web.repository.MoimRepository;
 import kr.co.shoulf.web.repository.UserRepository;
+import kr.co.shoulf.web.security.custom.userDetails.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -29,13 +32,12 @@ public class ChecklistService {
     }
 
     //체크리스트 등록
-    public void checklistWrite(String contents, Long moimNo) {
+    public void checklistWrite(String contents, Long moimNo, @AuthenticationPrincipal CustomUserDetails user) {
         Optional<Moim> result = moimRepository.findById(moimNo);
         Moim moim = result.orElseThrow();
-        
+
         //현재 로그인한 회원
-        Optional<Users> result2 = userRepository.findById(1L);
-        Users users = result2.orElseThrow();
+        Users users = userRepository.findByEmail(user.getUsername());
 
         Checklist checklist = Checklist.builder()
                 .contents(contents)
