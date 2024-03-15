@@ -65,12 +65,59 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Order(1)
+    public SecurityFilterChain filterChain2(HttpSecurity http) throws Exception {
+        log.info("----- 시큐리티 적용2 -----");
+        http
+                .securityMatcher("/login/**", "/oauth2/**", "/logout", "/moim/**",
+                        "/board/**", "/meeting/**", "/message/**", "/alarm/**")
+                // CSRF 보안 설정 비활성화
+                .csrf((csrf)->csrf.disable())
+                .authenticationProvider(userDaoAuthenticationProvider())
+                // 로그인 설정
+                .formLogin((auth) -> auth
+                        .loginPage("/login") // 로그인 페이지 설정
+                        .loginProcessingUrl("/loginProc") // 로그인 처리 URL 설정
+                        .failureUrl("/login?error") // 로그인 실패 시 이동할 URL 설정
+                        .defaultSuccessUrl("/")
+                )
+                // 권한 설정
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/login/**","/oauth2/**").permitAll()
+                        .requestMatchers("/mypage/**", "/moim/write", "/moimLike/**", "/message",
+                                "/board/write", "/board/modify", "/board/detail", "/meeting/**",
+                                "/alarm/list").hasRole("USER")
+                        .anyRequest().permitAll()
+                )
+                // Oauth2 로그인 설정
+                .oauth2Login(
+                        (oauth2Login) -> oauth2Login
+                                .loginPage("/login") // 로그인 페이지 설정
+                                .defaultSuccessUrl("/", true)
+                                .userInfoEndpoint(userInfo -> // 사용자 정보 엔드포인트 설정
+                                        userInfo.userService(customOAuth2UserService) // 사용자 정보 서비스 지정
+                                )
+                )
+                //로그아웃 설정
+                .logout((logout) -> logout
+                        .logoutUrl("/logout") // 로그아웃 URL 설정
+                        .logoutSuccessUrl("/") // 로그아웃 성공 시 리다이렉트 URL 설정
+                        .invalidateHttpSession(true) // 세션 무효화 설정
+                        .deleteCookies("JSESSIONID") // 삭제할 쿠키 설정
+                );
+
+
+        return http.build();
+    }
+
+    @Bean
     @Order(2)
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
         log.info("----- 시큐리티 적용1 -----");
         http
                 // CSRF 보안 설정 비활성화
-                .securityMatcher(("/admin/**"))
+                .securityMatcher("/admin/**", "/member/**", "/commute/**",
+                        "/annual/**","/study/**", "/reservation/**")
                 .csrf(AbstractHttpConfigurer::disable)
                 .authenticationProvider(memberDaoAuthenticationProvider())
                 // 권한 설정
@@ -94,49 +141,6 @@ public class SecurityConfig {
                         .invalidateHttpSession(true) // 세션 무효화 설정
                         .deleteCookies("JSESSIONID") // 삭제할 쿠키 설정
                 );
-        return http.build();
-    }
-
-
-    @Bean
-    @Order(1)
-    public SecurityFilterChain filterChain2(HttpSecurity http) throws Exception {
-        log.info("----- 시큐리티 적용2 -----");
-        http
-                .securityMatcher("/login/**", "/oauth2/**", "/logout")
-                // CSRF 보안 설정 비활성화
-                .csrf((csrf)->csrf.disable())
-                .authenticationProvider(userDaoAuthenticationProvider())
-                // 로그인 설정
-                .formLogin((auth) -> auth
-                        .loginPage("/login") // 로그인 페이지 설정
-                        .loginProcessingUrl("/loginProc") // 로그인 처리 URL 설정
-                        .failureUrl("/login?error") // 로그인 실패 시 이동할 URL 설정
-                        .defaultSuccessUrl("/")
-                )
-                // 권한 설정
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login/**","/oauth2/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                // Oauth2 로그인 설정
-                .oauth2Login(
-                        (oauth2Login) -> oauth2Login
-                        .loginPage("/login") // 로그인 페이지 설정
-                        .defaultSuccessUrl("/", true)
-                        .userInfoEndpoint(userInfo -> // 사용자 정보 엔드포인트 설정
-                                userInfo.userService(customOAuth2UserService) // 사용자 정보 서비스 지정
-                        )
-                )
-                //로그아웃 설정
-                .logout((logout) -> logout
-                .logoutUrl("/logout") // 로그아웃 URL 설정
-                .logoutSuccessUrl("/") // 로그아웃 성공 시 리다이렉트 URL 설정
-                .invalidateHttpSession(true) // 세션 무효화 설정
-                .deleteCookies("JSESSIONID") // 삭제할 쿠키 설정
-        );
-
-
         return http.build();
     }
 }
