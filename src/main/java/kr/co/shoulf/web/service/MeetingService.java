@@ -5,9 +5,12 @@ import kr.co.shoulf.web.dto.MeetingDTO;
 import kr.co.shoulf.web.dto.ReservPaymentDTO;
 import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.repository.*;
+import kr.co.shoulf.web.security.custom.userDetails.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -84,13 +87,10 @@ public class MeetingService {
     }
 
     //일반 결제 미팅 예약 결제 등록
-    public void writeReservPayment(ReservPaymentDTO reservPaymentDTO, Authentication authentication) {
-//        Optional<Users> userss = userRepository.findById(reservPaymentDTO.getUserNo());
-//        Users users = userss.orElseThrow();
+    public void writeReservPayment(ReservPaymentDTO reservPaymentDTO, String approval, @RequestParam String card, @AuthenticationPrincipal CustomUserDetails user) {
+        Users users = userRepository.findByEmail(user.getUsername());
 
-        Users users = (Users) authentication.getPrincipal();
-
-        String meetingDate = reservPaymentDTO.getStartDate() + " " + reservPaymentDTO.getStartTime();
+        String meetingDate = reservPaymentDTO.getCalendar_start_date() + " " + reservPaymentDTO.getStart_time();
 
         Optional<Moim> result = moimRepository.findById(reservPaymentDTO.getMoimNo());
         Moim moim = result.orElseThrow();
@@ -101,8 +101,8 @@ public class MeetingService {
         LocalDate now = LocalDate.now();
 
         Meeting meeting = Meeting.builder()
-                .contents(reservPaymentDTO.getTitle())
-                .addr(reservPaymentDTO.getAddr())
+                .contents(reservPaymentDTO.getCalendar_content())
+                .addr(reservPaymentDTO.getCalendar_addr())
                 .meetDate(Timestamp.valueOf(meetingDate))
                 .moim(moim)
                 .build();
@@ -110,7 +110,7 @@ public class MeetingService {
         Reservation reservation = null;
         try {
             reservation = Reservation.builder()
-                    .checkin(Date.valueOf(reservPaymentDTO.getCheckin()))
+                    .checkin(Date.valueOf(reservPaymentDTO.getCalendar_start_date()))
                     .ip(Inet4Address.getLocalHost().getHostAddress())
                     .users(users)
                     .meeting(meeting)
@@ -121,10 +121,10 @@ public class MeetingService {
         }
 
         Payment payment = Payment.builder()
-                .approvalNum(reservPaymentDTO.getApprovalNum())
-                .cardNum(reservPaymentDTO.getCardNum())
+                .approvalNum(Long.valueOf(approval))
+                .cardNum(Long.valueOf(card))
                 .name(reservPaymentDTO.getName())
-                .productName(reservPaymentDTO.getProductName())
+                .productName(reservPaymentDTO.getStudycafename())
                 .email(reservPaymentDTO.getEmail())
                 .price(reservPaymentDTO.getPrice())
                 .payDate(Date.valueOf(now))
@@ -223,24 +223,4 @@ public class MeetingService {
         paymentRepository.save(payment);
     }
 
-    //페이 임시 추가
-    public void payment(int amount, String paymentKey, String orderId) {
-        String encodedStr = Base64.getEncoder().encodeToString(str.getBytes());
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.tosspayments.com/v1/payments/confirm"))
-                .header("Authorization", "Basic "+encodedStr)
-                .header("Content-Type", "application/json")
-                .method("POST", HttpRequest.BodyPublishers.ofString("{\"paymentKey\":\""+paymentKey+"\",\"amount\":"+amount+",\"orderId\":\""+orderId+"\"}"))
-                .build();
-        HttpResponse<String> response = null;
-        try {
-            response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(response.body());
-    }
 }
