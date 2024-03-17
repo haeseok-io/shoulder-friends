@@ -11,16 +11,27 @@ import kr.co.shoulf.web.service.MeetingService;
 import kr.co.shoulf.web.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
 import org.junit.validator.PublicClassValidator;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Controller
@@ -73,10 +84,9 @@ public class MeetingController {
 
     //미팅 일반 결제 예약 결제 저장
     @PostMapping("/reservPayment")
-    public ResponseEntity<String> reservPayment(ReservPaymentDTO reservPaymentDTO, Authentication authentication){
-        System.out.println(reservPaymentDTO);
-        meetingService.writeReservPayment(reservPaymentDTO, authentication);
-        return ResponseEntity.ok(" ");
+    public String reservPayment(ReservPaymentDTO reservPaymentDTO, @RequestParam String approval, @RequestParam String card, @RequestParam Long amount, @AuthenticationPrincipal CustomUserDetails user){
+        meetingService.writeReservPayment(reservPaymentDTO, approval, card, user);
+        return "redirect:/meeting/detail?moimNo="+reservPaymentDTO.getMoimNo();
     }
 
     //미팅 정보로 스터디룸 정보 보내기
@@ -107,14 +117,6 @@ public class MeetingController {
     public String cancel(@RequestParam String endDate, @RequestParam Long roomNo2, @RequestParam Long moimNo){
         meetingService.cancelRoom(endDate, roomNo2);
         return "redirect:/meeting/detail?moimNo="+moimNo;
-    }
-
-    //페이 임시 추가
-    @GetMapping("/payment")
-    public ResponseEntity payment(@RequestParam int amount, @RequestParam String paymentKey, @RequestParam String orderId){
-        System.out.println(amount+" : "+paymentKey+" : "+orderId);
-        meetingService.payment(amount, paymentKey, orderId);
-        return ResponseEntity.ok().build();
     }
 
 }
