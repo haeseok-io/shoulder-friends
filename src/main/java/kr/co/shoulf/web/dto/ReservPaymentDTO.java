@@ -16,16 +16,17 @@ public class ReservPaymentDTO {
     private Long approvalNum;
     private Long cardNum;
     private String name;
-    private String productName;
+    private String studycafename;
     private String email;
     private Integer price;
     private String checkin;
     private Long userNo;
     private Long moimNo;
     private Long studyroomNo;
-    private String title;
-    private String startDate;
+    private String calendar_content;
+    private String calendar_start_date;
     private String  endDate;
-    private String addr;
-    private String startTime;
+    private String calendar_addr;
+    private String start_time;
+    private Long amount;
 }
