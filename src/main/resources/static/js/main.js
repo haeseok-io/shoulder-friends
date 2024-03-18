@@ -2,17 +2,42 @@ $(()=>{
     // 유저아이콘 이벤트
     $("header .userToggle").on("click", e => {
         let _this = $(e.currentTarget);
+        _this.parent(".headerUser").toggleClass("active");
 
         // 로그아웃 상태
-        if( !loggedInUser ) {
-            let modalLogout = $("header .modalLogout");
-            modalLogout.show();
-        } else {
-            _this.parent(".headerUser").toggleClass("active");
+        if( loggedInUser ) {
+            if( _this.parent(".headerUser").hasClass("active") ) {
+                $.get("/user/simple/json", {}, data => {
+                    let loginLayout = $("header .modalLogin");
+                    let thumbnailPath = data.userDetail.profileImg!=null ? data.userDetail.profileImg : "/images/profileBlank.png";
 
+                    let positionName = "미설정";
+                    let positionDetailName = "미설정";
+                    let position = "직무 미설정"
+                    let level = "레벨 없음";
 
+                    if( data.userJob!=null ) {
+                        if( data.userJob.positionDetail!=null ) {
+                            positionName = data.userJob.positionDetail.position.bigName;
+                            positionDetailName = data.userJob.positionDetail.middleName;
+                            position = positionName+" / "+positionDetailName;
+                        }
+                        if( data.userJob.level!=null ) {
+                            level = "Lv."+data.userJob.level;
+                        }
+                    }
+
+                    loginLayout.find(".infoThumbnail img").attr("src", thumbnailPath);
+                    loginLayout.find(".nickname").text(data.nickname);
+                    loginLayout.find(".position").text(position+" / "+level);
+                }, 'json');
+            }
         }
+    });
 
+    // 로그인 모달 닫기
+    $(".modalClose").on("click", e => {
+        $(e.currentTarget).parents(".headerUser").removeClass("active");
 
     });
 });
