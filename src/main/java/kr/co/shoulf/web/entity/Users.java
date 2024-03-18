@@ -32,7 +32,7 @@ public class Users {
     @Column(length = 100)
     private String nickname;
     @Column
-    private String Oauth2Where;
+    private String oauth2Where;
 
     @Column(name = "last_login_date", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
