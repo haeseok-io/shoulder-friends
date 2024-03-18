@@ -1,5 +1,7 @@
 package kr.co.shoulf.web.control;
 
+import jakarta.servlet.http.HttpSession;
+import kr.co.shoulf.web.entity.Users;
 import kr.co.shoulf.web.service.CategoryService;
 import kr.co.shoulf.web.service.OnlineService;
 import kr.co.shoulf.web.service.PositionService;
@@ -20,9 +22,9 @@ public class MypageController {
     private final CategoryService categoryService;
 
     @GetMapping(value = "/user")
-    public String user(Model model) {
-        // 테스트 유저
-        Long userNo = 10L;
+    public String user(Model model, HttpSession session) {
+        Users user = (Users) session.getAttribute("loggedInUser");
+        Long userNo = user.getUserNo();
 
         model.addAttribute("userData", userService.readUserDetail(userNo));
         model.addAttribute("positionList", positionService.readAll());
