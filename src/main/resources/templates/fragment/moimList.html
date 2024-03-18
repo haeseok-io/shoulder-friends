@@ -8,13 +8,8 @@
                 <span class="badge badge-size-sm badge-category" th:if="${data.moimDetail.studyCategory!=null}">[[${data.moimDetail.studyCategory.studyCategoryName}]]</span>
             </div>
             <div class="thumbnail">
-                <!-- 테스트 데이터 경로문제로 임시로 추가 -->
-                <th:block th:if="${data.moimDetail.moimImg!=null}">
-                    <img th:if="${data.moimDetail.moimImg=='https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png'}" src="https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png" alt="">
-                    <img th:if="${data.moimDetail.moimImg!='https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png'}" th:src="'/upload/moim/'+${data.moimDetail.moimImg}" alt="">
-                </th:block>
-
                 <img th:if="${data.moimDetail.moimImg==null}" src="https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png" alt="">
+                <img th:if="${data.moimDetail.moimImg!=null}" th:src="${data.moimDetail.moimImg}" alt="">
             </div>
             <div class="wrap">
                 <div class="etc">
