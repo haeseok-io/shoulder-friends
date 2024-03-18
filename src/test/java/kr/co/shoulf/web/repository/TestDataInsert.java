@@ -1284,7 +1284,7 @@ public class TestDataInsert {
     void insertPayment() {
         List<List<Object>> dataList = new ArrayList<>();
         // 승인번호	카드번호	이름	상품명	이메일	결제금액	결제상태	결제일자	예약번호
-        dataList.add(Arrays.asList(64654414964L, 1111111111111111L, "홍길동", "어깨동무 스터디 카페 종로점", "aaa@naver.com", 40000, "2024-01-15", 1L));
+        dataList.add(Arrays.asList(64654414964L, "1111111111111111", "홍길동", "어깨동무 스터디 카페 종로점", "aaa@naver.com", 40000, "2024-01-15", 1L));
 
         dataList.forEach(data -> {
             Reservation reservation = reservationRepository.findById((Long) data.get(7)).orElse(null);
@@ -1292,7 +1292,7 @@ public class TestDataInsert {
             paymentRepository.save(
                     Payment.builder()
                             .approvalNum((Long) data.get(0))
-                            .cardNum((Long) data.get(1))
+                            .cardNum((String) data.get(1))
                             .name(data.get(2).toString())
                             .productName(data.get(3).toString())
                             .email(data.get(4).toString())

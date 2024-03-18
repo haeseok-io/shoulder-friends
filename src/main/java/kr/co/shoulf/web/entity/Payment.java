@@ -23,7 +23,7 @@ public class Payment {
     @Column(nullable = false)
     private Long approvalNum;
     @Column(nullable = false)
-    private Long cardNum;
+    private String cardNum;
     @Column(nullable = false, length = 30)
     private String name;
     @Column(nullable = false, length = 200)
