@@ -10,33 +10,32 @@
             width: 690px;
         }
         #cafecard{
-            width: 320px;
+            width: 260px;
             display: inline-block;
             padding-top: 40px;
             padding-bottom: 30px;
-            padding-left: 23px;
         }
         #cafename{
             text-align: center;
             font-weight: bold;
-            font-size: 17px;
+            font-size: 15px;
             color: #5D5D5D;
         }
         .btnd{
             padding-bottom: 10px;
         }
         .cafes{
-            width: 666px;
+            width: 540px;
         }
         .card-img-top{
-            height: 146px;
+            height: 130px;
         }
         .main-title{
             margin-top: 50px;
             margin-left: 15px;
             margin-bottom: 20px;
             font-weight: 550;
-            font-size: 30px;
+            font-size: 25px;
             color: #4D4358;
         }
     </style>
@@ -49,9 +48,9 @@
     </div>
     <div class="cafes">
         <div th:each="dto:${cafeList}" id="cafecard">
-            <div class="card" style="width: 300px;">
+            <div class="card" style="width: 250px;">
                 <a th:href="@{/meeting/roomlist(studycafeNo=${dto.studycafeNo}, checkin=${checkin}, moimNo=${moimNo})}"><img class="card-img-top" th:src="${dto.mainImg}"></a>
-                <div class="card-body">
+                <div class="card-body" style="padding: 16px 10px;">
                     <p class="card-text" id="cafename" th:text="${dto.name}"></p>
                 </div>
             </div>
