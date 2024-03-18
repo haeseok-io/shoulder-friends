@@ -16,7 +16,6 @@
             width: 130px;
         }
         .form-check-input:checked{
-            /* 선택된 상태의 배경색 및 테두리 색을 여기에 지정합니다 */
             background-color: #7B27FF;
             border-color: #DEE2E6;
             box-shadow: none;
@@ -42,6 +41,14 @@
         .form-check-label{
             font-size: 18px;
             padding: 0 8px;
+        }
+        .form-control:focus{
+            box-shadow: none;
+            border: 1px solid #CCCCCC;
+        }
+        .dropdown-item:focus, .dropdown-item:checked{
+            background-color: #F8F9FA;
+            color: #000;
         }
     </style>
 </th:block>
@@ -110,41 +117,59 @@
                     <p class="mini-title">할일 등록하기</p>
                 </div>
                 <div class="input-group mb-3" style="width: 600px;">
-                    <input type="text" class="form-control" name="contents" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <input type="text" class="form-control" name="contents" placeholder="할일을 입력해주세요" aria-describedby="button-addon2">
                     <input class="btn btn-outline-secondary" id="checkbtn" type="submit" value="등록하기" />
                     <input type="hidden" id="moimNo" name="moimNo" th:value="${moimNo}">
-                    <input type="hidden" id="userName" name="userName" th:value="${userName}">
                 </div>
+            </form>
                 <div class="title">
                     <p class="mini-title">할일 목록</p>
                 </div>
                 <div th:each="dto : ${list}">
                 <div class="form-check">
-                    <div th:if="${dto.status == 2}">
-                        <input class="form-check-input" type="checkbox" th:value="${dto.checklistNo}" th:name="${dto.checklistNo}" id="defaultCheck1" checked>
-                        <input type="hidden" name="useremail" th:value="${dto.Users.email}">
-                        <label class="form-check-label" for="defaultCheck1" style="text-decoration: line-through;">
-                            [[${dto.contents}]]
-                        </label>
-                        <button class="btn btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" th:href="@{/moim/checklist/delete(checklistNo=${dto.checklistNo}, moimNo=${moimNo})}">삭제</a></li>
-                        </ul>
+                    <div th:if="${dto.Users.email == userName}">
+                        <div th:if="${dto.status == 2}">
+                            <input class="form-check-input" type="checkbox" th:value="${dto.checklistNo}" th:name="${dto.checklistNo}" id="defaultCheck1" checked>
+                            <input type="hidden" name="useremail" th:value="${dto.Users.email}">
+                            <label class="form-check-label" for="defaultCheck1" style="text-decoration: line-through;">
+                                [[${dto.contents}]]
+                            </label>
+                            <button class="btn btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" th:href="@{/moim/checklist/delete(checklistNo=${dto.checklistNo}, moimNo=${moimNo})}">삭제</a></li>
+                            </ul>
+                        </div>
+                        <div th:if="${dto.status == 1}">
+                            <input class="form-check-input" type="checkbox" th:value="${dto.checklistNo}" th:name="${dto.checklistNo}" id="defaultCheck2">
+                            <input type="hidden" name="useremail" th:value="${dto.Users.email}">
+                            <label class="form-check-label" for="defaultCheck2">
+                                [[${dto.contents}]]
+                            </label>
+                            <button class="btn btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" th:href="@{/moim/checklist/delete(checklistNo=${dto.checklistNo}, moimNo=${moimNo})}">삭제</a></li>
+                            </ul>
+                        </div>
                     </div>
-                    <div th:if="${dto.status == 1}">
-                        <input class="form-check-input" type="checkbox" th:value="${dto.checklistNo}" th:name="${dto.checklistNo}" id="defaultCheck2">
-                        <input type="hidden" name="useremail" th:value="${dto.Users.email}">
-                        <label class="form-check-label" for="defaultCheck2">
-                            [[${dto.contents}]]
-                        </label>
-                        <button class="btn btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" th:href="@{/moim/checklist/delete(checklistNo=${dto.checklistNo}, moimNo=${moimNo})}">삭제</a></li>
-                        </ul>
+
+                    <div th:unless="${dto.Users.email == userName}">
+                        <div th:if="${dto.status == 2}">
+                            <input class="form-check-input" type="checkbox" th:value="${dto.checklistNo}" th:name="${dto.checklistNo}" id="defaultCheck3" disabled readonly checked>
+                            <input type="hidden" name="useremail" th:value="${dto.Users.email}">
+                            <label class="form-check-label" for="defaultCheck1" style="text-decoration: line-through; padding-top: 9px; margin-bottom: 13px;">
+                                [[${dto.contents}]]
+                            </label>
+                        </div>
+                        <div th:if="${dto.status == 1}">
+                            <input class="form-check-input" type="checkbox" th:value="${dto.checklistNo}" th:name="${dto.checklistNo}" disabled readonly id="defaultCheck4">
+                            <input type="hidden" name="useremail" th:value="${dto.Users.email}">
+                            <label class="form-check-label" for="defaultCheck2" style="padding-top: 9px; margin-bottom: 13px;">
+                                [[${dto.contents}]]
+                            </label>
+                        </div>
                     </div>
                 </div>
                 </div>
-            </form>
         </div>
     </main>
 </th:block>
