@@ -1,12 +1,16 @@
 package kr.co.shoulf.web.control;
 
+import kr.co.shoulf.web.dto.UserDataRequestDTO;
 import kr.co.shoulf.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/user")
@@ -19,5 +23,13 @@ public class UserController {
         model.addAttribute("userData", userService.readUserDetail(userNo));
 
         return "user/detail";
+    }
+
+    @PostMapping(value = "/modify")
+    public String modify(UserDataRequestDTO userDataRequestDTO) {
+        Map<Boolean, String> isOk = userService.modifyOne(userDataRequestDTO);
+
+
+        return "redirect:/mypage/user";
     }
 }
