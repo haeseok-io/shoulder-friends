@@ -130,8 +130,6 @@
 
         //예약 취소 함수
         function offCafe(){
-            let roomNo2 = $("#roomNo").val();
-            let endDate = $("#start_date").val();
 
             if(confirm("예약을 취소하시겠습니까?")) {
                 let form = $("#modifyform");
@@ -162,7 +160,6 @@
         }
 
         $(()=>{
-            $("#payment").hide();
             $("#paymentName").hide();
 
             window.addEventListener('message',function (event){
