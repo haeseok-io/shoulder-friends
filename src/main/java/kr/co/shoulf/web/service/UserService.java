@@ -3,16 +3,21 @@ package kr.co.shoulf.web.service;
 import kr.co.shoulf.web.dto.LanguageDTO;
 import kr.co.shoulf.web.dto.MoimDTO;
 import kr.co.shoulf.web.dto.UserDTO;
+import kr.co.shoulf.web.dto.UserDataRequestDTO;
 import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.repository.*;
 import kr.co.shoulf.web.util.LanguageImgPathConvert;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -28,6 +33,12 @@ public class UserService {
     private final MoimLikeRepository moimLikeRepository;
     private final MoimRepository moimRepository;
     private final MoimParticipantsRepository moimParticipantsRepository;
+    private final PositionDetailRepository positionDetailRepository;
+    private final OnlineRepository onlineRepository;
+    private final CategoryRepository categoryRepository;
+
+    @Value("${kr.co.shoulf.upload.directory}")
+    private String uploadPath;
 
     // 신규 회원 리스트
     public List<UserDTO> readNewUserList() {
@@ -93,5 +104,119 @@ public class UserService {
                 .pass(users.getPass())
                 .build();
         return dto;
+    }
+
+    // 회원 정보 수정
+    public Map<Boolean, String> modifyOne(UserDataRequestDTO userDataRequestDTO) {
+        HashMap<Boolean, String> result = new HashMap<>();
+
+        Users users = userRepository.findById(userDataRequestDTO.getUserNo()).orElse(null);
+        if( users==null ) {
+            result.put(false, "회원 정보가 존재하지 않습니다.");
+            return result;
+        }
+
+        // 프로필 이미지
+        String profileImgName = null;
+        if( !userDataRequestDTO.getProfileImg().isEmpty() ) {
+            // 기존 이미지가 존재한다면 기존 이미지 삭제
+            String beforeImgPath = users.getUserDetail().getProfileImg();
+            if( beforeImgPath!=null ) {
+                File beforeImg = new File(beforeImgPath);
+                if( beforeImg.exists() ) beforeImg.delete();
+            }
+
+            // 이미지 업로드
+            MultipartFile file = userDataRequestDTO.getProfileImg();
+            String[] fileInfo = file.getOriginalFilename().split("\\.");
+            String fileSuffix = fileInfo[fileInfo.length - 1];
+
+            profileImgName = "user_"+UUID.randomUUID().toString()+"."+fileSuffix;
+
+            Path savePath = Paths.get(uploadPath+"user/", profileImgName);
+            try {
+                file.transferTo(savePath);
+            } catch(IOException e) {
+                result.put(false, "파일 업로드에 실패하였습니다.");
+                return result;
+            }
+
+            // 파일명에 경로 병합
+            profileImgName = "/upload/user/"+profileImgName;
+        } else {
+            profileImgName = users.getUserDetail().getProfileImg();
+        }
+
+        users.setNickname(userDataRequestDTO.getNickname());
+        users.getUserDetail().setIntroduce(userDataRequestDTO.getIntroduce());
+        users.getUserDetail().setPreferArea(userDataRequestDTO.getPreferArea());
+        users.getUserDetail().setGitLink(userDataRequestDTO.getGitLink());
+        users.getUserDetail().setBlogLink(userDataRequestDTO.getBlogLink());
+        users.getUserDetail().setProfileImg(profileImgName);
+        userRepository.save(users);
+
+        // 회원 직무
+        PositionDetail positionDetail = null;
+        if( userDataRequestDTO.getPositionDetailNo()!=null ) {
+            positionDetail = positionDetailRepository.findById(userDataRequestDTO.getPositionDetailNo()).orElse(null);
+        }
+
+        UserJob userJob = UserJob.builder()
+                .userJobNo(userDataRequestDTO.getUserJobNo())
+                .level(userDataRequestDTO.getLevel())
+                .career(userDataRequestDTO.getCareer())
+                .users(users)
+                .positionDetail(positionDetail)
+                .build();
+        userJobRepository.save(userJob);
+
+        // 회원 온/오프라인
+        if( userDataRequestDTO.getOnlineNo()!=null ) {
+            Online online = onlineRepository.findById(userDataRequestDTO.getOnlineNo()).orElse(null);
+            UserOnline userOnline = UserOnline.builder()
+                    .userOnlineNo(userDataRequestDTO.getUserOnlineNo())
+                    .users(users)
+                    .online(online)
+                    .build();
+
+            userOnlineRepository.save(userOnline);
+        }
+
+        // 관심분야
+        List<UserInterestCategory> userInterestCategoryList = userInterestCategoryRepository.findByUsers(users);
+        userInterestCategoryRepository.deleteAll(userInterestCategoryList);
+        if( userDataRequestDTO.getCategoryNo()!=null ) {
+            userDataRequestDTO.getCategoryNo().forEach(cate -> {
+                Category category = categoryRepository.findById(cate).orElse(null);
+                userInterestCategoryRepository.save(UserInterestCategory.builder()
+                        .users(users)
+                        .category(category)
+                        .build());
+            });
+        }
+
+        // 포트폴리오
+        // 제거된 포트폴리오 제거
+        List<UserPortfolio> deleteUserPortfolioList = userPortfolioRepository.findByUsers(users).stream().filter(portfolio -> {
+            return !userDataRequestDTO.getPortfolioNo().contains(portfolio.getPortfolioNo());
+        }).toList();
+        userPortfolioRepository.deleteAll(deleteUserPortfolioList);
+
+        // 포트폴리오 수정 및 추가
+        if( !userDataRequestDTO.getPortfolio().isEmpty() ) {
+            for(int i=0; i<userDataRequestDTO.getPortfolio().size(); i++ ) {
+                String portfolioUrl = userDataRequestDTO.getPortfolio().get(i);
+                Long portfolioNo = userDataRequestDTO.getPortfolioNo().isEmpty() ? null : userDataRequestDTO.getPortfolioNo().get(i);
+
+                userPortfolioRepository.save(UserPortfolio.builder()
+                        .portfolioNo(portfolioNo)
+                        .url(portfolioUrl)
+                        .users(users)
+                        .build());
+            }
+        }
+
+
+        return result;
     }
 }
