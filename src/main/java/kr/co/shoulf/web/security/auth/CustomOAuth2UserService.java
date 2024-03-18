@@ -40,38 +40,38 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             return null;
         }
 
-        String nickName = oAuth2Response.getProvider() + "_" + oAuth2Response.getProviderId();
-        Users user = userRepository.findByNickname(nickName);
         String role = "ROLE_USER";
-        
-        // 비밀번호 10자리 랜덤 생성
-        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        int PASSWORD_LENGTH = 10;
+        Users user = userRepository.findByEmailAndOauth2Where(oAuth2Response.getEmail(), registrationId);
 
-        SecureRandom random = new SecureRandom();
-        StringBuilder sb = new StringBuilder(PASSWORD_LENGTH);
+        if( user==null ) {
+            // 비밀번호 10자리 랜덤 생성
+            String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            int PASSWORD_LENGTH = 10;
 
-        for (int i = 0; i < PASSWORD_LENGTH; i++) {
-            int index = random.nextInt(CHARACTERS.length());
-            sb.append(CHARACTERS.charAt(index));
-        }
-        
-        //  DB에 user 정보가 없으면 저장
-        if(user == null) {
-            Users user2 = new Users();
-            user2.setNickname(nickName);
-            user2.setEmail(oAuth2Response.getEmail());
-            user2.setRole(role);
-            user2.setPass(sb.toString());
-            user2.setOauth2Where(oAuth2Response.getProvider());
+            SecureRandom random = new SecureRandom();
+            StringBuilder sb = new StringBuilder(PASSWORD_LENGTH);
+
+            for (int i = 0; i < PASSWORD_LENGTH; i++) {
+                int index = random.nextInt(CHARACTERS.length());
+                sb.append(CHARACTERS.charAt(index));
+            }
+
+            user = Users.builder()
+                    .nickname(oAuth2Response.getName())
+                    .email(oAuth2Response.getEmail())
+                    .role(role)
+                    .pass(sb.toString())
+                    .oauth2Where(oAuth2Response.getProvider())
+                    .build();
 
             UserDetail userDetail = UserDetail.builder()
-                    .users(user2)
+                    .users(user)
                     .build();
 
             userDetailRepository.save(userDetail);
         }
 
-        return new CustomOAuth2User(oAuth2Response, role);
+        Users finalUser = userRepository.findByEmailAndOauth2Where(user.getEmail(), registrationId);
+        return new CustomOAuth2User(oAuth2Response, role, finalUser.getUserNo());
     }
 }
