@@ -1,37 +1,20 @@
 package kr.co.shoulf.web.control;
 
-import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.PushBuilder;
 import kr.co.shoulf.web.dto.MeetingDTO;
 import kr.co.shoulf.web.dto.ReservPaymentDTO;
-import kr.co.shoulf.web.entity.Member;
-import kr.co.shoulf.web.entity.Users;
 import kr.co.shoulf.web.security.custom.userDetails.CustomUserDetails;
 import kr.co.shoulf.web.service.MeetingService;
 import kr.co.shoulf.web.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
-import org.junit.validator.PublicClassValidator;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Controller

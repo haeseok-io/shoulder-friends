@@ -7,18 +7,12 @@ import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.repository.*;
 import kr.co.shoulf.web.security.custom.userDetails.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
 import java.net.Inet4Address;
-import java.net.URI;
 import java.net.UnknownHostException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -32,14 +26,12 @@ import java.util.*;
 @RequiredArgsConstructor
 @Transactional
 public class MeetingService {
-    private final String str = "test_sk_LlDJaYngroo0B6YyxbGnrezGdRpX:";
     private final MoimRepository moimRepository;
     private final MeetingRepository meetingRepository;
     private final ReservationRepository reservationRepository;
     private final PaymentRepository paymentRepository;
     private final UserRepository userRepository;
     private final StudyroomRepository studyroomRepository;
-    private final StudycafeRepository studycafeRepository;
 
     //모임번호로 미팅 리스트 불러오기
     public List<Meeting> meetingList(Long moimNo) {
@@ -201,6 +193,12 @@ public class MeetingService {
     //미팅 삭제
     public void deleteMeeting(Long moimNo, String meetingdate) {
         Meeting meetings = meetingRepository.findByMeetDateAndMoim_MoimNo(Timestamp.valueOf(meetingdate), moimNo);
+        Reservation reservation = reservationRepository.findByMeeting_MeetingNo(meetings.getMeetingNo());
+        if(reservation != null) {
+            reservation.setMeeting(null);
+            reservationRepository.save(reservation);
+        }
+
         meetingRepository.delete(meetings);
     }
 
