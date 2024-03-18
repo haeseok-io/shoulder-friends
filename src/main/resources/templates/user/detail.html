@@ -4,13 +4,13 @@
 
 <th:block layout:fragment="css">
     <style>
-        main .container { max-width: 1000px; }
+        main .container { max-width: 1080px; }
 
         .profile > div { margin-top: 50px; }
-        .profile .profileTitle { border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 10px; }
+        .profile .profileTitle { border-bottom: 1px solid #1F1926; padding-bottom: 10px; margin-bottom: 10px; }
         .profile .profileTitle p { font-weight: 600; font-size: 1.2rem; color: #1F1926; }
 
-        .profile .profileList li { display: flex; line-height: 2rem; }
+        .profile .profileList li { display: flex; align-items: center; height: 40px; }
         .profile .profileList li .name { width: 120px; font-weight: 600; }
 
         .profile .profileDataBlank { background: #f1f1f1; padding: 20px; }
@@ -51,6 +51,20 @@
                     <div class="community">
                         <button type="button" class="btn btn-custom-default btn-lg">1:1 대화</button>
                         <button type="button" class="btn btn-custom-add btn-lg">모임 초대</button>
+                    </div>
+                </div>
+
+                <div class="introduce">
+                    <div class="profileTitle">
+                        <p>소개</p>
+                    </div>
+                    <div class="content">
+                        <div class="profileDataBlank" th:if="${userData.userDetail.introduce==null}">
+                            <p>입력된 소개가 없습니다.</p>
+                        </div>
+                        <p th:if="${userData.userDetail.introduce!=null}">
+                            [[${userData.userDetail.introduce}]]
+                        </p>
                     </div>
                 </div>
 
@@ -96,19 +110,6 @@
                                 <span class="item">[[${userData.userDetail.preferArea}]]</span>
                             </li>
                         </ul>
-                    </div>
-                </div>
-                <div class="introduce">
-                    <div class="profileTitle">
-                        <p>소개</p>
-                    </div>
-                    <div class="content">
-                        <div class="profileDataBlank" th:if="${userData.userDetail.introduce==null}">
-                            <p>입력된 소개가 없습니다.</p>
-                        </div>
-                        <p th:if="${userData.userDetail.introduce!=null}">
-                            [[${userData.userDetail.introduce}]]
-                        </p>
                     </div>
                 </div>
                 <div class="interest">
