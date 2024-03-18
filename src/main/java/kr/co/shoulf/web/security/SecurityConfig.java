@@ -1,7 +1,9 @@
 package kr.co.shoulf.web.security;
 
 import kr.co.shoulf.web.security.auth.CustomOAuth2UserService;
-import kr.co.shoulf.web.security.custom.userDetails.service.CustomAuthenticationSuccessHandler;
+import kr.co.shoulf.web.security.custom.userDetails.handler.CustomAuthenticationFailureHandler;
+import kr.co.shoulf.web.security.custom.userDetails.handler.CustomAuthenticationSuccessHandler;
+import kr.co.shoulf.web.security.custom.userDetails.handler.CustomOAuth2AuthenticationSuccessHandler;
 import kr.co.shoulf.web.security.custom.userDetails.service.CustomMemberUserDetailsService;
 import kr.co.shoulf.web.security.custom.userDetails.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,8 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+    private final CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
 
     @Bean
     public UserDetailsService userMemberDetailsService() {
@@ -37,7 +41,8 @@ public class SecurityConfig {
     public PasswordEncoder memberPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-//    @Bean
+
+    @Bean
     public UserDetailsService userDetailsService() {
         return customUserDetailsService;
     }
@@ -47,6 +52,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
     public DaoAuthenticationProvider memberDaoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 
@@ -56,12 +62,15 @@ public class SecurityConfig {
         return provider;
     }
 
-//    @Bean
+    @Bean
     public DaoAuthenticationProvider userDaoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 
         provider.setUserDetailsService(userDetailsService());
         provider.setPasswordEncoder(passwordEncoder());
+
+        // 해당 설정을 해줘야 CustomUserDetailsService 에서 발생시킨 예외처리가 가능해짐
+        provider.setHideUserNotFoundExceptions(false);
 
         return provider;
     }
@@ -80,9 +89,10 @@ public class SecurityConfig {
                 .formLogin((auth) -> auth
                         .loginPage("/login") // 로그인 페이지 설정
                         .loginProcessingUrl("/login/loginProc") // 로그인 처리 URL 설정
-                        .failureUrl("/login?error") // 로그인 실패 시 이동할 URL 설정
+                        .failureUrl("/") // 로그인 실패 시 이동할 URL 설정
                         .defaultSuccessUrl("/")
                         .successHandler(customAuthenticationSuccessHandler)
+                        .failureHandler(customAuthenticationFailureHandler)
                 )
                 // 권한 설정
                 .authorizeHttpRequests((auth) -> auth
@@ -100,6 +110,7 @@ public class SecurityConfig {
                                 .userInfoEndpoint(userInfo -> // 사용자 정보 엔드포인트 설정
                                         userInfo.userService(customOAuth2UserService) // 사용자 정보 서비스 지정
                                 )
+                                .successHandler(customOAuth2AuthenticationSuccessHandler)
                 )
                 //로그아웃 설정
                 .logout((logout) -> logout

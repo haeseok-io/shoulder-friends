@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<Users, Long> {
     Users findByEmail(String email);
+    Users findByEmailAndOauth2Where(String email, String oauth2);
     List<Users> findTop12ByOrderByUserNoDesc();
     boolean existsByEmail(String email);
     Users findByNickname(String nickName);

@@ -1,4 +1,4 @@
-package kr.co.shoulf.web.security.custom.userDetails.service;
+package kr.co.shoulf.web.security.custom.userDetails.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import kr.co.shoulf.web.entity.Users;
 import kr.co.shoulf.web.security.custom.userDetails.CustomUserDetails;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -13,9 +15,12 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
+@RequiredArgsConstructor
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        String redirectUrl = request.getParameter("redirect");
+
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         Users users = Users.builder()
                 .userNo(customUserDetails.getUserNo())
@@ -26,6 +31,12 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         HttpSession session = request.getSession();
         session.setAttribute("loggedInUser", users);
 
-        response.sendRedirect("/");
+        // 리다이렉트 url 이 없을경우 메인으로 이동
+        if( redirectUrl==null || redirectUrl.isEmpty() ) {
+            redirectUrl = "/";
+        }
+
+        response.setStatus(HttpStatus.OK.value());
+        response.getWriter().write(redirectUrl);
     }
 }

@@ -1,3 +1,46 @@
+$(()=>{
+    // 유저아이콘 이벤트
+    $("header .userToggle").on("click", e => {
+        let _this = $(e.currentTarget);
+
+        // 로그아웃 상태
+        if( !loggedInUser ) {
+            let modalLogout = $("header .modalLogout");
+            modalLogout.show();
+        } else {
+            _this.parent(".headerUser").toggleClass("active");
+
+
+        }
+
+
+    });
+});
+
+// 로그인 폼 체크
+function loginFormCheck() {
+    let form = document.loginForm;
+
+    if( !form.username.value ) {
+        requestToast("회원 이메일을 입력해주세요.", "danger", form.username);
+        return false;
+    } else if( !form.password.value ) {
+        requestToast("비밀번호를 입력해주세요.", "danger", form.password);
+        return false;
+    }
+
+    // 로그인 처리
+    $.ajax({
+        type: "post",
+        url: "/login/loginProc",
+        data: $(form).serialize(),
+        success: redirectUrl => location.href = redirectUrl,
+        error: data => requestToast(data.responseText, "danger")
+    })
+
+    return false;
+}
+
 // input name 에 배열 순서값 넣기
 function convertNameArrayNumber(name) {
     let list = $("[name*='"+name+"['");

@@ -25,16 +25,75 @@
             </div>
 
             <div class="etc">
-                <ul>
-                    <li>
+                <div class="headerAlram">
+                    <div class="alramToggle">
                         <i class="bi bi-bell"></i>
-                    </li>
-                    <li>
-                        <a href="/login">
-                            <i class="bi bi-person"></i>
-                        </a>
-                    </li>
-                </ul>
+                    </div>
+                </div>
+                <div class="headerUser">
+                    <div class="userToggle">
+                        <i class="bi bi-person"></i>
+                    </div>
+                    <div class="userModal">
+                        <div class="modalLogout" th:if="${session.loggedInUser==null}">
+                            <div class="modalBackground"></div>
+                            <div class="modalWrap">
+                                <div class="modalTitle">
+                                    <p class="titleName">로그인</p>
+                                    <div class="titleEtc">
+                                        <button type="button" class="modalClose">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="modalContent">
+                                    <div class="basic">
+                                        <form name="loginForm" action="/login/loginProc" method="post" onsubmit="return loginFormCheck();">
+                                            <div>
+                                                <input type="text" name="username" placeholder="이메일을 입력해주세요.">
+                                            </div>
+                                            <div>
+                                                <input type="password" name="password" placeholder="비밀번호를 입력해주세요.">
+                                            </div>
+                                            <div class="submit">
+                                                <button type="submit" class="btn btn-custom-default">로그인</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="oauth2">
+                                        <a href="/oauth2/authorization/google" class="loginBtn google">구글 로그인</a>
+                                        <a href="/oauth2/authorization/naver" class="loginBtn naver">네이버 로그인</a>
+                                        <a href="/oauth2/authorization/kakao" class="loginBtn kakao">카카오 로그인</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modalLogin" th:if="${session.loggedInUser!=null}">
+                            <div class="loginInfo">
+                                <div class="infoThumbnail">
+                                    <img src="https://www.placehold.it/200x200" alt="">
+                                </div>
+                                <div class="infoData">
+                                    <div class="logout">
+                                        <a href="/logout">로그아웃</a>
+                                    </div>
+                                    <p class="nickname">닉네임자리</p>
+                                    <p class="position">백엔드 / 웹서버 / Lv.3</p>
+                                </div>
+                            </div>
+                            <div class="loginMenu">
+                                <ul>
+                                    <li><a th:href="@{/user/detail(no=${session.loggedInUser.userNo})}">내 프로필</a></li>
+                                    <li><a href="/mypage/user">마이 페이지</a></li>
+                                    <li><a href="/mypage/user">모임 현황</a></li>
+                                </ul>
+                            </div>
+                            <div class="loginMoim">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
