@@ -98,6 +98,9 @@ public class MoimService {
                 e.printStackTrace();
                 return false;
             }
+
+            // 파일명에 경로 병합
+            moimImgName = "/upload/moim/"+moimImgName;
         } else {
             Moim orgMoim = dto.getMoimNo()!=null ? moimRepository.findById(dto.getMoimNo()).orElse(null) : null;
             moimImgName = orgMoim!=null ? orgMoim.getMoimDetail().getMoimImg() : null;
@@ -105,7 +108,6 @@ public class MoimService {
 
 
         // 오임 등록/수정
-        System.out.println(dto.getType());
         Moim moim = Moim.builder()
                 .moimNo(dto.getMoimNo())
                 .type(dto.getType())
@@ -153,8 +155,8 @@ public class MoimService {
         if( dto.getPositionNo()!=null && !dto.getPositionNo().isEmpty() ) {
             // 기존 값 수정
             for(int i=0; i<dto.getPersonnel().size(); i++) {
+                Long moimHeadcountNo = dto.getHeadcountNo().isEmpty() ? null : dto.getHeadcountNo().get(i);
                 Integer personnel = dto.getPersonnel().get(i);
-                Long moimHeadcountNo = dto.getHeadcountNo().get(i);
 
                 Integer positionDetailNo = dto.getPositionDetailNo().get(i);
                 PositionDetail positionDetail = positionDetailNo!=null ? positionDetailRepository.findById(positionDetailNo).orElse(null) : null;
@@ -199,7 +201,7 @@ public class MoimService {
         // 참고링크
         if( dto.getLink()!=null && !dto.getLink().isEmpty() ) {
             for(int i=0; i<dto.getLink().size(); i++) {
-                Long linkNo = dto.getLinkNo().get(i);
+                Long linkNo = dto.getLinkNo().isEmpty() ? null : dto.getLinkNo().get(i);
                 String linkUrl = dto.getLink().get(i);
 
                 moimProjectLinkRepository.save(
