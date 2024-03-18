@@ -31,6 +31,7 @@ public class ChecklistController {
     @GetMapping("/checklist")
     public void checklist(@RequestParam Long moimNo, Model model, @AuthenticationPrincipal CustomUserDetails user) {
         model.addAttribute("list", checklistService.getlist(moimNo));
+        model.addAttribute("endlist", checklistService.getEndlist(moimNo));
         model.addAttribute("moimNo", moimNo);
         model.addAttribute("userName", user.getUsername());
 

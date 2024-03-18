@@ -31,6 +31,12 @@ public class ChecklistService {
         return checklistList;
     }
 
+    //완료 상태인 체크리스트 찾기
+    public Object getEndlist(Long moimNo) {
+        List<Checklist> checklistList = checklistRepository.findByMoim_MoimNoAndStatus(moimNo, 2);
+        return checklistList;
+    }
+
     //체크리스트 등록
     public void checklistWrite(String contents, Long moimNo, @AuthenticationPrincipal CustomUserDetails user) {
         Optional<Moim> result = moimRepository.findById(moimNo);

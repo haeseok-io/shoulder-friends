@@ -5,10 +5,15 @@
 <th:block layout:fragment="css">
     <style>
         .mini-title{
+            width: 200px;
             font-weight: 600;
             font-size: 22px;
             color: #1F1926;
             padding: 25px 0;
+            display: inline-block;
+        }
+        .checkIndex{
+            color: #aaaaaa;
         }
         #checkbtn{
             background-color: #382B47;
@@ -73,9 +78,11 @@
                             },
                             success: function (data){
                                 alert("완료");
+                                location.reload();
                             },
                             error: function(xhr, status, error) {
-                                alert("오류발생 새로고침 해주세요");
+                                alert("오류발생 다시 실행해주세요");
+                                location.reload();
                             }
                         })
 
@@ -95,9 +102,11 @@
                             },
                             success: function (data){
                                 alert("취소");
+                                location.reload();
                             },
                             error: function(xhr, status, error) {
-                                alert("오류발생 새로고침 해주세요");
+                                alert("오류발생 다시 실행해주세요");
+                                location.reload();
                             }
                         })
 
@@ -123,7 +132,8 @@
                 </div>
             </form>
                 <div class="title">
-                    <p class="mini-title">할일 목록</p>
+                    <p class="mini-title" style="width: 90px;">할일 목록</p>
+                    <span class="checkIndex">[[${list.size()}]] / [[${endlist.size()}]]</span>
                 </div>
                 <div th:each="dto : ${list}">
                 <div class="form-check">
