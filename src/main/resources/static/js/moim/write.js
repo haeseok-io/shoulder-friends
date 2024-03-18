@@ -30,27 +30,27 @@ function moimImgUploadEvent(e) {
     }
 
     if( e.type=='change' ) {
-            let target = $("#moimImg-thumbnail-btn");
+        let target = $("#moimImg-thumbnail-btn");
 
-            if( e.target.files.length>0 ){
-                let file = e.target.files[0];
+        if( e.target.files.length>0 ){
+            let file = e.target.files[0];
 
-                if( file!==moimImgFileInfo[0] ){
-                    let reader = new FileReader();
+            if( file!==moimImgFileInfo[0] ){
+                let reader = new FileReader();
 
-                    reader.onload = e => {
-                        let imgElement = $("<img />");
-                        imgElement.attr('src', e.target.result);
+                reader.onload = e => {
+                    let imgElement = $("<img />");
+                    imgElement.attr('src', e.target.result);
 
-                        target.html('');
-                        target.append(imgElement);
-                    };
+                    target.html('');
+                    target.append(imgElement);
+                };
 
-                    reader.readAsDataURL(file);
-                }
-            } else {
-                $(e.currentTarget).prop("files", moimImgFileInfo);
+                reader.readAsDataURL(file);
             }
+        } else {
+            $(e.currentTarget).prop("files", moimImgFileInfo);
+        }
     }
 }
 function moimImgLoader(path) {
