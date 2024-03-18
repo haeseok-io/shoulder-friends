@@ -101,3 +101,7 @@ footer .container p { font-weight: 300; color: #fff; }
 .btn.btn-custom-default,
 .btn.btn-custom-default:focus { background: #382B47; color: #fff; }
 .btn.btn-custom-default:focus { border: 1px solid #382B47; }
+
+.btn.btn-custom-point,
+.btn.btn-custom-point:focus { background: #FF8911; color: #fff; }
+.btn.btn-custom-point:focus { border: 1px solid #FF8911; }
