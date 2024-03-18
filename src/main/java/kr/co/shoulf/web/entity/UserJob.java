@@ -18,7 +18,7 @@ public class UserJob {
     private Integer career;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "position_detail_no", nullable = false)
+    @JoinColumn(name = "position_detail_no")
     @ToString.Exclude
     private PositionDetail positionDetail;
 
