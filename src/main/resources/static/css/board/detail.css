@@ -96,4 +96,4 @@ input[type='submit'] {border-radius: 5px;}
 .btnViewComments{height: 30px; font-size: 15px; line-height: normal;}
 .writerProfile img {width: 30px; height: 30px;  border-radius: 50%; /* 이미지를 원형으로 만듦 */}
 
-.recommentWrap{margin-top: 30px; display: none; margin-left: 20px;}
+.recommentWrap{margin-top: 30px; margin-left: 20px;}

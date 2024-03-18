@@ -56,12 +56,9 @@ public class BoardController {
     public String boardDetail(@RequestParam(value = "boardNo", required = false) Long boardNo, Model model) {
         BoardDTO boardDetail = boardService.readOne(boardNo);
         model.addAttribute("boardDetail", boardDetail);
-        //System.out.println(boardDetail.getBoard().getUsers());
 
         List<Reply> replyList = replyService.readAll(boardNo);
-        System.out.println("-------------------------------------------------"+replyList);
         List<Reply> childReply = replyService.readChild(boardNo);
-        System.out.println("-------------------------------------------------childReply"+childReply);
         model.addAttribute("replyList", replyList);
         model.addAttribute("childReply", childReply);
 
@@ -81,6 +78,35 @@ public class BoardController {
         return "redirect:/board/detail?boardNo=" + board.getBoardNo();
     }
 
+    @PostMapping("/writeChildReply")
+    public String writeChildReply(@ModelAttribute Reply reply, @RequestParam("replyNo") Long replyNo, @RequestParam("boardNo") Long boardNo){
+        Board board = boardService.readOne(boardNo).getBoard();
+        Users users = userService.readOne(3L);
+        Reply parent = replyService.readOne(replyNo);
+        System.out.println("parent:"+parent);
+        Reply child = new Reply();
+        Integer depth = null;
+        if(!parent.getChildren().isEmpty()) {
+            depth = parent.getChildren().stream().findFirst().get().getDepth();
+        }
+        child.setBoard(board);
+        child.setUsers(users);
+        child.setParentReply(parent);
+        child.setContents(reply.getContents());
+        if(depth == null) child.setDepth(2);
+        else child.setDepth(parent.getChildren().stream().findFirst().get().getDepth()+1);
+        System.out.println(child);
+        replyService.write(child);
+        return "redirect:/board/detail?boardNo=" + board.getBoardNo();
+    }
+
+    @GetMapping("/getChild")
+    @ResponseBody
+    public List<Reply> getChild(@RequestParam Long replyNo){
+        List<Reply> list = replyService.readRecomments(replyNo);
+//        System.out.println(replyNo + "--------------------------------"+ list);
+        return list;
+    }
     @PostMapping("/plusHits")
     @ResponseBody
     public void plusHits(@RequestParam Long boardNo) {
