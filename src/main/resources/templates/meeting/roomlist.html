@@ -8,7 +8,7 @@
             padding-top: 50px;
             padding-bottom: 100px;
             text-align: center;
-            font-size: 35px;
+            font-size: 30px;
             color: #6F6F6F;
             font-weight: bold;
         }
@@ -31,7 +31,7 @@
         .cafe-addr{
             padding-bottom: 50px;
             text-align: center;
-            font-size: 27px;
+            font-size: 22px;
             color: #6F6F6F;
         }
         .navbar-nav .nav-link {
@@ -51,12 +51,11 @@
         }
         #cafemap{
             width: 100%;
-            height: 400px;
+            height: 320px;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding-top: 100px;
-            padding-bottom: 100px;
+            padding-bottom: 50px;
         }
         .caferoom{
             text-align: center;
@@ -94,9 +93,9 @@
         .room-name{
             padding-top: 50px;
             padding-bottom: 30px;
-            padding-left: 100px;
+            padding-left: 90px;
             text-align: left;
-            font-size: 40px;
+            font-size: 35px;
         }
         .room-detail{
             width: 80%;
@@ -127,7 +126,7 @@
             text-align: right;
         }
         .roomd{
-            font-size: 22px;
+            font-size: 20px;
             color: #6F6F6F;
             padding: 8px 0;
         }
@@ -235,7 +234,7 @@
             <hr>
             <div class="room-name">위치</div>
             <div id="cafemap">
-                <div id="map" style="width:600px;height:400px;"></div>
+                <div id="map" style="width:450px;height:300px;"></div>
             </div>
             <div class="cafe-addr" style="text-align: center;" th:text="'주소 : '+${oneCafe.post}+' '+${oneCafe.addr}"></div>
             <input type="hidden" name="x" id="x" th:value="${oneCafe.x}">
@@ -261,7 +260,7 @@
                 </div>
             </div>
             <div class="room-detail">
-                <ul class="list-group">
+                <ul class="list-group" style="padding-left: 0px;">
                     <li class="roomd" th:text="'대여가격 : '+${dto.price}+'원'"></li>
                     <input type="hidden" id="room-price" th:value="${dto.price}">
                     <input type="hidden" name="roomno" id="roomno" th:value="${dto.studyroomNo}">
