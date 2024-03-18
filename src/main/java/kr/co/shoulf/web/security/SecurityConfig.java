@@ -1,6 +1,7 @@
 package kr.co.shoulf.web.security;
 
 import kr.co.shoulf.web.security.auth.CustomOAuth2UserService;
+import kr.co.shoulf.web.security.custom.userDetails.service.CustomAuthenticationSuccessHandler;
 import kr.co.shoulf.web.security.custom.userDetails.service.CustomMemberUserDetailsService;
 import kr.co.shoulf.web.security.custom.userDetails.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class SecurityConfig {
     private final CustomMemberUserDetailsService customMemberUserDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomUserDetailsService customUserDetailsService;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public UserDetailsService userMemberDetailsService() {
@@ -80,6 +82,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login/loginProc") // 로그인 처리 URL 설정
                         .failureUrl("/login?error") // 로그인 실패 시 이동할 URL 설정
                         .defaultSuccessUrl("/")
+                        .successHandler(customAuthenticationSuccessHandler)
                 )
                 // 권한 설정
                 .authorizeHttpRequests((auth) -> auth
