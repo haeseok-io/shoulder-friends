@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,5 +23,15 @@ public class ReplyService {
 
     public void write(Reply reply) {
         replyRepository.save(reply);
+    }
+
+    public List<Reply> readRecomments(Long replyNo) {
+        return replyRepository.findReplyWithChildrenByReplyNo(replyNo);
+    }
+
+    public Reply readOne(Long replyNo) {
+        Optional<Reply> result =replyRepository.findById(replyNo);
+        Reply reply = result.get();
+        return reply;
     }
 }

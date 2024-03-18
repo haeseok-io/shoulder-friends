@@ -6,49 +6,114 @@
     <link rel="stylesheet" th:href="@{/css/board/detail.css}">
 </th:block>
 <th:block layout:fragment="js">
-    <script>
+    <script th:inline="javascript">
         $(() => {
-            let btnViewComments = $(".btnViewComments");
-            /*$.ajax({
-                url : "/board/getChild",
-                type : "get",
-                data : {replyNo :}
-            })*/
+            function commonAjax(url, parameter, type, callback, contentType) { //ajax처리 공용함수
+                $.ajax({
+                    url: url,
+                    data: parameter,
+                    dataType : 'json',
+                    type: type,
+                    contentType: contentType != null ? contentType : 'application/x-www-form-urlencoded;charset=UTF-8',
+                    success: function (res) {
+                        callback(res);
+                    },
+                    error: function (err) {
+                        callback(err);
+                    }
+                });
+            }
+
+            let btnViewComments = $(".btnViewComments"); //답글 보기 버튼
 
             btnViewComments.on("click", function () { //답글 보기
+                let _this = $(this);
+
                 // 현재 클릭된 버튼에 가장 가까운 부모 중에서 가장 가까운 .commentWrap을 선택
                 let closestCommentWrap = $(this).closest(".commentWrap");
+                // let recommentWrapNo = closestCommentWrap.closest(".recommentWrap");
+
                 let replyNo = closestCommentWrap.data("no");
-
-                // 가장 가까운 부모 댓글 번호
-                let childsParentNo =  $(".recommentWrap").data("no");
                 console.log("(부모)고유댓글번호: " + replyNo);
-                console.log("(자식)의 부모고유번호: " + childsParentNo);
+                let dataType = {replyNo : replyNo};
+                commonAjax("/board/getChild",dataType,"get",function (result){
+                   viewRecomment(result);
+                });
+                function viewRecomment(res) {
+                    // 부모 요소를 찾아서 그 다음에 추가할 것이므로 부모 요소를 미리 선택합니다
+                    let parentElement = _this.parents(".commentWrap");
 
-                if(replyNo == childsParentNo){
-                    $(".recommentWrap").toggle();
+                    // recommentWrap이 이미 존재하는지 확인합니다
+                    let recommentWrap = parentElement.next(".recommentWrap");
+                    if (!recommentWrap.length) {
+                        // recommentWrap이 없는 경우, 새로운 요소를 생성합니다
+                        parentElement.after("<div class=\"recommentWrap\"></div>");
+                        // 다시 생성된 recommentWrap을 선택합니다
+                        recommentWrap = parentElement.next(".recommentWrap");
+                    } else {
+                        // 이미 recommentWrap이 있는 경우, 중복 생성을 막기 위해 함수를 종료합니다.
+                        return;
+                    }
+
+                    // depth에 따라 데이터를 정렬합니다
+                    res.sort((a, b) => a.depth - b.depth);
+
+                    res.forEach(function (obj) {
+                        obj.children.forEach(function (child) {
+                            console.log(child);
+                            // 날짜 문자열을 Date 객체로 변환
+                            let date = new Date(child.regdate);
+                            // 각 부분의 값 추출
+                            let year = date.getFullYear();
+                            let month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요
+                            let day = String(date.getDate()).padStart(2, '0');
+                            let hours = String(date.getHours()).padStart(2, '0');
+                            let minutes = String(date.getMinutes()).padStart(2, '0');
+                            // 원하는 형식으로 조합
+                            let formattedDate = year + '년 ' + month + '월 ' + day + '일 ' + hours + ':' + minutes;
+                            let tag = "<div class=\"recommentWrap\" data-no=\"" + child.replyNo + "\">\n" +
+                                "                                <div class=\"commentsHeader\">\n" +
+                                "                                    <a href=\"/user/detail\">\n" +
+                                "                                        <div class=\"writerProfile\">\n" +
+                                "                                            <img src=\""+ child.users.userDetail.profileImg+ "\" alt=\"\">\n" +
+                                "                                        </div>\n" +
+                                "                                        <p class=\"writerName\">" + child.users.nickname + "</p>\n" +
+                                "                                    </a>\n" +
+                                "                                    <p class=\"commentRegdate\"> " + formattedDate + "</p>\n" +
+                                "                                </div>\n" +
+                                "                                <div class=\"commentsBody\">"+child.contents+"</div>\n" +
+                                "                            </div>";
+
+                            // 생성된 recommentWrap에 답글을 추가합니다
+                            recommentWrap.append(tag);
+                        });
+                    });
+                    if(recommentWrap.length > 0 ){
+                        return false;
+                    }
                 }
             });
 
             $(".btnPlusComments").on("click", function () {
                 console.log("답글 달기 버튼");
                 let closestCommentWrap = $(this).closest(".commentWrap");
+                console.log(closestCommentWrap.data("no"));
                 let closestRecommentForm = closestCommentWrap.find(".recommentForm");
                 closestRecommentForm.toggle();
             });
 
-            $(".recommentBtn").on("click",function (){
+            $(".recommentBtn").on("click", function () {
                 let recomment = $.trim($("#recomment").val());
-                if(recomment===""){
+                /*if (recomment === "") {
                     alert("답글을 작성해주세요.");
-                    return false;
-                }
+                    return false;*/
+                // }
             });
 
-            $(".replyWrite").on("click", function (){
+            $(".replyWrite").on("click", function () {
                 console.log("댓글 작성 버튼");
                 let reply = $.trim($("#reply").val());
-                if(reply===""){
+                if (reply === "") {
                     alert("댓글을 작성해주세요.");
                     return false;
                 }
@@ -56,7 +121,6 @@
         });
     </script>
 </th:block>
-
 <th:block layout:fragment="container">
     <main>
         <div class="container">
@@ -114,41 +178,31 @@
                                         HH:mm')}]]</p>
                                 </div>
                                 <!-- 댓글을 화면에 출력할 때 줄바꿈 문자를 <br> 태그로 변환 -->
-                                <div class="commentsBody" th:utext="${#strings.replace(reply.contents, nlString, '&lt;br /&gt;')}"></div>
+                                <div class="commentsBody"
+                                     th:utext="${#strings.replace(reply.contents, nlString, '&lt;br /&gt;')}"></div>
                                 <div class="commentsBottom">
-                                    <button type="button" class="btn btn-outline-secondary btnViewComments">
-                                        <i class="bi bi-chevron-down"></i>
-                                        <span>답글 보기</span>
-                                    </button>
+                                    <th:block th:if="${not reply.getChildren().isEmpty()}">
+                                        <button type="button" class="btn btn-outline-secondary btnViewComments">
+                                            <i class="bi bi-chevron-down"></i>
+                                            <span>답글 보기</span>
+                                        </button>
+                                    </th:block>
                                     <button type="button" class="btn btn-outline-secondary btnPlusComments">
                                         <span>답글 달기</span>
                                     </button>
                                 </div>
                                 <div class="recommentWrite">
-                                    <form action="/board/replyWrite?replyNo" method="post" class="recommentForm">
+                                    <form action="/board/writeChildReply" method="post" class="recommentForm">
                                         <input type="hidden" name="boardNo" th:value="${boardDetail.board.boardNo}">
                                         <input type="hidden" name="userNo" th:value="${boardDetail.board.users.userNo}">
+                                        <input type="hidden" name="replyNo" th:value="${reply.replyNo}">
                                         <textarea id="recomment" name="contents" placeholder="답글을 작성해주세요."></textarea>
                                         <input type="submit" value="작성" class="btn btn-custom-add recommentBtn">
                                     </form>
                                 </div>
                             </div>
-                        <th:block th:each="reply : ${childReply}">
-                            <div class="recommentWrap" th:data-no="${reply.parentReply.replyNo}" th:value="${reply.depth}">
-                                <div class="commentsHeader">
-                                    <a href="/user/detail">
-                                        <div class="writerProfile">
-                                            <img th:src="${reply.users.userDetail.profileImg}" alt="">
-                                        </div>
-                                        <p class="writerName">[[${reply.users.nickname}]]</p>
-                                    </a>
-                                    <p class="commentRegdate">[[${#dates.format(reply.regdate, 'yyyy년 MM월 dd일
-                                        HH:mm')}]]</p>
-                                </div>
-                                <div class="commentsBody" th:utext="${#strings.replace(reply.contents, nlString, '&lt;br /&gt;')}"></div>
-                            </div>
                         </th:block>
-                        </th:block>
+                        <!--원래 childReply 있던 자리 -->
                     </div>
                 </div>
             </div>
@@ -161,5 +215,4 @@
         </div>
     </main>
 </th:block>
-
 </html>

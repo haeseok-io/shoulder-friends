@@ -122,7 +122,7 @@ public class MeetingService {
 
         Payment payment = Payment.builder()
                 .approvalNum(Long.valueOf(approval))
-                .cardNum(Long.valueOf(card))
+                .cardNum(card)
                 .name(reservPaymentDTO.getName())
                 .productName(reservPaymentDTO.getStudycafename())
                 .email(reservPaymentDTO.getEmail())
