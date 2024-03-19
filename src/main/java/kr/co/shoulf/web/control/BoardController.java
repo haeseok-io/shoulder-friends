@@ -15,7 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -84,21 +86,27 @@ public class BoardController {
         Users users = userService.readOne(3L);
         Reply parent = replyService.readOne(replyNo);
         System.out.println("parent:"+parent);
+        System.out.println("-------------------------");
         Reply child = new Reply();
         Integer depth = null;
-        if(!parent.getChildren().isEmpty()) {
-            depth = parent.getChildren().stream().findFirst().get().getDepth();
+        Optional<Reply> latestChild = parent.getChildren().stream()
+                .sorted(Comparator.comparing(Reply::getRegdate).reversed())
+                .findFirst();
+        if (latestChild.isPresent()) {
+            depth = latestChild.get().getDepth();
         }
         child.setBoard(board);
         child.setUsers(users);
         child.setParentReply(parent);
         child.setContents(reply.getContents());
         if(depth == null) child.setDepth(2);
-        else child.setDepth(parent.getChildren().stream().findFirst().get().getDepth()+1);
+        else child.setDepth(depth + 1);
+        System.out.println("최근댓글 뎁스? " + latestChild.orElse(null));
         System.out.println(child);
         replyService.write(child);
         return "redirect:/board/detail?boardNo=" + board.getBoardNo();
     }
+
 
     @GetMapping("/getChild")
     @ResponseBody
