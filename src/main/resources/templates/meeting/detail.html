@@ -448,11 +448,17 @@
             let price = $("#price").val();
             let studyroomNo = $("#studyroomNo").val();
             let calendar_addr = $("#calendar_addr").val();
+            let moimNo = $("#moimNo").val();
+            let studycafeNo = $("#studycafeNo").val();
+            let calendar_content = $("#calendar_content").val();
+            let calendar_start_date = $("#calendar_start_date").val();
+            let start_time = $("#start_time").val();
+            let random = Math.floor(Math.random()*10);
 
             IMP.request_pay({
                 pg: "inicis.shoulf",
                 pay_method: "card",
-                merchant_uid : 'm_'+new Date().getTime(),
+                merchant_uid : new Date().getTime()+random,
                 amount: price,
                 name : studycafename,
                 buyer_email : email,
@@ -460,19 +466,35 @@
             }, function (rsp) {
                 if (rsp.success) {
 
-                    document.getElementById("reservform").action = "/meeting/reservPayment";
-
-                    document.reservform.approval.value = rsp.apply_num;
-                    document.reservform.amount.value = rsp.paid_amount;
-                    document.reservform.card.value = rsp.card_number;
-                    document.reservform.studycafename.value = studycafename;
-                    document.reservform.price.value = price;
-                    document.reservform.studyroomNo.value = studyroomNo;
-                    document.reservform.calendar_addr.value = calendar_addr;
-
-                    alert("예약이 완료되었습니다.");
-
-                    document.reservform.submit();
+                    $.ajax({
+                        url: "/meeting/reservPayment",
+                        method: "POST",
+                        data: {
+                            "approvalNum" : rsp.merchant_uid,
+                            "cardNum" : rsp.card_number,
+                            "name" : name,
+                            "studycafename" : studycafename,
+                            "email" : email,
+                            "price" : price,
+                            "moimNo" : moimNo,
+                            "studyroomNo" : studyroomNo,
+                            "studycafeNo" : studycafeNo,
+                            "calendar_content" : calendar_content,
+                            "calendar_start_date" : calendar_start_date,
+                            "calendar_addr" : calendar_addr,
+                            "start_time" : start_time,
+                            "amount" : rsp.paid_amount
+                        },
+                        success: function(response) {
+                            alert("결제가 완료되었습니다.");
+                            $("#calendarModal").modal("hide");
+                            location.reload();
+                        },
+                        error: function(xhr, status, error) {
+                            alert("이미 예약이 되어 결제가 취소되었습니다."+" "+error);
+                            console.log(error);
+                        }
+                    });
 
                 } else {
                     var msg = '결제에 실패하였습니다.';
@@ -486,23 +508,47 @@
         function notPay() {
 
             let studycafename = $("#studycafename").val();
+            let name = $("#name").val();
+            let email = $("#email").val();
             let price = $("#price").val();
             let studyroomNo = $("#studyroomNo").val();
             let calendar_addr = $("#calendar_addr").val();
+            let moimNo = $("#moimNo").val();
+            let studycafeNo = $("#studycafeNo").val();
+            let calendar_content = $("#calendar_content").val();
+            let calendar_start_date = $("#calendar_start_date").val();
+            let start_time = $("#start_time").val();
+            let random = Math.floor(Math.random()*10);
 
-            document.getElementById("reservform").action = "/meeting/reservPayment";
-
-            document.reservform.approval.value = "101010101010";
-            document.reservform.amount.value = price;
-            document.reservform.card.value = "1122334455667788";
-            document.reservform.studycafename.value = studycafename;
-            document.reservform.price.value = price;
-            document.reservform.studyroomNo.value = studyroomNo;
-            document.reservform.calendar_addr.value = calendar_addr;
-
-            alert("예약이 완료되었습니다.");
-
-            document.reservform.submit();
+            $.ajax({
+                url: "/meeting/reservPayment",
+                method: "POST",
+                data: {
+                    "approvalNum" : new Date().getTime()+random,
+                    "cardNum" : "1111222233334444",
+                    "name" : name,
+                    "studycafename" : studycafename,
+                    "email" : email,
+                    "price" : price,
+                    "moimNo" : moimNo,
+                    "studyroomNo" : studyroomNo,
+                    "studycafeNo" : studycafeNo,
+                    "calendar_content" : calendar_content,
+                    "calendar_start_date" : calendar_start_date,
+                    "calendar_addr" : calendar_addr,
+                    "start_time" : start_time,
+                    "amount" : price
+                },
+                success: function(response) {
+                    alert("결제가 완료되었습니다.");
+                    $("#calendarModal").modal("hide");
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    alert("이미 예약이 되어 결제가 취소되었습니다."+" "+error);
+                    console.log(error);
+                }
+            });
         }
     </script>
 </th:block>
@@ -520,7 +566,6 @@
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel" style="font-weight: 500;font-size: 1.4rem;">미팅을 추가하세요.</h5>
                         </div>
-                        <form name="reservform" id="reservform" method="post">
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="calendar_content" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 내용</label>
@@ -578,6 +623,7 @@
                                             <input type="hidden" name="card" id="cardNum">
                                             <input type="hidden" name="amount" id="amount">
                                             <input type="hidden" name="moimNo" id="moimNo" th:value="${moimNo}">
+                                            <input type="hidden" name="merchantUid" id="merchantUid">
                                         </div>
                                         <input type="hidden" name="studycafeNo" id="studycafeNo">
                                         <input type="hidden" name="studyroomNo" id="studyroomNo">
@@ -585,7 +631,6 @@
                                 </div>
                             </div>
                         </div>
-                        </form>
                         <div class="modal-footer">
                             <button type="button" class="btn btn" id="addMeeting">결제 넘기기</button>
                             <button type="button" class="btn btn" id="addCalendar">등록</button>
