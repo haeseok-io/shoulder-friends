@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReservPaymentDTO {
     private Long approvalNum;
-    private Long cardNum;
+    private String cardNum;
     private String name;
     private String studycafename;
     private String email;
@@ -23,10 +23,11 @@ public class ReservPaymentDTO {
     private Long userNo;
     private Long moimNo;
     private Long studyroomNo;
+    private Long studycafeNo;
     private String calendar_content;
     private String calendar_start_date;
     private String  endDate;
     private String calendar_addr;
     private String start_time;
-    private Long amount;
+    private Integer amount;
 }

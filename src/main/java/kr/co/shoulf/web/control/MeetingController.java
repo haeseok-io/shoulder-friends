@@ -2,17 +2,21 @@ package kr.co.shoulf.web.control;
 
 import kr.co.shoulf.web.dto.MeetingDTO;
 import kr.co.shoulf.web.dto.ReservPaymentDTO;
+import kr.co.shoulf.web.entity.Studyroom;
 import kr.co.shoulf.web.security.custom.userDetails.CustomUserDetails;
 import kr.co.shoulf.web.service.MeetingService;
 import kr.co.shoulf.web.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +27,8 @@ import java.util.Map;
 public class MeetingController {
     private final MeetingService meetingService;
     private final StudyService studyService;
+    public static final String KEY = "0588185562360842";
+    public static final String SECRET = "ZODmGjsuy0mz52841UHYk8J4ETFFStAbaoAbtXIcfjb6hnrN3VZHAaHNDwnBzECspEMjQuFYSdlwMRv9";
 
     // 미팅 디테일로 이동
     @GetMapping("/detail")
@@ -67,9 +73,31 @@ public class MeetingController {
 
     //미팅 일반 결제 예약 결제 저장
     @PostMapping("/reservPayment")
-    public String reservPayment(ReservPaymentDTO reservPaymentDTO, @RequestParam String approval, @RequestParam String card, @RequestParam Long amount, @AuthenticationPrincipal CustomUserDetails user){
-        meetingService.writeReservPayment(reservPaymentDTO, approval, card, user);
-        return "redirect:/meeting/detail?moimNo="+reservPaymentDTO.getMoimNo();
+    public ResponseEntity<String> reservPayment(ReservPaymentDTO reservPaymentDTO, @AuthenticationPrincipal CustomUserDetails user) throws IOException {
+
+        List<Studyroom> studyroomList = studyService.ckeckinlistRoom(reservPaymentDTO.getStudycafeNo(), reservPaymentDTO.getCalendar_start_date());
+        ArrayList<Long> studyrooms = new ArrayList<>();
+        studyroomList.forEach(studyroom -> {
+            Long studyroomNo = studyroom.getStudyroomNo();
+            studyrooms.add(studyroomNo);
+        });
+
+        if (!reservPaymentDTO.getAmount().equals(reservPaymentDTO.getPrice())) {
+            String token = meetingService.getToken(KEY, SECRET);
+            meetingService.refundRequest(token, String.valueOf(reservPaymentDTO.getApprovalNum()));
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        //현재 남은 방 이면 예약정보 저장 아니면 결제 취소하기
+        if(studyrooms.contains(reservPaymentDTO.getStudyroomNo())){
+            meetingService.writeReservPayment(reservPaymentDTO, user);
+        }else {
+            String token = meetingService.getToken(KEY, SECRET);
+            meetingService.refundRequest(token, String.valueOf(reservPaymentDTO.getApprovalNum()));
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     //미팅 정보로 스터디룸 정보 보내기
