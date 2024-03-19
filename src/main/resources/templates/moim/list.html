@@ -72,7 +72,6 @@
 
         $(() => {
             callList();
-
             typeSelect = $("select[name='type']").select2();
             positionSelect = $("select[name='positionNo']").select2();
             positionDetailSelect = $("select[name='positionDetailNo']").select2();
@@ -97,6 +96,18 @@
                 } else {
                     positionDetail.append(`<option value="">대분류를 선택해주세요.</option>`)
                 }
+            });
+
+            // 신규모임 클릭 이벤트
+            $(".moimNewList li").on("click", e => {
+                let no = $(e.currentTarget).data("no");
+
+                if( !no ) {
+                    requestToast("모임 고유번호가 존재하지 않습니다.<br>새로고침 후 다시 시도해주세요.", "danger");
+                    return false;
+                }
+
+                document.location.href = "/moim/detail?no="+no;
             });
 
             // 페이지 스크롤 이벤트
@@ -164,6 +175,7 @@
                         .studyCategoryName;
 
                             // 데이터 담기
+                            append.attr("data-no", obj.moimNo);
                             append.find(".thumbnail img").attr("src", newThunbnailPath);
                             append.find(".category span").text(categoryName);
                             append.find(".etc .type span").addClass("badge-"+obj.type).text(typeName);
@@ -218,6 +230,10 @@
 </th:block>
 
 <th:block layout:fragment="container">
+    <aside class="pageBanner">
+        <img src="/images/moimBanner.png" alt="">
+    </aside>
+    
     <main>
         <div class="container">
             <div class="wrapper newMoim">
@@ -229,7 +245,7 @@
                 </div>
                 <div class="content">
                     <ul class="moimNewList">
-                        <li th:each="data : ${moimNewList}">
+                        <li th:each="data : ${moimNewList}" th:data-no="${data.moimNo}">
                             <div class="thumbnail">
                                 <img th:if="${data.moimDetail.moimImg==null}" src="/images/moimBlank.png" alt="">
                                 <img th:if="${data.moimDetail.moimImg!=null}" th:src="${data.moimDetail.moimImg}" alt="">
