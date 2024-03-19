@@ -68,7 +68,7 @@ function moimImgLoader(path) {
 function onlineChangeEvent(e) {
     let _this = e ? $(e.currentTarget) : $("select[name='onlineNo']");
     let onlineNo = _this.val();
-    let hideTarget = $(".wrapper.fee");
+    let hideTarget = $(".fee");
 
 
     if( onlineNo==2 ) {
@@ -103,7 +103,7 @@ function initializePositionSelect(type) {
 // 모집직무 추가/제거
 function positionAddToDrop(type) {
     let cloneItem, cloneHtml;
-    let appendSel = $(".wrapper.headcount .content");
+    let appendSel = $(".headcount .content");
 
     if( type==='add' ) {
         if( appendSel.find(".colItem").length>0 ) {
@@ -149,7 +149,7 @@ function personnelControl(element, type) {
 // 직무구분 없음 이벤트 처리
 function positionEveryoneEvent(e) {
     let _this = e ? $(e.currentTarget) : $("input[name='everyone']");
-    let parentElement = $(".wrapper.headcount");
+    let parentElement = $(".headcount");
     let everyoneStatus = _this.is(":checked");
 
     if( everyoneStatus ) {
@@ -170,7 +170,7 @@ function positionEveryoneEvent(e) {
 
 // 참고링크 추가/제거
 function linkControl(type) {
-    let appendSel = $(".wrapper.link .content .rowItem");
+    let appendSel = $(".link .content .rowItem");
     let selCount = $("input[name='link']").length;
 
     if( type==='add' ) {
@@ -189,7 +189,7 @@ function linkControl(type) {
 
 // 타입에 맞는 템플릿 가져오기
 function getHtmlTemplate(type) {
-    let appendTarget = $(".formWrapper");
+    let appendTarget = $(".templateContainer");
     let templateName = type=='project' ? 'moimProjectTemplate' : 'moimStudyTemplate';
     let template = document.getElementById(templateName);
 
@@ -255,7 +255,7 @@ function formCheck() {
 
         if( !form.categoryNo.value ) {
             requestToast("분야를 선택해주세요.", "danger");
-            $(document).scrollTop($(".wrapper.category-project").position().top);
+            $(document).scrollTop($(".category-project").position().top);
             return false;
         } else if( platformNoValues.length<=0 ) {
             requestToast("출시 플랫폼을 선택해주세요.", "danger", form.platformNo);
