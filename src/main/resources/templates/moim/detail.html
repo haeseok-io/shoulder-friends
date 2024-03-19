@@ -30,12 +30,15 @@
         .moimPageWrap{display: flex; margin-top: 60px;}
         .moimDetailContents{width: 75%;}
         .moimRightInfoContents {
-            width: 25%;
+            position: fixed;
+            top: 20%;
+            left: 73%;
+            width: 20%;
             margin-left: 10px;
-            background-color: #fff; /* 배경색 추가 */
+            /*background-color: #fff; !* 배경색 추가 *!*/
             padding: 20px; /* 내부 여백 추가 */
             border-radius: 8px; /* 모서리를 둥글게 만듦 */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+            /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); !* 그림자 효과 추가 *!*/
         }
         .moimTabMenu ul{
             display: flex;
@@ -57,14 +60,23 @@
         .moimTabMenu ul li:hover a {color: #fff; /* 마우스를 갖다 대었을 때 링크의 글자색 변경 */}
         .userProfile {text-align: center; /* 텍스트 가운데 정렬 */}
         .userProfile img {
-            max-width: 100%; /* 이미지가 부모 요소를 넘어가지 않도록 함 */
+            max-width: 50%; /* 이미지가 부모 요소를 넘어가지 않도록 함 */
+            width: 150px;
+            height: 150px;
             border-radius: 50%; /* 이미지를 원형으로 만듦 */
             margin-top: 10px; /* 이미지 위 여백 추가 */
         }
     </style>
 </th:block>
 <th:block layout:fragment="js">
-
+    <script>
+        $(()=>{
+            $('.moimTabMenu .bi-lock').parent().click(function(event) {
+                event.preventDefault(); // 링크 클릭 이벤트 중지
+                // 추가적인 작업을 수행하거나 아무것도 하지 않음
+            });
+        });
+    </script>
 </th:block>
 
 <th:block layout:fragment="container">
@@ -72,7 +84,8 @@
         <div class="container">
             <div class="moimHeaderWrap">
                 <div class="moimThumbnail">
-                    <img th:src="${moim.moimDetail.moimImg}" alt="">
+                    <img th:if="${moim.moimDetail.moimImg != null}" th:src="${moim.moimDetail.moimImg}" alt="">
+                    <img th:if="${moim.moimDetail.moimImg == null}" src="/images/moimBlank.png" alt="">
                 </div>
                 <div class="moimHeaderContents">
                     <div class="moimPurposeWrap">
@@ -81,10 +94,10 @@
                     </div>
                     <div class="moimTitle">
                         <h2 class="title">[[${moim.subject}]]</h2>
-                        <span th:if="${moim.status eq 1}">모집중</span>
-                        <span th:if="${moim.status eq 2}">모집완료</span>
+                        <span th:if="${moim.status eq 1}">[모집중]</span>
+                        <span th:if="${moim.status eq 2}">[모집완료]</span>
                         <div>
-                            <button type="button"><i class="bi bi-share"></i></button>  &nbsp;
+                            <button type="button"><i class="bi bi-share"></i></button> &nbsp;
                             <button type="button"><i class="bi bi-heart"></i></button>
                         </div>
                     </div>
@@ -131,15 +144,20 @@
                 <div class="moimDetailContents">
                     <div class="moimTabMenu">
                         <ul>
-                            <li><a th:href="@{/moim/detail(no=${moim.moimNo})}">정보</a></li>
-                            <li><a href="">멤버</a></li>
-                            <li><a href="">할일 <i class="bi bi-lock"></i></a></li>
-                            <li><a href="">미팅 <i class="bi bi-lock"></i></a></li>
-                            <li th:if="${moim.users}"><a href="">관리 <i class="bi bi-lock"></i></a></li>
+                            <li><a th:href="@{/moim/detail(no=${moim.moimNo},type='info')}">정보</a></li>
+                            <li><a th:href="@{/moim/detail(no=${moim.moimNo},type='member')}">멤버</a></li>
+                            <li th:if="${ableMemberTab}"><a th:href="@{/moim/detail(no=${moim.moimNo},type='todo')}">할일</a></li>
+                            <li th:unless="${ableMemberTab}"><a href="">할일<i class="bi bi-lock"></i></a></li>
+                            <li th:if="${ableMemberTab}"><a th:href="@{/moim/detail(no=${moim.moimNo},type='meeting')}">미팅</a></li>
+                            <li th:unless="${ableMemberTab}"><a href="">미팅<i class="bi bi-lock"></i></a></li>
+                            <li th:if="${ableControlTab}"><a th:href="@{/moim/detail(no=${moim.moimNo},type='control')}">관리</a></li>
+                            <li th:unless="${ableControlTab}"><a href="">관리<i class="bi bi-lock"></i></a></li>
                         </ul>
                     </div>
                     <div class="moimDetailWrap">
-
+                        <th:block th:if="${infoTab}">
+                            asdasdsa
+                        </th:block>
                     </div>
                 </div>
                 <aside class="moimRightInfoContents">
