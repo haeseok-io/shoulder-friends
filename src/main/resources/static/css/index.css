@@ -1,5 +1,11 @@
 @charset "UTF-8";
 
+.mainSlider { width: 100%; position: relative; overflow: hidden; }
+.mainSlider .swiper-wrapper {}
+.mainSlider .swiper-wrapper .swiper-slide { position: relative; }
+.mainSlider .swiper-wrapper .swiper-slide img { width: 100%; height: 25vw; object-fit: cover; }
+.mainSlider .swiper-wrapper .swiper-slide a { position: absolute; top: 65%; left: 23%; display: flex; justify-content: center; align-items: center; width: 15vw; height: 3vw; padding: 0; font-size: 1.2vw; }
+
 .weekBest {}
 .weekBest .content {}
 .weekBest .content .moimList {  }
