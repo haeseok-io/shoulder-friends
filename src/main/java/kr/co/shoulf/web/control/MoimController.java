@@ -73,4 +73,10 @@ public class MoimController {
         moimService.addOne(moimDataRequestDTO);
         return "redirect:/moim/";
     }
+
+    @RequestMapping("/detail")
+    public String detail(@RequestParam("no") Long moimNo, Model model){
+        model.addAttribute("moim", moimService.readOne(moimNo));
+        return "moim/detail";
+    }
 }
