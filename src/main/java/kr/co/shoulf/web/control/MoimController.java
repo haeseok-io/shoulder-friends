@@ -3,6 +3,7 @@ package kr.co.shoulf.web.control;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import kr.co.shoulf.web.dto.*;
+import kr.co.shoulf.web.entity.Users;
 import kr.co.shoulf.web.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -76,8 +79,39 @@ public class MoimController {
     }
 
     @RequestMapping("/detail")
-    public String detail(@RequestParam("no") Long moimNo, Model model){
-        model.addAttribute("moim", moimService.readOne(moimNo));
+    public String detail(@RequestParam("no") Long moimNo, @RequestParam(value = "type", required = false) String type, Model model, HttpSession session){
+        Users loggedInUser = (Users) session.getAttribute("loggedInUser");
+        MoimDTO moimDTO = moimService.readOne(moimNo);
+
+        // 자물쇠 검증
+        boolean ableControlTab;
+        boolean ableMemberTab;
+        List<Users> moimMember = new ArrayList<>();
+        moimMember.add(moimDTO.getUsers());
+        moimDTO.getHeadcountList().forEach(h->{ //모임 멤버 구해오기
+            h.getParticipantApprovalList().forEach(p-> {
+                moimMember.add(p.getUsers());
+            });
+        });
+        System.out.println(moimMember);
+        if(loggedInUser != null){
+            //관리 탭
+            ableControlTab = Objects.equals(loggedInUser.getUserNo(), moimDTO.getUsers().getUserNo());
+            model.addAttribute("ableControlTab",ableControlTab);
+            // 할일, 미팅 탭
+            ableMemberTab = moimMember.stream().anyMatch(member -> Objects.equals(member.getUserNo(), loggedInUser.getUserNo()));
+            model.addAttribute("ableMemberTab", ableMemberTab);
+        }
+
+        if(type != null){
+            //정보 탭 클릭시
+            if(type.equals("info")){
+                model.addAttribute("infoTab", true);
+            }
+        }
+
+
+        model.addAttribute("moim", moimDTO);
         return "moim/detail";
     }
 }
