@@ -1,5 +1,6 @@
 package kr.co.shoulf.web.service;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.shoulf.web.dto.*;
 import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.repository.*;
@@ -70,13 +71,17 @@ public class MoimService {
         return convertMoimDTOList(moimRepository.findTop8ByOrderByHitsDesc());
     }
 
+    public List<MoimDTO> readSelfWriteList(Long userNo) {
+        return convertMoimDTOList(moimRepository.findByUsers_UserNo(userNo));
+    }
+
     public MoimDTO readOne(Long moimNo) {
         return convertMoimDTO(moimRepository.findById(moimNo).orElse(null));
     }
 
     // 모임 등록/수정
-    public boolean addOne(MoimDataRequestDTO dto) {
-        Users users = userRepository.findById(1L).orElse(null); // 로그인 유저로 변경 필요
+    public boolean addOne(MoimDataRequestDTO dto, HttpSession session) {
+        Users users = (Users) session.getAttribute("loggedInUser");
         Online online = onlineRepository.findById(dto.getOnlineNo()).orElse(null);
         Category category = dto.getCategoryNo()!=null ? categoryRepository.findById(dto.getCategoryNo()).orElse(null) : null;
         StudyCategory studyCategory = dto.getStudyCategoryNo()!=null ? studyCategoryRepository.findById(dto.getStudyCategoryNo()).orElse(null) : null;
@@ -153,12 +158,21 @@ public class MoimService {
 
         // 모집인원 등록/수정
         if( dto.getPositionNo()!=null && !dto.getPositionNo().isEmpty() ) {
+            // 제거된 모집인원 처리
+            List<MoimHeadcount> moimHeadcountList = moimHeadcountRepository.findByMoim(newMoim);
+            if( moimHeadcountList!=null && !moimHeadcountList.isEmpty() ) {
+                List<MoimHeadcount> deleteMoimHeadcountList = moimHeadcountList.stream().filter(headcount -> {
+                    return !dto.getHeadcountNo().contains(headcount.getMoimHeadcountNo());
+                }).toList();
+                moimHeadcountRepository.deleteAll(deleteMoimHeadcountList);
+            }
+
             // 기존 값 수정
             for(int i=0; i<dto.getPersonnel().size(); i++) {
                 Long moimHeadcountNo = dto.getHeadcountNo().isEmpty() ? null : dto.getHeadcountNo().get(i);
                 Integer personnel = dto.getPersonnel().get(i);
-
                 Integer positionDetailNo = dto.getPositionDetailNo().get(i);
+
                 PositionDetail positionDetail = positionDetailNo!=null ? positionDetailRepository.findById(positionDetailNo).orElse(null) : null;
 
                 moimHeadcountRepository.save(
@@ -170,14 +184,6 @@ public class MoimService {
                                 .build()
                 );
             }
-
-            // 제거된 모집인원 제거
-            List<MoimHeadcount> moimHeadcountList = moimHeadcountRepository.findByMoim(newMoim);
-            List<MoimHeadcount> deleteMoimHeadcountList = moimHeadcountList.stream().filter(headcount -> {
-                return !dto.getHeadcountNo().contains(headcount.getMoimHeadcountNo());
-            }).toList();
-
-            moimHeadcountRepository.deleteAll(deleteMoimHeadcountList);
         }
 
 

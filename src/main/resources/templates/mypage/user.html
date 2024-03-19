@@ -136,10 +136,8 @@
 <th:block layout:fragment="container">
     <main>
         <div class="container">
-
+            <th:block th:replace="fragment/mypageTab :: mypageTab"></th:block>
             <div class="wrapper">
-                <th:block th:replace="fragment/mypageTab :: mypageTab"></th:block>
-
                 <div class="profile">
                     <form action="/user/modify" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="userNo" th:value="${userData.userNo}">

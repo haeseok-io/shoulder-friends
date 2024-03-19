@@ -53,7 +53,7 @@
                     <ul class="userList">
                         <li th:each="data : ${userNewList}" th:data-no="${data.userNo}">
                             <div class="thumbnail">
-                                <img th:if="${data.userDetail.profileImg eq null}" src="https://letspl.me/assets/images/prof-no-img.png" alt="">
+                                <img th:if="${data.userDetail.profileImg eq null}" src="/images/profileBlank.png" alt="">
                                 <img th:unless="${data.userDetail.profileImg eq null}" th:src="${data.userDetail.profileImg}" alt="">
                             </div>
                             <div class="wrap">
@@ -67,10 +67,7 @@
                                     </th:block>
                                 </p>
                                 <p class="positionDetail">
-                                    <th:block th:if="${data.userJob==null}">미입력</th:block>
-                                    <th:block th:if="${data.userJob!=null && data.userJob.positionDetail!=null}">
-                                        [[${data.userJob.positionDetail.middleName}]]
-                                    </th:block>
+                                    <th:block th:text="${data.userJob==null || data.userJob.positionDetail==null ? '직무없음' : data.userJob.positionDetail.middleName}"></th:block>
                                 </p>
                             </div>
                             <div class="message">

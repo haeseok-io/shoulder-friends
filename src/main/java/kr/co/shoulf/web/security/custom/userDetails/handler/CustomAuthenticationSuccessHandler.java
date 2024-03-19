@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import kr.co.shoulf.web.entity.Users;
 import kr.co.shoulf.web.security.custom.userDetails.CustomUserDetails;
+import kr.co.shoulf.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -17,15 +18,14 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+    private final UserService userService;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String redirectUrl = request.getParameter("redirect");
 
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-        Users users = Users.builder()
-                .userNo(customUserDetails.getUserNo())
-                .email(customUserDetails.getUsername())
-                .build();
+        Users users = userService.readOne(customUserDetails.getUserNo());
 
         // 로그인 된 정보 세션에 담기
         HttpSession session = request.getSession();

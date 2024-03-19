@@ -39,7 +39,7 @@
         <div class="container">
             <div class="wrapper profile">
                 <div class="img">
-                    <img th:src="${userData.userDetail.profileImg!=null ? userData.userDetail.profileImg : 'https://letspl.me/assets/images/prof-no-img.png'}" alt="">
+                    <img th:src="${userData.userDetail.profileImg!=null ? userData.userDetail.profileImg : '/images/profileBlank.png'}" alt="">
                 </div>
 
                 <div class="info">
@@ -59,7 +59,7 @@
                         <p>소개</p>
                     </div>
                     <div class="content">
-                        <div class="profileDataBlank" th:if="${userData.userDetail.introduce==null}">
+                        <div class="profileDataBlank" th:if="${userData.userDetail.introduce==null || userData.userDetail.introduce.isEmpty()}">
                             <p>입력된 소개가 없습니다.</p>
                         </div>
                         <p th:if="${userData.userDetail.introduce!=null}">
@@ -79,15 +79,21 @@
                         <ul class="profileList" th:if="${userData.userJob!=null}">
                             <li>
                                 <span class="name">직무</span>
-                                <span class="item">[[${userData.userJob.positionDetail.position.bigName}]] > [[${userData.userJob.positionDetail.middleName}]]</span>
+                                <span class="item">
+                                    <th:block th:text="${userData.userJob.positionDetail==null ? '미설정' : userData.userJob.positionDetail.position.bigName+' > '+userData.userJob.positionDetail.middleName}"
+                                </span>
                             </li>
                             <li>
                                 <span class="name">직무 레벨</span>
-                                <span class="item">[[${userData.userJob.level}]]레벨</span>
+                                <span class="item">
+                                    <th:block th:text="${userData.userJob.level==null ? '미설정' : userData.userJob.level+'레벨'}"></th:block>
+                                </span>
                             </li>
                             <li>
                                 <span class="name">경력</span>
-                                <span class="item">[[${userData.userJob.career}]]년차</span>
+                                <span class="item">
+                                    <th:block th:text="${userData.userJob.career==null ? '미설정' : userData.userJob.career+'년차'}"></th:block>
+                                </span>
                             </li>
                         </ul>
                     </div>

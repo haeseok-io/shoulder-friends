@@ -81,13 +81,13 @@ public class SecurityConfig {
         log.info("----- 시큐리티 적용2 -----");
         http
                 .securityMatcher("/login/**", "/oauth2/**", "/logout", "/moim/**",
-                        "/board/**", "/meeting/**", "/message/**", "/alarm/**")
+                        "/board/**", "/meeting/**", "/message/**", "/alarm/**", "/mypage/**")
                 // CSRF 보안 설정 비활성화
                 .csrf((csrf)->csrf.disable())
                 .authenticationProvider(userDaoAuthenticationProvider())
                 // 로그인 설정
                 .formLogin((auth) -> auth
-                        .loginPage("/login") // 로그인 페이지 설정
+                        .loginPage("/?refType=login") // 로그인 페이지 설정
                         .loginProcessingUrl("/login/loginProc") // 로그인 처리 URL 설정
                         .failureUrl("/") // 로그인 실패 시 이동할 URL 설정
                         .defaultSuccessUrl("/")

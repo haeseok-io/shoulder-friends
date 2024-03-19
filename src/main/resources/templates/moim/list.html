@@ -124,7 +124,7 @@
         // 리스트 조회
         function callList(page) {
             let form = $("form[name='searchForm']");
-            let thumbnailPath = "https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png";
+            let thumbnailPath = "/images/moimBlank.png";
             let appendSel = $(".moim .content .moimList");
             let appendHtml = $("#moimListTemplate").html();
 
@@ -155,8 +155,8 @@
                             let typeName = obj.type=="project" ? "프로젝트" : "스터디";
 
                             // 썸네일 이미지 조정 ( 이미지가 없을경우 기본 이미지로 대체 )
-                            if( obj.moimDetail.moimImg!="" && obj.moimDetail.moimImg!=thumbnailPath ) {
-                                newThunbnailPath = "/upload/moim/"+obj.moimDetail.moimImg;
+                            if( obj.moimDetail.moimImg!=null && obj.moimDetail.moimImg!="" ) {
+                                newThunbnailPath = obj.moimDetail.moimImg;
                             }
 
                             // 카테고리명
@@ -231,13 +231,8 @@
                     <ul class="moimNewList">
                         <li th:each="data : ${moimNewList}">
                             <div class="thumbnail">
-                                <!-- 테스트 데이터 경로문제로 임시로 추가 -->
-                                <th:block th:if="${data.moimDetail.moimImg!=null}">
-                                    <img th:if="${data.moimDetail.moimImg=='https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png'}" src="https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png" alt="">
-                                    <img th:if="${data.moimDetail.moimImg!='https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png'}" th:src="'/upload/moim/'+${data.moimDetail.moimImg}" alt="">
-                                </th:block>
-
-                                <img th:if="${data.moimDetail.moimImg==null}" src="https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png" alt="">
+                                <img th:if="${data.moimDetail.moimImg==null}" src="/images/moimBlank.png" alt="">
+                                <img th:if="${data.moimDetail.moimImg!=null}" th:src="${data.moimDetail.moimImg}" alt="">
                             </div>
                             <div class="wrap">
                                 <div class="label">
