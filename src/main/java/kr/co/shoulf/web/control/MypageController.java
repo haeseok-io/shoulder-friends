@@ -38,7 +38,7 @@ public class MypageController {
         Long userNo = user.getUserNo();
 
         model.addAttribute("selfList", moimService.readSelfWriteList(userNo));
-
+        model.addAttribute("joinList", moimService.readJoinList(userNo));
 
         return "mypage/moim";
     }
