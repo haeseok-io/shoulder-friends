@@ -136,7 +136,7 @@
 <th:block layout:fragment="container">
     <main>
         <div class="container">
-            <th:block th:replace="fragment/mypageTab :: mypageTab"></th:block>
+            <th:block th:replace="fragment/mypageTab :: mypageTab(tab='user')"></th:block>
             <div class="wrapper">
                 <div class="profile">
                     <form action="/user/modify" method="post" enctype="multipart/form-data">
