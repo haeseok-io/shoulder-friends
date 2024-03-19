@@ -38,8 +38,12 @@ $(()=>{
     // 로그인 모달 닫기
     $(".modalClose").on("click", e => {
         $(e.currentTarget).parents(".headerUser").removeClass("active");
-
     });
+
+    // url 의 파라미터로 login 값이 있을경우 로그인 창 열어주기
+    if( getQueryString("refType")==='login' ) {
+        $("header .userToggle").trigger("click");
+    }
 });
 
 // 로그인 폼 체크
@@ -144,4 +148,11 @@ function requestToast(message, bgClass = "primary", focusElement) {
     if( focusElement ) {
         focusElement.focus();
     }
+}
+
+function getQueryString(name) {
+    let queryString = window.location.search;
+    let param = new URLSearchParams(queryString);
+
+    return param.get(name);
 }
