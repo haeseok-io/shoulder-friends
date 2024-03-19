@@ -141,7 +141,7 @@
             <th:block th:replace="fragment/mypageTab :: mypageTab(tab='user')"></th:block>
 
             <form action="/user/modify" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="userNo" th:value="userData.userNo">
+                <input type="hidden" name="userNo" th:value="${userData.userNo}">
 
                 <section class="profileImg">
                     <input type="file" name="profileImg">
