@@ -14,6 +14,7 @@ import java.util.List;
 public interface MoimRepository extends JpaRepository<Moim,Long> {
     List<Moim> findTop2ByOrderByMoimNoDesc();
     List<Moim> findTop8ByOrderByHitsDesc();
+    List<Moim> findByUsers_UserNo(Long userNo);
     Moim findByMoimHeadcountList_MoimHeadcountNo(Long moimHeadcountNo);
 
     @Query("Select m From Moim m " +
