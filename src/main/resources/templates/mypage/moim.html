@@ -1,0 +1,30 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/mypage/mypage.css}">
+
+</th:block>
+<th:block layout:fragment="js">
+
+</th:block>
+
+<th:block layout:fragment="container">
+    <main>
+        <div class="container">
+            <th:block th:replace="fragment/mypageTab :: mypageTab"></th:block>
+
+            <div class="wrapper">
+                <div class="myList">
+                    <div class="content">
+                        <th:block th:replace="fragment/moimList :: moimList(templateData=${selfList})"></th:block>
+                    </div>
+                </div>
+            </div>
+            [[${selfList}]]
+        </div>
+    </main>
+</th:block>
+
+</html>
