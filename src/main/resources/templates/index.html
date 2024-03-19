@@ -10,7 +10,7 @@
         $(() => {
             $(".moimList > li").click(e => {
                 let no = $(e.currentTarget).data('no');
-                document.location.href = "/moim/detail/"+no;
+                document.location.href = "/moim/detail?no="+no;
             });
 
             $(".userList > li").click(e => {

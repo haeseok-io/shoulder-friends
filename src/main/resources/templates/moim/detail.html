@@ -1,0 +1,157 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/layout}">
+
+<th:block layout:fragment="css">
+    <style>
+        main .container {
+            width: 1400px;
+            max-width: 1400px;
+            margin: 0 auto; /* 가운데 정렬을 위해 추가 */
+            /*display: flex;*/
+            justify-content: space-between;
+            background-color: #f2f2f2; /* 배경색 추가 */
+            padding: 20px; /* 내부 여백 추가 */
+        }
+        .moimHeaderWrap{display: flex; margin-top: 50px;}
+        .moimThumbnail{width: 45%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px;}
+        .moimThumbnail img{width: 550px; height: 300px;}
+        .moimHeaderContents{width: 65%; margin-left: 50px;}
+        .moimHeaderContents .title{font-weight: bold; color: black;}
+        .moimHeaderContents > div {margin-bottom: 13px; /* 각 요소 사이에 10px의 아래 여백을 추가합니다. */}
+        .moimTitle{ display: flex;}
+        .moimTitle span{margin-top: 13px; margin-left: 10px; text-align: center;}
+        .moimTitle div{margin-left: 200px;}
+        .moimTitle div button{outline: none; border: none;}
+        .moimLanguage .moimLanguageList{ display: flex; align-items: center; height: 50px;}
+        .moimLanguage .item{text-align: center;  margin-right: 10px; margin-left: 1px;}
+        .moimLanguage .item img{width: 30px; height: auto;}
+        /*(위)헤더 ------------ 본문(아래)*/
+        .moimPageWrap{display: flex; margin-top: 60px;}
+        .moimDetailContents{width: 75%;}
+        .moimRightInfoContents {
+            width: 25%;
+            margin-left: 10px;
+            background-color: #fff; /* 배경색 추가 */
+            padding: 20px; /* 내부 여백 추가 */
+            border-radius: 8px; /* 모서리를 둥글게 만듦 */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+        }
+        .moimTabMenu ul{
+            display: flex;
+            height: 50px;
+            line-height: 50px;
+            padding: 0; /* 기본 여백 제거 */
+            list-style: none; /* 기본 목록 스타일 제거 */
+            justify-content: space-between; /* 요소들을 동일한 간격으로 분산 배치 */
+            border-top: 1px solid #ccc; /* 상단에 선 추가 */
+            border-bottom: 1px solid #ccc; /* 하단에 선 추가 */
+        }
+        .moimTabMenu ul li {
+            flex-grow: 1; /* 동일한 너비를 갖도록 설정 */
+            text-align: center; /* 텍스트 가운데 정렬 */
+            border-right: 1px solid transparent;
+        }
+        .moimTabMenu ul li:not(:last-child) {border-right: 1px solid #ccc; /* 오른쪽에 선 추가 (마지막 요소 제외) */}
+        .moimTabMenu ul li:hover {background-color: #7B27FF; /* 마우스를 갖다 대었을 때 배경색 변경 */}
+        .moimTabMenu ul li:hover a {color: #fff; /* 마우스를 갖다 대었을 때 링크의 글자색 변경 */}
+        .userProfile {text-align: center; /* 텍스트 가운데 정렬 */}
+        .userProfile img {
+            max-width: 100%; /* 이미지가 부모 요소를 넘어가지 않도록 함 */
+            border-radius: 50%; /* 이미지를 원형으로 만듦 */
+            margin-top: 10px; /* 이미지 위 여백 추가 */
+        }
+    </style>
+</th:block>
+<th:block layout:fragment="js">
+
+</th:block>
+
+<th:block layout:fragment="container">
+    <main>
+        <div class="container">
+            <div class="moimHeaderWrap">
+                <div class="moimThumbnail">
+                    <img th:src="${moim.moimDetail.moimImg}" alt="">
+                </div>
+                <div class="moimHeaderContents">
+                    <div class="moimPurposeWrap">
+                        <span class="badge badge-size-lg badge-project" th:if="${moim.type eq 'project'}"> 프로젝트 </span>
+                        <span class="badge badge-size-lg badge-study" th:if="${moim.type eq 'study'}"> 스터디 </span>
+                    </div>
+                    <div class="moimTitle">
+                        <h2 class="title">[[${moim.subject}]]</h2>
+                        <span th:if="${moim.status eq 1}">모집중</span>
+                        <span th:if="${moim.status eq 2}">모집완료</span>
+                        <div>
+                            <button type="button"><i class="bi bi-share"></i></button>  &nbsp;
+                            <button type="button"><i class="bi bi-heart"></i></button>
+                        </div>
+                    </div>
+                    <div class="shortDesc">
+                        <p>[[${moim.shortDesc}]]</p>
+                    </div>
+                    <div class="moimCate">
+                        <h4 class="title">모임 분야</h4>
+                        <th:block th:if="${moim.moimDetail.category != null}">
+                            <p th:text="${moim.moimDetail.category.categoryName}"></p>
+                        </th:block>
+                        <th:block th:if="${moim.moimDetail.studyCategory != null}">
+                            <p th:text="${moim.moimDetail.studyCategory.studyCategoryName}"></p>
+                        </th:block>
+                    </div>
+                    <div class="moimLanguage">
+                        <h4 class="title">사용 언어 및 기술</h4>
+                        <ul class="moimLanguageList">
+                            <li th:each="language : ${moim.languageList}">
+                                <div class="item" th:if="${language.path==null}">
+                                    <span class="badge rounded-pill text-bg-secondary">[[${language.name}]]</span>
+                                </div>
+                                <div class="item" th:if="${language.path!=null}">
+                                    <img th:src="${language.path}" alt="">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <th:block th:if="${moim.type eq 'project'}">
+                        <div class="moimPlatform">
+                            <h4 class="title">출시 플랫폼</h4>
+                            <ul class="moimPlatformList">
+                                <li th:each="platformList : ${moim.projectPlatformList}">
+                                    <div class="item">
+                                        <span class="badge rounded-pill text-bg-secondary">[[${platformList.platform.name}]]</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+            <div class="moimPageWrap">
+                <div class="moimDetailContents">
+                    <div class="moimTabMenu">
+                        <ul>
+                            <li><a th:href="@{/moim/detail(no=${moim.moimNo})}">정보</a></li>
+                            <li><a href="">멤버</a></li>
+                            <li><a href="">할일 <i class="bi bi-lock"></i></a></li>
+                            <li><a href="">미팅 <i class="bi bi-lock"></i></a></li>
+                            <li th:if="${moim.users}"><a href="">관리 <i class="bi bi-lock"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="moimDetailWrap">
+
+                    </div>
+                </div>
+                <aside class="moimRightInfoContents">
+                    <div class="userProfile">
+                        <p>[리더]</p>
+                        <p>[[${moim.users.nickname}]]</p>
+                        <img th:src="${moim.users.userDetail.profileImg}" alt="">
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+</th:block>
+
+</html>
