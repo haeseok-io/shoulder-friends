@@ -5,12 +5,13 @@
 <th:block layout:fragment="css">
     <link rel="stylesheet" th:href="@{/css/mypage/mypage.css}">
     <style>
-        .moimList > li { width: calc(33.3333% - (60px / 3)); }
-        .moimList > li .headcount { display: none; }
+        main {}
+        main .container { padding: 50px 0; }
+        main .container section { margin-top: 50px; }
+        main .container section .content { padding: 10px; }
 
-        .wrapper {}
-        .wrapper > div { margin-top: 50px; }
-        .wrapper .content { padding: 10px; }
+        main .container section .moimList > li { width: calc(33.3333% - (60px / 3)); }
+        main .container section .moimList > li .headcount { display: none; }
     </style>
 </th:block>
 <th:block layout:fragment="js">
@@ -18,35 +19,37 @@
 </th:block>
 
 <th:block layout:fragment="container">
+    <aside class="pageBanner">
+        <img src="/images/mypageBanner.png" alt="">
+    </aside>
     <main>
         <div class="container">
             <th:block th:replace="fragment/mypageTab :: mypageTab(tab='moim')"></th:block>
 
-            <div class="wrapper">
-                <div class="myList">
-                    <div class="mypageTitle">
-                        <p>내 모임</p>
+            <section class="myList">
+                <div class="mypageTitle">
+                    <p>내 모임</p>
+                </div>
+                <div class="content">
+                    <div class="mypageBlank" th:if="${selfList==null || selfList.isEmpty()}">
+                        등록한 모임이 없습니다.
                     </div>
-                    <div class="content">
-                        <div class="mypageBlank" th:if="${selfList==null || selfList.isEmpty()}">
-                            등록한 모임이 없습니다.
-                        </div>
 
-                        <th:block th:if="${selfList!=null && !selfList.isEmpty()}" th:replace="fragment/moimList :: moimList(templateData=${selfList})"></th:block>
-                    </div>
+                    <th:block th:if="${selfList!=null && !selfList.isEmpty()}" th:replace="fragment/moimList :: moimList(templateData=${selfList})"></th:block>
                 </div>
-                <div class="joinList">
-                    <div class="mypageTitle">
-                        <p>팀원으로 참여중인 모임</p>
-                    </div>
-                    <div class="content">
-                        <div class="mypageBlank" th:if="${joinList==null || joinList.isEmpty()}">
-                            팀원으로 참여중인 모임이 없습니다.
-                        </div>
-                        <th:block th:if="${joinList!=null && !joinList.isEmpty()}" th:replace="fragment/moimList :: moimList(templateData=${joinList})"></th:block>
-                    </div>
+            </section>
+
+            <section class="joinList">
+                <div class="mypageTitle">
+                    <p>팀원으로 참여중인 모임</p>
                 </div>
-            </div>
+                <div class="content">
+                    <div class="mypageBlank" th:if="${joinList==null || joinList.isEmpty()}">
+                        팀원으로 참여중인 모임이 없습니다.
+                    </div>
+                    <th:block th:if="${joinList!=null && !joinList.isEmpty()}" th:replace="fragment/moimList :: moimList(templateData=${joinList})"></th:block>
+                </div>
+            </section>
         </div>
     </main>
 </th:block>
