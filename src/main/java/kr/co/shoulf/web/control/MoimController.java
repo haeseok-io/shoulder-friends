@@ -1,5 +1,6 @@
 package kr.co.shoulf.web.control;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import kr.co.shoulf.web.dto.*;
 import kr.co.shoulf.web.service.*;
@@ -50,8 +51,8 @@ public class MoimController {
     }
 
     @PostMapping(value = "/write")
-    public String writeOk(MoimDataRequestDTO moimDataRequestDTO) {
-        boolean status = moimService.addOne(moimDataRequestDTO);
+    public String writeOk(MoimDataRequestDTO moimDataRequestDTO, HttpSession session) {
+        boolean status = moimService.addOne(moimDataRequestDTO, session);
         return "redirect:/moim/";
     }
 
@@ -69,8 +70,8 @@ public class MoimController {
     }
 
     @PostMapping(value = "/modify")
-    public String modifyOk(MoimDataRequestDTO moimDataRequestDTO) {
-        moimService.addOne(moimDataRequestDTO);
+    public String modifyOk(MoimDataRequestDTO moimDataRequestDTO, HttpSession session) {
+        moimService.addOne(moimDataRequestDTO, session);
         return "redirect:/moim/";
     }
 }
