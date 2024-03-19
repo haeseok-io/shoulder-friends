@@ -8,7 +8,7 @@
             max-width: 900px;
             margin: 40px 0;
         }
-        #addCalendar, #modifyCalendar, #modify{
+        #addCalendar, #modifyCalendar, #modify, #addMeeting{
             background-color: #7B27FF;
             color: white;
         }
@@ -350,7 +350,74 @@
                                             if (requestPay()) {
                                                 $("#calendarModal").modal("hide");
                                                 location.reload();
-                                                console.log("성공성공임");
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
+                            //결제 넘기기 테스트용
+                            $("#addMeeting").on("click",function(){  // modal의 추가 버튼 클릭 시
+                                let content = $("#calendar_content").val();
+                                let start_date = $("#calendar_start_date").val();
+                                let addr = $("#calendar_addr").val();
+                                let studycafeNo = $("#studycafeNo").val();
+                                let start_time = $("#start_time").val();
+                                let moimNo = $("#moimNo").val();
+
+                                //내용 입력 여부 확인
+                                if(content == null || content == ""){
+                                    alert("내용을 입력하세요.");
+                                    return;
+                                }else if(addr == ""){
+                                    alert("주소를 입력하세요.");
+                                    return;
+                                }else if(start_date == ""){
+                                    alert("날짜를 입력하세요.");
+                                    return;
+                                }else{
+
+                                    let meetingOnly = {
+                                        "title" : content,
+                                        "startDate" : start_date,
+                                        "endDate" : start_date,
+                                        "addr" : addr,
+                                        "startTime":start_time,
+                                        "moimNo":moimNo
+                                    }//전송할 객체 생성
+
+                                    //스터디룸 번호 입력값 유무 확인
+                                    if(studycafeNo == '' || studycafeNo == null){
+                                        //룸 번호가 없으면 일정만 등록
+                                        $.ajax({
+                                            url: "/meeting/write",
+                                            method: "POST",
+                                            contentType: "application/json",
+                                            data: JSON.stringify(meetingOnly),
+                                            success: function(response) {
+                                                console.log(response);
+                                                $("#calendarModal").modal("hide");
+                                                location.reload();
+                                            },
+                                            error: function(xhr, status, error) {
+                                                alert("오류발생 다시 시도해주세요");
+                                                console.log(error);
+                                            }
+                                        });
+                                    }else{
+                                        let name = $("#name").val();
+                                        let email = $("#email").val();
+
+                                        if(name === "" || name === null){
+                                            alert("이름을 입력해주세요");
+                                            return;
+                                        }else if(email === "" || email === null){
+                                            alert("이메일을 입력해주세요");
+                                            return;
+                                        }else {
+                                            if (notPay()) {
+                                                $("#calendarModal").modal("hide");
+                                                location.reload();
                                             }
                                         }
                                     }
@@ -386,19 +453,12 @@
                 pg: "inicis.shoulf",
                 pay_method: "card",
                 merchant_uid : 'm_'+new Date().getTime(),
-                amount: 1,
+                amount: price,
                 name : studycafename,
                 buyer_email : email,
                 buyer_name : name
             }, function (rsp) {
                 if (rsp.success) {
-                    var msg = '결제가 완료되었습니다.';
-                    msg += "고유ID"+ rsp.imp_uid;
-                    msg += "상점 거래 ID : "+rsp.merchant_uid;
-                    msg += "결제 금액 : "+rsp.paid_amount;
-                    msg += "카드 승인 번호 : "+rsp.apply_num;
-
-                    console.log(msg);
 
                     document.getElementById("reservform").action = "/meeting/reservPayment";
 
@@ -420,6 +480,29 @@
                     alert(msg);
                 }
             });
+        }
+
+        //결제 없음
+        function notPay() {
+
+            let studycafename = $("#studycafename").val();
+            let price = $("#price").val();
+            let studyroomNo = $("#studyroomNo").val();
+            let calendar_addr = $("#calendar_addr").val();
+
+            document.getElementById("reservform").action = "/meeting/reservPayment";
+
+            document.reservform.approval.value = "101010101010";
+            document.reservform.amount.value = price;
+            document.reservform.card.value = "1122334455667788";
+            document.reservform.studycafename.value = studycafename;
+            document.reservform.price.value = price;
+            document.reservform.studyroomNo.value = studyroomNo;
+            document.reservform.calendar_addr.value = calendar_addr;
+
+            alert("예약이 완료되었습니다.");
+
+            document.reservform.submit();
         }
     </script>
 </th:block>
@@ -504,6 +587,7 @@
                         </div>
                         </form>
                         <div class="modal-footer">
+                            <button type="button" class="btn btn" id="addMeeting">결제 넘기기</button>
                             <button type="button" class="btn btn" id="addCalendar">등록</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="sprintSettingModalClose">취소</button>
                         </div>
