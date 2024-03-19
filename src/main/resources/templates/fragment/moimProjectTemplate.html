@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:fragment="moimProjectTemplate">
-    <div class="wrapper subject">
+    <section class="subject">
         <div class="mainTitle">
             <div class="title">
                 <p class="subject">프로젝트명</p>
@@ -11,8 +11,8 @@
         <div class="content">
             <input type="text" name="subject" placeholder="3~20 글자로 적어주세요 예)승차거부 신고앱">
         </div>
-    </div>
-    <div class="wrapper">
+    </section>
+    <section class="shortDesc">
         <div class="mainTitle">
             <div class="title">
                 <p class="subject">간단한 설명</p>
@@ -22,8 +22,8 @@
         <div class="content">
             <input type="text" name="shortDesc" placeholder="간단한 설명을 30 글자 이내로 적어주세요 에)승차거부하는 택시를 신고하는 앱입니다.">
         </div>
-    </div>
-    <div class="wrapper moimImg">
+    </section>
+    <section class="moimImg">
         <div class="mainTitle">
             <div class="title">
                 <p class="subject">프로젝트 대표 이미지</p>
@@ -41,10 +41,9 @@
                 <p>- 가로/세로의 비율이 3:2일 때 썸네일이 가장 예쁩니다.</p>
                 <p>- 저작권에 위배되지 않는 파일만 업로드해주세요.</p>
             </div>
-
         </div>
-    </div>
-    <div class="wrapper category category-project">
+    </section>
+    <section class="category category-project">
         <div class="mainTitle">
             <div class="title">
                 <p class="subject">프로젝트 분야</p>
@@ -59,8 +58,8 @@
                 </div>
             </th:block>
         </div>
-    </div>
-    <div class="wrapper">
+    </section>
+    <section class="platform">
         <div class="mainTitle">
             <div class="title">
                 <p class="subject">출시 플랫폼</p>
@@ -72,8 +71,8 @@
                 <option th:each="platform : ${platformList}" th:value="${platform.platformNo}">[[${platform.name}]]</option>
             </select>
         </div>
-    </div>
-    <div class="wrapper online">
+    </section>
+    <section class="online">
         <div class="mainTitle">
             <div class="title">
                 <p class="subject">지역</p>
@@ -92,8 +91,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="wrapper fee">
+    </section>
+    <section class="fee">
         <div class="mainTitle">
             <div class="title">
                 <p class="subject">오프라인 참가비용</p>
@@ -103,8 +102,8 @@
         <div class="content">
             <input type="text" name="fee" placeholder="금액을 입력해주세요.">
         </div>
-    </div>
-    <div class="wrapper headcount">
+    </section>
+    <section class="headcount">
         <div class="mainTitle">
             <div class="title">
                 <p class="subject">모집인원</p>
@@ -135,8 +134,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="wrapper detailDesc">
+    </section>
+    <section class="detailDesc">
         <div class="mainTitle">
             <div class="title">
                 <p class="subject">프로젝트 설명</p>
@@ -147,8 +146,8 @@
             <input type="hidden" name="detailDesc">
             <div id="detailDesc"></div>
         </div>
-    </div>
-    <div class="wrapper">
+    </section>
+    <section class="language">
         <div class="mainTitle">
             <div class="title">
                 <p class="subject">사용 언어/기술</p>
@@ -158,8 +157,8 @@
         <div class="content">
             <select name="language" multiple></select>
         </div>
-    </div>
-    <div class="wrapper link">
+    </section>
+    <section class="link">
         <div class="mainTitle">
             <div class="title">
                 <p class="subject">참고자료</p>
@@ -178,7 +177,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <template id="detailDescContent"># 1. 프로젝트의 시작 동기
 - **왜 이 프로덕트를 만드시고 싶은지 적어주세요**
