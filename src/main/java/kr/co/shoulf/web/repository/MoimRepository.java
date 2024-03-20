@@ -17,6 +17,13 @@ public interface MoimRepository extends JpaRepository<Moim,Long> {
     List<Moim> findByUsers_UserNo(Long userNo);
     Moim findByMoimHeadcountList_MoimHeadcountNo(Long moimHeadcountNo);
 
+    // 회원번호로 해당 회원이 참여중인 모임 찾기
+    @Query("Select m From Moim m " +
+            "Left Join fetch m.moimHeadcountList mh " +
+            "Left Join mh.moimParticipantsList mp " +
+            "Where mp.users.userNo=:userNo")
+    List<Moim> selectByMoimParticipants_UserNo(Long userNo);
+
     @Query("Select m From Moim m " +
             "Left Join fetch m.moimDetail md " +
             "Left Join fetch m.moimHeadcountList mh " +

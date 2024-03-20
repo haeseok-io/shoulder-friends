@@ -44,6 +44,18 @@ $(()=>{
     if( getQueryString("refType")==='login' ) {
         $("header .userToggle").trigger("click");
     }
+
+    // 모임 리스트 클릭 이벤트
+    $(document).on("click", ".moimList > li", e => {
+        let no = $(e.currentTarget).data('no');
+
+        if( !no ) {
+            requestToast("모임 고유번호가 존재하지 않습니다.<br>새로고침 후 다시 시도해주세요.", "danger");
+            return false;
+        }
+
+        document.location.href = "/moim/detail?no="+no;
+    });
 });
 
 // 로그인 폼 체크
@@ -142,7 +154,7 @@ function requestToast(message, bgClass = "primary", focusElement) {
     let updateClass = toastElement.attr("class").replace(/text-bg-\S+/, "text-bg-"+bgClass);
 
     toastElement.attr("class", updateClass);
-    toastElement.find(".toast-body").text(message);
+    toastElement.find(".toast-body").html(message);
     toast.show();
 
     if( focusElement ) {

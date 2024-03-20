@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Entity
 @Table(name = "moim_headcount")
 @Data
@@ -27,4 +29,7 @@ public class MoimHeadcount {
     @JoinColumn(name = "position_detail_no")
     @ToString.Exclude
     private PositionDetail positionDetail;
+
+    @OneToMany(mappedBy = "moimHeadcount", fetch = FetchType.LAZY)
+    private List<MoimParticipants> moimParticipantsList;
 }

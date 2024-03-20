@@ -6,43 +6,42 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
     <link rel="stylesheet" th:href="@{/css/mypage/mypage.css}">
     <style>
-        main .container .wrapper {}
-        main .container .wrapper input[type='text'] { width: 100%; height: 40px; border: 1px solid #e0e0e0; border-radius: 5px; padding-left: 10px; }
+        main {}
+        main .container { padding: 50px 0; }
+        main .container section { margin-top: 50px; }
+        main .container section .content { padding: 10px; }
 
-        .profile { padding: 50px 0; }
-        .profile form > div { margin-top: 60px; }
-        .profile .content { padding: 10px; }
+        main .container section input[type='text'] { width: 100%; height: 40px; border: 1px solid #e0e0e0; border-radius: 5px; padding-left: 10px; }
+        main .container section textarea { width: 100%; height: 150px; border: 1px solid #e0e0e0; border-radius: 5px; padding: 10px; resize: none; }
 
-        .profile .profileList li { width: 100%; display: flex; align-items: center; height: 60px; }
-        .profile .profileList li .name { width: 120px; font-weight: 600; }
-        .profile .profileList li .item { width: calc(100% - 140px); }
+        main .container section .profileList {}
+        main .container section .profileList li { width: 100%; display: flex; align-items: center; height: 60px; }
+        main .container section .profileList li .name { width: 120px; font-weight: 600; }
+        main .container section .profileList li .item { width: calc(100% - 140px); }
 
-        .profile .profileImg { display: flex; justify-content: center; }
-        .profile .profileImg input[type='file'] { display: none; }
-        .profile .profileImg .imgWrap { position: relative; width: 200px; height: 200px; }
-        .profile .profileImg .imgWrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 100%; }
-        .profile .profileImg .imgWrap button { position: absolute; bottom: 0; right: 0; width: 50px; height: 50px; background: #fff; border: none; border-radius: 100%; box-shadow: 0 2px 2px #ccc; }
+        main .container .profileImg { display: flex; justify-content: center; }
+        main .container .profileImg input[type='file'] { display: none; }
+        main .container .profileImg .imgWrap { position: relative; width: 200px; height: 200px; }
+        main .container .profileImg .imgWrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 100%; }
+        main .container .profileImg .imgWrap button { position: absolute; bottom: 0; right: 0; width: 50px; height: 50px; background: #fff; border: none; border-radius: 100%; box-shadow: 0 2px 2px #ccc; }
 
+        main .container .interestList { display: flex; flex-wrap: wrap; }
+        main .container .interestList li {}
+        main .container .interestList li input[type='checkbox'] { display: none; }
+        main .container .interestList li label { display: inline-block; border: 1px solid #e0e0e0; border-radius: 30px; padding: 5px 15px; margin-right: 10px; margin-bottom: 10px; font-size: .9rem; cursor: pointer; }
+        main .container .interestList li input[type='checkbox']:checked + label { background: #444; border: 1px solid #444; color: #fff; }
 
-        .profile .introduce textarea { width: 100%; height: 150px; border: 1px solid #e0e0e0; border-radius: 5px; padding: 10px; resize: none; }
+        main .container .portfolio {}
+        main .container .portfolio .portfolioList {}
+        main .container .portfolio .portfolioList li { height: 60px; }
 
-        .profile .interestList { display: flex; flex-wrap: wrap; }
-        .profile .interestList li {}
-        .profile .interestList li input[type='checkbox'] { display: none; }
-        .profile .interestList li label { display: inline-block; border: 1px solid #e0e0e0; border-radius: 30px; padding: 5px 15px; margin-right: 10px; margin-bottom: 10px; font-size: .9rem; cursor: pointer; }
-        .profile .interestList li input[type='checkbox']:checked + label { background: #444; border: 1px solid #444; color: #fff; }
+        main .container .update { text-align: center; }
 
-        .profile .portfolio {}
-        .profile .portfolio .portfolioList {}
-        .profile .portfolio .portfolioList li { height: 60px; }
-
-        .profile .update { text-align: center; }
-
-        .wrapper .select2-selection--single,
-        .wrapper .select2-selection--multiple { display: flex; align-items: center; height: 40px; border: 1px solid #e0e0e0; padding: 0 10px; }
-        .wrapper .select2-selection--multiple .select2-search { display: flex; flex: 1; }
-        .wrapper .select2-selection--single .select2-selection__arrow { top: 50%; transform: translateY(-50%); right: 10px; }
-        .wrapper .select2-selection--single .select2-selection__rendered { padding-left: 0; padding-right: 0; }
+        main .container .select2-selection--single,
+        main .container .select2-selection--multiple { display: flex; align-items: center; height: 40px; border: 1px solid #e0e0e0; padding: 0 10px; }
+        main .container .select2-selection--multiple .select2-search { display: flex; flex: 1; }
+        main .container .select2-selection--single .select2-selection__arrow { top: 50%; transform: translateY(-50%); right: 10px; }
+        main .container .select2-selection--single .select2-selection__rendered { padding-left: 0; padding-right: 0; }
         .select2-dropdown { border: 1px solid #e0e0e0; }
     </style>
 </th:block>
@@ -134,223 +133,223 @@
 </th:block>
 
 <th:block layout:fragment="container">
+    <aside class="pageBanner">
+        <img src="/images/mypageBanner.png" alt="">
+    </aside>
     <main>
         <div class="container">
-            <th:block th:replace="fragment/mypageTab :: mypageTab"></th:block>
-            <div class="wrapper">
-                <div class="profile">
-                    <form action="/user/modify" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="userNo" th:value="${userData.userNo}">
+            <th:block th:replace="fragment/mypageTab :: mypageTab(tab='user')"></th:block>
 
-                        <div class="profileImg">
-                            <input type="file" name="profileImg">
-                            <div class="imgWrap">
-                                <img th:if="${userData.userDetail.profileImg==null}" src="https://letspl.me/assets/images/prof-no-img.png" alt="" onclick="profileImgUploadTrigger();">
-                                <img th:if="${userData.userDetail.profileImg!=null}" th:src="${userData.userDetail.profileImg}" alt="" onclick="profileImgUploadTrigger();">
+            <form action="/user/modify" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="userNo" th:value="${userData.userNo}">
 
-                                <button type="button" onclick="profileImgUploadTrigger();">
-                                    <i class="bi bi-camera"></i>
-                                </button>
-                            </div>
-                        </div>
+                <section class="profileImg">
+                    <input type="file" name="profileImg">
+                    <div class="imgWrap">
+                        <img th:if="${userData.userDetail.profileImg==null}" src="https://letspl.me/assets/images/prof-no-img.png" alt="" onclick="profileImgUploadTrigger();">
+                        <img th:if="${userData.userDetail.profileImg!=null}" th:src="${userData.userDetail.profileImg}" alt="" onclick="profileImgUploadTrigger();">
 
-                        <div class="basic">
-                            <div class="mypageTitle">
-                                <p>기본 정보</p>
-                            </div>
-                            <div class="content">
-                                <ul class="profileList">
-                                    <li>
-                                        <span class="name">이메일</span>
-                                        <span class="item">
-                                            <input type="text" name="email" th:value="${userData.email}" disabled>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <span class="name">닉네임</span>
-                                        <span class="item">
-                                            <input type="text" name="nickname" th:value="${userData.nickname}" placeholder="닉네임을 입력해주세요.">
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <button type="button" onclick="profileImgUploadTrigger();">
+                            <i class="bi bi-camera"></i>
+                        </button>
+                    </div>
+                </section>
 
-                        <div class="introduce">
-                            <div class="mypageTitle">
-                                <p>소개</p>
-                            </div>
-                            <div class="content">
-                                <textarea name="introduce" placeholder="자기소개를 작성해주세요.">[[${userData.userDetail.introduce}]]</textarea>
-                            </div>
-                        </div>
-
-                        <div class="job">
-                            <div class="mypageTitle">
-                                <p>직무</p>
-                            </div>
-                            <div class="content">
-                                <input type="hidden" name="userJobNo" th:value="${userData.userJob!=null ? userData.userJob.userJobNo : ''}">
-                                <ul class="profileList">
-                                    <li>
-                                        <span class="name">직무</span>
-                                        <span class="item">
-                                            <select name="positionNo">
-                                                <option value="">직무 대분류</option>
-
-                                                <th:block th:each="position: ${positionList}">
-                                                    <option th:if="${userData.userJob==null || userData.userJob.positionDetail==null}" th:value="${position.positionNo}">[[${position.bigName}]]</option>
-                                                    <option th:if="${userData.userJob!=null && userData.userJob.positionDetail!=null}" th:value="${position.positionNo}" th:selected="${position.positionNo==userData.userJob.positionDetail.position.positionNo}">[[${position.bigName}]]</option>
-                                                </th:block>
-
-                                            </select>
-                                            <select name="positionDetailNo">
-                                                <option value="">직무 중분류 선택</option>
-                                            </select>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <span class="name">직무 레벨</span>
-                                        <span class="item">
-                                            <select name="level">
-                                                <option value="">레벨 선택</option>
-
-                                                <th:block th:each="dex : ${#numbers.sequence(1, 5)}">
-                                                    <option th:if="${userData.userJob==null || userData.userJob.level==null}" th:value="${dex}">[[${dex}]]레벨</option>
-                                                    <option th:if="${userData.userJob!=null && userData.userJob.level!=null}" th:value="${dex}" th:selected="${dex==userData.userJob.level}">[[${dex}]]레벨</option>
-                                                </th:block>
-                                            </select>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <span class="name">경력</span>
-                                        <span class="item">
-                                            <select name="career">
-                                                <option value="">경력 선택</option>
-
-                                                <th:block th:each="dex : ${#numbers.sequence(1, 5)}">
-                                                    <option th:if="${userData.userJob==null || userData.userJob.career==null}" th:value="${dex}">
-                                                        [[${dex}]]년차
-                                                        <th:block th:if="${dex==5}">이상</th:block>
-                                                    </option>
-                                                    <option th:if="${userData.userJob!=null && userData.userJob.career!=null}" th:value="${dex}" th:selected="${dex==userData.userJob.career}">
-                                                        [[${dex}]]년차
-                                                        <th:block th:if="${dex==5}">이상</th:block>
-                                                    </option>
-                                                </th:block>
-                                            </select>
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="online">
-                            <div class="mypageTitle">
-                                <p>온/오프라인 여부</p>
-                            </div>
-                            <div class="content">
-                                <input type="hidden" name="userOnlineNo" th:value="${userData.userOnline!=null ? userData.userOnline.userOnlineNo : ''}">
-                                <ul class="profileList">
-                                    <li>
-                                        <span class="name">온/오프라인</span>
-                                        <span class="item">
-                                            <select name="onlineNo">
-                                                <option value="">온/오프라인 선택</option>
-
-                                                <th:block th:each="online : ${onlineList}">
-                                                    <option th:if="${userData.userOnline==null}" th:value="${online.onlineNo}">[[${online.onlineName}]]</option>
-                                                    <option th:if="${userData.userOnline!=null}" th:value="${online.onlineNo}" th:selected="${online.onlineNo==userData.userOnline.online.onlineNo}">[[${online.onlineName}]]</option>
-                                                </th:block>
-                                            </select>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <span class="name">선호 장소</span>
-                                        <span class="item">
-                                            <input type="text" name="preferArea" th:value="${userData.userDetail.preferArea}" placeholder="선호하는 지역을 입력해주세요.">
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="interest">
-                            <div class="mypageTitle">
-                                <p>관심분야</p>
-                            </div>
-                            <div class="content">
-                                <ul class="interestList">
-                                    <li th:each="category : ${categoryList}">
-                                        <th:block th:if="${userData.interestCategoryList.isEmpty()}">
-                                            <input type="checkbox" name="categoryNo" th:id="'category_'+${category.categoryNo}" th:value="${category.categoryNo}">
-                                            <label th:for="'category_'+${category.categoryNo}">[[${category.categoryName}]]</label>
-                                        </th:block>
-                                        <th:block th:if="${!userData.interestCategoryList.isEmpty()}">
-                                            <input type="checkbox" name="categoryNo" th:id="'category_'+${category.categoryNo}" th:value="${category.categoryNo}" th:checked="${userData.interestCategoryList.![category.categoryNo].contains(category.categoryNo)}">
-                                            <label th:for="'category_'+${category.categoryNo}">[[${category.categoryName}]]</label>
-                                        </th:block>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="portfolio">
-                            <div class="mypageTitle">
-                                <p>포트폴리오 링크</p>
-                                <div class="etc">
-                                    <button type="button" class="btn btn-custom-default btn-sm" onclick="userPortfolioControl('add');">추가</button>
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="userPortfolioControl('drop')">제거</button>
+                <section class="basic">
+                    <div class="mypageTitle">
+                        <p>기본 정보</p>
+                    </div>
+                    <div class="content">
+                        <ul class="profileList">
+                            <li>
+                                <div class="name">이메일</div>
+                                <div class="item">
+                                    <input type="text" name="email" th:value="${userData.email}" disabled>
                                 </div>
-                            </div>
-                            <div class="content">
-                                <ul class="portfolioList">
-                                    <li th:if="${userData.portfolioList.isEmpty()}">
-                                        <input type="hidden" name="portfolioNo">
-                                        <input type="text" name="portfolio" placeholder="포트폴리오 URL 을 입력해주세요.">
-                                    </li>
-                                    <li th:each="portfolio : ${userData.portfolioList}">
-                                        <input type="hidden" name="portfolioNo" th:value="${portfolio.portfolioNo}">
-                                        <input type="text" name="portfolio" th:value="${portfolio.url}" placeholder="포트폴리오 URL 을 입력해주세요.">
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                            </li>
+                            <li>
+                                <div class="name">닉네임</div>
+                                <div class="item">
+                                    <input type="text" name="nickname" th:value="${userData.nickname}" placeholder="닉네임을 입력해주세요.">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
 
-                        <div class="blog">
-                            <div class="mypageTitle">
-                                <p>외부 사이트 링크</p>
-                            </div>
-                            <div class="content">
-                                <ul class="profileList">
-                                    <li>
-                                        <span class="name">
-                                            <i class="bi bi-github"></i>
-                                            Github
-                                        </span>
-                                        <div class="item">
-                                            <input type="text" name="gitLink" th:value="${userData.userDetail.gitLink}">
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span class="name">
-                                            <i class="bi bi-feather"></i>
-                                            Blog
-                                        </span>
-                                        <span class="item">
-                                            <input type="text" name="blogLink" th:value="${userData.userDetail.blogLink}">
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                <section class="introduce">
+                    <div class="mypageTitle">
+                        <p>소개</p>
+                    </div>
+                    <div class="content">
+                        <textarea name="introduce" placeholder="자기소개를 작성해주세요.">[[${userData.userDetail.introduce}]]</textarea>
+                    </div>
+                </section>
 
-                        <div class="update">
-                            <button type="submit" class="btn btn-custom-point">업데이트</button>
+                <section class="job">
+                    <div class="mypageTitle">
+                        <p>직무</p>
+                    </div>
+                    <div class="content">
+                        <input type="hidden" name="userJobNo" th:value="${userData.userJob!=null ? userData.userJob.userJobNo : ''}">
+                        <ul class="profileList">
+                            <li>
+                                <div class="name">직무</div>
+                                <div class="item">
+                                    <select name="positionNo">
+                                        <option value="">직무 대분류</option>
+
+                                        <th:block th:each="position: ${positionList}">
+                                            <option th:if="${userData.userJob==null || userData.userJob.positionDetail==null}" th:value="${position.positionNo}">[[${position.bigName}]]</option>
+                                            <option th:if="${userData.userJob!=null && userData.userJob.positionDetail!=null}" th:value="${position.positionNo}" th:selected="${position.positionNo==userData.userJob.positionDetail.position.positionNo}">[[${position.bigName}]]</option>
+                                        </th:block>
+
+                                    </select>
+                                    <select name="positionDetailNo">
+                                        <option value="">직무 중분류 선택</option>
+                                    </select>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="name">직무 레벨</div>
+                                <div class="item">
+                                    <select name="level">
+                                        <option value="">레벨 선택</option>
+
+                                        <th:block th:each="dex : ${#numbers.sequence(1, 5)}">
+                                            <option th:if="${userData.userJob==null || userData.userJob.level==null}" th:value="${dex}">[[${dex}]]레벨</option>
+                                            <option th:if="${userData.userJob!=null && userData.userJob.level!=null}" th:value="${dex}" th:selected="${dex==userData.userJob.level}">[[${dex}]]레벨</option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="name">경력</div>
+                                <div class="item">
+                                    <select name="career">
+                                        <option value="">경력 선택</option>
+
+                                        <th:block th:each="dex : ${#numbers.sequence(1, 5)}">
+                                            <option th:if="${userData.userJob==null || userData.userJob.career==null}" th:value="${dex}">
+                                                [[${dex}]]년차
+                                                <th:block th:if="${dex==5}">이상</th:block>
+                                            </option>
+                                            <option th:if="${userData.userJob!=null && userData.userJob.career!=null}" th:value="${dex}" th:selected="${dex==userData.userJob.career}">
+                                                [[${dex}]]년차
+                                                <th:block th:if="${dex==5}">이상</th:block>
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="online">
+                    <div class="mypageTitle">
+                        <p>온/오프라인 여부</p>
+                    </div>
+                    <div class="content">
+                        <input type="hidden" name="userOnlineNo" th:value="${userData.userOnline!=null ? userData.userOnline.userOnlineNo : ''}">
+                        <ul class="profileList">
+                            <li>
+                                <div class="name">온/오프라인</div>
+                                <div class="item">
+                                    <select name="onlineNo">
+                                        <option value="">온/오프라인 선택</option>
+
+                                        <th:block th:each="online : ${onlineList}">
+                                            <option th:if="${userData.userOnline==null}" th:value="${online.onlineNo}">[[${online.onlineName}]]</option>
+                                            <option th:if="${userData.userOnline!=null}" th:value="${online.onlineNo}" th:selected="${online.onlineNo==userData.userOnline.online.onlineNo}">[[${online.onlineName}]]</option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="name">선호 장소</div>
+                                <div class="item">
+                                    <input type="text" name="preferArea" th:value="${userData.userDetail.preferArea}" placeholder="선호하는 지역을 입력해주세요.">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="interest">
+                    <div class="mypageTitle">
+                        <p>관심분야</p>
+                    </div>
+                    <div class="content">
+                        <ul class="interestList">
+                            <li th:each="category : ${categoryList}">
+                                <th:block th:if="${userData.interestCategoryList.isEmpty()}">
+                                    <input type="checkbox" name="categoryNo" th:id="'category_'+${category.categoryNo}" th:value="${category.categoryNo}">
+                                    <label th:for="'category_'+${category.categoryNo}">[[${category.categoryName}]]</label>
+                                </th:block>
+                                <th:block th:if="${!userData.interestCategoryList.isEmpty()}">
+                                    <input type="checkbox" name="categoryNo" th:id="'category_'+${category.categoryNo}" th:value="${category.categoryNo}" th:checked="${userData.interestCategoryList.![category.categoryNo].contains(category.categoryNo)}">
+                                    <label th:for="'category_'+${category.categoryNo}">[[${category.categoryName}]]</label>
+                                </th:block>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="portfolio">
+                    <div class="mypageTitle">
+                        <p>포트폴리오 링크</p>
+                        <div class="etc">
+                            <button type="button" class="btn btn-custom-default btn-sm" onclick="userPortfolioControl('add');">추가</button>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="userPortfolioControl('drop')">제거</button>
                         </div>
-                    </form>
-                </div>
-            </div>
+                    </div>
+                    <div class="content">
+                        <ul class="portfolioList">
+                            <li th:if="${userData.portfolioList.isEmpty()}">
+                                <input type="hidden" name="portfolioNo">
+                                <input type="text" name="portfolio" placeholder="포트폴리오 URL 을 입력해주세요.">
+                            </li>
+                            <li th:each="portfolio : ${userData.portfolioList}">
+                                <input type="hidden" name="portfolioNo" th:value="${portfolio.portfolioNo}">
+                                <input type="text" name="portfolio" th:value="${portfolio.url}" placeholder="포트폴리오 URL 을 입력해주세요.">
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="blog">
+                    <div class="mypageTitle">
+                        <p>외부 사이트 링크</p>
+                    </div>
+                    <div class="content">
+                        <ul class="profileList">
+                            <li>
+                                <div class="name">
+                                    <i class="bi bi-github"></i>
+                                    Github
+                                </div>
+                                <div class="item">
+                                    <input type="text" name="gitLink" th:value="${userData.userDetail.gitLink}">
+                                </div>
+                            </li>
+                            <li>
+                                <div class="name">
+                                    <i class="bi bi-feather"></i>
+                                    Blog
+                                </div>
+                                <div class="item">
+                                    <input type="text" name="blogLink" th:value="${userData.userDetail.blogLink}">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="update">
+                    <button type="submit" class="btn btn-custom-point">업데이트</button>
+                </section>
+            </form>
         </div>
     </main>
 </th:block>

@@ -75,6 +75,10 @@ public class MoimService {
         return convertMoimDTOList(moimRepository.findByUsers_UserNo(userNo));
     }
 
+    public List<MoimDTO> readJoinList(Long userNo) {
+        return convertMoimDTOList(moimRepository.selectByMoimParticipants_UserNo(userNo));
+    }
+
     public MoimDTO readOne(Long moimNo) {
         return convertMoimDTO(moimRepository.findById(moimNo).orElse(null));
     }
@@ -157,7 +161,7 @@ public class MoimService {
         }
 
         // 모집인원 등록/수정
-        if( dto.getPositionNo()!=null && !dto.getPositionNo().isEmpty() ) {
+        if( dto.getPersonnel()!=null && !dto.getPersonnel().isEmpty() ) {
             // 제거된 모집인원 처리
             List<MoimHeadcount> moimHeadcountList = moimHeadcountRepository.findByMoim(newMoim);
             if( moimHeadcountList!=null && !moimHeadcountList.isEmpty() ) {
@@ -169,9 +173,9 @@ public class MoimService {
 
             // 기존 값 수정
             for(int i=0; i<dto.getPersonnel().size(); i++) {
-                Long moimHeadcountNo = dto.getHeadcountNo().isEmpty() ? null : dto.getHeadcountNo().get(i);
+                Long moimHeadcountNo = dto.getHeadcountNo()==null || dto.getHeadcountNo().isEmpty() ? null : dto.getHeadcountNo().get(i);
+                Integer positionDetailNo = dto.getPositionDetailNo()==null || dto.getPositionDetailNo().isEmpty() ? null : dto.getPositionDetailNo().get(i);
                 Integer personnel = dto.getPersonnel().get(i);
-                Integer positionDetailNo = dto.getPositionDetailNo().get(i);
 
                 PositionDetail positionDetail = positionDetailNo!=null ? positionDetailRepository.findById(positionDetailNo).orElse(null) : null;
 

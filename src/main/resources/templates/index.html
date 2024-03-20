@@ -3,14 +3,22 @@
       layout:decorate="~{fragment/layout}">
 
 <th:block layout:fragment="css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <link rel="stylesheet" th:href="@{/css/index.css}">
 </th:block>
 <th:block layout:fragment="js">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         $(() => {
-            $(".moimList > li").click(e => {
-                let no = $(e.currentTarget).data('no');
-                document.location.href = "/moim/detail?no="+no;
+            // 메인배너
+            const mainSlide = new Swiper(".mainSlider", {
+                loop: true,
+                // autoplay: {
+                //     delay: 5000,
+                // },
+                pagination: {
+                    el: '.swiper-pagination',
+                },
             });
 
             $(".userList > li").click(e => {
@@ -22,6 +30,25 @@
 </th:block>
 
 <th:block layout:fragment="container">
+    <aside>
+        <div class="mainSlider">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <img src="/images/mainBanner01.png" alt="">
+                    <a href="/moim/write" class="btn btn-custom-point">모임 시작하기</a>
+                </div>
+                <div class="swiper-slide">
+                    <img src="/images/mainBanner01.png" alt="">
+                </div>
+                <div class="swiper-slide">
+                    <img src="/images/mainBanner01.png" alt="">
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+
+        </div>
+    </aside>
+
     <main>
         <div class="container">
             <div class="wrapper weekBest">

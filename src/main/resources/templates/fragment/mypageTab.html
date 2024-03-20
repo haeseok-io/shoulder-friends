@@ -3,10 +3,10 @@
 <th:block th:fragment="mypageTab">
     <div class="mypageTab">
         <ul class="tabList">
-            <li><a href="/mypage/user">내정보</a></li>
-            <li><a href="/mypage/moim">모임</a></li>
-            <li><a href="/mypage/moim/support">지원 현황</a></li>
-            <li><a href="/mypage/alram">알림</a></li>
+            <li th:class="${tab=='user' ? 'active' : ''}"><a href="/mypage/user">내정보</a></li>
+            <li th:class="${tab=='moim' ? 'active' : ''}"><a href="/mypage/moim">모임</a></li>
+            <li th:class="${tab=='support' ? 'active' : ''}"><a href="/mypage/support">지원 현황</a></li>
+            <li th:class="${tab=='alram' ? 'active' : ''}"><a href="/mypage/alram">알림</a></li>
         </ul>
     </div>
 </th:block>

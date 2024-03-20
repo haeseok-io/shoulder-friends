@@ -105,12 +105,15 @@
 </th:block>
 
 <th:block layout:fragment="container">
+    <aside class="pageBanner">
+        <img src="/images/moimWriteBanner.png" alt="">
+    </aside>
     <main>
         <div class="container">
             <form th:action="'/moim/' + ${processType}" method="post" enctype="multipart/form-data" name="writeForm" onsubmit="return formCheck();" autocomplete="off">
                 <input type="hidden" name="moimNo">
 
-                <div class="wrapper type">
+                <section class="type">
                     <div class="mainTitle">
                         <div class="title">
                             <p class="subject">모임 유형</p>
@@ -123,13 +126,12 @@
                         <input type="radio" name="type" value="study" id="type-study">
                         <label for="type-study">스터디</label>
                     </div>
-                </div>
-                <div class="formWrapper"></div>
-
-                <div class="formButton">
+                </section>
+                <section class="templateContainer"></section>
+                <section class="formButton">
                     <button type="submit" class="btn btn-custom-add btn-lg">작성완료</button>
                     <a href="/" class="btn btn-secondary btn-lg">다음에 하기</a>
-                </div>
+                </section>
             </form>
         </div>
     </main>
