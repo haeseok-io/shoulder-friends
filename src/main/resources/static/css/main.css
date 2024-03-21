@@ -50,6 +50,11 @@ header .container .etc .headerUser .userModal .modalLogout .modalWrap .modalCont
 header .container .etc .headerUser .userModal .modalLogout .modalWrap .modalContent .oauth2 .loginBtn.naver:after { left: 15px; width: 20px; height: 20px; background-image: url("/images/naverIcon.png"); }
 header .container .etc .headerUser .userModal .modalLogout .modalWrap .modalContent .oauth2 .loginBtn.kakao:after { background-image: url("/images/kakaoIcon.png"); }
 
+header .container .etc .headerUser .userModal .modalLogout .modalWrap .modalContent .other { margin-top: 20px; }
+header .container .etc .headerUser .userModal .modalLogout .modalWrap .modalContent .other ul { display: flex; justify-content: center; }
+header .container .etc .headerUser .userModal .modalLogout .modalWrap .modalContent .other ul li { padding: 0 20px; }
+header .container .etc .headerUser .userModal .modalLogout .modalWrap .modalContent .other ul li a { font-size: .9rem; }
+
 
 header .container .etc .headerUser .userModal .modalLogin { display: none; position: absolute; top: 40px; right: 0; z-index: 999; width: 300px; background: #fff; box-shadow: 0 1px 5px #ccc; border-radius: 10px; padding: 20px; }
 header .container .etc .headerUser.active .userModal .modalLogin { display: block; }
@@ -133,6 +138,12 @@ footer .container p { font-weight: 300; color: #fff; }
 .moimList > li .wrap .headcount .headcountWrap ul li .participant .approval:after { position: absolute; top: 0; right: -6px; content: "/"; }
 
 .moimList > li .wrap .headcount .headcountToggle:hover + .headcountWrap { display: block; }
+
+/* 메세지 */
+#message {}
+#message .messageToggle { position: fixed; bottom: 100px; left: calc(50% + 730px); display: flex; justify-content: center; align-items: center; width: 60px; height: 60px; background: #fff; box-shadow: 0 0 5px #ccc; border: 1px solid #ccc; border-radius: 100%; cursor: pointer; }
+#message .messageToggle .new { position: absolute; top: 0; right: 0; display: none; width: 15px; height: 15px; background: #ff0000; border-radius: 100%; }
+#message .messageToggle i { font-size: 1.3rem; }
 
 
 /* 부투스트랩 조정 */
