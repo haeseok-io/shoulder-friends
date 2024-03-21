@@ -2,6 +2,7 @@ package kr.co.shoulf.web.service;
 
 import com.nimbusds.jose.shaded.gson.Gson;
 import com.nimbusds.jose.shaded.gson.JsonObject;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import kr.co.shoulf.web.dto.MeetingDTO;
 import kr.co.shoulf.web.dto.ReservPaymentDTO;
@@ -83,9 +84,9 @@ public class MeetingService {
     }
 
     //일반 결제 미팅 예약 결제 등록
-    public void writeReservPayment(ReservPaymentDTO reservPaymentDTO,@AuthenticationPrincipal CustomUserDetails user) {
+    public void writeReservPayment(ReservPaymentDTO reservPaymentDTO, Users loggedInUser) {
 
-        Users users = userRepository.findByEmail(user.getUsername());
+        Users users = userRepository.findByEmail(loggedInUser.getEmail());
 
         String meetingDate = reservPaymentDTO.getCalendar_start_date() + " " + reservPaymentDTO.getStart_time();
 

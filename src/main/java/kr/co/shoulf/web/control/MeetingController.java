@@ -1,8 +1,11 @@
 package kr.co.shoulf.web.control;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.shoulf.web.dto.MeetingDTO;
 import kr.co.shoulf.web.dto.ReservPaymentDTO;
+import kr.co.shoulf.web.entity.Member;
 import kr.co.shoulf.web.entity.Studyroom;
+import kr.co.shoulf.web.entity.Users;
 import kr.co.shoulf.web.security.custom.userDetails.CustomUserDetails;
 import kr.co.shoulf.web.service.MeetingService;
 import kr.co.shoulf.web.service.StudyService;
@@ -32,11 +35,9 @@ public class MeetingController {
 
     // 미팅 디테일로 이동
     @GetMapping("/detail")
-    public void detail(Model model, @RequestParam Long moimNo, @AuthenticationPrincipal CustomUserDetails user){
+    public void detail(Model model, @RequestParam Long moimNo){
         model.addAttribute("meetinglist", meetingService.meetingList(moimNo));
         model.addAttribute("moimNo", moimNo);
-        model.addAttribute("userName", user.getUsername());
-
     }
 
     //카페 목록 페이지로 이동
@@ -73,7 +74,7 @@ public class MeetingController {
 
     //미팅 일반 결제 예약 결제 저장
     @PostMapping("/reservPayment")
-    public ResponseEntity<String> reservPayment(ReservPaymentDTO reservPaymentDTO, @AuthenticationPrincipal CustomUserDetails user) throws IOException {
+    public ResponseEntity<String> reservPayment(ReservPaymentDTO reservPaymentDTO, HttpSession session) throws IOException {
 
         List<Studyroom> studyroomList = studyService.ckeckinlistRoom(reservPaymentDTO.getStudycafeNo(), reservPaymentDTO.getCalendar_start_date());
         ArrayList<Long> studyrooms = new ArrayList<>();
@@ -87,10 +88,10 @@ public class MeetingController {
             meetingService.refundRequest(token, String.valueOf(reservPaymentDTO.getApprovalNum()));
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
+        Users loggedInUser = (Users) session.getAttribute("loggedInUser");
         //현재 남은 방 이면 예약정보 저장 아니면 결제 취소하기
         if(studyrooms.contains(reservPaymentDTO.getStudyroomNo())){
-            meetingService.writeReservPayment(reservPaymentDTO, user);
+            meetingService.writeReservPayment(reservPaymentDTO, loggedInUser);
         }else {
             String token = meetingService.getToken(KEY, SECRET);
             meetingService.refundRequest(token, String.valueOf(reservPaymentDTO.getApprovalNum()));
