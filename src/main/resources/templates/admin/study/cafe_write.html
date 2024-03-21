@@ -1,8 +1,10 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragment/layout}">
-
-<th:block layout:fragment="css">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <style>
         .filebox .upload-name {
             display: inline-block;
@@ -10,7 +12,7 @@
             padding: 0 10px;
             vertical-align: middle;
             border: 1px solid #CCCCCC;
-            width: 83%;
+            width: 82%;
             color: #999999;
             border-radius: 5px;
         }
@@ -40,7 +42,7 @@
             height: 50px;
             border-radius: 5px;
         }
-        input[type="text"]::placeholder{
+        input[type="text"]::placeholder, #shortDesc::placeholder{
             color: #999999;
         }
         input[type="text"]:focus, #shortDesc:focus {
@@ -61,12 +63,13 @@
             background: #fff;
             border: 1px solid #8D57E1;
             border-radius: 5px;
-            padding: 10px 15px;
+            padding: 10px 10px;
             font-size: 19px;
             color: #8D57E1;
             height: 50px;
             width: 130px;
             float: right;
+            margin-left: 20px;
         }
         #in1, #in2, #in3, #in4, #in7, #in8, #in9{
             padding-top: 50px;
@@ -89,8 +92,6 @@
             color: #312A38;
         }
     </style>
-</th:block>
-<th:block layout:fragment="js">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f1da5cac1e623212589550b0421c5af7&libraries=services,clusterer,drawing"></script>
@@ -204,12 +205,10 @@
             });
         });
     </script>
-</th:block>
-
-<th:block layout:fragment="container">
-    <main>
+</head>
+<body>
         <div class="container" style="width: 775px">
-            <div class="main-title">카페 등록</div>
+            <div class="main-title">스터디 카페 등록</div>
             <form action="/study/cafe/write" method="post" name="studycafeadd" enctype="multipart/form-data">
                 <div class="mb-3" id="in1">
                     <label for="files" class="form-label">메인 이미지</label>
@@ -225,7 +224,7 @@
                 </div>
                 <div class="mb-3" id="in3">
                     <label for="shortDesc" class="form-label">카페 설명</label>
-                    <textarea class="form-control" name="shortDesc" id="shortDesc" rows="3" style="width: 750px; height: 200px"></textarea>
+                    <textarea class="form-control" name="shortDesc" id="shortDesc" placeholder="카페에 대한 설명을 간단하게 적어주세요" rows="3" style="width: 750px; height: 200px"></textarea>
                 </div>
                 <div class="mb-3" id="in4">
                     <label for="inin" class="form-label">주소</label>
@@ -250,16 +249,15 @@
                 </div>
                 <div class="mb-3" id="in8">
                     <label for="member" class="form-label">담당 직원 번호</label>
-                    <input type="text" class="form-control" name="member" id="member">
+                    <input type="text" class="form-control" name="member" id="member" placeholder="담당 직원이 정해지지 않았다면 빈칸으로 남겨주세요">
                 </div>
                 <input type="hidden" name="x">
                 <input type="hidden" name="y">
                 <div id="in9">
+                    <a th:href="@{/study/cafe/list}"><button type="button" class="btnsub" style="border-radius: 5px;" >취소</button></a>
                     <input type="submit" value="등록" class="btnsub" style="border-radius: 5px;">
                 </div>
             </form>
         </div>
-    </main>
-</th:block>
-
+        </body>
 </html>
