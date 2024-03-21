@@ -76,7 +76,7 @@ public class MoimService {
     }
 
     public List<MoimDTO> readJoinList(Long userNo) {
-        return convertMoimDTOList(moimRepository.selectByMoimParticipants_UserNo(userNo));
+        return convertMoimDTOList(moimRepository.selectByMoimParticipants_UserNoAndStatus(userNo, 2));
     }
 
     public MoimDTO readOne(Long moimNo) {

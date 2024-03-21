@@ -21,8 +21,8 @@ public interface MoimRepository extends JpaRepository<Moim,Long> {
     @Query("Select m From Moim m " +
             "Left Join fetch m.moimHeadcountList mh " +
             "Left Join mh.moimParticipantsList mp " +
-            "Where mp.users.userNo=:userNo")
-    List<Moim> selectByMoimParticipants_UserNo(Long userNo);
+            "Where mp.users.userNo=:userNo And mp.status=:status")
+    List<Moim> selectByMoimParticipants_UserNoAndStatus(Long userNo, Integer status);
 
     @Query("Select m From Moim m " +
             "Left Join fetch m.moimDetail md " +
