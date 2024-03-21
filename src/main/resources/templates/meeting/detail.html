@@ -86,6 +86,9 @@
         .col-form-label{
             padding: 9px 0;
         }
+        .fc-day-today {
+            background: #ECF2F3 !important;
+        }
     </style>
 </th:block>
 
@@ -189,9 +192,9 @@
 
         //캘린더 이벤트
         document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
+            let calendarEl = document.getElementById('calendar');
             let moimNos = $("#moimNo").val();
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            let calendar = new FullCalendar.Calendar(calendarEl, {
                 timeZone: 'UTC',
                 initialView: 'dayGridMonth',
                 eventSources: [{ //db에서 meeting 날짜 가지고 오기
@@ -618,7 +621,7 @@
                                         <div id="paymentName">
                                             <label for="name" class="col-form-label" style="font-size: 17px;font-weight: 600;">결제자 이름</label>
                                             <input type="text" class="form-control" id="name" name="name">
-                                            <input type="hidden" id="email" name="email" th:value="${userName}">
+                                            <input type="hidden" id="email" name="email" th:value="${session.loggedInUser.email}">
                                             <input type="hidden" name="approval" id="approvalNum">
                                             <input type="hidden" name="card" id="cardNum">
                                             <input type="hidden" name="amount" id="amount">
