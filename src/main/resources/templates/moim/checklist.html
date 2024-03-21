@@ -137,7 +137,7 @@
                 </div>
                 <div th:each="dto : ${list}">
                 <div class="form-check">
-                    <div th:if="${dto.Users.email == userName}">
+                    <div th:if="${dto.Users.email == session.loggedInUser.email}">
                         <div th:if="${dto.status == 2}">
                             <input class="form-check-input" type="checkbox" th:value="${dto.checklistNo}" th:name="${dto.checklistNo}" id="defaultCheck1" checked>
                             <input type="hidden" name="useremail" th:value="${dto.Users.email}">
@@ -162,7 +162,7 @@
                         </div>
                     </div>
 
-                    <div th:unless="${dto.Users.email == userName}">
+                    <div th:unless="${dto.Users.email == session.loggedInUser.email}">
                         <div th:if="${dto.status == 2}">
                             <input class="form-check-input" type="checkbox" th:value="${dto.checklistNo}" th:name="${dto.checklistNo}" id="defaultCheck3" disabled readonly checked>
                             <input type="hidden" name="useremail" th:value="${dto.Users.email}">

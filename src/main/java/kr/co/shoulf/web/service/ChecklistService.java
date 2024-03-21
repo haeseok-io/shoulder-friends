@@ -38,12 +38,12 @@ public class ChecklistService {
     }
 
     //체크리스트 등록
-    public void checklistWrite(String contents, Long moimNo, @AuthenticationPrincipal CustomUserDetails user) {
+    public void checklistWrite(String contents, Long moimNo, Users loggedInUser) {
         Optional<Moim> result = moimRepository.findById(moimNo);
         Moim moim = result.orElseThrow();
 
         //현재 로그인한 회원
-        Users users = userRepository.findByEmail(user.getUsername());
+        Users users = userRepository.findByEmail(loggedInUser.getEmail());
 
         Checklist checklist = Checklist.builder()
                 .contents(contents)

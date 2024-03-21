@@ -29,18 +29,18 @@ public class ChecklistController {
 
     //체크리스트 목록
     @GetMapping("/checklist")
-    public void checklist(@RequestParam Long moimNo, Model model, @AuthenticationPrincipal CustomUserDetails user) {
+    public void checklist(@RequestParam Long moimNo, Model model) {
         model.addAttribute("list", checklistService.getlist(moimNo));
         model.addAttribute("endlist", checklistService.getEndlist(moimNo));
         model.addAttribute("moimNo", moimNo);
-        model.addAttribute("userName", user.getUsername());
 
     }
 
     //체크리스트 등록
     @PostMapping("/checklist/write")
-    public String checklistWrite(@RequestParam String contents, @RequestParam Long moimNo, @AuthenticationPrincipal CustomUserDetails user){
-        checklistService.checklistWrite(contents, moimNo ,user);
+    public String checklistWrite(@RequestParam String contents, @RequestParam Long moimNo, HttpSession session){
+        Users loggedInUser = (Users) session.getAttribute("loggedInUser");
+        checklistService.checklistWrite(contents, moimNo ,loggedInUser);
         return "redirect:/moim/checklist?moimNo="+moimNo;
     }
 
