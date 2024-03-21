@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,7 +24,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class MoimService {
-    private final UserRepository userRepository;
     private final MoimRepository moimRepository;
     private final MoimDetailRepository moimDetailRepository;
     private final MoimLikeRepository moimLikeRepository;
