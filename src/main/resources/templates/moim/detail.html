@@ -29,6 +29,7 @@
         /*(위)헤더 ------------ 본문(아래)*/
         .moimPageWrap{display: flex; margin-top: 60px;}
         .moimDetailContents{width: 75%;}
+        .moimDetailWrap .detailDesc{margin-top: 30px;}
         .moimRightInfoContents {
             position: fixed;
             top: 20%;
@@ -156,16 +157,23 @@
                     </div>
                     <div class="moimDetailWrap">
                         <th:block th:if="${infoTab}">
-                            asdasdsa
+                            <div class="detailDesc"
+                                th:utext="${#strings.replace(moim.moimDetail.detailDesc, nlString, '&lt;br /&gt;')}">
+                            </div>
+                        </th:block>
+                        <th:block th:if="${memberTab}">
+
                         </th:block>
                     </div>
                 </div>
                 <aside class="moimRightInfoContents">
-                    <div class="userProfile">
-                        <p>[리더]</p>
-                        <p>[[${moim.users.nickname}]]</p>
-                        <img th:src="${moim.users.userDetail.profileImg}" alt="">
-                    </div>
+                    <a th:href="@{/user/detail(no=${moim.users.userNo})}">
+                        <div class="userProfile">
+                            <p>[리더]</p>
+                            <p>[[${moim.users.nickname}]]</p>
+                            <img th:src="${moim.users.userDetail.profileImg}" alt="">
+                        </div>
+                    </a>
                 </aside>
             </div>
         </div>
