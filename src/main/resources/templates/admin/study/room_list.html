@@ -1,9 +1,14 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragment/layout}">
-
-<th:block layout:fragment="css">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <style>
+        .container{
+            width: 1200px;
+        }
         .cafe-name{
             padding-top: 50px;
             padding-bottom: 100px;
@@ -150,9 +155,10 @@
         .dropdown-item:hover {
             background-color: #CABBE1;
         }
+        ul{
+            list-style-type: none;
+        }
     </style>
-</th:block>
-<th:block layout:fragment="js">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f1da5cac1e623212589550b0421c5af7&libraries=services,clusterer,drawing"></script>
@@ -191,10 +197,8 @@
         })
 
     </script>
-</th:block>
-
-<th:block layout:fragment="container">
-    <main>
+</head>
+<body>
         <div class="container">
             <form action="/study/cafe/delete" method="post">
                 <div style="padding-top: 40px; height: 50px;"></div>
@@ -279,7 +283,5 @@
                 </div>
             </div>
         </div>
-    </main>
-</th:block>
-
+</body>
 </html>
