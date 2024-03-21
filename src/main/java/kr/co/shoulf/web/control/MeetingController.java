@@ -8,6 +8,7 @@ import kr.co.shoulf.web.entity.Studyroom;
 import kr.co.shoulf.web.entity.Users;
 import kr.co.shoulf.web.security.custom.userDetails.CustomUserDetails;
 import kr.co.shoulf.web.service.MeetingService;
+import kr.co.shoulf.web.service.MoimService;
 import kr.co.shoulf.web.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ import java.util.Map;
 public class MeetingController {
     private final MeetingService meetingService;
     private final StudyService studyService;
+    private final MoimService moimService;
     public static final String KEY = "0588185562360842";
     public static final String SECRET = "ZODmGjsuy0mz52841UHYk8J4ETFFStAbaoAbtXIcfjb6hnrN3VZHAaHNDwnBzECspEMjQuFYSdlwMRv9";
 
@@ -37,6 +39,7 @@ public class MeetingController {
     @GetMapping("/detail")
     public void detail(Model model, @RequestParam Long moimNo){
         model.addAttribute("meetinglist", meetingService.meetingList(moimNo));
+        model.addAttribute("moimUser", moimService.readOne(moimNo).getUsers());
         model.addAttribute("moimNo", moimNo);
     }
 
