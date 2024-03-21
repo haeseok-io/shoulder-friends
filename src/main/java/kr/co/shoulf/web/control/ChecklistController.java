@@ -6,6 +6,7 @@ import kr.co.shoulf.web.entity.Member;
 import kr.co.shoulf.web.entity.Users;
 import kr.co.shoulf.web.security.custom.userDetails.CustomUserDetails;
 import kr.co.shoulf.web.service.ChecklistService;
+import kr.co.shoulf.web.service.MoimService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -26,11 +27,13 @@ import java.io.Console;
 @RequestMapping("/moim")
 public class ChecklistController {
     private final ChecklistService checklistService;
+    private final MoimService moimService;
 
     //체크리스트 목록
     @GetMapping("/checklist")
     public void checklist(@RequestParam Long moimNo, Model model) {
         model.addAttribute("list", checklistService.getlist(moimNo));
+        model.addAttribute("moimUser", moimService.readOne(moimNo).getUsers());
         model.addAttribute("endlist", checklistService.getEndlist(moimNo));
         model.addAttribute("moimNo", moimNo);
 
