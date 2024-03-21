@@ -82,6 +82,8 @@ public class MoimController {
     public String detail(@RequestParam("no") Long moimNo, @RequestParam(value = "type", required = false) String type, Model model, HttpSession session){
         Users loggedInUser = (Users) session.getAttribute("loggedInUser");
         MoimDTO moimDTO = moimService.readOne(moimNo);
+        String br = System.getProperty("line.separator").toString();
+        model.addAttribute( "nlString", br);
 
         // 자물쇠 검증
         boolean ableControlTab;
@@ -107,6 +109,8 @@ public class MoimController {
             //정보 탭 클릭시
             if(type.equals("info")){
                 model.addAttribute("infoTab", true);
+            } else if (type.equals("member")){
+                model.addAttribute("memberTab", true);
             }
         }
 
