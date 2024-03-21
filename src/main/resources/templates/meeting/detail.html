@@ -290,8 +290,9 @@
                     addEventButton: { // 추가한 버튼 설정
                         text : "미팅 등록",  // 버튼 내용
                         click : function(){ // 버튼 클릭 시 이벤트 추가
-                            $("#calendarModal").modal("show"); // modal 나타내기
-
+                            if($("#moimUser").val() == $("#myNo").val) {
+                                $("#calendarModal").modal("show"); // modal 나타내기
+                            }
                             $("#addCalendar").on("click",function(){  // modal의 추가 버튼 클릭 시
                                 let content = $("#calendar_content").val();
                                 let start_date = $("#calendar_start_date").val();
@@ -562,6 +563,8 @@
             <div id="calendarBox" style="width: 850px;">
                 <div id="calendar"></div>
             </div>
+            <input type="hidden" name="moimUser" id="moimUser" th:value="${moimUser.userNo}">
+            <input type="hidden" name="myNo" id="myNo" th:value="${session.loggedInUser.getUserNo()}">
             <!-- modal 추가 -->
             <div class="modal fade" id="calendarModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -682,8 +685,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn" id="modifyCalendar">일정 수정</button>
+                            <div th:if="${session.loggedInUser.email == moimUser.email}">
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn" id="modifyCalendar">일정 수정</button>
+                                </div>
                             </div>
                         </div>
 
