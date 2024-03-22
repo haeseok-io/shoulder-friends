@@ -3,78 +3,74 @@
       layout:decorate="~{fragment/layout}">
 
 <th:block layout:fragment="css">
-    <style>
-        main .container {
-            width: 1400px;
-            max-width: 1400px;
-            margin: 0 auto; /* 가운데 정렬을 위해 추가 */
-            /*display: flex;*/
-            justify-content: space-between;
-            background-color: #f2f2f2; /* 배경색 추가 */
-            padding: 20px; /* 내부 여백 추가 */
-        }
-        .moimHeaderWrap{display: flex; margin-top: 50px;}
-        .moimThumbnail{width: 45%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px;}
-        .moimThumbnail img{width: 550px; height: 300px;}
-        .moimHeaderContents{width: 65%; margin-left: 50px;}
-        .moimHeaderContents .title{font-weight: bold; color: black;}
-        .moimHeaderContents > div {margin-bottom: 13px; /* 각 요소 사이에 10px의 아래 여백을 추가합니다. */}
-        .moimTitle{ display: flex;}
-        .moimTitle span{margin-top: 13px; margin-left: 10px; text-align: center;}
-        .moimTitle div{margin-left: 200px;}
-        .moimTitle div button{outline: none; border: none;}
-        .moimLanguage .moimLanguageList{ display: flex; align-items: center; height: 50px;}
-        .moimLanguage .item{text-align: center;  margin-right: 10px; margin-left: 1px;}
-        .moimLanguage .item img{width: 30px; height: auto;}
-        /*(위)헤더 ------------ 본문(아래)*/
-        .moimPageWrap{display: flex; margin-top: 60px;}
-        .moimDetailContents{width: 75%;}
-        .moimDetailWrap .detailDesc{margin-top: 30px;}
-        .moimRightInfoContents {
-            position: fixed;
-            top: 20%;
-            left: 73%;
-            width: 20%;
-            margin-left: 10px;
-            /*background-color: #fff; !* 배경색 추가 *!*/
-            padding: 20px; /* 내부 여백 추가 */
-            border-radius: 8px; /* 모서리를 둥글게 만듦 */
-            /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); !* 그림자 효과 추가 *!*/
-        }
-        .moimTabMenu ul{
-            display: flex;
-            height: 50px;
-            line-height: 50px;
-            padding: 0; /* 기본 여백 제거 */
-            list-style: none; /* 기본 목록 스타일 제거 */
-            justify-content: space-between; /* 요소들을 동일한 간격으로 분산 배치 */
-            border-top: 1px solid #ccc; /* 상단에 선 추가 */
-            border-bottom: 1px solid #ccc; /* 하단에 선 추가 */
-        }
-        .moimTabMenu ul li {
-            flex-grow: 1; /* 동일한 너비를 갖도록 설정 */
-            text-align: center; /* 텍스트 가운데 정렬 */
-            border-right: 1px solid transparent;
-        }
-        .moimTabMenu ul li:not(:last-child) {border-right: 1px solid #ccc; /* 오른쪽에 선 추가 (마지막 요소 제외) */}
-        .moimTabMenu ul li:hover {background-color: #7B27FF; /* 마우스를 갖다 대었을 때 배경색 변경 */}
-        .moimTabMenu ul li:hover a {color: #fff; /* 마우스를 갖다 대었을 때 링크의 글자색 변경 */}
-        .userProfile {text-align: center; /* 텍스트 가운데 정렬 */}
-        .userProfile img {
-            max-width: 50%; /* 이미지가 부모 요소를 넘어가지 않도록 함 */
-            width: 150px;
-            height: 150px;
-            border-radius: 50%; /* 이미지를 원형으로 만듦 */
-            margin-top: 10px; /* 이미지 위 여백 추가 */
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/moim/detail.css}">
 </th:block>
 <th:block layout:fragment="js">
-    <script>
+    <script th:inline="javascript">
+        // 모달 열기 함수
+        function openModal() {
+            document.getElementById("myModal").style.display = "block";
+        }
+        // 모달 닫기 함수
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+        }
+
         $(()=>{
             $('.moimTabMenu .bi-lock').parent().click(function(event) {
                 event.preventDefault(); // 링크 클릭 이벤트 중지
                 // 추가적인 작업을 수행하거나 아무것도 하지 않음
+            });
+
+            //멤버 클릭시 정보로 이동
+            $(".memberWrap .memberList li").on("click",function (){
+                let userNo = $(this).data("no");
+                window.location.href = "/user/detail?no="+userNo;
+            });
+
+            // 모달 창 닫기 버튼과 모달 바깥 영역을 클릭하여 모달 닫기
+            window.onclick = function(event) {
+                var modal = document.getElementById("myModal");
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            // 지원하기 버튼 클릭 시
+            $(".yet").on("click",function (){
+                if(loggedInUser != null) {
+                    $("#userNo").val(loggedInUser.userNo);
+                } else {
+                    alert("로그인 해주세요.");
+                    return false;
+                }
+                openModal();
+                let positionDetailNo = $(this).closest(".headcount").find(".positionDetail").data("no");
+                let positionName = $(this).closest(".headcount").find(".positionDetail").html();
+                let headcountNo = $(this).closest(".headcount").data("no");
+                $("#positionDetailNo").val(positionDetailNo); // 폼의 히든 입력 필드에 값 설정
+                $("#moimHeadcountNo").val(headcountNo);
+                $("#positionName").html(positionName);
+            })
+
+            $('.apply').submit(function(event) {
+                // 폼 제출을 취소하여 기본 동작을 막습니다.
+                event.preventDefault();
+                // 선택된 직장인 여부 값을 가져옵니다.
+                let jobValue = $('input[name="job"]:checked').val();
+                // 지원 동기를 가져옵니다.
+                let reasonValue = $('textarea[name="reason"]').val().trim();
+                // 유효성 검사를 수행합니다.
+                if (!jobValue) {
+                    alert('직장인 여부를 선택해주세요.');
+                    return;
+                }
+                if (!reasonValue) {
+                    alert('지원 동기를 입력해주세요.');
+                    return;
+                }
+                // 유효성 검사를 통과한 경우, 폼을 서버로 제출합니다.
+                this.submit();
             });
         });
     </script>
@@ -144,14 +140,14 @@
             <div class="moimPageWrap">
                 <div class="moimDetailContents">
                     <div class="moimTabMenu">
-                        <ul>
-                            <li><a th:href="@{/moim/detail(no=${moim.moimNo},type='info')}">정보</a></li>
-                            <li><a th:href="@{/moim/detail(no=${moim.moimNo},type='member')}">멤버</a></li>
-                            <li th:if="${ableMemberTab}"><a th:href="@{/moim/detail(no=${moim.moimNo},type='todo')}">할일</a></li>
+                        <ul class="tabList">
+                            <li th:class="${type == 'info' ? 'active' : ''}"><a th:href="@{/moim/detail(no=${moim.moimNo},type='info')}">정보</a></li>
+                            <li th:class="${type == 'member' ? 'active' : ''}"><a th:href="@{/moim/detail(no=${moim.moimNo},type='member')}">멤버</a></li>
+                            <li th:class="${type == 'todo' ? 'active' : ''}" th:if="${ableMemberTab}"><a th:href="@{/moim/detail(no=${moim.moimNo},type='todo')}">할일</a></li>
                             <li th:unless="${ableMemberTab}"><a href="">할일<i class="bi bi-lock"></i></a></li>
-                            <li th:if="${ableMemberTab}"><a th:href="@{/moim/detail(no=${moim.moimNo},type='meeting')}">미팅</a></li>
+                            <li th:class="${type == 'meeting' ? 'active' : ''}" th:if="${ableMemberTab}"><a th:href="@{/moim/detail(no=${moim.moimNo},type='meeting')}">미팅</a></li>
                             <li th:unless="${ableMemberTab}"><a href="">미팅<i class="bi bi-lock"></i></a></li>
-                            <li th:if="${ableControlTab}"><a th:href="@{/moim/detail(no=${moim.moimNo},type='control')}">관리</a></li>
+                            <li th:class="${type == 'control' ? 'active' : ''}" th:if="${ableControlTab}"><a th:href="@{/moim/detail(no=${moim.moimNo},type='control')}">관리</a></li>
                             <li th:unless="${ableControlTab}"><a href="">관리<i class="bi bi-lock"></i></a></li>
                         </ul>
                     </div>
@@ -162,7 +158,85 @@
                             </div>
                         </th:block>
                         <th:block th:if="${memberTab}">
-
+                            <div class="recruitStatus">
+                                <div class="title">
+                                    <h2>모집 현황</h2>
+                                </div>
+                                <ul th:each=" data : ${moim.headcountList}">
+                                    <li class="headcount" th:data-no="${data.moimHeadcountNo}">
+                                        <div class="positionDetail" th:data-no="${data.positionDetail.positionDetailNo}">
+                                            <p th:if="${data.positionDetail}">[[${data.positionDetail.middleName}]]</p>
+                                            <p th:unless="${data.positionDetail}">누구나 가능</p>
+                                        </div>
+                                        <div class="participant">
+                                            <span class="approval">[[${data.participantApprovalList.size()}]]</span> /
+                                            <span class="personnel">[[${data.personnel}]]</span>
+                                        </div>
+                                        <div class="applyBtn">
+                                            <button th:if="${data.participantApprovalList.size() < data.personnel}" type="button" class="yet">지원하기</button>
+                                            <button th:if="${data.participantApprovalList.size() == data.personnel}" type="button" class="done">모집완료</button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div id="myModal" class="modal">
+                                <div class="modal-content">
+                                    <h3 class="title">지원하기</h3>
+                                    <span class="close" onclick="closeModal();">&times;</span>
+                                    <div class="applyPosition">
+                                        <p class="title">지원 포지션</p>
+                                        <p id="positionName"></p>
+                                    </div>
+                                    <div class="applyForm">
+                                        <form action="/moim/apply" class="apply" method="post">
+                                            <input type="hidden" name="positionDetailNo" id="positionDetailNo" value="">
+                                            <input type="hidden" name="moimHeadcountNo" id="moimHeadcountNo" value="">
+                                            <input type="hidden" name="userNo" id="userNo" value="">
+                                            <input type="hidden" name="moimNo" id="moimNo" th:value="${moim.moimNo}">
+                                            <div class="haveJob">
+                                                <p class="title">직장인 여부</p>
+                                                <label><input type="radio" name="job" value="Y"> 예</label>
+                                                <label><input type="radio" name="job" value="N"> 아니오</label>
+                                            </div>
+                                            <textarea name="reason" placeholder="지원동기를 입력해주세요."></textarea>
+                                            <input type="submit" class="submitBtn" value="지원하기">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="participating">
+                                <div class="title">
+                                    <h2>참여 멤버</h2>
+                                </div>
+                                <div class="memberWrap">
+                                    <ul class="memberList">
+                                        <li th:each="m : ${moimMember}" th:data-no="${m.userNo}">
+                                            <div class="thumbnail">
+                                                <img th:if="${m.userDetail.profileImg}" th:src="${m.userDetail.profileImg}" alt="">
+                                                <img th:if="${m.userDetail.profileImg eq null}" src="/images/profileBlank.png" alt="">
+                                            </div>
+                                            <div class="info">
+                                                <p class="nickname">
+                                                    [[${m.userDetail.users.nickname}]]
+                                                    <span class="level">
+                                                        Lv. <span th:text="${m.userJob.level eq null ? '0' : m.userJob.level}"></span>
+                                                    </span>
+                                                </p>
+                                                <th:block th:if="${m.userDetail.introduce != null}">
+                                                    <p class="introduce" th:if="${m.userDetail.introduce.length() > 0}">
+                                                        <th:block th:text="${#strings.substring(m.userDetail.introduce, 0, 15)+ '..'}"> </th:block>
+                                                    </p>
+                                                </th:block>
+                                                <p class="positionDetail" th:text="${m.userJob==null || m.userJob.positionDetail==null ? '직무없음' : m.userJob.positionDetail.middleName}">
+                                                </p>
+                                            </div>
+                                            <div class="message">
+                                                <i class="bi bi-envelope"></i>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </th:block>
                     </div>
                 </div>
