@@ -114,26 +114,35 @@
                     }
                 });
             });
+
+            $("#todoForm").submit(function(event) {
+                var todoValue = $("#todoInput").val().trim();
+
+                if (todoValue === "") {
+                    alert("할일을 입력해주세요.");
+                    event.preventDefault();
+                }
+            });
         })
     </script>
 </th:block>
 
 <th:block layout:fragment="container">
     <main>
-        <div class="container">
-            <form action="/moim/checklist/write" method="post">
+        <div class="container" style="width: 650px;">
+            <form id="todoForm" action="/moim/checklist/write" method="post">
                 <div class="title">
                     <p class="mini-title">할일 등록하기</p>
                 </div>
-                <div class="input-group mb-3" style="width: 600px;">
-                    <input type="text" class="form-control" name="contents" placeholder="할일을 입력해주세요" aria-describedby="button-addon2">
+                <div class="input-group mb-3" style="width: 650px;">
+                    <input type="text" class="form-control" id="todoInput" name="contents" placeholder="할일을 입력해주세요" aria-describedby="button-addon2">
                     <input class="btn btn-outline-secondary" id="checkbtn" type="submit" value="등록하기" />
                     <input type="hidden" id="moimNo" name="moimNo" th:value="${moimNo}">
                 </div>
             </form>
                 <div class="title">
                     <p class="mini-title" style="width: 90px;">할일 목록</p>
-                    <span class="checkIndex">[[${list.size()}]] / [[${endlist.size()}]]</span>
+                    <span class="checkIndex">[[${endlist.size()}]] / [[${list.size()}]]</span>
                 </div>
                 <div th:each="dto : ${list}">
                 <div class="form-check">
