@@ -16,10 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -81,6 +78,24 @@ public class MoimService {
 
     public MoimDTO readOne(Long moimNo) {
         return convertMoimDTO(moimRepository.findById(moimNo).orElse(null));
+    }
+
+    //모임 지원하기
+    public void applyParticipant(Integer positionDetailNo, Long moimHeadcountNo, HttpSession session, MoimParticipants moimParticipants) {
+        Users users = (Users) session.getAttribute("loggedInUser");
+        Optional<PositionDetail> positionDetailResult = positionDetailRepository.findById(positionDetailNo);
+        PositionDetail positionDetail = positionDetailResult.get();
+        Optional<MoimHeadcount> moimHeadcountResult = moimHeadcountRepository.findById(moimHeadcountNo);
+        MoimHeadcount moimHeadcount = moimHeadcountResult.get();
+        moimHeadcount.setPositionDetail(positionDetail);
+        MoimParticipants insertData = MoimParticipants.builder()
+                        .reason(moimParticipants.getReason())
+                        .job(moimParticipants.getJob())
+                        .users(users)
+                        .moimHeadcount(moimHeadcount)
+                        .status(1)
+                        .build();
+        moimParticipantsRepository.save(insertData);
     }
 
     // 모임 등록/수정
