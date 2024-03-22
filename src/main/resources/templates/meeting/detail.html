@@ -290,7 +290,7 @@
                     addEventButton: { // 추가한 버튼 설정
                         text : "미팅 등록",  // 버튼 내용
                         click : function(){ // 버튼 클릭 시 이벤트 추가
-                            if($("#moimUser").val() == $("#myNo").val) {
+                            if($("#moimUser").val() == $("#myNo").val()) {
                                 $("#calendarModal").modal("show"); // modal 나타내기
                             }
                             $("#addCalendar").on("click",function(){  // modal의 추가 버튼 클릭 시
