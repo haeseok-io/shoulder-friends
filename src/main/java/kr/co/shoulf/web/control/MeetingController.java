@@ -41,6 +41,7 @@ public class MeetingController {
         model.addAttribute("meetinglist", meetingService.meetingList(moimNo));
         model.addAttribute("moimUser", moimService.readOne(moimNo).getUsers());
         model.addAttribute("moimNo", moimNo);
+        model.addAttribute("moim", moimService.readOne(moimNo));
     }
 
     //카페 목록 페이지로 이동

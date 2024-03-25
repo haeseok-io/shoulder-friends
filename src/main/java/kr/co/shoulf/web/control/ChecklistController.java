@@ -36,6 +36,7 @@ public class ChecklistController {
         model.addAttribute("moimUser", moimService.readOne(moimNo).getUsers());
         model.addAttribute("endlist", checklistService.getEndlist(moimNo));
         model.addAttribute("moimNo", moimNo);
+        model.addAttribute("moim", moimService.readOne(moimNo));
 
     }
 
