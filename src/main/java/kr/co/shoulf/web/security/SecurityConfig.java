@@ -81,7 +81,7 @@ public class SecurityConfig {
         log.info("----- 시큐리티 적용2 -----");
         http
                 .securityMatcher("/login/**", "/oauth2/**", "/logout", "/moim/**",
-                        "/board/**", "/meeting/**", "/message/**", "/alarm/**", "/mypage/**")
+                        "/board/**", "/meeting/**", "/message/**", "/alarm/**", "/mypage/**", "/moim/checklist")
                 // CSRF 보안 설정 비활성화
                 .csrf((csrf)->csrf.disable())
                 .authenticationProvider(userDaoAuthenticationProvider())
@@ -99,7 +99,7 @@ public class SecurityConfig {
                         .requestMatchers("/login/**","/oauth2/**").permitAll()
                         .requestMatchers("/mypage/**", "/moim/write", "/moimLike/**", "/message",
                                 "/board/write", "/board/modify", "/board/detail", "/meeting/**",
-                                "/alarm/list").hasRole("USER")
+                                "/alarm/list", "/moim/checklist").hasRole("USER")
                         .anyRequest().permitAll()
                 )
                 // Oauth2 로그인 설정
