@@ -1,6 +1,7 @@
 package kr.co.shoulf.web.control;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import kr.co.shoulf.web.dto.BoardDTO;
 import kr.co.shoulf.web.dto.PageRequestDTO;
 import kr.co.shoulf.web.dto.PageResponseDTO;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -55,7 +57,7 @@ public class BoardController {
     }
 
     @GetMapping("/detail")
-    public String boardDetail(@RequestParam(value = "boardNo", required = false) Long boardNo, Model model) {
+    public String boardDetail(@RequestParam(value = "boardNo", required = false) Long boardNo, Model model, HttpSession session) {
         BoardDTO boardDetail = boardService.readOne(boardNo);
         model.addAttribute("boardDetail", boardDetail);
 
@@ -66,24 +68,28 @@ public class BoardController {
 
         String br = System.getProperty("line.separator").toString();
         model.addAttribute( "nlString", br);
+
+        Users loggedInUser = (Users) session.getAttribute("loggedInUser");
+        Users boardUser = boardDetail.getBoard().getUsers();
+        if(Objects.equals(loggedInUser.getUserNo(), boardUser.getUserNo())) model.addAttribute("sameUser", true);
         return "board/detail";
     }
 
     @PostMapping("/replyWrite")
-    public String replyWrite(@ModelAttribute Reply reply, @RequestParam("boardNo") Long boardNo){
+    public String replyWrite(@ModelAttribute Reply reply, @RequestParam("boardNo") Long boardNo, HttpSession session){
         Board board = boardService.readOne(boardNo).getBoard();
-        Users users = userService.readOne(1L);
+        Users loggedInUser = (Users) session.getAttribute("loggedInUser");
         reply.setBoard(board);
-        reply.setUsers(users);
+        reply.setUsers(loggedInUser);
         reply.setDepth(1);
         replyService.write(reply);
         return "redirect:/board/detail?boardNo=" + board.getBoardNo();
     }
 
     @PostMapping("/writeChildReply")
-    public String writeChildReply(@ModelAttribute Reply reply, @RequestParam("replyNo") Long replyNo, @RequestParam("boardNo") Long boardNo){
+    public String writeChildReply(@ModelAttribute Reply reply, @RequestParam("replyNo") Long replyNo, @RequestParam("boardNo") Long boardNo, HttpSession session){
         Board board = boardService.readOne(boardNo).getBoard();
-        Users users = userService.readOne(3L);
+        Users loggedInUser = (Users) session.getAttribute("loggedInUser");
         Reply parent = replyService.readOne(replyNo);
         System.out.println("parent:"+parent);
         System.out.println("-------------------------");
@@ -96,7 +102,7 @@ public class BoardController {
             depth = latestChild.get().getDepth();
         }
         child.setBoard(board);
-        child.setUsers(users);
+        child.setUsers(loggedInUser);
         child.setParentReply(parent);
         child.setContents(reply.getContents());
         if(depth == null) child.setDepth(2);
@@ -130,11 +136,11 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String writeOk(@ModelAttribute Board board, HttpServletRequest req) {
-        Users user = userService.readOne(1L);
+    public String writeOk(@ModelAttribute Board board, HttpServletRequest req, HttpSession session) {
+        Users loggedInUser = (Users) session.getAttribute("loggedInUser");
         board.setIp(req.getRemoteAddr());
         board.setCate(board.getCate());
-        board.setUsers(user);
+        board.setUsers(loggedInUser);
         boardService.add(board);
         return "redirect:/board/";
     }
