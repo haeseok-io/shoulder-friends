@@ -238,6 +238,19 @@
                                 </div>
                             </div>
                         </th:block>
+                        <th:block th:if="${todoTab}">
+                            <div class="todo">
+                                <div class="title">
+                                    <h2>할일 등록하기</h2>
+                                </div>
+                                <div class="applyTodo">
+                                    <form action="/moim/applyTodo" method="post">
+                                        <input type="text" name="contents" class="contents">
+                                        <input type="submit" value="등록하기">
+                                    </form>
+                                </div>
+                            </div>
+                        </th:block>
                     </div>
                 </div>
                 <aside class="moimRightInfoContents">
