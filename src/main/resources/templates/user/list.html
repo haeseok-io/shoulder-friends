@@ -1,0 +1,200 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/layout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <style>
+        /* 사용자 정보 컨테이너 스타일 */
+        .wrapper.recommendUser {display: flex;justify-content: flex-start;flex-wrap: wrap;}
+        .wrapper.recommendUser > .randomUser {position: relative;display: flex;justify-content: space-between;align-items: center;width: calc(75% - (60px / 4));border: 1px solid #ccc;border-radius: 10px;margin-right: 20px;margin-bottom: 30px;padding: 30px;overflow: hidden;cursor: pointer;}
+        .wrapper.recommendUser > .randomUser:nth-child(4n) {margin-right: 0;}
+        .wrapper.recommendUser > .randomUser .thumbnail {width: 50%;}
+        .wrapper.recommendUser > .randomUser .thumbnail img {width: 120px;height: auto;border: 1px solid #ccc;border-radius: 10%;overflow: hidden;}
+        .wrapper.recommendUser > .randomUser .wrap {width: 50%;padding-left: 20px;}
+        .wrapper.recommendUser > .randomUser .wrap .nickname {font-weight: 600;font-size: 1.1rem;color: #1F1926;}
+        .wrapper.recommendUser > .randomUser .linkBtn {width: 25%; text-align: right; cursor: pointer;}
+        .wrapper.recommendUser > .randomUser .linkBtn i {font-size: 1.5rem; color: #ccc;}
+
+        .search {margin-bottom: 50px;}
+        .search form {display: flex; flex-wrap: wrap; align-items: center;}
+
+        .search .bigPosition {width: 10%; margin-right: 10px;}
+        .search .middlePosition {width: 15%; margin-right: 10px;}
+        .search .onOff {width: 20%; margin-right: 10px;}
+
+        .search .searchField {display: flex; justify-content: space-between; width: calc(55% - 30px);}
+        .search .searchField input[type='text'] { width: calc(100% - 110px); height: 50px; border: 1px solid #e0e0e0; border-radius: 5px; padding-left: 10px; }
+        .search .searchField button { width: 100px; }
+
+        /* 사용자 정보 스타일 */
+        .position {font-weight: bold; margin-bottom: 10px;}
+        .intro {color: #777; margin-bottom: 20px;}
+
+        /* 진행중인 모임 스타일 */
+        .progressMoim {font-weight: bold; margin-bottom: 10px; color: #333; }
+        .progressMoim span {display: block; margin-bottom: 5px; color: #777;}
+        .progressMoim span:last-child {margin-bottom: 0;}
+
+        /* 링크 버튼 스타일 */
+        .linkBtn {margin-top: 20px; float: right;}
+        .linkBtn span {display: flex; margin-bottom: 10px;}
+        .linkBtn a {color: #007bff; text-decoration: none;}
+        .linkBtn a:hover {text-decoration: underline;}
+    </style>
+</th:block>
+
+<th:block layout:fragment="js">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        let onOffSelect, bigPositionSelect, middlePositionSelect;
+        $.fn.select2.defaults.set("minimumResultsForSearch", -1);
+        $.fn.select2.defaults.set("width", "100%");
+
+        $(() => {
+            callList();
+            onOffSelect = $("select[name='onOff']").select2();
+            bigPositionSelect = $("select[name='bigPosition']").select2();
+            middlePositionSelect = $("select[name='middlePosition']").select2();
+
+        })
+
+        function callList() {
+            // 직무 대분류 선택 값 가져오기
+            let bigPosition = $("select[name='bigPosition']").val();
+
+            // AJAX 요청을 통해 해당하는 중분류 가져오기
+            if (bigPosition) {
+                $.ajax({
+                    url: '/position/' + bigPosition + '/detail',
+                    type: 'GET',
+                    success: function(data) {
+                        console.log(data)
+                        let middlePosition = $("select[name='middlePosition']");
+
+                        // 기존 중분류 옵션 제거
+                        middlePosition.find("option").remove();
+                        middlePosition.append('<option value="">직무 중분류 전체</option>');
+
+                        // 가져온 중분류 데이터로 옵션 추가
+                        data.forEach(detail => {
+                            console.log(detail)
+                            middlePosition.append(`<option value="${detail.positionDetailNo}">${detail.middleName}</option>`);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            } else {
+                // 대분류를 선택하지 않은 경우 중분류 옵션 초기화
+                $("select[name='middlePosition']").empty().append('<option value="">직무 대분류를 선택해주세요</option>');
+            }
+        }
+    </script>
+</th:block>
+
+<th:block layout:fragment="container">
+    <aside class="pageBanner">
+        <img src="/images/moimBanner.png" alt="">
+    </aside>
+    <main>
+        <div class="container">
+            <div class="content">
+                <p>오늘의 추천 팀원</p>
+                <div class="wrapper recommendUser">
+                    <div class="randomUser">
+                        <div class="thumbnail">
+                            <img th:if="${recommendUser.userDetail.getProfileImg != null}" th:src="${recommendUser.userDetail.getProfileImg}" alt="">
+                            <img th:if="${recommendUser.userDetail.getProfileImg == null}" src="https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png" alt="">
+                        </div>
+                        <div class="wrap">
+                            <div class="position">
+                                <span th:if="${recommendUser.userJob != null}" th:text="${recommendUser.userJob.positionDetail.position.bigName == null ? '직무없음' : recommendUser.userJob.positionDetail.position.bigName}"></span>
+                            </div>
+                            <div class="nickname">
+                                <span th:text="${recommendUser.nickname}"></span>
+                            </div>
+                            <div class="intro">
+                                <span th:text="${recommendUser.userDetail.introduce}"></span>
+                            </div>
+                            <div>
+                                <span class="progressMoim">진행중인 모임</span><br>
+                                <span th:each="moim : ${recommendUser.moim}">
+                                    <span th:if="${#strings.contains(moim.subject, '프로젝트')}" th:text="'[프로젝트] ' + ${moim.shortDesc}"></span>
+                                    <span th:if="${#strings.contains(moim.subject, '스터디')}" th:text="'[스터디] ' + ${moim.shortDesc}"></span>
+                                    <span th:if="${moim == null}" th:text="없음"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="linkBtn">
+                            <span><a th:href="@{/message(no=${recommendUser.userNo})}">메세지 보내기</a></span><br>
+                            <span><a th:href="@{/user/detail(no=${recommendUser.userNo})}">팀원 상세보기</a></span>
+                        </div>
+                    </div>
+                </div>
+                <p>함께할 팀원 찾기</p>
+                <div class="wrapper team">
+                    <div class="search">
+                        <form name="searchForm" onsubmit="return callList();">
+
+                            <div class="bigPosition">
+                                <select name="bigPosition" onchange="callList();">
+                                    <option value="">직무 대분류 전체</option>
+                                    <option th:each="bigPosition : ${bigPositionList}" th:value="${bigPosition.positionNo}">[[${bigPosition.bigName}]]</option>
+                                </select>
+                            </div>
+                            <div class="middlePosition">
+                                <select name="middlePosition">
+                                    <option value="">직무 중분류 전체</option>
+                                    <option th:each="middlePosition : ${middlePositionList}" th:value="${middlePosition.positionDetailNo}">[[${middlePosition.middleName}]]</option>
+                                </select>
+                            </div>
+                            <div class="onOff">
+                                <select name="onOff">
+                                    <option value="">모임 여부</option>
+                                    <option th:each="onOff : ${online}" th:value="${onOff.onlineNo}">[[${onOff.onlineName}]]</option>
+                                </select>
+                            </div>
+                            <div class="searchField">
+                                <input type="text" name="keyword" placeholder="ex) 이름, 사용언어, 분야">
+                                <button type="submit" class="btn btn-custom-default">검색</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="wrapper newUser">
+                    <div class="content">
+                        <ul class="userList">
+                            <li th:each="data : ${userNewList}" th:data-no="${data.userNo}">
+                                <div class="thumbnail">
+                                    <img th:if="${data.userDetail.profileImg eq null}" src="/images/profileBlank.png" alt="">
+                                    <img th:unless="${data.userDetail.profileImg eq null}" th:src="${data.userDetail.profileImg}" alt="">
+                                </div>
+                                <div class="wrap">
+                                    <p class="nickname">
+                                        [[${data.nickname}]]
+                                        <th:block th:unless="${data.userJob eq null}">
+                                    <span class="level" th:unless="${data.userJob.level eq null}">
+                                        Lv.
+                                        <span>[[${data.userJob.level}]]</span>
+                                    </span>
+                                        </th:block>
+                                    </p>
+                                    <p class="positionDetail">
+                                        <th:block th:text="${data.userJob==null || data.userJob.positionDetail==null ? '직무없음' : data.userJob.positionDetail.middleName}"></th:block>
+                                    </p>
+                                </div>
+                                <div class="message">
+                                    <i class="bi bi-envelope"></i>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</th:block>
