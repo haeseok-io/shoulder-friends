@@ -35,15 +35,6 @@ public class MeetingController {
     public static final String KEY = "0588185562360842";
     public static final String SECRET = "ZODmGjsuy0mz52841UHYk8J4ETFFStAbaoAbtXIcfjb6hnrN3VZHAaHNDwnBzECspEMjQuFYSdlwMRv9";
 
-    // 미팅 디테일로 이동
-    @GetMapping("/detail")
-    public void detail(Model model, @RequestParam Long moimNo){
-        model.addAttribute("meetinglist", meetingService.meetingList(moimNo));
-        model.addAttribute("moimUser", moimService.readOne(moimNo).getUsers());
-        model.addAttribute("moimNo", moimNo);
-        model.addAttribute("moim", moimService.readOne(moimNo));
-    }
-
     //카페 목록 페이지로 이동
     @GetMapping("/cafelist")
     public void cafelist(Model model, @RequestParam String checkin, @RequestParam Long moimNo){
@@ -118,21 +109,21 @@ public class MeetingController {
     @PostMapping("/modify")
     public String modify(MeetingDTO meetingDTO){
         meetingService.modifyMeeting(meetingDTO);
-        return "redirect:/meeting/detail?moimNo="+meetingDTO.getMoimNo();
+        return "redirect:/moim/detail?no="+meetingDTO.getMoimNo()+"&type=meeting";
     }
 
     //미팅 정보 삭제
     @PostMapping("/delete")
     public String delete(@RequestParam Long moimNo,@RequestParam String meetingdate){
         meetingService.deleteMeeting(moimNo, meetingdate);
-        return "redirect:/meeting/detail?moimNo="+moimNo;
+        return "redirect:/moim/detail?no="+moimNo+"&type=meeting";
     }
 
     //스터디룸 예약 취소
     @PostMapping("/cancel")
     public String cancel(@RequestParam String endDate, @RequestParam Long roomNo2, @RequestParam Long moimNo){
         meetingService.cancelRoom(endDate, roomNo2);
-        return "redirect:/meeting/detail?moimNo="+moimNo;
+        return "redirect:/moim/detail?no="+moimNo+"&type=meeting";
     }
 
 }

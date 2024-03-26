@@ -1,8 +1,9 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragment/layout}">
+<html xmlns:th="http://www.thymeleaf.org">
 
-<th:block layout:fragment="css">
+<th:block th:fragment="detail">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
     <style>
         #calendar {
             max-width: 900px;
@@ -90,9 +91,6 @@
             background: #ECF2F3 !important;
         }
     </style>
-</th:block>
-
-<th:block layout:fragment="js">
     <!-- jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- bootstrap 4 -->
@@ -555,11 +553,9 @@
             });
         }
     </script>
-</th:block>
-
-<th:block layout:fragment="container">
-    <main>
-        <div class="container" style="margin-top: 80px; margin-bottom: 80px; margin-left: 120px;">
+</head>
+<body>
+        <div class="container" style="margin-top: 50px; margin-bottom: 50px; margin-left: 110px; width: 760px;">
             <div id="calendarBox" style="width: 750px;">
                 <div id="calendar"></div>
             </div>
@@ -767,7 +763,7 @@
                 </div>
             </div>
         </div>
-    </main>
+</body>
 </th:block>
 
 </html>
