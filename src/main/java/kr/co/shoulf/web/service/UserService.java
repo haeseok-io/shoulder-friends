@@ -1,12 +1,10 @@
 package kr.co.shoulf.web.service;
 
-import kr.co.shoulf.web.dto.LanguageDTO;
-import kr.co.shoulf.web.dto.MoimDTO;
-import kr.co.shoulf.web.dto.UserDTO;
-import kr.co.shoulf.web.dto.UserDataRequestDTO;
+import kr.co.shoulf.web.dto.*;
 import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.repository.*;
 import kr.co.shoulf.web.util.LanguageImgPathConvert;
+import kr.co.shoulf.web.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -58,6 +57,25 @@ public class UserService {
         return userList;
     }
 
+    public List<FindUserDTO> readFindUserList() {
+        return userRepository.findAll().stream()
+                .map(user -> {
+                    return FindUserDTO.builder()
+                            .userNo(user.getUserNo())
+                            .nickname(user.getNickname())
+                            .userDetail(user.getUserDetail())
+                            .userJob(userJobRepository.findByUsers(user))
+                            .moim(moimRepository.findByUsers(user))
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
+
+    public FindUserDTO readRandomFindUser() {
+        List<FindUserDTO> findUserList = readFindUserList();
+        return RandomUtil.getRandomElement(findUserList);
+    }
+
     // 회원 상세
     public UserDTO readUserDetail(Long userNo) {
         Optional<Users> usersOptional = userRepository.findById(userNo);
@@ -77,7 +95,6 @@ public class UserService {
             return moimService.readOne(m.getMoimNo());
             //return ;
         }).toList();
-
 
         return UserDTO.builder()
                 .userNo(users.getUserNo())
