@@ -28,7 +28,7 @@ public class AnnualController {
     public String annualMain(HttpSession session, Model model) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         if (loggedInUser != null) {
-            System.out.println("annual main : " + loggedInUser);
+//            System.out.println("annual main : " + loggedInUser);
             model.addAttribute("loggedInUser", loggedInUser);
             return "admin/annual/index";
         } else {
