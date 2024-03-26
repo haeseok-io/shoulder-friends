@@ -146,6 +146,8 @@ public class MoimController {
                 model.addAttribute("infoTab", true);
             } else if (type.equals("member")){
                 model.addAttribute("memberTab", true);
+            } else if (type.equals("todo")){
+                model.addAttribute("todoTab", true);
             }
         }
 
