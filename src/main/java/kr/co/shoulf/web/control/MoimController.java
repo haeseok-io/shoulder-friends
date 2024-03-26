@@ -27,6 +27,8 @@ public class MoimController {
     private final OnlineService onlineService;
     private final PositionService positionService;
     private final UserJobService userJobService;
+    private final ChecklistService checklistService;
+    private final MeetingService meetingService;
 
     @GetMapping(value = {"/", "/list"})
     public String list(PageRequestDTO pageRequestDto, Model model){
@@ -148,6 +150,15 @@ public class MoimController {
                 model.addAttribute("memberTab", true);
             } else if (type.equals("todo")){
                 model.addAttribute("todoTab", true);
+                model.addAttribute("list", checklistService.getlist(moimNo));
+                model.addAttribute("moimUser", moimService.readOne(moimNo).getUsers());
+                model.addAttribute("endlist", checklistService.getEndlist(moimNo));
+                model.addAttribute("moimNo", moimNo);
+            } else if (type.equals("meeting")) {
+                model.addAttribute("meetingTab", true);
+                model.addAttribute("meetinglist", meetingService.meetingList(moimNo));
+                model.addAttribute("moimUser", moimService.readOne(moimNo).getUsers());
+                model.addAttribute("moimNo", moimNo);
             }
         }
 
