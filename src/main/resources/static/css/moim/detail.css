@@ -31,7 +31,7 @@ main .container {
 .recruitStatus .positionDetail{width: 200px; align-items: center;}
 .recruitStatus ul{margin-bottom: 30px;}
 .recruitStatus .applyBtn .yet{margin-left: 30px; padding:10px; width: 100px; height: 40px; color:#FF8911;  border: 1px solid #FF8911; border-radius: 5px;}
-.recruitStatus .applyBtn .done{margin-left: 30px; padding:10px; width: 100px; height: 40px; background-color:#FF8911; color:white;  border: 1px solid #FF8911;; border-radius: 5px;}
+.recruitStatus .applyBtn .done{margin-left: 30px; padding:10px; width: 100px; height: 40px; background-color:#FF8911; color:white;  border: 1px solid #FF8911; border-radius: 5px;}
 .participating .memberWrap{width: 1200px;}
 .participating .memberList{display: flex; justify-content: flex-start; flex-wrap: wrap;}
 .participating .memberList li{position: relative; display: flex; justify-content: space-between; align-items: center; width: calc(25% - (60px / 4)); border: 1px solid #ccc; border-radius: 10px; margin-right: 20px; margin-bottom: 30px; padding: 20px; overflow: hidden; cursor: pointer;}
@@ -45,6 +45,11 @@ main .container {
 .participating .memberList > li .info .positionDetail{margin-top: 10px;}
 .participating .memberList > li .message { width: 25%; text-align: right; cursor: pointer; }
 .participating .memberList > li .message i { font-size: 1.5rem; color: #ccc; }
+.todo {margin-top: 30px;}
+.todo .title {margin-bottom: 30px; color: black;}
+.todo .contents{width: 70%; height: 40px; border-radius: 5px;}
+.todo .applyTodo input[type='submit']{width: 20%;  height: 40px; border-radius: 5px; background-color:#FF8911; color:white;  border: 1px solid #FF8911;}
+.todo .checkList {margin-top: 10px;}
 /* 모달 스타일 */
 .modal {
     display: none; /* 모달 초기에 숨김 */
