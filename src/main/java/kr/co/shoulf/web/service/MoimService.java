@@ -364,10 +364,17 @@ public class MoimService {
         return list;
     }
 
-    public void approveParticipant(Long moimNo, Long userNo) {
+    public void approveParticipant(Long moimNo, Long participantNo) {
+        MoimParticipants moimParticipants = moimParticipantsRepository.findById(participantNo).orElse(null);
+        moimParticipants.setStatus(2);
+        moimParticipantsRepository.save(moimParticipants);
         Moim moim = moimRepository.findById(moimNo).orElse(null);
-        Users users = userRepository.findById(userNo).orElse(null);
-        MoimDTO moimDTO = convertMoimDTO(moim);
+    }
 
+    public void rejectParticipant(Long moimNo, Long participantNo) {
+        MoimParticipants moimParticipants = moimParticipantsRepository.findById(participantNo).orElse(null);
+        moimParticipants.setStatus(3);
+        System.out.println(moimParticipants);
+//        moimParticipantsRepository.save(moimParticipants);
     }
 }
