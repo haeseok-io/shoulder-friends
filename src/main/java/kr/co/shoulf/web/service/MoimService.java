@@ -363,4 +363,11 @@ public class MoimService {
 
         return list;
     }
+
+    public void approveParticipant(Long moimNo, Long userNo) {
+        Moim moim = moimRepository.findById(moimNo).orElse(null);
+        Users users = userRepository.findById(userNo).orElse(null);
+        MoimDTO moimDTO = convertMoimDTO(moim);
+
+    }
 }
