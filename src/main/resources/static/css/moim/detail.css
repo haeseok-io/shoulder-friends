@@ -45,13 +45,41 @@ main .container {
 .participating .memberList > li .info .positionDetail{margin-top: 10px;}
 .participating .memberList > li .message { width: 25%; text-align: right; cursor: pointer; }
 .participating .memberList > li .message i { font-size: 1.5rem; color: #ccc; }
+
+.participantWrap {width: 1200px;}
+.participantWrap .participantList{display: flex; justify-content: flex-start; flex-wrap: wrap;}
+.participantWrap .participantList li{position: relative; justify-content: space-between; align-items: center; width: calc(25% - (40px / 4)); border: 1px solid #ccc; border-radius: 10px; margin-right: 20px; margin-bottom: 30px; padding: 20px; overflow: hidden;}
+.participantWrap .participantList > li:nth-child(4n) { margin-right: 0; }
+.participantWrap .participantList > li .thumbnail a { display: flex; align-items: center;}
+.participantWrap .participantList img { width: 50px; height: 50px; border: 1px solid #ccc; border-radius: 100%; overflow: hidden;}
+.participantWrap .participantList > li .info {width:100%; padding-left: 5px; }
+.participantWrap .participantList > li .info .nickname{font-weight: 600; font-size: 1.1rem; color: #1F1926; margin-left: 5px;}
+.participantWrap .participantList > li .info .introduce{width: 100%; margin-top: 5px;}
+.participantWrap .participantList > li .info .level{font-weight: 200; color: #FF8911; font-size: 15px; padding-left: 5px;}
+.participantWrap .participantList > li .info .positionDetail{margin-top: 10px;}
+.participantWrap .participantList > li .decideBtn{width:100%; padding-left: 5px; margin-top: 10px; text-align: center; justify-content: space-between}
+.participantWrap .participantList > li .decideBtn .approveBtn{width: 48%; height: 40px; border-radius: 5px; background-color:#FF8911; color:white;  border: 1px solid #FF8911;}
+.participantWrap .participantList > li .decideBtn .rejectBtn{width: 48%; height: 40px; border-radius: 5px; background-color:#CCCCCC; color:#444444;  border: 1px solid #CCCCCC;}
+.control .moimControl{width: 1000px;}
+.control .moimControl .moimComplete{width: 30%; height: 45px; border-radius: 5px; background-color:#7B27FF; color:white;  border: 1px solid #7B27FF;}
+.control .moimControl .moimDelete{margin-left: 10px; width: 30%; height: 45px; border-radius: 5px; background-color:#CC0000; color:white;  border: 1px solid #CC0000;}
 .todo {margin-top: 30px;}
 .todo .title {margin-bottom: 30px; color: black;}
 .todo .contents{width: 70%; height: 40px; border-radius: 5px;}
-.todo .applyTodo input[type='submit']{width: 20%;  height: 40px; border-radius: 5px; background-color:#FF8911; color:white;  border: 1px solid #FF8911;}
+.todo .applyTodo input[type='submit']{width: 20%;  height: 40px; border-radius: 5px; background-color:#FF8911; color:#777777;  border: 1px solid;}
 .todo .checkList {margin-top: 10px;}
+.meeting {margin-top: 30px; display: flex;}
+.meeting .title, .applyMeeting{margin-bottom: 30px; color: black;}
+.meeting .applyMeeting{margin-left: 30px;}
+.meeting .applyMeeting button{line-height: 30px; width: 100px; height: 40px; border-radius: 5px; background-color:#FF8911; color:white;  border: 1px solid #FF8911;}
+.control{margin-top: 30px;}
+.control .title{margin-bottom: 30px; color: black;}
+
+
+
 /* 모달 스타일 */
-.modal {
+.positionModal
+ {
     display: none; /* 모달 초기에 숨김 */
     position: fixed;
     z-index: 1;
@@ -64,7 +92,7 @@ main .container {
 }
 
 /* 모달 콘텐츠 스타일 */
-.modal-content {
+.positionModal-content {
     background-color: #fefefe;
     margin: 15% auto;
     padding: 20px;
@@ -72,12 +100,12 @@ main .container {
     width: 50%;
     position: relative; /* 모달 내부 요소의 position을 상대적으로 설정 */
 }
-.modal-content .title{font-weight: bold; color: #1F1926;}
-.modal-content .applyPosition{margin-top: 20px;}
-.modal-content .applyForm{margin-top: 20px;}
-.modal-content .applyForm textarea{margin-top: 20px; width: 100%; height: 200px;}
-.modal-content .applyPosition .title, .haveJob p  {font-weight: 600;}
-.modal-content .applyForm .submitBtn{margin-top: 20px; width: 100%; height: 40px; color:#FF8911;  border: 1px solid #FF8911; border-radius: 5px;}
+.positionModal-content .title{font-weight: bold; color: #1F1926;}
+.positionModal-content .applyPosition{margin-top: 20px;}
+.positionModal-content .applyForm{margin-top: 20px;}
+.positionModal-content .applyForm textarea{margin-top: 20px; width: 100%; height: 200px;}
+.positionModal-content .applyPosition .title, .haveJob p  {font-weight: 600;}
+.positionModal .applyForm .submitBtn{margin-top: 20px; width: 100%; height: 40px; color:#FF8911;  border: 1px solid #FF8911; border-radius: 5px;}
     /* 닫기 버튼 스타일 */
 .close {
     color: #aaaaaa;
