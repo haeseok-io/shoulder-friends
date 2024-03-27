@@ -1,43 +1,93 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>연차 상세 정보</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</head>
-<body>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>연차 상세 정보</title>-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h2>연차 상세 정보</h2>-->
+<!--    <div class="container">-->
+<!--        <div class="content">-->
+<!--            <table class="table">-->
+<!--                <thead>-->
+<!--                    <tr>-->
+<!--                        <th>연차 구분</th>-->
+<!--                        <th>발급 갯수</th>-->
+<!--                        <th>남은 갯수</th>-->
+<!--                        <th>지급 사유</th>-->
+<!--                        <th>발급일</th>-->
+<!--                    </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                    <tr th:each="annualList : ${annualList}">-->
+<!--                        <td th:text="${annualList.type}"></td>-->
+<!--                        <td th:text="${annualList.num}"></td>-->
+<!--                        <td th:text="${annualList.num - totalAnnualNum[0].useNum}"></td>-->
+<!--                        <td th:text="${annualList.reason}"></td>-->
+<!--                        <td th:text="${annualList.issueDate}"></td>-->
+<!--                    </tr>-->
+<!--                </tbody>-->
+<!--                <tfoot>-->
+<!--                    <tr>-->
+<!--                        <td colspan="4"></td>-->
+<!--                        <td><a class="btn btn-primary" href="/annual/list">목록으로</a></td>-->
+<!--                    </tr>-->
+<!--                </tfoot>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</body>-->
+<!--</html>-->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/adminLayout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <style>
+        h2 {
+            text-align: center; /* 제목 가운데 정렬 */
+        }
+    </style>
+</th:block>
+
+<th:block layout:fragment="container">
     <h2>연차 상세 정보</h2>
     <div class="container">
         <div class="content">
             <table class="table">
                 <thead>
-                    <tr>
-                        <th>연차 구분</th>
-                        <th>발급 갯수</th>
-                        <th>남은 갯수</th>
-                        <th>지급 사유</th>
-                        <th>발급일</th>
-                    </tr>
+                <tr>
+                    <th>연차 구분</th>
+                    <th>발급 갯수</th>
+                    <th>남은 갯수</th>
+                    <th>지급 사유</th>
+                    <th>발급일</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="annualList : ${annualList}">
-                        <td th:text="${annualList.type}"></td>
-                        <td th:text="${annualList.num}"></td>
-                        <td th:text="${annualList.num - totalAnnualNum[0].useNum}"></td>
-                        <td th:text="${annualList.reason}"></td>
-                        <td th:text="${annualList.issueDate}"></td>
-                    </tr>
+                <tr th:each="annualList : ${annualList}">
+                    <td th:text="${annualList.type}"></td>
+                    <td th:text="${annualList.num}"></td>
+                    <td th:text="${annualList.num - totalAnnualNum[0].useNum}"></td>
+                    <td th:text="${annualList.reason}"></td>
+                    <td th:text="${annualList.issueDate}"></td>
+                </tr>
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <td colspan="4"></td>
-                        <td><a class="btn btn-primary" href="/annual/list">목록으로</a></td>
-                    </tr>
+                <tr>
+                    <td colspan="4"></td>
+                    <td><a class="btn btn-primary" href="/annual/list">목록으로</a></td>
+                </tr>
                 </tfoot>
             </table>
         </div>
     </div>
-</body>
+</th:block>
+
 </html>

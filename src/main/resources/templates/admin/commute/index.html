@@ -1,111 +1,229 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Commute Main</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</head>
-<body>
-<div class="container">
-    <h2>출퇴근시간 입력</h2>
-    <h3 th:text="${loggedInUser.name} + '님 안녕하세요'"></h3>
-    <div class="content">
-        <input type="button" id="inTime" value="출근" class="btn btn-success commute-btn" onclick="inAndOut('in');">
-        <input type="button" id="outTime" value="퇴근" class="btn btn-success commute-btn" onclick="inAndOut('out');">
-        <br>
-        <span class="date">날짜 선택</span>
-        <input type="date" id="datePicker" name="selectedDate">
-        <table class="table">
-            <thead>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Commute Main</title>-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--    <h2>출퇴근시간 입력</h2>-->
+<!--    <h3 th:text="${loggedInUser.name} + '님 안녕하세요'"></h3>-->
+<!--    <div class="content">-->
+<!--        <input type="button" id="inTime" value="출근" class="btn btn-success commute-btn" onclick="inAndOut('in');">-->
+<!--        <input type="button" id="outTime" value="퇴근" class="btn btn-success commute-btn" onclick="inAndOut('out');">-->
+<!--        <br>-->
+<!--        <span class="date">날짜 선택</span>-->
+<!--        <input type="date" id="datePicker" name="selectedDate">-->
+<!--        <table class="table">-->
+<!--            <thead>-->
+<!--                <tr>-->
+<!--                    <th>직원명</th>-->
+<!--                    <th>출퇴근 시간</th>-->
+<!--                    <th>상태</th>-->
+<!--                </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--&lt;!&ndash;                <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <td></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <td></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <td></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                </tr>&ndash;&gt;-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--        <form action="/commute/insertTemporaryData" method="post">-->
+<!--            <input type="submit" value="임시 데이터 생성">-->
+<!--        </form>-->
+<!--        <button><a href="/admin/">메인으로</a></button>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    // 오늘 날짜-->
+<!--    const today = new Date().toISOString().split('T')[0];-->
+
+<!--    // 설정된 날짜의 멤버 리스트 불러오기-->
+<!--    function callList(date) {-->
+<!--        $.ajax({-->
+<!--            type : 'GET',-->
+<!--            url : '/commute/list',-->
+<!--            data : { selectedDate: date },-->
+<!--            success : function (response) {-->
+<!--                const tbody = $('table tbody');-->
+
+<!--                tbody.empty();-->
+
+<!--                response.forEach(function (item) {-->
+<!--                    const newRow = $('<tr>');-->
+
+<!--                    newRow.append('<td>' + item.member.name + '</td>')-->
+<!--                    newRow.append('<td>' + item.inTime + '-' + item.outTime + '</td>')-->
+<!--                    newRow.append('<td>' + item.status + '</td>')-->
+
+<!--                    tbody.append(newRow);-->
+<!--                })-->
+<!--            },-->
+<!--            error : function (xhr, status, error) {-->
+<!--                console.log(error);-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+
+<!--    $(document).ready(function() {-->
+<!--        const datePicker = $('#datePicker');-->
+
+<!--        // 오늘 날짜를 전송해 정보를 받아오는 Ajax 요청-->
+<!--        callList(today);-->
+
+<!--        // 오늘 날짜를 기본으로 설정-->
+<!--        datePicker.val(today);-->
+
+<!--        // 날짜의 변경을 감지-->
+<!--        datePicker.on('change', function () {-->
+<!--            // 선택한 날짜 가져오기-->
+<!--            const selectedDate = new Date($(this).val()).toISOString();-->
+
+<!--            // 선택한 날짜를 전송하여 해당 날짜에 해당하는 정보를 받아오는 Ajax 요청-->
+<!--            callList(selectedDate);-->
+<!--        });-->
+<!--    });-->
+
+<!--    // 출퇴근 시간 수정 후 성공 시 리스트 불러오기-->
+<!--    function inAndOut(type) {-->
+<!--        $.ajax({-->
+<!--            type : 'POST',-->
+<!--            url : '/commute/' + type,-->
+<!--            data : {selectedDate : today},-->
+<!--            success : function (response) {-->
+<!--                if(response === "success") {-->
+<!--                    callList(today);-->
+<!--                }-->
+<!--            },-->
+<!--            error : function (xhr, status, error) {-->
+<!--                console.log(error);-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/adminLayout}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <style>
+        h2 {
+            text-align: center; /* 제목 가운데 정렬 */
+        }
+    </style>
+</th:block>
+
+<th:block layout:fragment="container">
+    <div class="container">
+        <h2>출퇴근시간 입력</h2>
+        <h3 th:text="${loggedInUser.name} + '님 안녕하세요'"></h3>
+        <div class="content">
+            <input type="button" id="inTime" value="출근" class="btn btn-success commute-btn" onclick="inAndOut('in');">
+            <input type="button" id="outTime" value="퇴근" class="btn btn-success commute-btn" onclick="inAndOut('out');">
+            <br>
+            <span class="date">날짜 선택</span>
+            <input type="date" id="datePicker" name="selectedDate">
+            <table class="table">
+                <thead>
                 <tr>
                     <th>직원명</th>
                     <th>출퇴근 시간</th>
                     <th>상태</th>
                 </tr>
-            </thead>
-            <tbody>
-<!--                <tr>-->
-<!--                    <td></td>-->
-<!--                    <td></td>-->
-<!--                    <td></td>-->
-<!--                </tr>-->
-            </tbody>
-        </table>
-        <form action="/commute/insertTemporaryData" method="post">
-            <input type="submit" value="임시 데이터 생성">
-        </form>
-        <button><a href="/admin/">메인으로</a></button>
+                </thead>
+                <tbody>
+                <!--                <tr>-->
+                <!--                    <td></td>-->
+                <!--                    <td></td>-->
+                <!--                    <td></td>-->
+                <!--                </tr>-->
+                </tbody>
+            </table>
+            <form action="/commute/insertTemporaryData" method="post">
+                <input type="submit" value="임시 데이터 생성">
+            </form>
+            <button><a href="/admin/">메인으로</a></button>
+        </div>
     </div>
-</div>
 
-<script>
-    // 오늘 날짜
-    const today = new Date().toISOString().split('T')[0];
+    <script>
+        // 오늘 날짜
+        const today = new Date().toISOString().split('T')[0];
 
-    // 설정된 날짜의 멤버 리스트 불러오기
-    function callList(date) {
-        $.ajax({
-            type : 'GET',
-            url : '/commute/list',
-            data : { selectedDate: date },
-            success : function (response) {
-                const tbody = $('table tbody');
+        // 설정된 날짜의 멤버 리스트 불러오기
+        function callList(date) {
+            $.ajax({
+                type : 'GET',
+                url : '/commute/list',
+                data : { selectedDate: date },
+                success : function (response) {
+                    const tbody = $('table tbody');
 
-                tbody.empty();
+                    tbody.empty();
 
-                response.forEach(function (item) {
-                    const newRow = $('<tr>');
+                    response.forEach(function (item) {
+                        const newRow = $('<tr>');
 
-                    newRow.append('<td>' + item.member.name + '</td>')
-                    newRow.append('<td>' + item.inTime + '-' + item.outTime + '</td>')
-                    newRow.append('<td>' + item.status + '</td>')
+                        newRow.append('<td>' + item.member.name + '</td>')
+                        newRow.append('<td>' + item.inTime + '-' + item.outTime + '</td>')
+                        newRow.append('<td>' + item.status + '</td>')
 
-                    tbody.append(newRow);
-                })
-            },
-            error : function (xhr, status, error) {
-                console.log(error);
-            }
-        });
-    }
-
-    $(document).ready(function() {
-        const datePicker = $('#datePicker');
-
-        // 오늘 날짜를 전송해 정보를 받아오는 Ajax 요청
-        callList(today);
-
-        // 오늘 날짜를 기본으로 설정
-        datePicker.val(today);
-
-        // 날짜의 변경을 감지
-        datePicker.on('change', function () {
-            // 선택한 날짜 가져오기
-            const selectedDate = new Date($(this).val()).toISOString();
-
-            // 선택한 날짜를 전송하여 해당 날짜에 해당하는 정보를 받아오는 Ajax 요청
-            callList(selectedDate);
-        });
-    });
-
-    // 출퇴근 시간 수정 후 성공 시 리스트 불러오기
-    function inAndOut(type) {
-        $.ajax({
-            type : 'POST',
-            url : '/commute/' + type,
-            data : {selectedDate : today},
-            success : function (response) {
-                if(response === "success") {
-                    callList(today);
+                        tbody.append(newRow);
+                    })
+                },
+                error : function (xhr, status, error) {
+                    console.log(error);
                 }
-            },
-            error : function (xhr, status, error) {
-                console.log(error);
-            }
+            });
+        }
+
+        $(document).ready(function() {
+            const datePicker = $('#datePicker');
+
+            // 오늘 날짜를 전송해 정보를 받아오는 Ajax 요청
+            callList(today);
+
+            // 오늘 날짜를 기본으로 설정
+            datePicker.val(today);
+
+            // 날짜의 변경을 감지
+            datePicker.on('change', function () {
+                // 선택한 날짜 가져오기
+                const selectedDate = new Date($(this).val()).toISOString();
+
+                // 선택한 날짜를 전송하여 해당 날짜에 해당하는 정보를 받아오는 Ajax 요청
+                callList(selectedDate);
+            });
         });
-    }
-</script>
-</body>
+
+        // 출퇴근 시간 수정 후 성공 시 리스트 불러오기
+        function inAndOut(type) {
+            $.ajax({
+                type : 'POST',
+                url : '/commute/' + type,
+                data : {selectedDate : today},
+                success : function (response) {
+                    if(response === "success") {
+                        callList(today);
+                    }
+                },
+                error : function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+    </script>
+</th:block>
+
 </html>
