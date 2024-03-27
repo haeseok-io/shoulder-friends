@@ -7,13 +7,14 @@
 </th:block>
 <th:block layout:fragment="js">
     <script th:inline="javascript">
+        let moimNo = [[${moim.moimNo}]]
         // 모달 열기 함수
-        function openModal() {
-            document.getElementById("myModal").style.display = "block";
+        function openPositionModal() {
+            document.getElementById("positionModal").style.display = "block";
         }
         // 모달 닫기 함수
-        function closeModal() {
-            document.getElementById("myModal").style.display = "none";
+        function closePositionModal() {
+            document.getElementById("positionModal").style.display = "none";
         }
 
         $(()=>{
@@ -44,7 +45,7 @@
                     alert("로그인 해주세요.");
                     return false;
                 }
-                openModal();
+                openPositionModal();
                 let positionDetailNo = $(this).closest(".headcount").find(".positionDetail").data("no");
                 let positionName = $(this).closest(".headcount").find(".positionDetail").html();
                 let headcountNo = $(this).closest(".headcount").data("no");
@@ -72,6 +73,30 @@
                 // 유효성 검사를 통과한 경우, 폼을 서버로 제출합니다.
                 this.submit();
             });
+
+            //승인하기 버튼 클릭시
+            $(".approveBtn").on("click",function (){
+                console.log("승인하기");
+                let participantNo = $(this).closest(".participantList").find(".participantNo").data("no");
+                $.ajax({
+                    url : "/moim/approveParticipant",
+                    type : "post",
+                    data : {participantNo : participantNo,
+                    moimNo : moimNo},
+                    success : function (){
+                        console.log("success");
+                    }
+
+                })
+
+            })
+
+            //거절하기 버튼 클릭시
+            $(".rejectBtn").on("click",function (){
+                console.log("거절하기");
+                let participantUserNo = $(this).closest(".participantList").find(".participantNo").data("no");
+                console.log(participantUserNo)
+            })
         });
     </script>
 </th:block>
@@ -179,10 +204,10 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div id="myModal" class="modal">
-                                <div class="modal-content">
+                            <div id="positionModal" class="positionModal">
+                                <div class="positionModal-content">
                                     <h3 class="title">지원하기</h3>
-                                    <span class="close" onclick="closeModal();">&times;</span>
+                                    <span class="close" onclick="closePositionModal();">&times;</span>
                                     <div class="applyPosition">
                                         <p class="title">지원 포지션</p>
                                         <p id="positionName"></p>
@@ -239,15 +264,64 @@
                             </div>
                         </th:block>
                         <th:block th:if="${todoTab}">
-                            <div class="todo">
+                                <th:block th:replace="moim/checklist :: checklist(moimNo=${moim.moimNo})"></th:block>
+                        </th:block>
+                        <th:block th:if="${meetingTab}">
+                                <th:block th:replace="meeting/detail :: detail(moimNo=${moim.moimNo})"></th:block>
+                        </th:block>
+                        <th:block th:if="${meetingTab}">
+                            <div class="meeting">
                                 <div class="title">
-                                    <h2>할일 등록하기</h2>
+                                    <h2>미팅</h2>
                                 </div>
-                                <div class="applyTodo">
-                                    <form action="/moim/applyTodo" method="post">
-                                        <input type="text" name="contents" class="contents">
-                                        <input type="submit" value="등록하기">
-                                    </form>
+                               <div class="applyMeeting">
+                                 <button type="button">미팅 등록</button>
+                               </div>
+                            </div>
+                        </th:block>
+                        <th:block th:if="${controlTab}">
+                            <div class="control">
+                                <div class="title">
+                                    <h2>지원자 관리</h2>
+                                </div>
+                                <div class="participantWrap">
+                                    <ul class="participantList">
+                                        <li class="participantNo" th:each="p : ${participants}" th:data-no="${p.moimParticipantsNo}">
+                                            <div class="info">
+                                                <div class="thumbnail">
+                                                    <a th:href="@{/user/detail(no=${p.users.userNo})}">
+                                                        <img th:if="${p.users.userDetail.profileImg}" th:src="${p.users.userDetail.profileImg}" alt="">
+                                                        <img th:if="${p.users.userDetail.profileImg eq null}" src="/images/profileBlank.png" alt="">
+                                                        <p class="nickname">
+                                                            [[${p.users.nickname}]]
+                                                            <span class="level">
+                                                                Lv. <span th:text="${p.userJob.level eq null ? '0' : p.userJob.level}"></span>
+                                                            </span>
+                                                        </p>
+                                                    </a>
+                                                </div>
+                                                <th:block th:if="${p.users.userDetail.introduce != null}">
+                                                    <p class="introduce" th:if="${p.users.userDetail.introduce.length() > 0}">
+                                                        <th:block th:text="${#strings.substring(p.users.userDetail.introduce, 0, 15)+ '..'}"> </th:block>
+                                                    </p>
+                                                </th:block>
+                                                <p class="positionDetail" th:text="${p.userJob==null || p.userJob.positionDetail==null ? '직무없음' : p.userJob.positionDetail.middleName}">
+                                                </p>
+                                                <span th:text="${p.userOnline == null ? '온/오프라인 여부 문의해주세요': p.userOnline.online.onlineName}"></span>
+                                            </div>
+                                            <div class="decideBtn">
+                                                <button type="button" class="approveBtn">승인하기</button>
+                                                <button type="button" class="rejectBtn">거절하기</button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="title">
+                                    <h2>모임 관리</h2>
+                                </div>
+                                <div class="moimControl">
+                                    <button type="button" class="moimComplete">모임 완료</button>
+                                    <a href=""><button type="button" class="moimDelete">모임 삭제</button></a>
                                 </div>
                             </div>
                         </th:block>
