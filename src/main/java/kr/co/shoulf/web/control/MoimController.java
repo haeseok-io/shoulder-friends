@@ -94,8 +94,14 @@ public class MoimController {
     }
     @PostMapping("/approveParticipant")
     public String approveParticipant(@RequestParam("moimNo") Long moimNo,
-                                     @RequestParam("participantUserNo") Long userNo){
-        moimService.approveParticipant(moimNo, userNo);
+                                     @RequestParam("participantNo") Long participantNo){
+        moimService.approveParticipant(moimNo, participantNo);
+        return "redirect:/moim/detail?no=" + moimNo;
+    }
+    @PostMapping("/rejectParticipant")
+    public String rejectParticipant(@RequestParam("moimNo") Long moimNo,
+                                     @RequestParam("participantNo") Long participantNo){
+        moimService.rejectParticipant(moimNo, participantNo);
         return "redirect:/moim/detail?no=" + moimNo;
     }
 
