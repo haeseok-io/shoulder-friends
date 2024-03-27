@@ -15,7 +15,7 @@
             padding: 0 10px;
             vertical-align: middle;
             border: 1px solid #CCCCCC;
-            width: 83%;
+            width: 84%;
             color: #999999;
             border-radius: 5px;
         }
@@ -272,6 +272,7 @@
                     <input type="text" class="form-control" name="member" id="member" th:value="${oneCafe.member?.memberNo}">
                 </div>
                 <div id="in9">
+                    <a th:href="@{/study/room/list(studycafeNo=${oneCafe.studycafeNo})}"><button type="button" class="btnsub" style="border-radius: 5px;" >취소</button></a>
                     <input type="submit" value="등록" class="btnsub" style="border-radius: 5px;">
                 </div>
             </form>
