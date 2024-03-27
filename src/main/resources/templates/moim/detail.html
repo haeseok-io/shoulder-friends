@@ -12,9 +12,15 @@
         function openPositionModal() {
             document.getElementById("positionModal").style.display = "block";
         }
+        function openRejectModal() {
+            document.getElementById("rejectModal").style.display = "block";
+        }
         // 모달 닫기 함수
         function closePositionModal() {
             document.getElementById("positionModal").style.display = "none";
+        }
+        function closeRejectModal() {
+            document.getElementById("rejectModal").style.display = "none";
         }
 
         $(()=>{
@@ -28,14 +34,6 @@
                 let userNo = $(this).data("no");
                 window.location.href = "/user/detail?no="+userNo;
             });
-
-            // 모달 창 닫기 버튼과 모달 바깥 영역을 클릭하여 모달 닫기
-            window.onclick = function(event) {
-                var modal = document.getElementById("myModal");
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
 
             // 지원하기 버튼 클릭 시
             $(".yet").on("click",function (){
@@ -93,9 +91,19 @@
 
             //거절하기 버튼 클릭시
             $(".rejectBtn").on("click",function (){
+                openRejectModal();
                 console.log("거절하기");
-                let participantUserNo = $(this).closest(".participantList").find(".participantNo").data("no");
-                console.log(participantUserNo)
+                let participantNo = $(this).closest(".participantList").find(".participantNo").data("no");
+                $.ajax({
+                    url : "/moim/rejectParticipant",
+                    type : "post",
+                    data : {participantNo : participantNo,
+                        moimNo : moimNo},
+                    success : function (){
+                        console.log("success");
+                    }
+
+                })
             })
         });
     </script>
@@ -244,7 +252,7 @@
                                                 <p class="nickname">
                                                     [[${m.userDetail.users.nickname}]]
                                                     <span class="level">
-                                                        Lv. <span th:text="${m.userJob.level eq null ? '0' : m.userJob.level}"></span>
+                                                        Lv. <span th:text="${m.userJob.level eq null ? '입력안함' : m.userJob.level}"></span>
                                                     </span>
                                                 </p>
                                                 <th:block th:if="${m.userDetail.introduce != null}">
@@ -280,7 +288,7 @@
                                 </div>
                                 <div class="participantWrap">
                                     <ul class="participantList">
-                                        <li class="participantNo" th:each="p : ${participants}" th:data-no="${p.moimParticipantsNo}">
+                                        <li class="participantNo" th:each="p : ${participants}" th:data-no="${p.moimParticipantsNo}" th:if="${p.status == 1}">
                                             <div class="info">
                                                 <div class="thumbnail">
                                                     <a th:href="@{/user/detail(no=${p.users.userNo})}">
@@ -289,7 +297,7 @@
                                                         <p class="nickname">
                                                             [[${p.users.nickname}]]
                                                             <span class="level">
-                                                                Lv. <span th:text="${p.userJob.level eq null ? '0' : p.userJob.level}"></span>
+                                                                Lv. <span th:text="${p.userJob == null ? '입력안함' : p.userJob.level}"></span>
                                                             </span>
                                                         </p>
                                                     </a>
@@ -309,6 +317,18 @@
                                             </div>
                                         </li>
                                     </ul>
+                                </div>
+                                <div id="rejectModal" class="rejectModal">
+                                    <div class="rejectModal-content">
+                                        <h3 class="title">거절하기</h3>
+                                        <span class="close" onclick="closeRejectModal();">&times;</span>
+                                        <div class="applyForm">
+                                            <form action="/moim/apply" class="apply" method="post">
+                                                <textarea name="contents" placeholder="거절 사유를 입력해주세요."></textarea>
+                                                <input type="submit" class="submitBtn" value="거절하기">
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="title">
                                     <h2>모임 관리</h2>
