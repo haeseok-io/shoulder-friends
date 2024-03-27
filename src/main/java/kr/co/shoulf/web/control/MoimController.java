@@ -129,7 +129,6 @@ public class MoimController {
                         .build());
             });
         });
-//        System.out.println(moimMember);
         model.addAttribute("moimMember", moimMember);
 
         // 지원자 읽어오기
@@ -146,8 +145,7 @@ public class MoimController {
                                 .status(p.getStatus())
                                 .reason(p.getReason())
                                 .moimHeadcount(p.getMoimHeadcount())
-                                .build()
-                );
+                                .build());
             });
         });
         System.out.println(participants);
