@@ -29,6 +29,7 @@ public class MoimController {
     private final UserJobService userJobService;
     private final ChecklistService checklistService;
     private final MeetingService meetingService;
+    private final UserOnlineService userOnlineService;
 
     @GetMapping(value = {"/", "/list"})
     public String list(PageRequestDTO pageRequestDto, Model model){
@@ -91,18 +92,16 @@ public class MoimController {
         System.out.println(moimParticipants);
         return "redirect:/moim/detail?no=" + moimNo;
     }
+    @PostMapping("/approveParticipant")
+    public String approveParticipant(@RequestParam("moimNo") Long moimNo,
+                                     @RequestParam("participantUserNo") Long userNo){
+        moimService.approveParticipant(moimNo, userNo);
+        return "redirect:/moim/detail?no=" + moimNo;
+    }
 
     @RequestMapping("/detail")
     public String detail(@RequestParam("no") Long moimNo, @RequestParam(value = "type", required = false, defaultValue = "info") String type, Model model, HttpSession session){
         Users loggedInUser = (Users) session.getAttribute("loggedInUser");
-        /*if(loggedInUser != null) {
-            UserDTO userDTO = UserDTO.builder()
-                    .userNo(loggedInUser.getUserNo())
-                    .nickname(loggedInUser.getNickname())
-                    .build();
-            model.addAttribute("loggedInUser", userDTO);
-        }*/
-
         MoimDTO moimDTO = moimService.readOne(moimNo);
         String br = System.getProperty("line.separator").toString();
         model.addAttribute( "nlString", br);
@@ -119,7 +118,8 @@ public class MoimController {
                  .userDetail(leader.getUserDetail())
                  .userJob(userJobService.readById(leader))
                  .build());
-        moimDTO.getHeadcountList().forEach(h->{ //모임 멤버 구해오기
+        //모임 멤버 구해오기
+        moimDTO.getHeadcountList().forEach(h->{
             h.getParticipantApprovalList().forEach(p-> {
                 moimMember.add(UserDTO.builder()
                         .userNo(p.getUsers().getUserNo())
@@ -129,9 +129,29 @@ public class MoimController {
                         .build());
             });
         });
-        System.out.println(moimMember);
-
+//        System.out.println(moimMember);
         model.addAttribute("moimMember", moimMember);
+
+        // 지원자 읽어오기
+        List<MoimParticipantDTO> participants = new ArrayList<>();
+        moimDTO.getHeadcountList().forEach(h ->{
+            h.getParticipantList().forEach(p->{
+                participants.add(
+                        MoimParticipantDTO.builder()
+                                .moimParticipantsNo(p.getMoimParticipantsNo())
+                                .userJob(userJobService.readById(p.getUsers()))
+                                .userOnline(userOnlineService.readOne(p.getUsers()))
+                                .users(p.getUsers())
+                                .job(p.getJob())
+                                .status(p.getStatus())
+                                .reason(p.getReason())
+                                .moimHeadcount(p.getMoimHeadcount())
+                                .build()
+                );
+            });
+        });
+        System.out.println(participants);
+        model.addAttribute("participants", participants);
         if(loggedInUser != null){
             //관리 탭
             ableControlTab = Objects.equals(loggedInUser.getUserNo(), moimDTO.getUsers().getUserNo());
@@ -159,6 +179,8 @@ public class MoimController {
                 model.addAttribute("meetinglist", meetingService.meetingList(moimNo));
                 model.addAttribute("moimUser", moimService.readOne(moimNo).getUsers());
                 model.addAttribute("moimNo", moimNo);
+            } else if (type.equals("control")){
+                model.addAttribute("controlTab", true);
             }
         }
 
