@@ -94,16 +94,21 @@
                 openRejectModal();
                 console.log("거절하기");
                 let participantNo = $(this).closest(".participantList").find(".participantNo").data("no");
-                $.ajax({
-                    url : "/moim/rejectParticipant",
-                    type : "post",
-                    data : {participantNo : participantNo,
-                        moimNo : moimNo},
-                    success : function (){
-                        console.log("success");
-                    }
+                $("#moimParticipantsNo").val(participantNo);
+            })
 
-                })
+            $(".reject").submit(function (event){
+                event.preventDefault();
+                let rejectContent = $("#rejectContents").val().trim();
+                if(!rejectContent){
+                    alert("거절 사유를 입력해주세요.");
+                    return;
+                }
+                this.submit();
+            })
+
+            $(".moimDelete").on("click",function (){
+
             })
         });
     </script>
@@ -322,9 +327,11 @@
                                     <div class="rejectModal-content">
                                         <h3 class="title">거절하기</h3>
                                         <span class="close" onclick="closeRejectModal();">&times;</span>
-                                        <div class="applyForm">
-                                            <form action="/moim/apply" class="apply" method="post">
-                                                <textarea name="contents" placeholder="거절 사유를 입력해주세요."></textarea>
+                                        <div class="rejectForm">
+                                            <form action="/moim/rejectParticipant" class="reject" method="post">
+                                                <input type="hidden" name="participantNo" id="moimParticipantsNo" value="">
+                                                <input type="hidden" name="moimNo" th:value="${moim.moimNo}">
+                                                <textarea name="contents" id="rejectContents" placeholder="거절 사유를 입력해주세요."></textarea>
                                                 <input type="submit" class="submitBtn" value="거절하기">
                                             </form>
                                         </div>
@@ -334,8 +341,8 @@
                                     <h2>모임 관리</h2>
                                 </div>
                                 <div class="moimControl">
-                                    <button type="button" class="moimComplete">모임 완료</button>
-                                    <a href=""><button type="button" class="moimDelete">모임 삭제</button></a>
+                                    <a th:href="@{/moim/complete(no=${moim.moimNo})}"><button type="button" class="moimComplete">모임 완료</button></a>
+                                    <a th:href="@{/moim/delete(no=${moim.moimNo})}"><button type="button" class="moimDelete">모임 삭제</button></a>
                                 </div>
                             </div>
                         </th:block>
