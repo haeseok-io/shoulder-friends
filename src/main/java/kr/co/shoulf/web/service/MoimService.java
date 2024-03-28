@@ -416,9 +416,11 @@ public class MoimService {
     }
 
     public MoimLike readLike(Long moimNo, Users user) {
-
-        Moim moim = moimRepository.findById(moimNo).orElse(null);
-        return moimLikeRepository.findByMoimAndUsers_UserNo(moim, user.getUserNo());
+        if(user != null){
+            Moim moim = moimRepository.findById(moimNo).orElse(null);
+            return moimLikeRepository.findByMoimAndUsers_UserNo(moim, user.getUserNo());
+        }
+        return null;
     }
 
     @Transactional
