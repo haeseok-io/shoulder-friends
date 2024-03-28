@@ -102,10 +102,10 @@ main .container {
 .positionModal-content .title, .rejectModal-content .title {font-weight: bold; color: #1F1926;}
 .positionModal-content .applyPosition{margin-top: 20px;}
 .positionModal-content .applyForm{margin-top: 20px;}
-.positionModal-content .applyForm textarea, .rejectModal-content .applyForm textarea{margin-top: 20px; width: 100%; height: 200px;}
+.positionModal-content .applyForm textarea, .rejectModal-content .rejectForm textarea{margin-top: 20px; width: 100%; height: 200px;}
 .positionModal-content .applyPosition .title, .haveJob p  {font-weight: 600;}
 .positionModal .applyForm .submitBtn {margin-top: 20px; width: 100%; height: 40px; color:#FF8911;  border: 1px solid #FF8911; border-radius: 5px;}
-.rejectModal-content .applyForm .submitBtn {margin-top: 20px; width: 100%; height: 40px; color:#CC0000;  border: 1px solid #CC0000; border-radius: 5px;}
+.rejectModal-content .rejectForm .submitBtn {margin-top: 20px; width: 100%; height: 40px; color:#CC0000;  border: 1px solid #CC0000; border-radius: 5px;}
     /* 닫기 버튼 스타일 */
 .close {
     color: #aaaaaa;
