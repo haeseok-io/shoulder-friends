@@ -95,14 +95,25 @@ public class MoimController {
     @PostMapping("/approveParticipant")
     public String approveParticipant(@RequestParam("moimNo") Long moimNo,
                                      @RequestParam("participantNo") Long participantNo){
-        moimService.approveParticipant(moimNo, participantNo);
+        moimService.approveParticipant(participantNo);
         return "redirect:/moim/detail?no=" + moimNo;
     }
     @PostMapping("/rejectParticipant")
-    public String rejectParticipant(@RequestParam("moimNo") Long moimNo,
-                                     @RequestParam("participantNo") Long participantNo){
-        moimService.rejectParticipant(moimNo, participantNo);
+    public String rejectParticipant(@RequestParam("participantNo") Long participantNo,
+                                    @RequestParam("contents") String contents,
+                                    @RequestParam("moimNo") Long moimNo){
+        moimService.rejectParticipant(participantNo,contents);
         return "redirect:/moim/detail?no=" + moimNo;
+    }
+
+    @RequestMapping("/delete")
+    public String moimDelete(@RequestParam("no") Long moimNo){
+//        moimService.deleteOne(moimNo);
+        return "redirect:/moim/";
+    }
+    @RequestMapping("/complete")
+    public String moimComplete(@RequestParam("no") Long moimNo){
+        return "redirect:/moim/";
     }
 
     @RequestMapping("/detail")
@@ -154,7 +165,6 @@ public class MoimController {
                                 .build());
             });
         });
-        System.out.println(participants);
         model.addAttribute("participants", participants);
         if(loggedInUser != null){
             //관리 탭
