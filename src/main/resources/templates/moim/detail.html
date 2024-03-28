@@ -148,6 +148,21 @@
                 }
 
             })
+            //공유하기 버튼 클릭시
+            $(".share").on("click",function (){
+                // 복사할 텍스트
+                let urlToCopy = window.location.href;
+
+                // 가상의 textarea 요소를 생성하여 텍스트를 복사
+                let $tempTextArea = $("<textarea>");
+                $("body").append($tempTextArea);
+                $tempTextArea.val(urlToCopy).select();
+                document.execCommand("copy");
+                $tempTextArea.remove();
+
+                // 복사되었다는 메시지 표시 등 추가적인 작업 수행 가능
+                alert("주소가 복사되었습니다: " + urlToCopy);
+            })
         });
     </script>
 </th:block>
