@@ -3,9 +3,7 @@ main .container {
     width: 1400px;
     max-width: 1400px;
     margin: 0 auto; /* 가운데 정렬을 위해 추가 */
-    /*display: flex;*/
     justify-content: space-between;
-    background-color: #f2f2f2; /* 배경색 추가 */
     padding: 20px; /* 내부 여백 추가 */
 }
 .moimHeaderWrap{display: flex; margin-top: 50px;}
