@@ -14,6 +14,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @Component
 @RequiredArgsConstructor
@@ -31,9 +33,20 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         HttpSession session = request.getSession();
         session.setAttribute("loggedInUser", users);
 
-        // 리다이렉트 url 이 없을경우 메인으로 이동
+        // 넘겨받은 리다이렉트 url 이 있을경우에는 리다이렉트
+        // 없을경우에는 로그인을 시도했던 url 로 리다이렉트 처리
+        String refererUrl = request.getHeader("Referer");
+        String refererPath = null;
+
+        try {
+            URI uri = new URI(refererUrl);
+            refererPath = uri.getPath();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
         if( redirectUrl==null || redirectUrl.isEmpty() ) {
-            redirectUrl = "/";
+            redirectUrl = refererPath;
         }
 
         response.setStatus(HttpStatus.OK.value());

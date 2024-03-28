@@ -94,6 +94,16 @@ public class SecurityConfig {
                         .successHandler(customAuthenticationSuccessHandler)
                         .failureHandler(customAuthenticationFailureHandler)
                 )
+                // Oauth2 로그인 설정
+                .oauth2Login((oauth2Login) -> oauth2Login
+                        .loginPage("/?refType=login") // 로그인 페이지 설정
+                        .userInfoEndpoint(userInfo -> // 사용자 정보 엔드포인트 설정
+                                userInfo.userService(customOAuth2UserService) // 사용자 정보 서비스 지정
+                        )
+                        .failureUrl("/")
+                        .defaultSuccessUrl("/")
+                        .successHandler(customOAuth2AuthenticationSuccessHandler)
+                )
                 // 권한 설정
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login/**","/oauth2/**").permitAll()
@@ -101,16 +111,6 @@ public class SecurityConfig {
                                 "/board/write", "/board/modify", "/board/detail", "/meeting/**",
                                 "/alarm/list", "/moim/checklist").hasRole("USER")
                         .anyRequest().permitAll()
-                )
-                // Oauth2 로그인 설정
-                .oauth2Login(
-                        (oauth2Login) -> oauth2Login
-                                .loginPage("/login") // 로그인 페이지 설정
-                                .defaultSuccessUrl("/", true)
-                                .userInfoEndpoint(userInfo -> // 사용자 정보 엔드포인트 설정
-                                        userInfo.userService(customOAuth2UserService) // 사용자 정보 서비스 지정
-                                )
-                                .successHandler(customOAuth2AuthenticationSuccessHandler)
                 )
                 //로그아웃 설정
                 .logout((logout) -> logout
