@@ -140,11 +140,59 @@ footer .container p { font-weight: 300; color: #fff; }
 .moimList > li .wrap .headcount .headcountToggle:hover + .headcountWrap { display: block; }
 
 /* 메세지 */
-#message {}
-#message .messageToggle { position: fixed; bottom: 100px; left: calc(50% + 730px); display: flex; justify-content: center; align-items: center; width: 60px; height: 60px; background: #fff; box-shadow: 0 0 5px #ccc; border: 1px solid #ccc; border-radius: 100%; cursor: pointer; }
-#message .messageToggle .new { position: absolute; top: 0; right: 0; display: none; width: 15px; height: 15px; background: #ff0000; border-radius: 100%; }
+#message { position: fixed; bottom: 100px; left: calc(50% + 730px); z-index: 2; }
+#message .messageToggle { display: flex; justify-content: center; align-items: center; width: 60px; height: 60px; background: #fff; box-shadow: 0 0 5px #ccc; border: 1px solid #ccc; border-radius: 100%; cursor: pointer; }
+#message .messageToggle span { position: absolute; top: 0; right: 0; display: none; width: 15px; height: 15px; background: #ff0000; border-radius: 100%; }
 #message .messageToggle i { font-size: 1.3rem; }
+#message .messageToggle.new span { display: block; }
 
+#message .messageWrap { position: absolute; bottom: 85px; right: 0; display: flex; pointer-events: none; flex-wrap: wrap; align-items: flex-start; width: 700px; height: 500px; background: #fff; border: 1px solid #ccc; border-radius: 10px; overflow: hidden; opacity: 0; transition: bottom .5s cubic-bezier(0.25, 1, .5, 2), opacity .3s; }
+#message.active .messageWrap { display: flex; bottom: 65px; opacity: 1; pointer-events: auto; }
+
+#message .messageWrap .messageTitle { display: flex; justify-content: space-between; align-items: center; width: 100%; height: 50px; background: #f1f1f1; padding: 0 20px; border-bottom: 1px solid #ccc; }
+#message .messageWrap .messageTitle .titleName { font-weight: 600; font-size: 1.1rem; }
+#message .messageWrap .messageTitle .messageClose { cursor: pointer; }
+
+#message .messageWrap .messageBlank { width: 100%; height: calc(100% - 50px); display: none; justify-content: center; align-items: center; font-size: 1.2rem; }
+
+#message .messageWrap .messageList { display: none; width: 200px; height: calc(100% - 50px); border-right: 1px solid #ccc; overflow: auto; }
+#message .messageWrap .messageList::-webkit-scrollbar { display: none; }
+#message .messageWrap .messageList ul {}
+#message .messageWrap .messageList ul li { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e0e0e0; padding: 10px; cursor: pointer; }
+#message .messageWrap .messageList ul li:hover,
+#message .messageWrap .messageList ul li.active { background: #f1f1f1; }
+
+#message .messageWrap .messageList ul li .thumbnail { position: relative; width: 35px; height: 35px; }
+#message .messageWrap .messageList ul li .thumbnail img { width: 100%; height: 100%; border: 1px solid #ccc; border-radius: 100%; object-fit: cover; overflow: hidden; }
+#message .messageWrap .messageList ul li .thumbnail span { position: absolute; top: 0; right: 0; display: none; width: 10px; height: 10px; background: #ff0000; border-radius: 100%; }
+#message .messageWrap .messageList ul li.new .thumbnail span { display: block; }
+
+#message .messageWrap .messageList ul li .data { width: calc(100% - 50px); font-size: .8rem; }
+#message .messageWrap .messageList ul li .data .content { color: #888; }
+#message .messageWrap .messageList ul li .data .nickname { font-weight: 600; color: #ccc; }
+
+#message .messageWrap .messageContent { display: none; width: calc(100% - 200px); height: calc(100% - 50px); padding: 10px; }
+#message .messageWrap .messageContent ul { height: calc(100% - 80px); padding: 10px 0; overflow: auto; }
+#message .messageWrap .messageContent ul::-webkit-scrollbar { display: none; }
+#message .messageWrap .messageContent ul li { display: flex; position: relative; padding-left: 60px; margin-top: 5px; }
+#message .messageWrap .messageContent ul li .thumbnail { position: absolute; top: 50%; left: 0; transform: translateY(-50%); width: 50px; height: 50px; }
+#message .messageWrap .messageContent ul li .thumbnail img { width: 100%; height: 100%; object-fit: cover; border-radius: 100%; }
+#message .messageWrap .messageContent ul li .data {}
+#message .messageWrap .messageContent ul li .data .info { display: flex; justify-content: flex-start; align-items: center; }
+#message .messageWrap .messageContent ul li .data .info .nickname { font-weight: 600; margin-right: 10px; }
+#message .messageWrap .messageContent ul li .data .info .sendDate { font-size: .8rem; color: #888; }
+#message .messageWrap .messageContent ul li .data .content { background: #EAF4FF; padding: 10px; margin-top: 10px; border-radius: 5px; }
+
+/* 본인 메세지 */
+#message .messageWrap .messageContent ul li.send { padding-left: 0; padding-right: 60px; }
+#message .messageWrap .messageContent ul li.send .thumbnail { left: inherit; right: 0; }
+#message .messageWrap .messageContent ul li.send .data { margin-left: auto; }
+#message .messageWrap .messageContent ul li.send .data .content { background: #FFEAFE; }
+
+#message .messageWrap .messageContent .contentInput { height: 80px; }
+#message .messageWrap .messageContent .contentInput form { height: 100%; }
+#message .messageWrap .messageContent .contentInput textarea { width: 100%; height: 100%; resize: none; padding: 10px; }
+#message .messageWrap .messageContent .contentInput textarea::placeholder { color: #e0e0e0; }
 
 /* 부투스트랩 조정 */
 .badge { font-weight: 400; }
