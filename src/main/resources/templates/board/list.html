@@ -50,19 +50,27 @@
                     </div>
                 </div>
                 <div class="content">
-                    <div class="wrap" th:data-no="${boardBest.board.boardNo}">
-                        <div class="cate">
-                            <span>
-                                <th:block th:if="${boardBest.board.cate == 1}">자유</th:block>
-                                <th:block th:if="${boardBest.board.cate == 2}">개발Q&A</th:block>
-                            </span>
+                    <th:block th:unless="${boardBest.board eq null}">
+                        <div class="wrap"  th:data-no="${boardBest.board.boardNo}">
+                            <div class="cate">
+                                <span>
+                                    <th:block th:if="${boardBest.board.cate == 1}">자유</th:block>
+                                    <th:block th:if="${boardBest.board.cate == 2}">개발Q&A</th:block>
+                                </span>
+                            </div>
+                            <p class="subject">[[${boardBest.board.title}]]</p> <br>
+                            <p class="boardDesc">
+                                <th:block th:utext="${boardBest.board.contents}"></th:block> <br>
+                                조회수 : [[${boardBest.board.hits}]]
+                            </p>
                         </div>
-                        <p class="subject">[[${boardBest.board.title}]]</p> <br>
-                        <p class="boardDesc">
-                            [[${boardBest.board.contents}]] <br> <br>
-                            조회수 : [[${boardBest.board.hits}]]
-                        </p>
-                    </div>
+                    </th:block>
+                    <th:block th:if="${boardBest.board eq null}">
+                        <div class="nullNotice">
+                            <h2>아직 인기 게시물이 없습니다. </h2>
+                            <h2>게시물을 작성해보세요!</h2>
+                        </div>
+                    </th:block>
                 </div>
             </div>
             <div class="wrapperAll">
@@ -71,7 +79,6 @@
                         <div class="title">
                             <p class="subject">커뮤니티</p>
                         </div>
-
                     </div>
                     <div class="search">
                         <div class="selectCategory">

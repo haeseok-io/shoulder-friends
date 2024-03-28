@@ -1,6 +1,7 @@
 package kr.co.shoulf.web.service;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import kr.co.shoulf.web.dto.*;
 import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.repository.*;
@@ -364,10 +365,65 @@ public class MoimService {
         return list;
     }
 
-    public void approveParticipant(Long moimNo, Long userNo) {
-        Moim moim = moimRepository.findById(moimNo).orElse(null);
-        Users users = userRepository.findById(userNo).orElse(null);
-        MoimDTO moimDTO = convertMoimDTO(moim);
+    public void approveParticipant(Long participantNo) {
+        MoimParticipants moimParticipants = moimParticipantsRepository.findById(participantNo).orElse(null);
+        moimParticipants.setStatus(2);
+        moimParticipantsRepository.save(moimParticipants);
+    }
 
+    public void rejectParticipant(Long participantNo, String contents) {
+        MoimParticipants rejectParticipants = moimParticipantsRepository.findById(participantNo).orElse(null);
+        rejectParticipants.setStatus(3);
+
+        MoimParticipantsReject participantsReject  = MoimParticipantsReject.builder()
+                .moimParticipants(rejectParticipants)
+                .contents(contents)
+                .build();
+        moimParticipantsRejectRepository.save(participantsReject);
+    }
+
+    @Transactional
+    public void deleteOne(Long moimNo) {
+        Moim deleteMoim = moimRepository.findById(moimNo).orElse(null);
+        moimLanguageRepository.findByMoim(deleteMoim).forEach(l->{
+            moimLanguageRepository.delete(l);
+        });
+        moimProjectPlatformRepository.deleteByMoim(deleteMoim);
+
+        moimHeadcountRepository.findByMoim(deleteMoim).forEach(h->{
+            h.getMoimParticipantsList().forEach(p->{
+                moimParticipantsRejectRepository.deleteByMoimParticipants(p);
+            });
+            moimParticipantsRepository.deleteByMoimHeadcount(h);
+            moimHeadcountRepository.delete(h);
+        });
+        moimDetailRepository.deleteByMoim(deleteMoim);
+        moimRepository.delete(deleteMoim);
+    }
+
+    public void complete(Long moimNo) {
+        Moim moim = moimRepository.findById(moimNo).orElse(null);
+        moim.setStatus(2);
+        moimRepository.save(moim);
+    }
+
+    public void moimLike(Long moimNo, Users user) {
+        MoimLike moimLike = MoimLike.builder()
+                .users(user)
+                .moim(moimRepository.findById(moimNo).orElse(null))
+                .build();
+        moimLikeRepository.save(moimLike);
+    }
+
+    public MoimLike readLike(Long moimNo, Users user) {
+
+        Moim moim = moimRepository.findById(moimNo).orElse(null);
+        return moimLikeRepository.findByMoimAndUsers_UserNo(moim, user.getUserNo());
+    }
+
+    @Transactional
+    public void deleteLike(Long moimNo, Users user) {
+        Moim moim = moimRepository.findById(moimNo).orElse(null);
+        moimLikeRepository.deleteByMoimAndUsers_UserNo(moim, user.getUserNo());
     }
 }

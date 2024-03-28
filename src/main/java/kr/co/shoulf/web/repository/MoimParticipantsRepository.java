@@ -1,5 +1,6 @@
 package kr.co.shoulf.web.repository;
 
+import kr.co.shoulf.web.entity.Moim;
 import kr.co.shoulf.web.entity.MoimHeadcount;
 import kr.co.shoulf.web.entity.MoimParticipants;
 import kr.co.shoulf.web.entity.Users;
@@ -13,4 +14,6 @@ public interface MoimParticipantsRepository extends JpaRepository<MoimParticipan
     List<MoimParticipants> findByMoimHeadcount(MoimHeadcount moimHeadcount);
     List<MoimParticipants> findByMoimHeadcountAndStatus(MoimHeadcount moimHeadcount, Integer status);
     List<MoimParticipants> findByUsersAndStatus(Users users, Integer status);
+
+    void deleteByMoimHeadcount(MoimHeadcount moimHeadcount);
 }

@@ -12,9 +12,15 @@
         function openPositionModal() {
             document.getElementById("positionModal").style.display = "block";
         }
+        function openRejectModal() {
+            document.getElementById("rejectModal").style.display = "block";
+        }
         // 모달 닫기 함수
         function closePositionModal() {
             document.getElementById("positionModal").style.display = "none";
+        }
+        function closeRejectModal() {
+            document.getElementById("rejectModal").style.display = "none";
         }
 
         $(()=>{
@@ -28,14 +34,6 @@
                 let userNo = $(this).data("no");
                 window.location.href = "/user/detail?no="+userNo;
             });
-
-            // 모달 창 닫기 버튼과 모달 바깥 영역을 클릭하여 모달 닫기
-            window.onclick = function(event) {
-                var modal = document.getElementById("myModal");
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
 
             // 지원하기 버튼 클릭 시
             $(".yet").on("click",function (){
@@ -93,9 +91,62 @@
 
             //거절하기 버튼 클릭시
             $(".rejectBtn").on("click",function (){
+                openRejectModal();
                 console.log("거절하기");
-                let participantUserNo = $(this).closest(".participantList").find(".participantNo").data("no");
-                console.log(participantUserNo)
+                let participantNo = $(this).closest(".participantList").find(".participantNo").data("no");
+                $("#moimParticipantsNo").val(participantNo);
+            })
+            //거절 사유가 비어있을 때
+            $(".reject").submit(function (event){
+                event.preventDefault();
+                let rejectContent = $("#rejectContents").val().trim();
+                if(!rejectContent){
+                    alert("거절 사유를 입력해주세요.");
+                    return;
+                }
+                this.submit();
+            })
+
+            //모임 삭제
+            $(".moimDelete").on("click",function (){
+                let confirmDelete = confirm("정말로 삭제하시겠습니까?");
+                if(confirmDelete){
+                    return true;
+                } else {
+                    return false;
+                }
+            })
+            // 하트(찜) 버튼 클릭시
+            $(".heart").on("click",function (){
+                let heartStatus = $(this).attr("data-heart");
+                console.log(heartStatus);
+                let $currentHeart = $(this);
+                // 좋아요 처리
+                if( heartStatus == "false" ) {
+                    $.ajax({
+                        url: "/moim/heart",
+                        data: {moimNo:moimNo},
+                        success:function () {
+                            // data-heart 속성 변경
+                            $currentHeart.attr("data-heart", true);
+                            // 하트 아이콘 클래스 변경
+                            $currentHeart.find(".bi").removeClass("bi-heart").addClass("bi-heart-fill");
+                        }
+                    })
+                }
+                if( heartStatus == "true" ) {
+                    $.ajax({
+                        url: "/moim/heartDelete",
+                        data: {moimNo:moimNo},
+                        success:function () {
+                            // data-heart 속성 변경
+                            $currentHeart.attr("data-heart", false);
+                            // 하트 아이콘 클래스 변경
+                            $currentHeart.find(".bi").removeClass("bi-heart-fill").addClass("bi-heart");
+                        }
+                    })
+                }
+
             })
         });
     </script>
@@ -119,8 +170,15 @@
                         <span th:if="${moim.status eq 1}">[모집중]</span>
                         <span th:if="${moim.status eq 2}">[모집완료]</span>
                         <div>
-                            <button type="button"><i class="bi bi-share"></i></button> &nbsp;
-                            <button type="button"><i class="bi bi-heart"></i></button>
+                            <button type="button" class="share"><i class="bi bi-share"></i></button> &nbsp;
+                            <button type="button" class="heart" th:data-heart="${moimLike != null ? true : false}">
+                                <th:block th:if="${moimLike != null}">
+                                    <i class="bi bi-heart-fill"></i>
+                                </th:block>
+                                <th:block th:if="${moimLike == null}">
+                                    <i class="bi bi-heart"></i>
+                                </th:block>
+                            </button>
                         </div>
                     </div>
                     <div class="shortDesc">
@@ -183,27 +241,29 @@
                             </div>
                         </th:block>
                         <th:block th:if="${memberTab}">
-                            <div class="recruitStatus">
-                                <div class="title">
-                                    <h2>모집 현황</h2>
+                            <th:block th:if="${moim.status==1}">
+                                <div class="recruitStatus">
+                                    <div class="title">
+                                        <h2>모집 현황</h2>
+                                    </div>
+                                    <ul th:each=" data : ${moim.headcountList}">
+                                        <li class="headcount" th:data-no="${data.moimHeadcountNo}">
+                                            <div class="positionDetail" th:data-no="${data.positionDetail.positionDetailNo}">
+                                                <p th:if="${data.positionDetail}">[[${data.positionDetail.middleName}]]</p>
+                                                <p th:unless="${data.positionDetail}">누구나 가능</p>
+                                            </div>
+                                            <div class="participant">
+                                                <span class="approval">[[${data.participantApprovalList.size()}]]</span> /
+                                                <span class="personnel">[[${data.personnel}]]</span>
+                                            </div>
+                                            <div class="applyBtn">
+                                                <button th:if="${data.participantApprovalList.size() < data.personnel}" type="button" class="yet">지원하기</button>
+                                                <button th:if="${data.participantApprovalList.size() == data.personnel}" type="button" class="done">모집완료</button>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <ul th:each=" data : ${moim.headcountList}">
-                                    <li class="headcount" th:data-no="${data.moimHeadcountNo}">
-                                        <div class="positionDetail" th:data-no="${data.positionDetail.positionDetailNo}">
-                                            <p th:if="${data.positionDetail}">[[${data.positionDetail.middleName}]]</p>
-                                            <p th:unless="${data.positionDetail}">누구나 가능</p>
-                                        </div>
-                                        <div class="participant">
-                                            <span class="approval">[[${data.participantApprovalList.size()}]]</span> /
-                                            <span class="personnel">[[${data.personnel}]]</span>
-                                        </div>
-                                        <div class="applyBtn">
-                                            <button th:if="${data.participantApprovalList.size() < data.personnel}" type="button" class="yet">지원하기</button>
-                                            <button th:if="${data.participantApprovalList.size() == data.personnel}" type="button" class="done">모집완료</button>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                            </th:block>
                             <div id="positionModal" class="positionModal">
                                 <div class="positionModal-content">
                                     <h3 class="title">지원하기</h3>
@@ -244,7 +304,7 @@
                                                 <p class="nickname">
                                                     [[${m.userDetail.users.nickname}]]
                                                     <span class="level">
-                                                        Lv. <span th:text="${m.userJob.level eq null ? '0' : m.userJob.level}"></span>
+                                                        Lv. <span th:text="${m.userJob.level eq null ? '입력안함' : m.userJob.level}"></span>
                                                     </span>
                                                 </p>
                                                 <th:block th:if="${m.userDetail.introduce != null}">
@@ -280,7 +340,7 @@
                                 </div>
                                 <div class="participantWrap">
                                     <ul class="participantList">
-                                        <li class="participantNo" th:each="p : ${participants}" th:data-no="${p.moimParticipantsNo}">
+                                        <li class="participantNo" th:each="p : ${participants}" th:data-no="${p.moimParticipantsNo}" th:if="${p.status == 1}">
                                             <div class="info">
                                                 <div class="thumbnail">
                                                     <a th:href="@{/user/detail(no=${p.users.userNo})}">
@@ -289,7 +349,7 @@
                                                         <p class="nickname">
                                                             [[${p.users.nickname}]]
                                                             <span class="level">
-                                                                Lv. <span th:text="${p.userJob.level eq null ? '0' : p.userJob.level}"></span>
+                                                                Lv. <span th:text="${p.userJob == null ? '입력안함' : p.userJob.level}"></span>
                                                             </span>
                                                         </p>
                                                     </a>
@@ -310,12 +370,26 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <div id="rejectModal" class="rejectModal">
+                                    <div class="rejectModal-content">
+                                        <h3 class="title">거절하기</h3>
+                                        <span class="close" onclick="closeRejectModal();">&times;</span>
+                                        <div class="rejectForm">
+                                            <form action="/moim/rejectParticipant" class="reject" method="post">
+                                                <input type="hidden" name="participantNo" id="moimParticipantsNo" value="">
+                                                <input type="hidden" name="moimNo" th:value="${moim.moimNo}">
+                                                <textarea name="contents" id="rejectContents" placeholder="거절 사유를 입력해주세요."></textarea>
+                                                <input type="submit" class="submitBtn" value="거절하기">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="title">
                                     <h2>모임 관리</h2>
                                 </div>
                                 <div class="moimControl">
-                                    <button type="button" class="moimComplete">모임 완료</button>
-                                    <a href=""><button type="button" class="moimDelete">모임 삭제</button></a>
+                                    <a th:href="@{/moim/complete(no=${moim.moimNo})}"><button type="button" class="moimComplete">모임 완료</button></a>
+                                    <a th:href="@{/moim/delete(no=${moim.moimNo})}"><button type="button" class="moimDelete">모임 삭제</button></a>
                                 </div>
                             </div>
                         </th:block>

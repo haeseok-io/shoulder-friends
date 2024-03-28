@@ -2,8 +2,10 @@ package kr.co.shoulf.web.control;
 
 import jakarta.servlet.http.HttpSession;
 import kr.co.shoulf.web.dto.*;
+import kr.co.shoulf.web.entity.MoimLike;
 import kr.co.shoulf.web.entity.MoimParticipants;
 import kr.co.shoulf.web.entity.Users;
+import kr.co.shoulf.web.repository.UserRepository;
 import kr.co.shoulf.web.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -94,8 +96,39 @@ public class MoimController {
     }
     @PostMapping("/approveParticipant")
     public String approveParticipant(@RequestParam("moimNo") Long moimNo,
-                                     @RequestParam("participantUserNo") Long userNo){
-        moimService.approveParticipant(moimNo, userNo);
+                                     @RequestParam("participantNo") Long participantNo){
+        moimService.approveParticipant(participantNo);
+        return "redirect:/moim/detail?no=" + moimNo;
+    }
+    @PostMapping("/rejectParticipant")
+    public String rejectParticipant(@RequestParam("participantNo") Long participantNo,
+                                    @RequestParam("contents") String contents,
+                                    @RequestParam("moimNo") Long moimNo){
+        moimService.rejectParticipant(participantNo,contents);
+        return "redirect:/moim/detail?no=" + moimNo;
+    }
+
+    @RequestMapping("/delete")
+    public String moimDelete(@RequestParam("no") Long moimNo){
+        moimService.deleteOne(moimNo);
+        return "redirect:/moim/";
+    }
+    @RequestMapping("/complete")
+    public String moimComplete(@RequestParam("no") Long moimNo){
+        moimService.complete(moimNo);
+        return "redirect:/moim/detail?no=" + moimNo;
+    }
+    @RequestMapping("/heart")
+    public String moimLike(@RequestParam("moimNo") Long moimNo,HttpSession session, Model model){
+        Users user = (Users) session.getAttribute("loggedInUser");
+        moimService.moimLike(moimNo, user);
+        return "redirect:/moim/detail?no=" + moimNo;
+    }
+
+    @RequestMapping("/heartDelete")
+    public String moimLikeDelete(@RequestParam("moimNo") Long moimNo,HttpSession session){
+        Users user = (Users) session.getAttribute("loggedInUser");
+        moimService.deleteLike(moimNo, user);
         return "redirect:/moim/detail?no=" + moimNo;
     }
 
@@ -105,6 +138,11 @@ public class MoimController {
         MoimDTO moimDTO = moimService.readOne(moimNo);
         String br = System.getProperty("line.separator").toString();
         model.addAttribute( "nlString", br);
+
+        //하트 검증
+        MoimLike moimLike = moimService.readLike(moimNo, loggedInUser);
+        System.out.println(moimLike);
+        model.addAttribute("moimLike", moimLike);
 
         // 자물쇠 검증
         boolean ableControlTab;
@@ -129,7 +167,6 @@ public class MoimController {
                         .build());
             });
         });
-//        System.out.println(moimMember);
         model.addAttribute("moimMember", moimMember);
 
         // 지원자 읽어오기
@@ -146,11 +183,9 @@ public class MoimController {
                                 .status(p.getStatus())
                                 .reason(p.getReason())
                                 .moimHeadcount(p.getMoimHeadcount())
-                                .build()
-                );
+                                .build());
             });
         });
-        System.out.println(participants);
         model.addAttribute("participants", participants);
         if(loggedInUser != null){
             //관리 탭

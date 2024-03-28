@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface MoimHeadcountRepository extends JpaRepository<MoimHeadcount,Long> {
     List<MoimHeadcount> findByMoim(Moim moim);
+
+    void deleteByMoim(Moim moim);
 }
