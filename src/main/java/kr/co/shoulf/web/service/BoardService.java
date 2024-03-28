@@ -24,9 +24,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BoardService {
     private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
-    private final ReplyRepository replyRepository;
-
     public BoardDTO readBest() {
         LocalDateTime weekAgo = LocalDateTime.now().minusDays(7);
         Page<Board> boards = boardRepository.findTopByHitsWithinLastWeek(weekAgo, PageRequest.of(0,1));
