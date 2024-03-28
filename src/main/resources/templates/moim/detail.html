@@ -108,7 +108,12 @@
             })
 
             $(".moimDelete").on("click",function (){
-
+                let confirmDelete = confirm("정말로 삭제하시겠습니까?");
+                if(confirmDelete){
+                    return true;
+                } else {
+                    return false;
+                }
             })
         });
     </script>
@@ -196,27 +201,29 @@
                             </div>
                         </th:block>
                         <th:block th:if="${memberTab}">
-                            <div class="recruitStatus">
-                                <div class="title">
-                                    <h2>모집 현황</h2>
+                            <th:block th:if="${moim.status==1}">
+                                <div class="recruitStatus">
+                                    <div class="title">
+                                        <h2>모집 현황</h2>
+                                    </div>
+                                    <ul th:each=" data : ${moim.headcountList}">
+                                        <li class="headcount" th:data-no="${data.moimHeadcountNo}">
+                                            <div class="positionDetail" th:data-no="${data.positionDetail.positionDetailNo}">
+                                                <p th:if="${data.positionDetail}">[[${data.positionDetail.middleName}]]</p>
+                                                <p th:unless="${data.positionDetail}">누구나 가능</p>
+                                            </div>
+                                            <div class="participant">
+                                                <span class="approval">[[${data.participantApprovalList.size()}]]</span> /
+                                                <span class="personnel">[[${data.personnel}]]</span>
+                                            </div>
+                                            <div class="applyBtn">
+                                                <button th:if="${data.participantApprovalList.size() < data.personnel}" type="button" class="yet">지원하기</button>
+                                                <button th:if="${data.participantApprovalList.size() == data.personnel}" type="button" class="done">모집완료</button>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <ul th:each=" data : ${moim.headcountList}">
-                                    <li class="headcount" th:data-no="${data.moimHeadcountNo}">
-                                        <div class="positionDetail" th:data-no="${data.positionDetail.positionDetailNo}">
-                                            <p th:if="${data.positionDetail}">[[${data.positionDetail.middleName}]]</p>
-                                            <p th:unless="${data.positionDetail}">누구나 가능</p>
-                                        </div>
-                                        <div class="participant">
-                                            <span class="approval">[[${data.participantApprovalList.size()}]]</span> /
-                                            <span class="personnel">[[${data.personnel}]]</span>
-                                        </div>
-                                        <div class="applyBtn">
-                                            <button th:if="${data.participantApprovalList.size() < data.personnel}" type="button" class="yet">지원하기</button>
-                                            <button th:if="${data.participantApprovalList.size() == data.personnel}" type="button" class="done">모집완료</button>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                            </th:block>
                             <div id="positionModal" class="positionModal">
                                 <div class="positionModal-content">
                                     <h3 class="title">지원하기</h3>

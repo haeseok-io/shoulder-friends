@@ -108,12 +108,13 @@ public class MoimController {
 
     @RequestMapping("/delete")
     public String moimDelete(@RequestParam("no") Long moimNo){
-//        moimService.deleteOne(moimNo);
+        moimService.deleteOne(moimNo);
         return "redirect:/moim/";
     }
     @RequestMapping("/complete")
     public String moimComplete(@RequestParam("no") Long moimNo){
-        return "redirect:/moim/";
+        moimService.complete(moimNo);
+        return "redirect:/moim/detail?no=" + moimNo;
     }
 
     @RequestMapping("/detail")

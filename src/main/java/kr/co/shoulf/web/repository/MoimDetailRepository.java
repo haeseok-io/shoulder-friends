@@ -1,5 +1,6 @@
 package kr.co.shoulf.web.repository;
 
+import kr.co.shoulf.web.entity.Moim;
 import kr.co.shoulf.web.entity.MoimDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,4 +13,6 @@ import java.util.List;
 public interface MoimDetailRepository extends JpaRepository<MoimDetail,Long> {
     List<MoimDetail> findTop2ByOrderByMoimNoDesc();
     List<MoimDetail> findTop8ByOrderByMoim_HitsDesc();
+
+    void deleteByMoim(Moim moim);
 }

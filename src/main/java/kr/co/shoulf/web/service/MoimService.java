@@ -1,6 +1,7 @@
 package kr.co.shoulf.web.service;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import kr.co.shoulf.web.dto.*;
 import kr.co.shoulf.web.entity.*;
 import kr.co.shoulf.web.repository.*;
@@ -381,7 +382,28 @@ public class MoimService {
         moimParticipantsRejectRepository.save(participantsReject);
     }
 
+    @Transactional
     public void deleteOne(Long moimNo) {
-        moimRepository.deleteById(moimNo);
+        Moim deleteMoim = moimRepository.findById(moimNo).orElse(null);
+        moimLanguageRepository.findByMoim(deleteMoim).forEach(l->{
+            moimLanguageRepository.delete(l);
+        });
+        moimProjectPlatformRepository.deleteByMoim(deleteMoim);
+
+        moimHeadcountRepository.findByMoim(deleteMoim).forEach(h->{
+            h.getMoimParticipantsList().forEach(p->{
+                moimParticipantsRejectRepository.deleteByMoimParticipants(p);
+            });
+            moimParticipantsRepository.deleteByMoimHeadcount(h);
+            moimHeadcountRepository.delete(h);
+        });
+        moimDetailRepository.deleteByMoim(deleteMoim);
+        moimRepository.delete(deleteMoim);
+    }
+
+    public void complete(Long moimNo) {
+        Moim moim = moimRepository.findById(moimNo).orElse(null);
+        moim.setStatus(2);
+        moimRepository.save(moim);
     }
 }

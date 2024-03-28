@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface MoimProjectPlatformRepository extends JpaRepository<MoimProjectPlatform,Long> {
     List<MoimProjectPlatform> findByMoim(Moim moim);
+
+    void deleteByMoim(Moim moim);
 }
