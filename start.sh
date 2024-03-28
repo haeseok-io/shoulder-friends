@@ -3,7 +3,7 @@ db_image_name="app"
 db_container_name="web"
 db_password=""
 version=""
-port=8081
+port=80
 
 echo "## Automation docker-database build and run ##"
 
