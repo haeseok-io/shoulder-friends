@@ -96,7 +96,7 @@
                 let participantNo = $(this).closest(".participantList").find(".participantNo").data("no");
                 $("#moimParticipantsNo").val(participantNo);
             })
-
+            //거절 사유가 비어있을 때
             $(".reject").submit(function (event){
                 event.preventDefault();
                 let rejectContent = $("#rejectContents").val().trim();
@@ -107,6 +107,7 @@
                 this.submit();
             })
 
+            //모임 삭제
             $(".moimDelete").on("click",function (){
                 let confirmDelete = confirm("정말로 삭제하시겠습니까?");
                 if(confirmDelete){
@@ -114,6 +115,38 @@
                 } else {
                     return false;
                 }
+            })
+            // 하트(찜) 버튼 클릭시
+            $(".heart").on("click",function (){
+                let heartStatus = $(this).attr("data-heart");
+                console.log(heartStatus);
+                let $currentHeart = $(this);
+                // 좋아요 처리
+                if( heartStatus == "false" ) {
+                    $.ajax({
+                        url: "/moim/heart",
+                        data: {moimNo:moimNo},
+                        success:function () {
+                            // data-heart 속성 변경
+                            $currentHeart.attr("data-heart", true);
+                            // 하트 아이콘 클래스 변경
+                            $currentHeart.find(".bi").removeClass("bi-heart").addClass("bi-heart-fill");
+                        }
+                    })
+                }
+                if( heartStatus == "true" ) {
+                    $.ajax({
+                        url: "/moim/heartDelete",
+                        data: {moimNo:moimNo},
+                        success:function () {
+                            // data-heart 속성 변경
+                            $currentHeart.attr("data-heart", false);
+                            // 하트 아이콘 클래스 변경
+                            $currentHeart.find(".bi").removeClass("bi-heart-fill").addClass("bi-heart");
+                        }
+                    })
+                }
+
             })
         });
     </script>
@@ -137,8 +170,15 @@
                         <span th:if="${moim.status eq 1}">[모집중]</span>
                         <span th:if="${moim.status eq 2}">[모집완료]</span>
                         <div>
-                            <button type="button"><i class="bi bi-share"></i></button> &nbsp;
-                            <button type="button"><i class="bi bi-heart"></i></button>
+                            <button type="button" class="share"><i class="bi bi-share"></i></button> &nbsp;
+                            <button type="button" class="heart" th:data-heart="${moimLike != null ? true : false}">
+                                <th:block th:if="${moimLike != null}">
+                                    <i class="bi bi-heart-fill"></i>
+                                </th:block>
+                                <th:block th:if="${moimLike == null}">
+                                    <i class="bi bi-heart"></i>
+                                </th:block>
+                            </button>
                         </div>
                     </div>
                     <div class="shortDesc">

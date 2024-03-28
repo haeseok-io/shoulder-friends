@@ -2,8 +2,10 @@ package kr.co.shoulf.web.control;
 
 import jakarta.servlet.http.HttpSession;
 import kr.co.shoulf.web.dto.*;
+import kr.co.shoulf.web.entity.MoimLike;
 import kr.co.shoulf.web.entity.MoimParticipants;
 import kr.co.shoulf.web.entity.Users;
+import kr.co.shoulf.web.repository.UserRepository;
 import kr.co.shoulf.web.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -116,6 +118,19 @@ public class MoimController {
         moimService.complete(moimNo);
         return "redirect:/moim/detail?no=" + moimNo;
     }
+    @RequestMapping("/heart")
+    public String moimLike(@RequestParam("moimNo") Long moimNo,HttpSession session, Model model){
+        Users user = (Users) session.getAttribute("loggedInUser");
+        moimService.moimLike(moimNo, user);
+        return "redirect:/moim/detail?no=" + moimNo;
+    }
+
+    @RequestMapping("/heartDelete")
+    public String moimLikeDelete(@RequestParam("moimNo") Long moimNo,HttpSession session){
+        Users user = (Users) session.getAttribute("loggedInUser");
+        moimService.deleteLike(moimNo, user);
+        return "redirect:/moim/detail?no=" + moimNo;
+    }
 
     @RequestMapping("/detail")
     public String detail(@RequestParam("no") Long moimNo, @RequestParam(value = "type", required = false, defaultValue = "info") String type, Model model, HttpSession session){
@@ -123,6 +138,11 @@ public class MoimController {
         MoimDTO moimDTO = moimService.readOne(moimNo);
         String br = System.getProperty("line.separator").toString();
         model.addAttribute( "nlString", br);
+
+        //하트 검증
+        MoimLike moimLike = moimService.readLike(moimNo, loggedInUser);
+        System.out.println(moimLike);
+        model.addAttribute("moimLike", moimLike);
 
         // 자물쇠 검증
         boolean ableControlTab;

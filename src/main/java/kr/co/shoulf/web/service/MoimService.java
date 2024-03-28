@@ -406,4 +406,24 @@ public class MoimService {
         moim.setStatus(2);
         moimRepository.save(moim);
     }
+
+    public void moimLike(Long moimNo, Users user) {
+        MoimLike moimLike = MoimLike.builder()
+                .users(user)
+                .moim(moimRepository.findById(moimNo).orElse(null))
+                .build();
+        moimLikeRepository.save(moimLike);
+    }
+
+    public MoimLike readLike(Long moimNo, Users user) {
+
+        Moim moim = moimRepository.findById(moimNo).orElse(null);
+        return moimLikeRepository.findByMoimAndUsers_UserNo(moim, user.getUserNo());
+    }
+
+    @Transactional
+    public void deleteLike(Long moimNo, Users user) {
+        Moim moim = moimRepository.findById(moimNo).orElse(null);
+        moimLikeRepository.deleteByMoimAndUsers_UserNo(moim, user.getUserNo());
+    }
 }

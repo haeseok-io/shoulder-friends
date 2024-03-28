@@ -12,4 +12,8 @@ import java.util.List;
 public interface MoimLikeRepository extends JpaRepository<MoimLike,Long> {
     List<MoimLike> findByMoim(Moim moim);
     List<MoimLike> findByUsers(Users users);
+
+    MoimLike findByMoimAndUsers_UserNo(Moim moim, Long userNo);
+
+    void deleteByMoimAndUsers_UserNo(Moim moim, Long userNo);
 }
