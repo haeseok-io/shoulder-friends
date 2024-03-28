@@ -231,6 +231,9 @@ function updateMessageList(obj) {
     // - groupNo가 없을경우 넘어온 groupNo로 업데이트
     if( !updateTarget.attr("data-groupNo") ) {
         updateTarget.attr("data-groupNo", obj.groupNo);
+
+        // 메세지 form 에 groupNo 추가하기
+        $("#message .messageContent form[name='messageForm'] input[name='groupNo']").val(obj.groupNo);
     }
 
     // 리스트 업데이트
