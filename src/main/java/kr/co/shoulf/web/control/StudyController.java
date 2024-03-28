@@ -71,7 +71,7 @@ public class StudyController {
                 .addr(dto.getAddr()+" "+dto.getAddrDetail())
                 .x(dto.getX())
                 .y(dto.getY())
-                .mainImg("http://localhost:8081/upload/"+uuid+"_"+originalFilename)
+                .mainImg("/upload/"+uuid+"_"+originalFilename)
                 .member(dto.getMember())
                 .build();
         studyService.saveCafe(studycafe);
@@ -135,7 +135,7 @@ public class StudyController {
                     .addr(address)
                     .x(dto.getX())
                     .y(dto.getY())
-                    .mainImg("http://localhost:8081/upload/"+uuid+"_"+originalFilename)
+                    .mainImg("/upload/"+uuid+"_"+originalFilename)
                     .member(dto.getMember())
                     .build();
             studyService.saveCafe(studycafe);
@@ -244,7 +244,7 @@ public class StudyController {
 
             StudyroomImage studyroomImage = StudyroomImage.builder()
                     .studyroom(studyroom)
-                    .path("http://localhost:8081/upload/"+uuid+"_"+originalFilename)
+                    .path("/upload/"+uuid+"_"+originalFilename)
                     .seq(seq)
                     .build();
             seq++;
@@ -327,7 +327,7 @@ public class StudyController {
 
                 StudyroomImage studyroomImage = StudyroomImage.builder()
                         .studyroom(studyroom)
-                        .path("http://localhost:8081/upload/" + uuid + "_" + originalFilename)
+                        .path("/upload/" + uuid + "_" + originalFilename)
                         .seq(seq)
                         .build();
                 seq++;
