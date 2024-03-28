@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragment/adminLayout}">
+
+<th:block layout:fragment="css">
     <style>
         input[type=file]::file-selector-button{
             display: inline-block;
@@ -80,6 +78,8 @@
             color: #312A38;
         }
     </style>
+</th:block>
+<th:block layout:fragment="js">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         function roomimgs(type) {
@@ -115,8 +115,10 @@
             });
         });
     </script>
-</head>
-<body>
+</th:block>
+
+<th:block layout:fragment="container">
+    <main>
         <div class="container" style="width: 775px">
             <div class="main-title">스터디 룸 등록</div>
             <form action="/study/room/write" method="post" enctype="multipart/form-data">
@@ -180,5 +182,7 @@
                 </div>
             </form>
         </div>
-</body>
+    </main>
+</th:block>
+
 </html>

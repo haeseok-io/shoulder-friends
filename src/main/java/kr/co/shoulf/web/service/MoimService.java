@@ -19,11 +19,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MoimService {
+    private final UserRepository userRepository;
     private final MoimRepository moimRepository;
     private final MoimDetailRepository moimDetailRepository;
     private final MoimLikeRepository moimLikeRepository;
@@ -79,6 +81,24 @@ public class MoimService {
 
     public MoimDTO readOne(Long moimNo) {
         return convertMoimDTO(moimRepository.findById(moimNo).orElse(null));
+    }
+
+    //모임 지원하기
+    public void applyParticipant(Integer positionDetailNo, Long moimHeadcountNo, HttpSession session, MoimParticipants moimParticipants) {
+        Users users = (Users) session.getAttribute("loggedInUser");
+        Optional<PositionDetail> positionDetailResult = positionDetailRepository.findById(positionDetailNo);
+        PositionDetail positionDetail = positionDetailResult.get();
+        Optional<MoimHeadcount> moimHeadcountResult = moimHeadcountRepository.findById(moimHeadcountNo);
+        MoimHeadcount moimHeadcount = moimHeadcountResult.get();
+        moimHeadcount.setPositionDetail(positionDetail);
+        MoimParticipants insertData = MoimParticipants.builder()
+                        .reason(moimParticipants.getReason())
+                        .job(moimParticipants.getJob())
+                        .users(users)
+                        .moimHeadcount(moimHeadcount)
+                        .status(1)
+                        .build();
+        moimParticipantsRepository.save(insertData);
     }
 
     // 모임 등록/수정
@@ -342,5 +362,12 @@ public class MoimService {
         });
 
         return list;
+    }
+
+    public void approveParticipant(Long moimNo, Long userNo) {
+        Moim moim = moimRepository.findById(moimNo).orElse(null);
+        Users users = userRepository.findById(userNo).orElse(null);
+        MoimDTO moimDTO = convertMoimDTO(moim);
+
     }
 }

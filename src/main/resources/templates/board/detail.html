@@ -73,7 +73,7 @@
                             let formattedDate = year + '년 ' + month + '월 ' + day + '일 ' + hours + ':' + minutes;
                             let tag = "<div class=\"recommentWrap\" data-no=\"" + child.replyNo + "\">\n" +
                                 "                                <div class=\"commentsHeader\">\n" +
-                                "                                    <a href=\"/user/detail\">\n" +
+                                "                                    <a href=\"/user/detail?no=" + child.users.userNo + "\">\n" +
                                 "                                        <div class=\"writerProfile\">\n" +
                                 "                                            <img src=\""+ child.users.userDetail.profileImg+ "\" alt=\"\">\n" +
                                 "                                        </div>\n" +
@@ -132,10 +132,12 @@
                             <p class="boardDetailInfo">
                                 <span>작성일: [[${#dates.format(boardDetail.board.regdate, 'yyyy년 MM월 dd일 HH:mm')}]] </span>
                                 <span>조회수: [[${boardDetail.board.hits}]]</span>
-                                <span class="wrapModify">
-                                    <a th:href="@{/board/delete(boardNo=${boardDetail.board.boardNo})}">삭제</a>
-                                    <a th:href="@{/board/modify(boardNo=${boardDetail.board.boardNo})}">수정</a>
-                                </span>
+                                <th:block th:if="${sameUser}">
+                                    <span class="wrapModify">
+                                        <a th:href="@{/board/modify(boardNo=${boardDetail.board.boardNo})}">수정</a>
+                                        <a th:href="@{/board/delete(boardNo=${boardDetail.board.boardNo})}">삭제</a>
+                                    </span>
+                                </th:block>
                             </p>
                         </div>
                     </div>
@@ -168,7 +170,7 @@
                         <th:block th:each="reply : ${replyList}" th:if="${reply.parentReply == null}">
                             <div class="commentWrap" th:data-no="${reply.replyNo}">
                                 <div class="commentsHeader">
-                                    <a href="/user/detail">
+                                    <a th:href="@{/user/detail(no=${reply.users.userNo})}">
                                         <div class="writerProfile">
                                             <img th:src="${reply.users.userDetail.profileImg}" alt="">
                                         </div>
@@ -207,10 +209,12 @@
                 </div>
             </div>
             <aside class="detailSidebar">
-                <div class="userProfile">
-                    <p>[[${boardDetail.board.users.nickname}]]</p>
-                    <img th:src="${boardDetail.board.users.userDetail.profileImg}" alt="">
-                </div>
+                <a th:href="@{/user/detail(no=${boardDetail.board.users.userNo})}">
+                    <div class="userProfile">
+                        <p>[[${boardDetail.board.users.nickname}]]</p>
+                        <img th:src="${boardDetail.board.users.userDetail.profileImg}" alt="">
+                    </div>
+                </a>
             </aside>
         </div>
     </main>

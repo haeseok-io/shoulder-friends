@@ -217,7 +217,7 @@ public class MeetingService {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        Reservation reservation = reservationRepository.findByCheckinAndStudyroom_StudyroomNo(date, roomNo2);
+        Reservation reservation = reservationRepository.findByCheckinAndStudyroom_StudyroomNoAndStatus(date, roomNo2, 1);
         Payment payment = paymentRepository.findByReservation_ReservationNo(reservation.getReservationNo());
 
         reservation.setStatus(2);

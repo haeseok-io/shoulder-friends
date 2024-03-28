@@ -1,0 +1,56 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="header">
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>
+                    <a href="/admin/"><img src="/images/logo.png" alt=""></a>
+                </h1>
+            </div>
+
+            <div class="gnb">
+                <ul>
+                    <li><a href="/member/">직원 목록</a></li>
+                    <li><a href="/annual/list" >연차 전체 내역</a></li>
+                    <li><a href="/commute/" >출퇴근 입력</a></li>
+                    <li><a href="/study/cafe/list" >스터디 카페</a></li>
+                    <li><a href="/admin/logout">로그아웃</a></li>
+
+<!--                    <a href="/annual/list" class="btn btn-primary mb-2">연차 전체 내역</a><br>-->
+<!--                    <a href="/commute/" class="btn btn-primary mb-2">출퇴근 입력</a><br>-->
+<!--                    <a href="/study/cafe/list" class="btn btn-primary mb-2">스터디 카페</a><br>-->
+<!--                    <a href="/admin/logout" class="btn btn-danger">로그아웃</a>-->
+
+<!--                    <li><a href="/moim/">모임</a></li>-->
+<!--                    <li><a href="/user/">팀원찾기</a></li>-->
+<!--                    <li><a href="/board/">커뮤니티</a></li>-->
+                </ul>
+            </div>
+
+            <div class="write">
+                <a href="/moim/write">
+                    <i class="bi bi-plus"></i>
+                    모임 등록하기
+                </a>
+            </div>
+
+            <div class="etc">
+                <div class="headerAlram">
+                    <div class="alramToggle">
+                        <i class="bi bi-bell"></i>
+                    </div>
+                </div>
+                <div class="headerUser">
+                    <div class="userToggle">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+</th:block>
+
+</html>
+

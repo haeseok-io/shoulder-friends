@@ -23,9 +23,15 @@
                 </span><br>
                 <span>지급 갯수 : <input type="number" name="num">개</span><br>
                 <span>지급 사유 : <input type="text" name="reason"></span><br>
-                <span><input type="submit" value="확인"></span>
+                <span><input type="submit" value="확인" onclick="completeGrant()"></span>
             </form>
         </div>
     </div>
+    <script>
+        function completeGrant() {
+            window.close();
+            alert("지급이 완료되었습니다.");
+        }
+    </script>
 </body>
 </html>

@@ -16,6 +16,7 @@ public interface MoimRepository extends JpaRepository<Moim,Long> {
     List<Moim> findTop8ByOrderByHitsDesc();
     List<Moim> findByUsers_UserNo(Long userNo);
     Moim findByMoimHeadcountList_MoimHeadcountNo(Long moimHeadcountNo);
+    List<Moim> findByUsers(Users user);
 
     // 회원번호로 해당 회원이 참여중인 모임 찾기
     @Query("Select m From Moim m " +

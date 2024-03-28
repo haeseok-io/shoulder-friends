@@ -1,69 +1,12 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragment/layout}">
+<html xmlns:th="http://www.thymeleaf.org">
 
-<th:block layout:fragment="css">
+<th:block th:fragment="detail">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
     <style>
-        main .container {
-            width: 1400px;
-            max-width: 1400px;
-            margin: 0 auto; /* 가운데 정렬을 위해 추가 */
-            /*display: flex;*/
-            justify-content: space-between;
-            background-color: #f2f2f2; /* 배경색 추가 */
-            padding: 20px; /* 내부 여백 추가 */
-        }
-        .moimHeaderWrap{display: flex; margin-top: 50px;}
-        .moimThumbnail{width: 45%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px;}
-        .moimThumbnail img{width: 550px; height: 300px;}
-        .moimHeaderContents{width: 65%; margin-left: 50px;}
-        .moimHeaderContents .title{font-weight: bold; color: black;}
-        .moimHeaderContents > div {margin-bottom: 13px; /* 각 요소 사이에 10px의 아래 여백을 추가합니다. */}
-        .moimTitle{ display: flex;}
-        .moimTitle span{margin-top: 13px; margin-left: 10px; text-align: center;}
-        .moimTitle div{margin-left: 200px;}
-        .moimTitle div button{outline: none; border: none;}
-        .moimLanguage .moimLanguageList{ display: flex; align-items: center; height: 50px;}
-        .moimLanguage .item{text-align: center;  margin-right: 10px; margin-left: 1px;}
-        .moimLanguage .item img{width: 30px; height: auto;}
-        /*(위)헤더 ------------ 본문(아래)*/
-        .moimPageWrap{display: flex; margin-top: 60px;}
-        .moimDetailContents{width: 75%;}
-        .moimRightInfoContents {
-            width: 25%;
-            margin-left: 10px;
-            background-color: #fff; /* 배경색 추가 */
-            padding: 20px; /* 내부 여백 추가 */
-            border-radius: 8px; /* 모서리를 둥글게 만듦 */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
-        }
-        .moimTabMenu ul{
-            display: flex;
-            height: 50px;
-            line-height: 50px;
-            padding: 0; /* 기본 여백 제거 */
-            list-style: none; /* 기본 목록 스타일 제거 */
-            justify-content: space-between; /* 요소들을 동일한 간격으로 분산 배치 */
-            border-top: 1px solid #ccc; /* 상단에 선 추가 */
-            border-bottom: 1px solid #ccc; /* 하단에 선 추가 */
-        }
-        .moimTabMenu ul li {
-            flex-grow: 1; /* 동일한 너비를 갖도록 설정 */
-            text-align: center; /* 텍스트 가운데 정렬 */
-            border-right: 1px solid transparent;
-        }
-        .moimTabMenu ul li:not(:last-child) {border-right: 1px solid #ccc; /* 오른쪽에 선 추가 (마지막 요소 제외) */}
-        .moimTabMenu ul li:hover {background-color: #7B27FF; /* 마우스를 갖다 대었을 때 배경색 변경 */}
-        .moimTabMenu ul li:hover a {color: #fff; /* 마우스를 갖다 대었을 때 링크의 글자색 변경 */}
-        .userProfile {text-align: center; /* 텍스트 가운데 정렬 */}
-        .userProfile img {
-            max-width: 100%; /* 이미지가 부모 요소를 넘어가지 않도록 함 */
-            border-radius: 50%; /* 이미지를 원형으로 만듦 */
-            margin-top: 10px; /* 이미지 위 여백 추가 */
-        }
-
         #calendar {
-            max-width: 900px;
+            max-width: 700px;
             margin: 40px 0;
         }
         #addCalendar, #modifyCalendar, #modify, #addMeeting{
@@ -148,9 +91,6 @@
             background: #ECF2F3 !important;
         }
     </style>
-</th:block>
-
-<th:block layout:fragment="js">
     <!-- jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- bootstrap 4 -->
@@ -613,300 +553,217 @@
             });
         }
     </script>
-</th:block>
-
-<th:block layout:fragment="container">
-    <main>
-        <div class="container">
-            <div class="moimHeaderWrap">
-                <div class="moimThumbnail">
-                    <img th:src="${moim.moimDetail.moimImg}" alt="">
-                </div>
-                <div class="moimHeaderContents">
-                    <div class="moimPurposeWrap">
-                        <span class="badge badge-size-lg badge-project" th:if="${moim.type eq 'project'}"> 프로젝트 </span>
-                        <span class="badge badge-size-lg badge-study" th:if="${moim.type eq 'study'}"> 스터디 </span>
-                    </div>
-                    <div class="moimTitle">
-                        <h2 class="title">[[${moim.subject}]]</h2>
-                        <span th:if="${moim.status eq 1}">모집중</span>
-                        <span th:if="${moim.status eq 2}">모집완료</span>
-                        <div>
-                            <button type="button"><i class="bi bi-share"></i></button>  &nbsp;
-                            <button type="button"><i class="bi bi-heart"></i></button>
+</head>
+<body>
+        <div class="container" style="margin-top: 50px; margin-bottom: 50px; margin-left: 135px; width: 750px;">
+            <div id="calendarBox" style="width: 700px;">
+                <div id="calendar"></div>
+            </div>
+            <input type="hidden" name="moimUser" id="moimUser" th:value="${moimUser.userNo}">
+            <input type="hidden" name="myNo" id="myNo" th:value="${session.loggedInUser.getUserNo()}">
+            <!-- modal 추가 -->
+            <div class="modal fade" id="calendarModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel" style="font-weight: 500;font-size: 1.4rem;">미팅을 추가하세요.</h5>
                         </div>
-                    </div>
-                    <div class="shortDesc">
-                        <p>[[${moim.shortDesc}]]</p>
-                    </div>
-                    <div class="moimCate">
-                        <h4 class="title">모임 분야</h4>
-                        <th:block th:if="${moim.moimDetail.category != null}">
-                            <p th:text="${moim.moimDetail.category.categoryName}"></p>
-                        </th:block>
-                        <th:block th:if="${moim.moimDetail.studyCategory != null}">
-                            <p th:text="${moim.moimDetail.studyCategory.studyCategoryName}"></p>
-                        </th:block>
-                    </div>
-                    <div class="moimLanguage">
-                        <h4 class="title">사용 언어 및 기술</h4>
-                        <ul class="moimLanguageList">
-                            <li th:each="language : ${moim.languageList}">
-                                <div class="item" th:if="${language.path==null}">
-                                    <span class="badge rounded-pill text-bg-secondary">[[${language.name}]]</span>
-                                </div>
-                                <div class="item" th:if="${language.path!=null}">
-                                    <img th:src="${language.path}" alt="">
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <th:block th:if="${moim.type eq 'project'}">
-                        <div class="moimPlatform">
-                            <h4 class="title">출시 플랫폼</h4>
-                            <ul class="moimPlatformList">
-                                <li th:each="platformList : ${moim.projectPlatformList}">
-                                    <div class="item">
-                                        <span class="badge rounded-pill text-bg-secondary">[[${platformList.platform.name}]]</span>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="calendar_content" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 내용</label>
+                                <input type="text" class="form-control" id="calendar_content" name="calendar_content" placeholder="미팅 내용을 적어주세요.">
+                                <label for="calendar_addr" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 주소</label>
+                                <input type="text" class="form-control" id="calendar_addr" name="calendar_addr" placeholder="미팅 장소의 주소를 상세하게 적어주세요.">
+                                <label for="calendar_start_date" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 날짜</label>
+                                <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
+                            </div>
+                            <div class="form-group">
+                                <label for="start_time" style="font-size: 18px;font-weight: 600; padding: 9px 0;">시작 시간</label>
+                                <select class="form-control" id="start_time" name="start_time">
+                                    <option value="09:00:00">09:00</option>
+                                    <option value="09:30:00">09:30</option>
+                                    <option value="10:00:00">10:00</option>
+                                    <option value="10:30:00">10:30</option>
+                                    <option value="11:00:00">11:00</option>
+                                    <option value="11:30:00">11:30</option>
+                                    <option value="12:00:00">12:00</option>
+                                    <option value="12:30:00">12:30</option>
+                                    <option value="13:00:00">13:00</option>
+                                    <option value="13:30:00">13:30</option>
+                                    <option value="14:00:00">14:00</option>
+                                    <option value="14:30:00">14:30</option>
+                                    <option value="15:00:00">15:00</option>
+                                    <option value="15:30:00">15:30</option>
+                                    <option value="16:00:00">16:00</option>
+                                    <option value="16:30:00">16:30</option>
+                                    <option value="17:00:00">17:00</option>
+                                    <option value="17:30:00">17:30</option>
+                                    <option value="18:00:00">18:00</option>
+                                    <option value="18:30:00">18:30</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="btnn" class="col-form-label" style="font-size: 18px;font-weight: 600;">어깨동무 스터디 카페</label>
+                                <p class="d-inline-flex gap-1">
+                                    <button class="btn btn-secondary" id="btnn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onclick="opencafe();">
+                                        이용하기
+                                    </button>
+                                </p>
+                                <div class="collapse show" id="collapseExample">
+                                    <div class="card card-body">
+                                        <label for="studycafename" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 카페 지점</label>
+                                        <input type="text" class="form-control" id="studycafename" name="studycafename" readonly>
+                                        <label for="studyroomname" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 룸</label>
+                                        <input type="text" class="form-control" id="studyroomname" name="studyroomname" readonly>
+                                        <label for="price" class="col-form-label" style="font-size: 17px;font-weight: 600;">가격</label>
+                                        <input type="text" class="form-control" id="price" name="price" readonly>
+                                        <div id="paymentName">
+                                            <label for="name" class="col-form-label" style="font-size: 17px;font-weight: 600;">결제자 이름</label>
+                                            <input type="text" class="form-control" id="name" name="name">
+                                            <input type="hidden" id="email" name="email" th:value="${session.loggedInUser.email}">
+                                            <input type="hidden" name="approval" id="approvalNum">
+                                            <input type="hidden" name="card" id="cardNum">
+                                            <input type="hidden" name="amount" id="amount">
+                                            <input type="hidden" name="moimNo" id="moimNo" th:value="${moimNo}">
+                                            <input type="hidden" name="merchantUid" id="merchantUid">
+                                        </div>
+                                        <input type="hidden" name="studycafeNo" id="studycafeNo">
+                                        <input type="hidden" name="studyroomNo" id="studyroomNo">
                                     </div>
-                                </li>
-                            </ul>
+                                </div>
+                            </div>
                         </div>
-                    </th:block>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn" id="addMeeting">결제 넘기기</button>
+                            <button type="button" class="btn btn" id="addCalendar">등록</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="sprintSettingModalClose">취소</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="moimPageWrap">
-                <div class="moimDetailContents">
-                    <div class="moimTabMenu">
-                        <ul>
-                            <li><a th:href="@{/moim/detail(no=${moim.moimNo})}">정보</a></li>
-                            <li><a href="">멤버</a></li>
-                            <li><a th:href="@{/moim/checklist(moimNo=${moim.moimNo})}">할일 <i class="bi bi-lock"></i></a></li>
-                            <li><a th:href="@{/meeting/detail(moimNo=${moim.moimNo})}">미팅 <i class="bi bi-lock"></i></a></li>
-                            <li th:if="${moim.users}"><a href="">관리 <i class="bi bi-lock"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="moimDetailWrap" style="margin-top: 80px; margin-bottom: 80px; margin-left: 120px;">
 
-                    <div id="calendarBox" style="width: 750px;">
-                        <div id="calendar"></div>
-                    </div>
-                    <input type="hidden" name="moimUser" id="moimUser" th:value="${moimUser.userNo}">
-                    <input type="hidden" name="myNo" id="myNo" th:value="${session.loggedInUser.getUserNo()}">
-                    <!-- modal 추가 -->
-                    <div class="modal fade" id="calendarModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel" style="font-weight: 500;font-size: 1.4rem;">미팅을 추가하세요.</h5>
+            <div class="modal fade" id="ckeckmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div id="body1">
+                            <div class="modal-header">
+                                <h5 class="modal-title" style="font-weight: 500;font-size: 1.4rem;">미팅 상세</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="content" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 내용</label>
+                                    <input type="text" class="form-control-plaintext" id="content" name="content" readonly style="border:none;" >
                                 </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <label for="calendar_content" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 내용</label>
-                                        <input type="text" class="form-control" id="calendar_content" name="calendar_content" placeholder="미팅 내용을 적어주세요.">
-                                        <label for="calendar_addr" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 주소</label>
-                                        <input type="text" class="form-control" id="calendar_addr" name="calendar_addr" placeholder="미팅 장소의 주소를 상세하게 적어주세요.">
-                                        <label for="calendar_start_date" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 날짜</label>
-                                        <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="start_time" style="font-size: 18px;font-weight: 600; padding: 9px 0;">시작 시간</label>
-                                        <select class="form-control" id="start_time" name="start_time">
-                                            <option value="09:00:00">09:00</option>
-                                            <option value="09:30:00">09:30</option>
-                                            <option value="10:00:00">10:00</option>
-                                            <option value="10:30:00">10:30</option>
-                                            <option value="11:00:00">11:00</option>
-                                            <option value="11:30:00">11:30</option>
-                                            <option value="12:00:00">12:00</option>
-                                            <option value="12:30:00">12:30</option>
-                                            <option value="13:00:00">13:00</option>
-                                            <option value="13:30:00">13:30</option>
-                                            <option value="14:00:00">14:00</option>
-                                            <option value="14:30:00">14:30</option>
-                                            <option value="15:00:00">15:00</option>
-                                            <option value="15:30:00">15:30</option>
-                                            <option value="16:00:00">16:00</option>
-                                            <option value="16:30:00">16:30</option>
-                                            <option value="17:00:00">17:00</option>
-                                            <option value="17:30:00">17:30</option>
-                                            <option value="18:00:00">18:00</option>
-                                            <option value="18:30:00">18:30</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="btnn" class="col-form-label" style="font-size: 18px;font-weight: 600;">어깨동무 스터디 카페</label>
-                                        <p class="d-inline-flex gap-1">
-                                            <button class="btn btn-secondary" id="btnn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onclick="opencafe();">
-                                                이용하기
-                                            </button>
-                                        </p>
-                                        <div class="collapse show" id="collapseExample">
-                                            <div class="card card-body">
-                                                <label for="studycafename" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 카페 지점</label>
-                                                <input type="text" class="form-control" id="studycafename" name="studycafename" readonly>
-                                                <label for="studyroomname" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 룸</label>
-                                                <input type="text" class="form-control" id="studyroomname" name="studyroomname" readonly>
-                                                <label for="price" class="col-form-label" style="font-size: 17px;font-weight: 600;">가격</label>
-                                                <input type="text" class="form-control" id="price" name="price" readonly>
-                                                <div id="paymentName">
-                                                    <label for="name" class="col-form-label" style="font-size: 17px;font-weight: 600;">결제자 이름</label>
-                                                    <input type="text" class="form-control" id="name" name="name">
-                                                    <input type="hidden" id="email" name="email" th:value="${session.loggedInUser.email}">
-                                                    <input type="hidden" name="approval" id="approvalNum">
-                                                    <input type="hidden" name="card" id="cardNum">
-                                                    <input type="hidden" name="amount" id="amount">
-                                                    <input type="hidden" name="moimNo" id="moimNo" th:value="${moimNo}">
-                                                    <input type="hidden" name="merchantUid" id="merchantUid">
-                                                </div>
-                                                <input type="hidden" name="studycafeNo" id="studycafeNo">
-                                                <input type="hidden" name="studyroomNo" id="studyroomNo">
-                                            </div>
+                                <div class="form-group">
+                                    <label for="addr" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 주소</label>
+                                    <input type="text" class="form-control-plaintext" id="addr" name="addr" readonly style="border:none;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="start_date" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 날짜</label>
+                                    <input type="text" class="form-control-plaintext" id="start_date" name="start_date" readonly style="border:none;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="time" class="col-form-label" style="font-size: 18px;font-weight: 600;">시작 시간</label>
+                                    <input type="text" class="form-control-plaintext" id="time" name="time" readonly style="border:none;">
+                                </div>
+                                <div class="form-group" id="cafeonly">
+                                    <label for="collapseExample2" class="col-form-label" style="font-size: 18px;font-weight: 600;">어깨동무 스터디 카페</label>
+                                    <div class="collapse show" id="collapseExample2">
+                                        <div class="card card-body" style="padding: 10px 15px;">
+                                            <label for="cafename" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 카페</label>
+                                            <input type="text" class="form-control-plaintext" id="cafename" name="cafename" readonly style="border:none;">
+                                            <label for="roomname" class="col-form-label" style="font-size: 17px;font-weight: 600;margin-top: 16px;">스터디 룸</label>
+                                            <input type="text" class="form-control-plaintext" id="roomname" name="roomname" readonly style="border:none;">
+                                            <input type="hidden" name="roomNo" id="roomNo">
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div th:if="${session.loggedInUser.email == moimUser.email}">
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn" id="addMeeting">결제 넘기기</button>
-                                    <button type="button" class="btn btn" id="addCalendar">등록</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="sprintSettingModalClose">취소</button>
+                                    <button type="button" class="btn btn" id="modifyCalendar">일정 수정</button>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="modal fade" id="ckeckmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-
-                                <div id="body1">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" style="font-weight: 500;font-size: 1.4rem;">미팅 상세</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label for="content" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 내용</label>
-                                            <input type="text" class="form-control-plaintext" id="content" name="content" readonly style="border:none;" >
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="addr" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 주소</label>
-                                            <input type="text" class="form-control-plaintext" id="addr" name="addr" readonly style="border:none;">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="start_date" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 날짜</label>
-                                            <input type="text" class="form-control-plaintext" id="start_date" name="start_date" readonly style="border:none;">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="time" class="col-form-label" style="font-size: 18px;font-weight: 600;">시작 시간</label>
-                                            <input type="text" class="form-control-plaintext" id="time" name="time" readonly style="border:none;">
-                                        </div>
-                                        <div class="form-group" id="cafeonly">
-                                            <label for="collapseExample2" class="col-form-label" style="font-size: 18px;font-weight: 600;">어깨동무 스터디 카페</label>
-                                            <div class="collapse show" id="collapseExample2">
-                                                <div class="card card-body" style="padding: 10px 15px;">
-                                                    <label for="cafename" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 카페</label>
-                                                    <input type="text" class="form-control-plaintext" id="cafename" name="cafename" readonly style="border:none;">
-                                                    <label for="roomname" class="col-form-label" style="font-size: 17px;font-weight: 600;margin-top: 16px;">스터디 룸</label>
-                                                    <input type="text" class="form-control-plaintext" id="roomname" name="roomname" readonly style="border:none;">
-                                                    <input type="hidden" name="roomNo" id="roomNo">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div th:if="${session.loggedInUser.email == moimUser.email}">
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn" id="modifyCalendar">일정 수정</button>
+                        <form action="/meeting/modify" method="post" name="modifyform" id="modifyform">
+                        <div id="body2">
+                            <div class="modal-header">
+                                <h5 class="modal-title" style="font-weight: 500;font-size: 1.4rem;">미팅 수정</h5>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="content2" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 내용</label>
+                                    <input type="text" class="form-control" id="content2" name="title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="addr2" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 주소</label>
+                                    <input type="text" class="form-control" id="addr2" name="addr">
+                                </div>
+                                <div class="form-group">
+                                    <label for="calendar_start_date2" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 날짜</label>
+                                    <input type="date" class="form-control" id="calendar_start_date2" name="startDate">
+                                    <input type="hidden" name="moimNo" th:value="${moimNo}">
+                                    <input type="hidden" name="endDate" id="endDate2">
+                                    <input type="hidden" name="meetingdate" id="meetingdate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="start_time2" style="font-size: 18px;font-weight: 600; padding: 9px 0;">시작 시간</label>
+                                    <select class="form-control" id="start_time2" name="startTime">
+                                        <option value="09:00:00">09:00</option>
+                                        <option value="09:30:00">09:30</option>
+                                        <option value="10:00:00">10:00</option>
+                                        <option value="10:30:00">10:30</option>
+                                        <option value="11:00:00">11:00</option>
+                                        <option value="11:30:00">11:30</option>
+                                        <option value="12:00:00">12:00</option>
+                                        <option value="12:30:00">12:30</option>
+                                        <option value="13:00:00">13:00</option>
+                                        <option value="13:30:00">13:30</option>
+                                        <option value="14:00:00">14:00</option>
+                                        <option value="14:30:00">14:30</option>
+                                        <option value="15:00:00">15:00</option>
+                                        <option value="15:30:00">15:30</option>
+                                        <option value="16:00:00">16:00</option>
+                                        <option value="16:30:00">16:30</option>
+                                        <option value="17:00:00">17:00</option>
+                                        <option value="17:30:00">17:30</option>
+                                        <option value="18:00:00">18:00</option>
+                                        <option value="18:30:00">18:30</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="cafeonly2">
+                                    <label for="btnn1" class="col-form-label" style="font-size: 18px;font-weight: 600;">어깨동무 스터디 카페</label>
+                                    <p class="d-inline-flex gap-1">
+                                        <button class="btn btn-secondary" id="btnn1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onclick="offCafe();">
+                                            예약 취소
+                                        </button>
+                                    </p>
+                                    <div class="collapse show" id="collapseExample3">
+                                        <div class="card card-body">
+                                            <label for="cafename2" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 카페</label>
+                                            <input type="text" class="form-control-plaintext" id="cafename2" name="cafename2" readonly>
+                                            <label for="roomname2" class="col-form-label" style="font-size: 17px;font-weight: 600;margin-top: 16px;">스터디 룸</label>
+                                            <input type="text" class="form-control-plaintext" id="roomname2" name="roomname2" readonly>
+                                            <input type="hidden" name="roomNo2" id="roomNo2">
                                         </div>
                                     </div>
                                 </div>
-
-                                <form action="/meeting/modify" method="post" name="modifyform" id="modifyform">
-                                <div id="body2">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" style="font-weight: 500;font-size: 1.4rem;">미팅 수정</h5>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label for="content2" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 내용</label>
-                                            <input type="text" class="form-control" id="content2" name="title">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="addr2" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 주소</label>
-                                            <input type="text" class="form-control" id="addr2" name="addr">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="calendar_start_date2" class="col-form-label" style="font-size: 18px;font-weight: 600;">미팅 날짜</label>
-                                            <input type="date" class="form-control" id="calendar_start_date2" name="startDate">
-                                            <input type="hidden" name="moimNo" th:value="${moimNo}">
-                                            <input type="hidden" name="endDate" id="endDate2">
-                                            <input type="hidden" name="meetingdate" id="meetingdate">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="start_time2" style="font-size: 18px;font-weight: 600; padding: 9px 0;">시작 시간</label>
-                                            <select class="form-control" id="start_time2" name="startTime">
-                                                <option value="09:00:00">09:00</option>
-                                                <option value="09:30:00">09:30</option>
-                                                <option value="10:00:00">10:00</option>
-                                                <option value="10:30:00">10:30</option>
-                                                <option value="11:00:00">11:00</option>
-                                                <option value="11:30:00">11:30</option>
-                                                <option value="12:00:00">12:00</option>
-                                                <option value="12:30:00">12:30</option>
-                                                <option value="13:00:00">13:00</option>
-                                                <option value="13:30:00">13:30</option>
-                                                <option value="14:00:00">14:00</option>
-                                                <option value="14:30:00">14:30</option>
-                                                <option value="15:00:00">15:00</option>
-                                                <option value="15:30:00">15:30</option>
-                                                <option value="16:00:00">16:00</option>
-                                                <option value="16:30:00">16:30</option>
-                                                <option value="17:00:00">17:00</option>
-                                                <option value="17:30:00">17:30</option>
-                                                <option value="18:00:00">18:00</option>
-                                                <option value="18:30:00">18:30</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group" id="cafeonly2">
-                                            <label for="btnn1" class="col-form-label" style="font-size: 18px;font-weight: 600;">어깨동무 스터디 카페</label>
-                                            <p class="d-inline-flex gap-1">
-                                                <button class="btn btn-secondary" id="btnn1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onclick="offCafe();">
-                                                    예약 취소
-                                                </button>
-                                            </p>
-                                            <div class="collapse show" id="collapseExample3">
-                                                <div class="card card-body">
-                                                    <label for="cafename2" class="col-form-label" style="font-size: 17px;font-weight: 600;">스터디 카페</label>
-                                                    <input type="text" class="form-control-plaintext" id="cafename2" name="cafename2" readonly>
-                                                    <label for="roomname2" class="col-form-label" style="font-size: 17px;font-weight: 600;margin-top: 16px;">스터디 룸</label>
-                                                    <input type="text" class="form-control-plaintext" id="roomname2" name="roomname2" readonly>
-                                                    <input type="hidden" name="roomNo2" id="roomNo2">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn" id="modify" style="box-shadow: none;">저장</button>
-                                        <button type="button" class="btn btn" id="deletebtn" onclick="deletemeeting();">삭제</button>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modifyx">취소</button>
-                                    </div>
-                                </div>
-                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn" id="modify" style="box-shadow: none;">저장</button>
+                                <button type="button" class="btn btn" id="deletebtn" onclick="deletemeeting();">삭제</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="modifyx">취소</button>
                             </div>
                         </div>
-                    </div>
-
+                        </form>
                     </div>
                 </div>
-                <aside class="moimRightInfoContents">
-                    <div class="userProfile">
-                        <p>[리더]</p>
-                        <p>[[${moim.users.nickname}]]</p>
-                        <img th:src="${moim.users.userDetail.profileImg}" alt="">
-                    </div>
-                </aside>
             </div>
         </div>
-    </main>
+</body>
 </th:block>
 
 </html>
