@@ -7,7 +7,6 @@ public class GoogleResponse implements OAuth2Response {
 
     public GoogleResponse(Map<String, Object> attribute) {
         this.attribute = attribute;
-        System.out.println("GoogleResponse = " + attribute);
     }
 
 

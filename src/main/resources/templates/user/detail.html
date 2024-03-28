@@ -31,7 +31,9 @@
     </style>
 </th:block>
 <th:block layout:fragment="js">
-
+    <script th:inline="javascript">
+        const viewUserNickname = [[${userData.nickname}]];
+    </script>
 </th:block>
 
 <th:block layout:fragment="container">
@@ -49,7 +51,7 @@
                         <span th:text="${userData.lastLoginDate==null ? '기록없음' : userData.lastLoginDate}"></span>
                     </p>
                     <div class="community">
-                        <button type="button" class="btn btn-custom-default btn-lg">1:1 대화</button>
+                        <button type="button" class="btn btn-custom-default btn-lg" th:onclick="'openMessageToUser('+${userData.userNo}+', viewUserNickname)'">1:1 대화</button>
                         <button type="button" class="btn btn-custom-add btn-lg">모임 초대</button>
                     </div>
                 </div>

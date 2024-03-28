@@ -13,6 +13,68 @@
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     </div>
+
+    <div id="message" th:if="${session.loggedInUser!=null}">
+        <div class="messageToggle">
+            <i class="bi bi-send"></i>
+            <span></span>
+        </div>
+        <div class="messageWrap">
+            <div class="messageTitle">
+                <p class="titleName">메세지</p>
+                <div class="messageClose">
+                    <i class="bi bi-x-lg"></i>
+                </div>
+            </div>
+            <div class="messageBlank">
+                <p>메세지가 존재하지 않습니다.</p>
+            </div>
+            <div class="messageList">
+                <ul></ul>
+            </div>
+            <div class="messageContent">
+                <ul></ul>
+                <div class="contentInput">
+                    <form name="messageForm">
+                        <input type="hidden" name="groupNo">
+                        <input type="hidden" name="senderNo">
+                        <input type="hidden" name="receiverNo">
+                        <textarea name="contents" id="messageInput" placeholder="Shift + Enter 로 중바꿈 가능합니다."></textarea>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <template id="messageListTemplate">
+            <li>
+                <div class="thumbnail">
+                    <img src="" alt="">
+                    <span></span>
+                </div>
+                <div class="data">
+                    <p class="content"></p>
+                    <p class="nickname"></p>
+                </div>
+            </li>
+        </template>
+
+        <template id="messageContentTemplate">
+            <li>
+                <div class="thumbnail">
+                    <img src="" alt="">
+                </div>
+                <div class="data">
+                    <div class="info">
+                        <p class="nickname"></p>
+                        <p class="sendDate"></p>
+                    </div>
+                    <div class="content">
+
+                    </div>
+                </div>
+            </li>
+        </template>
+    </div>
 </th:block>
 
 </html>
