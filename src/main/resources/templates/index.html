@@ -22,8 +22,16 @@
             });
 
             $(".userList > li").click(e => {
-                let no = $(e.currentTarget).data('no');
-                document.location.href = "/user/detail?no="+no;
+                let _this = $(e.currentTarget);
+                let userNo = _this.attr("data-no");
+
+                if( $(e.target).hasClass("bi-envelope") ) {
+                    let messageNickname = _this.find(".nickname").clone().find(".level").remove().end().text().trim();
+                    openMessageToUser(userNo, messageNickname);
+                    return false;
+                }
+
+                document.location.href = "/user/detail?no="+userNo;
             });
         });
     </script>
@@ -58,7 +66,7 @@
                         <span class="desc">현재 가장 인기있는 모임을 만나보세요!</span>
                     </div>
                     <div class="etc">
-                        <a href="" class="more">전체 모임 보기</a>
+                        <a href="/moim/" class="more">전체 모임 보기</a>
                     </div>
                 </div>
                 <div class="content">
