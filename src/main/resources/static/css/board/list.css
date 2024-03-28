@@ -113,3 +113,5 @@ main .container {
 }
 .search{margin-left: 15px;}
 .wrapperAll{margin-top: 30px;}
+.nullNotice{text-align: center; padding: 10px;}
+.nullNotice h2{font-weight: 500; color: #1F1926;}
