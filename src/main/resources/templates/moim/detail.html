@@ -12,6 +12,9 @@
         function openPositionModal() {
             document.getElementById("positionModal").style.display = "block";
         }
+        function openStudyModal() {
+            document.getElementById("studyModal").style.display = "block";
+        }
         function openRejectModal() {
             document.getElementById("rejectModal").style.display = "block";
         }
@@ -21,6 +24,9 @@
         }
         function closeRejectModal() {
             document.getElementById("rejectModal").style.display = "none";
+        }
+        function closeStudyModal() {
+            document.getElementById("studyModal").style.display = "none";
         }
 
         $(()=>{
@@ -38,20 +44,29 @@
             // 지원하기 버튼 클릭 시
             $(".yet").on("click",function (){
                 if(loggedInUser != null) {
-                    $("#userNo").val(loggedInUser.userNo);
+                    $(".userNo").val(loggedInUser.userNo);
                 } else {
                     alert("로그인 해주세요.");
                     return false;
                 }
-                openPositionModal();
+                let type = $(this).closest(".headcount").data("tp");
+                console.log(type);
                 let positionDetailNo = $(this).closest(".headcount").find(".positionDetail").data("no");
                 let positionName = $(this).closest(".headcount").find(".positionDetail").html();
                 let headcountNo = $(this).closest(".headcount").data("no");
-                $("#positionDetailNo").val(positionDetailNo); // 폼의 히든 입력 필드에 값 설정
-                $("#moimHeadcountNo").val(headcountNo);
-                $("#positionName").html(positionName);
+                if(type === 'project') {
+                    openPositionModal();
+                } else {
+                    openStudyModal();
+                }
+
+                // 폼의 히든 입력 필드에 값 설정
+                $("#positionDetailNo").val(positionDetailNo);
+                $(".moimHeadcountNo").val(headcountNo);
+                $(".positionName").html(positionName);
             })
 
+            //프로젝트 지원폼 검증
             $('.apply').submit(function(event) {
                 // 폼 제출을 취소하여 기본 동작을 막습니다.
                 event.preventDefault();
@@ -71,6 +86,27 @@
                 // 유효성 검사를 통과한 경우, 폼을 서버로 제출합니다.
                 this.submit();
             });
+
+            //스터디 지원폼 검증
+            $(".applyStudy").submit(function (event){
+                // 폼 제출을 취소하여 기본 동작을 막습니다.
+                event.preventDefault();
+                // 선택된 직장인 여부 값을 가져옵니다.
+                let jobValue = $('input[name="job"]:checked').val();
+                // 지원 동기를 가져옵니다.
+                let reasonValue = $('textarea[name="reason"]').val().trim();
+                // 유효성 검사를 수행합니다.
+                if (!jobValue) {
+                    alert('직장인 여부를 선택해주세요.');
+                    return;
+                }
+                if (!reasonValue) {
+                    alert('지원 동기를 입력해주세요.');
+                    return;
+                }
+                // 유효성 검사를 통과한 경우, 폼을 서버로 제출합니다.
+                this.submit();
+            })
 
             //승인하기 버튼 클릭시
             $(".approveBtn").on("click",function (){
@@ -119,34 +155,34 @@
             // 하트(찜) 버튼 클릭시
             $(".heart").on("click",function (){
                 let heartStatus = $(this).attr("data-heart");
-                console.log(heartStatus);
                 let $currentHeart = $(this);
-                // 좋아요 처리
-                if( heartStatus == "false" ) {
-                    $.ajax({
-                        url: "/moim/heart",
-                        data: {moimNo:moimNo},
-                        success:function () {
-                            // data-heart 속성 변경
-                            $currentHeart.attr("data-heart", true);
-                            // 하트 아이콘 클래스 변경
-                            $currentHeart.find(".bi").removeClass("bi-heart").addClass("bi-heart-fill");
-                        }
-                    })
+                if(loggedInUser != null){
+                    // 좋아요 처리
+                    if( heartStatus == "false" ) {
+                        $.ajax({
+                            url: "/moim/heart",
+                            data: {moimNo:moimNo},
+                            success:function () {
+                                // data-heart 속성 변경
+                                $currentHeart.attr("data-heart", true);
+                                // 하트 아이콘 클래스 변경
+                                $currentHeart.find(".bi").removeClass("bi-heart").addClass("bi-heart-fill");
+                            }
+                        })
+                    }
+                    if( heartStatus == "true" ) {
+                        $.ajax({
+                            url: "/moim/heartDelete",
+                            data: {moimNo:moimNo},
+                            success:function () {
+                                // data-heart 속성 변경
+                                $currentHeart.attr("data-heart", false);
+                                // 하트 아이콘 클래스 변경
+                                $currentHeart.find(".bi").removeClass("bi-heart-fill").addClass("bi-heart");
+                            }
+                        })
+                    }
                 }
-                if( heartStatus == "true" ) {
-                    $.ajax({
-                        url: "/moim/heartDelete",
-                        data: {moimNo:moimNo},
-                        success:function () {
-                            // data-heart 속성 변경
-                            $currentHeart.attr("data-heart", false);
-                            // 하트 아이콘 클래스 변경
-                            $currentHeart.find(".bi").removeClass("bi-heart-fill").addClass("bi-heart");
-                        }
-                    })
-                }
-
             })
             //공유하기 버튼 클릭시
             $(".share").on("click",function (){
@@ -261,49 +297,96 @@
                                     <div class="title">
                                         <h2>모집 현황</h2>
                                     </div>
-                                    <ul th:each=" data : ${moim.headcountList}">
-                                        <li class="headcount" th:data-no="${data.moimHeadcountNo}">
-                                            <div class="positionDetail" th:data-no="${data.positionDetail.positionDetailNo}">
-                                                <p th:if="${data.positionDetail}">[[${data.positionDetail.middleName}]]</p>
-                                                <p th:unless="${data.positionDetail}">누구나 가능</p>
-                                            </div>
-                                            <div class="participant">
-                                                <span class="approval">[[${data.participantApprovalList.size()}]]</span> /
-                                                <span class="personnel">[[${data.personnel}]]</span>
-                                            </div>
-                                            <div class="applyBtn">
-                                                <button th:if="${data.participantApprovalList.size() < data.personnel}" type="button" class="yet">지원하기</button>
-                                                <button th:if="${data.participantApprovalList.size() == data.personnel}" type="button" class="done">모집완료</button>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                    <th:block th:if="${moim.type == 'project'}">
+                                        <ul th:each=" data : ${moim.headcountList}">
+                                            <li class="headcount" th:data-no="${data.moimHeadcountNo}" th:data-tp="${moim.type}">
+                                                <div class="positionDetail" th:data-no="${data.positionDetail.positionDetailNo}">
+                                                    <p th:if="${data.positionDetail}">[[${data.positionDetail.middleName}]]</p>
+                                                    <p th:unless="${data.positionDetail}">누구나 가능</p>
+                                                </div>
+                                                <div class="participant">
+                                                    <span class="approval">[[${data.participantApprovalList.size()}]]</span> /
+                                                    <span class="personnel">[[${data.personnel}]]</span>
+                                                </div>
+                                                <div class="applyBtn">
+                                                    <button th:if="${data.participantApprovalList.size() < data.personnel}" type="button" class="yet">지원하기</button>
+                                                    <button th:if="${data.participantApprovalList.size() == data.personnel}" type="button" class="done">모집완료</button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </th:block>
+                                    <th:block th:if="${moim.type == 'study'}">
+                                        <ul th:each=" data : ${moim.headcountList}">
+                                            <li class="headcount" th:data-no="${data.moimHeadcountNo}" th:data-tp="${moim.type}">
+                                                <div class="positionDetail">
+                                                    <p th:unless="${data.positionDetail}">누구나 가능</p>
+                                                </div>
+                                                <div class="participant">
+                                                    <span class="approval">[[${data.participantApprovalList.size()}]]</span> /
+                                                    <span class="personnel">[[${data.personnel}]]</span>
+                                                </div>
+                                                <div class="applyBtn">
+                                                    <button th:if="${data.participantApprovalList.size() < data.personnel}" type="button" class="yet">지원하기</button>
+                                                    <button th:if="${data.participantApprovalList.size() == data.personnel}" type="button" class="done">모집완료</button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </th:block>
                                 </div>
                             </th:block>
-                            <div id="positionModal" class="positionModal">
-                                <div class="positionModal-content">
-                                    <h3 class="title">지원하기</h3>
-                                    <span class="close" onclick="closePositionModal();">&times;</span>
-                                    <div class="applyPosition">
-                                        <p class="title">지원 포지션</p>
-                                        <p id="positionName"></p>
-                                    </div>
-                                    <div class="applyForm">
-                                        <form action="/moim/apply" class="apply" method="post">
-                                            <input type="hidden" name="positionDetailNo" id="positionDetailNo" value="">
-                                            <input type="hidden" name="moimHeadcountNo" id="moimHeadcountNo" value="">
-                                            <input type="hidden" name="userNo" id="userNo" value="">
-                                            <input type="hidden" name="moimNo" id="moimNo" th:value="${moim.moimNo}">
-                                            <div class="haveJob">
-                                                <p class="title">직장인 여부</p>
-                                                <label><input type="radio" name="job" value="Y"> 예</label>
-                                                <label><input type="radio" name="job" value="N"> 아니오</label>
-                                            </div>
-                                            <textarea name="reason" placeholder="지원동기를 입력해주세요."></textarea>
-                                            <input type="submit" class="submitBtn" value="지원하기">
-                                        </form>
+                            <th:block th:if="${moim.type == 'project'}">
+                                <div id="positionModal" class="positionModal">
+                                    <div class="positionModal-content">
+                                        <h3 class="title">지원하기</h3>
+                                        <span class="close" onclick="closePositionModal();">&times;</span>
+                                        <div class="applyPosition">
+                                            <p class="title">지원 포지션</p>
+                                            <p class="positionName"></p>
+                                        </div>
+                                        <div class="applyForm">
+                                            <form action="/moim/apply" class="apply" method="post">
+                                                <input type="hidden" name="positionDetailNo" id="positionDetailNo" value="">
+                                                <input type="hidden" name="moimHeadcountNo" class="moimHeadcountNo" value="">
+                                                <input type="hidden" name="userNo" class="userNo" value="">
+                                                <input type="hidden" name="moimNo" th:value="${moim.moimNo}">
+                                                <div class="haveJob">
+                                                    <p class="title">직장인 여부</p>
+                                                    <label><input type="radio" name="job" value="Y"> 예</label>
+                                                    <label><input type="radio" name="job" value="N"> 아니오</label>
+                                                </div>
+                                                <textarea name="reason" placeholder="지원동기를 입력해주세요."></textarea>
+                                                <input type="submit" class="submitBtn" value="지원하기">
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </th:block>
+                            <th:block th:if="${moim.type == 'study'}">
+                                <div id="studyModal" class="studyModal">
+                                    <div class="studyModal-content">
+                                        <h3 class="title">지원하기</h3>
+                                        <span class="close" onclick="closeStudyModal();">&times;</span>
+                                        <div class="applyPosition">
+                                            <p class="title">지원 포지션</p>
+                                            <p class="positionName"></p>
+                                        </div>
+                                        <div class="applyForm">
+                                            <form action="/moim/applyStudy" class="applyStudy" method="post">
+                                                <input type="hidden" name="moimHeadcountNo" class="moimHeadcountNo" value="">
+                                                <input type="hidden" name="userNo" class="userNo" value="">
+                                                <input type="hidden" name="moimNo" th:value="${moim.moimNo}">
+                                                <div class="haveJob">
+                                                    <p class="title">직장인 여부</p>
+                                                    <label><input type="radio" name="job" value="Y"> 예</label>
+                                                    <label><input type="radio" name="job" value="N"> 아니오</label>
+                                                </div>
+                                                <textarea name="reason" placeholder="지원동기를 입력해주세요."></textarea>
+                                                <input type="submit" class="submitBtn" value="지원하기">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
                             <div class="participating">
                                 <div class="title">
                                     <h2>참여 멤버</h2>
@@ -318,14 +401,23 @@
                                             <div class="info">
                                                 <p class="nickname">
                                                     [[${m.userDetail.users.nickname}]]
-                                                    <span class="level">
-                                                        Lv. <span th:text="${m.userJob.level eq null ? '입력안함' : m.userJob.level}"></span>
-                                                    </span>
+                                                    <th:block th:if="${m.userJob != null}">
+                                                        <span class="level" th:if="${m.userJob.level != null}">
+                                                            Lv. [[${m.userJob.level}]]
+                                                        </span>
+                                                    </th:block>
                                                 </p>
                                                 <th:block th:if="${m.userDetail.introduce != null}">
-                                                    <p class="introduce" th:if="${m.userDetail.introduce.length() > 0}">
-                                                        <th:block th:text="${#strings.substring(m.userDetail.introduce, 0, 15)+ '..'}"> </th:block>
-                                                    </p>
+                                                    <th:block th:if="${0 < m.userDetail.introduce.length() && m.userDetail.introduce.length() < 15}">
+                                                        <p class="introduce">
+                                                            <th:block th:text="${m.userDetail.introduce}"></th:block>
+                                                        </p>
+                                                    </th:block>
+                                                    <th:block th:if="${m.userDetail.introduce.length() > 15}">
+                                                        <p class="introduce">
+                                                            <th:block th:text="${#strings.substring(m.userDetail.introduce, 0, 15)+ '..'}"> </th:block>
+                                                        </p>
+                                                    </th:block>
                                                 </th:block>
                                                 <p class="positionDetail" th:text="${m.userJob==null || m.userJob.positionDetail==null ? '직무없음' : m.userJob.positionDetail.middleName}">
                                                 </p>
@@ -415,7 +507,8 @@
                         <div class="userProfile">
                             <p>[리더]</p>
                             <p>[[${moim.users.nickname}]]</p>
-                            <img th:src="${moim.users.userDetail.profileImg}" alt="">
+                            <img th:if="${moim.users.userDetail.profileImg!=null}" th:src="${moim.users.userDetail.profileImg}" alt="">
+                            <img th:if="${moim.users.userDetail.profileImg == null}" src="/images/profileBlank.png" alt="">
                         </div>
                     </a>
                 </aside>
