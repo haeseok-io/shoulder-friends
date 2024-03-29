@@ -112,7 +112,7 @@
                                     <th:block th:utext="${data.contents}"></th:block>
                                 </div>
                                 <div class="etc">
-                                    <img th:if="${data.users.userDetail.profileImg != null}" th:src="${data.users.userDetail.profileImg}" alt="">
+                                    <img th:if="${data.users.userDetail.profileImg != null}" th:src="'/display?fileName='+${data.users.userDetail.profileImg}" alt="">
                                     <img th:if="${data.users.userDetail.profileImg == null}" src="/images/profileBlank.png" alt="">
                                     <p>[[${data.users.nickname}]]</p>
                                     <span>조회수 : [[${data.hits}]]</span>

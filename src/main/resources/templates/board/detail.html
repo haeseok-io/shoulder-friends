@@ -78,7 +78,7 @@
                                 "        <a href=\"/user/detail?no=" + child.users.userNo + "\">\n" +
                                 "            <div class=\"writerProfile\">\n";
                                 if(childImg != null ) {
-                                    tag += " <img src=\"" +child.users.userDetail.profileImg +"\" alt=\"\">\n";
+                                    tag += " <img src=\"/display?fileName=" +child.users.userDetail.profileImg +"\" alt=\"\">\n";
                                 } else {
                                     tag += " <img src=\"/images/profileBlank.png\" alt=\"\">\n" ;
                                 }
@@ -179,7 +179,7 @@
                                 <div class="commentsHeader">
                                     <a th:href="@{/user/detail(no=${reply.users.userNo})}">
                                         <div class="writerProfile">
-                                            <img th:if="${reply.users.userDetail.profileImg != null}" th:src="${reply.users.userDetail.profileImg}" alt="">
+                                            <img th:if="${reply.users.userDetail.profileImg != null}" th:src="'/display?fileName='+${reply.users.userDetail.profileImg}" alt="">
                                             <img th:if="${reply.users.userDetail.profileImg == null}" src="/images/profileBlank.png" alt="">
                                         </div>
                                         <p class="writerName">[[${reply.users.nickname}]]</p>
@@ -220,7 +220,7 @@
                 <a th:href="@{/user/detail(no=${boardDetail.board.users.userNo})}">
                     <div class="userProfile">
                         <p>[[${boardDetail.board.users.nickname}]]</p>
-                        <img th:if="${boardDetail.board.users.userDetail.profileImg != null}" th:src="${boardDetail.board.users.userDetail.profileImg}" alt="">
+                        <img th:if="${boardDetail.board.users.userDetail.profileImg != null}" th:src="'/display?fileName='+${boardDetail.board.users.userDetail.profileImg}" alt="">
                         <img th:if="${boardDetail.board.users.userDetail.profileImg == null}" src="/images/profileBlank.png" alt="">
                     </div>
                 </a>

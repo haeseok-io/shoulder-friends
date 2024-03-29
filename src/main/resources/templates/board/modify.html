@@ -79,7 +79,7 @@
             <aside class="detailSidebar">
                 <div class="userProfile">
                     <p>[[${boardDetail.users.nickname}]]</p>
-                    <img th:src="${boardDetail.users.userDetail.profileImg}" alt="">
+                    <img th:src="'/display?fileName='+${boardDetail.users.userDetail.profileImg}" alt="">
                 </div>
             </aside>
         </div>
