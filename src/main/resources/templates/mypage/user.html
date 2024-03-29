@@ -147,7 +147,7 @@
                     <input type="file" name="profileImg">
                     <div class="imgWrap">
                         <img th:if="${userData.userDetail.profileImg==null}" src="https://letspl.me/assets/images/prof-no-img.png" alt="" onclick="profileImgUploadTrigger();">
-                        <img th:if="${userData.userDetail.profileImg!=null}" th:src="${userData.userDetail.profileImg}" alt="" onclick="profileImgUploadTrigger();">
+                        <img th:if="${userData.userDetail.profileImg!=null}" th:src="'/display?fileName='+${userData.userDetail.profileImg}" alt="" onclick="profileImgUploadTrigger();">
 
                         <button type="button" onclick="profileImgUploadTrigger();">
                             <i class="bi bi-camera"></i>

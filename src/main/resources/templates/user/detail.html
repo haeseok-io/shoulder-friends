@@ -41,7 +41,7 @@
         <div class="container">
             <div class="wrapper profile">
                 <div class="img">
-                    <img th:src="${userData.userDetail.profileImg!=null ? userData.userDetail.profileImg : '/images/profileBlank.png'}" alt="">
+                    <img th:src="${userData.userDetail.profileImg!=null ? '/display?fileName='+userData.userDetail.profileImg : '/images/profileBlank.png'}" alt="">
                 </div>
 
                 <div class="info">

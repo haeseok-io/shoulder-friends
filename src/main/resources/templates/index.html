@@ -89,7 +89,7 @@
                         <li th:each="data : ${userNewList}" th:data-no="${data.userNo}">
                             <div class="thumbnail">
                                 <img th:if="${data.userDetail.profileImg eq null}" src="/images/profileBlank.png" alt="">
-                                <img th:unless="${data.userDetail.profileImg eq null}" th:src="${data.userDetail.profileImg}" alt="">
+                                <img th:unless="${data.userDetail.profileImg eq null}" th:src="'/display?fileName='+${data.userDetail.profileImg}" alt="">
                             </div>
                             <div class="wrap">
                                 <p class="nickname">

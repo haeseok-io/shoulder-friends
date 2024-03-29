@@ -167,7 +167,7 @@
 
                             // 썸네일 이미지 조정 ( 이미지가 없을경우 기본 이미지로 대체 )
                             if( obj.moimDetail.moimImg!=null && obj.moimDetail.moimImg!="" ) {
-                                newThunbnailPath = obj.moimDetail.moimImg;
+                                newThunbnailPath = "/display?fileName="+obj.moimDetail.moimImg;
                             }
 
                             // 카테고리명
@@ -248,7 +248,7 @@
                         <li th:each="data : ${moimNewList}" th:data-no="${data.moimNo}">
                             <div class="thumbnail">
                                 <img th:if="${data.moimDetail.moimImg==null}" src="/images/moimBlank.png" alt="">
-                                <img th:if="${data.moimDetail.moimImg!=null}" th:src="${data.moimDetail.moimImg}" alt="">
+                                <img th:if="${data.moimDetail.moimImg!=null}" th:src="'/display?fileName='+${data.moimDetail.moimImg}" alt="">
                             </div>
                             <div class="wrap">
                                 <div class="label">
