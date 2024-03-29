@@ -21,6 +21,6 @@ docker build --tag ${db_image_name} -f Dockerfile .
 
 # Run container
 echo "=> Run container..."
-docker run -d -p ${port}:${port}  --name ${db_container_name} ${db_image_name}
+docker run -d -p ${port}:${port} -v /var/jenkins_home:/var/upload --name ${db_container_name} ${db_image_name}
 
 # 도커 자동배포 테스트 주석
