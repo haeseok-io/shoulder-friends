@@ -153,7 +153,7 @@ public class UserService {
             String[] fileInfo = file.getOriginalFilename().split("\\.");
             String fileSuffix = fileInfo[fileInfo.length - 1];
 
-            profileImgName = "user_"+UUID.randomUUID().toString()+"."+fileSuffix;
+            profileImgName = UUID.randomUUID().toString()+"."+fileSuffix;
 
             Path savePath = Paths.get(uploadPath+"user/", profileImgName);
             try {
@@ -164,7 +164,7 @@ public class UserService {
             }
 
             // 파일명에 경로 병합
-            profileImgName = "/upload/user/"+profileImgName;
+            profileImgName = "/user/"+profileImgName;
         } else {
             profileImgName = users.getUserDetail().getProfileImg();
         }
