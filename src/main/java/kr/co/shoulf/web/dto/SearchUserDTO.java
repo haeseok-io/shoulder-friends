@@ -1,6 +1,5 @@
 package kr.co.shoulf.web.dto;
 
-import kr.co.shoulf.web.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchUserDTO extends Users {
+public class SearchUserDTO {
     private Integer positionNo;
     private Integer positionDetailNo;
     private Integer onlineNo;
