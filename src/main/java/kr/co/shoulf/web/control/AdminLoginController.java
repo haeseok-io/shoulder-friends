@@ -37,6 +37,7 @@ public class AdminLoginController {
 //        }
 //    }
 
+
     @GetMapping("/login/register")
     public String memberRegister() {
         return "admin/login/register";
