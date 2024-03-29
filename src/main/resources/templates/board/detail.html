@@ -71,18 +71,24 @@
                             let minutes = String(date.getMinutes()).padStart(2, '0');
                             // 원하는 형식으로 조합
                             let formattedDate = year + '년 ' + month + '월 ' + day + '일 ' + hours + ':' + minutes;
+                            let childImg = child.users.userDetail.profileImg ;
+
                             let tag = "<div class=\"recommentWrap\" data-no=\"" + child.replyNo + "\">\n" +
-                                "                                <div class=\"commentsHeader\">\n" +
-                                "                                    <a href=\"/user/detail?no=" + child.users.userNo + "\">\n" +
-                                "                                        <div class=\"writerProfile\">\n" +
-                                "                                            <img src=\""+ child.users.userDetail.profileImg+ "\" alt=\"\">\n" +
-                                "                                        </div>\n" +
-                                "                                        <p class=\"writerName\">" + child.users.nickname + "</p>\n" +
-                                "                                    </a>\n" +
-                                "                                    <p class=\"commentRegdate\"> " + formattedDate + "</p>\n" +
-                                "                                </div>\n" +
-                                "                                <div class=\"commentsBody\">"+child.contents+"</div>\n" +
-                                "                            </div>";
+                                "    <div class=\"commentsHeader\">\n" +
+                                "        <a href=\"/user/detail?no=" + child.users.userNo + "\">\n" +
+                                "            <div class=\"writerProfile\">\n";
+                                if(childImg != null ) {
+                                    tag += " <img src=\"" +child.users.userDetail.profileImg +"\" alt=\"\">\n";
+                                } else {
+                                    tag += " <img src=\"/images/profileBlank.png\" alt=\"\">\n" ;
+                                }
+                                tag +=  "            </div>\n" +
+                                    "            <p class=\"writerName\">" + child.users.nickname + "</p>\n" +
+                                    "        </a>\n" +
+                                    "        <p class=\"commentRegdate\"> " + formattedDate + "</p>\n" +
+                                    "    </div>\n" +
+                                    "    <div class=\"commentsBody\">"+child.contents+"</div>\n" +
+                                    "</div>\n";
 
                             // 생성된 recommentWrap에 답글을 추가합니다
                             recommentWrap.append(tag);
@@ -172,7 +178,8 @@
                                 <div class="commentsHeader">
                                     <a th:href="@{/user/detail(no=${reply.users.userNo})}">
                                         <div class="writerProfile">
-                                            <img th:src="${reply.users.userDetail.profileImg}" alt="">
+                                            <img th:if="${reply.users.userDetail.profileImg != null}" th:src="${reply.users.userDetail.profileImg}" alt="">
+                                            <img th:if="${reply.users.userDetail.profileImg == null}" src="/images/profileBlank.png" alt="">
                                         </div>
                                         <p class="writerName">[[${reply.users.nickname}]]</p>
                                     </a>
@@ -212,7 +219,8 @@
                 <a th:href="@{/user/detail(no=${boardDetail.board.users.userNo})}">
                     <div class="userProfile">
                         <p>[[${boardDetail.board.users.nickname}]]</p>
-                        <img th:src="${boardDetail.board.users.userDetail.profileImg}" alt="">
+                        <img th:if="${boardDetail.board.users.userDetail.profileImg != null}" th:src="${boardDetail.board.users.userDetail.profileImg}" alt="">
+                        <img th:if="${boardDetail.board.users.userDetail.profileImg == null}" src="/images/profileBlank.png" alt="">
                     </div>
                 </a>
             </aside>

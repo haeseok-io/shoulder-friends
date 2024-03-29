@@ -90,8 +90,17 @@ public class MoimController {
                           @RequestParam("moimNo") Long moimNo,
                           @ModelAttribute MoimParticipants moimParticipants,
                           HttpSession session){
-        moimService.applyParticipant(positionDetailNo, moimHeadcountNo, session, moimParticipants);
-        System.out.println(moimParticipants);
+        moimService.applyParticipant(positionDetailNo, moimHeadcountNo, session, moimParticipants,moimNo);
+        if (positionDetailNo == null) moimService.applyParticipantStudy(moimHeadcountNo, session, moimParticipants, moimNo);
+        return "redirect:/moim/detail?no=" + moimNo;
+    }
+
+    @PostMapping("/applyStudy")
+    public String applyMoim(@RequestParam("moimHeadcountNo") Long moimHeadcountNo,
+                            @RequestParam("moimNo") Long moimNo,
+                            @ModelAttribute MoimParticipants moimParticipants,
+                            HttpSession session){
+        moimService.applyParticipantStudy(moimHeadcountNo, session, moimParticipants, moimNo);
         return "redirect:/moim/detail?no=" + moimNo;
     }
     @PostMapping("/approveParticipant")
@@ -167,6 +176,7 @@ public class MoimController {
                         .build());
             });
         });
+        System.out.println(moimMember);
         model.addAttribute("moimMember", moimMember);
 
         // 지원자 읽어오기

@@ -84,13 +84,11 @@ public class MoimService {
         return convertMoimDTO(moimRepository.findById(moimNo).orElse(null));
     }
 
-    //모임 지원하기
-    public void applyParticipant(Integer positionDetailNo, Long moimHeadcountNo, HttpSession session, MoimParticipants moimParticipants) {
+    //프로젝트 지원하기
+    public void applyParticipant(Integer positionDetailNo, Long moimHeadcountNo, HttpSession session, MoimParticipants moimParticipants, Long moimNo) {
         Users users = (Users) session.getAttribute("loggedInUser");
-        Optional<PositionDetail> positionDetailResult = positionDetailRepository.findById(positionDetailNo);
-        PositionDetail positionDetail = positionDetailResult.get();
-        Optional<MoimHeadcount> moimHeadcountResult = moimHeadcountRepository.findById(moimHeadcountNo);
-        MoimHeadcount moimHeadcount = moimHeadcountResult.get();
+        PositionDetail positionDetail = positionDetailRepository.findById(positionDetailNo).orElse(null);
+        MoimHeadcount moimHeadcount = moimHeadcountRepository.findById(moimHeadcountNo).orElse(null);
         moimHeadcount.setPositionDetail(positionDetail);
         MoimParticipants insertData = MoimParticipants.builder()
                         .reason(moimParticipants.getReason())
@@ -99,6 +97,19 @@ public class MoimService {
                         .moimHeadcount(moimHeadcount)
                         .status(1)
                         .build();
+        moimParticipantsRepository.save(insertData);
+    }
+    //스터디 지원
+    public void applyParticipantStudy(Long moimHeadcountNo, HttpSession session, MoimParticipants moimParticipants, Long moimNo) {
+        Users users = (Users) session.getAttribute("loggedInUser");
+        MoimHeadcount moimHeadcount = moimHeadcountRepository.findById(moimHeadcountNo).orElse(null);
+        MoimParticipants insertData = MoimParticipants.builder()
+                .reason(moimParticipants.getReason())
+                .job(moimParticipants.getJob())
+                .users(users)
+                .moimHeadcount(moimHeadcount)
+                .status(1)
+                .build();
         moimParticipantsRepository.save(insertData);
     }
 
@@ -408,11 +419,13 @@ public class MoimService {
     }
 
     public void moimLike(Long moimNo, Users user) {
-        MoimLike moimLike = MoimLike.builder()
-                .users(user)
-                .moim(moimRepository.findById(moimNo).orElse(null))
-                .build();
-        moimLikeRepository.save(moimLike);
+        if(user != null){
+            MoimLike moimLike = MoimLike.builder()
+                    .users(user)
+                    .moim(moimRepository.findById(moimNo).orElse(null))
+                    .build();
+            moimLikeRepository.save(moimLike);
+        }
     }
 
     public MoimLike readLike(Long moimNo, Users user) {
@@ -425,7 +438,11 @@ public class MoimService {
 
     @Transactional
     public void deleteLike(Long moimNo, Users user) {
-        Moim moim = moimRepository.findById(moimNo).orElse(null);
-        moimLikeRepository.deleteByMoimAndUsers_UserNo(moim, user.getUserNo());
+        if(user != null){
+            Moim moim = moimRepository.findById(moimNo).orElse(null);
+            moimLikeRepository.deleteByMoimAndUsers_UserNo(moim, user.getUserNo());
+        }
     }
+
+   
 }
