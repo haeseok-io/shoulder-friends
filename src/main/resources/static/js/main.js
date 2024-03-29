@@ -9,7 +9,7 @@ $(()=>{
             if( _this.parent(".headerUser").hasClass("active") ) {
                 $.get("/user/simple/json", {}, data => {
                     let loginLayout = $("header .modalLogin");
-                    let thumbnailPath = data.userDetail.profileImg!=null ? data.userDetail.profileImg : "/images/profileBlank.png";
+                    let thumbnailPath = data.userDetail.profileImg!=null ? "/display?fileName="+data.userDetail.profileImg : "/images/profileBlank.png";
 
                     let positionName = "미설정";
                     let positionDetailName = "미설정";
