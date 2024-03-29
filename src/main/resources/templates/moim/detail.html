@@ -396,7 +396,7 @@
                                     <ul class="memberList">
                                         <li th:each="m : ${moimMember}" th:data-no="${m.userNo}">
                                             <div class="thumbnail">
-                                                <img th:if="${m.userDetail.profileImg}" th:src="${m.userDetail.profileImg}" alt="">
+                                                <img th:if="${m.userDetail.profileImg}" th:src="'/display?fileName='+${m.userDetail.profileImg}" alt="">
                                                 <img th:if="${m.userDetail.profileImg eq null}" src="/images/profileBlank.png" alt="">
                                             </div>
                                             <div class="info">
