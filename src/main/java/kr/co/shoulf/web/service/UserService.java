@@ -39,6 +39,11 @@ public class UserService {
     @Value("${kr.co.shoulf.upload.directory}")
     private String uploadPath;
 
+    public List<UserDTO> readSearchUser(SearchUserDTO searchUserDTO) {
+//        List<UserDTO> userList = userRepository;
+        return null;
+    }
+
     // 신규 회원 리스트
     public List<UserDTO> readNewUserList() {
         List<UserDTO> userList = new ArrayList<>();

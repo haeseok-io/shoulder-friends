@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface PositionDetailRepository extends JpaRepository<PositionDetail, Integer> {
     List<PositionDetail> findByPosition_PositionNo(Integer positionNo);
-
+    PositionDetail findByPositionDetailNo(Integer positionNo);
 }
