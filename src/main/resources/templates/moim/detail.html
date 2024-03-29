@@ -208,7 +208,7 @@
         <div class="container">
             <div class="moimHeaderWrap">
                 <div class="moimThumbnail">
-                    <img th:if="${moim.moimDetail.moimImg != null}" th:src="${moim.moimDetail.moimImg}" alt="">
+                    <img th:if="${moim.moimDetail.moimImg != null}" th:src="'/display?fileName='+${moim.moimDetail.moimImg}" alt="">
                     <img th:if="${moim.moimDetail.moimImg == null}" src="/images/moimBlank.png" alt="">
                 </div>
                 <div class="moimHeaderContents">
@@ -452,7 +452,7 @@
                                             <div class="info">
                                                 <div class="thumbnail">
                                                     <a th:href="@{/user/detail(no=${p.users.userNo})}">
-                                                        <img th:if="${p.users.userDetail.profileImg}" th:src="${p.users.userDetail.profileImg}" alt="">
+                                                        <img th:if="${p.users.userDetail.profileImg}" th:src="'/display?fileName='+${p.users.userDetail.profileImg}" alt="">
                                                         <img th:if="${p.users.userDetail.profileImg eq null}" src="/images/profileBlank.png" alt="">
                                                         <p class="nickname">
                                                             [[${p.users.nickname}]]
@@ -510,7 +510,7 @@
                         <div class="userProfile">
                             <p>[리더]</p>
                             <p>[[${moim.users.nickname}]]</p>
-                            <img th:if="${moim.users.userDetail.profileImg!=null}" th:src="${moim.users.userDetail.profileImg}" alt="">
+                            <img th:if="${moim.users.userDetail.profileImg!=null}" th:src="'/display?fileName='+${moim.users.userDetail.profileImg}" alt="">
                             <img th:if="${moim.users.userDetail.profileImg == null}" src="/images/profileBlank.png" alt="">
                         </div>
                     </a>
