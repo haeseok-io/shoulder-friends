@@ -17,7 +17,7 @@ main .container {
 }
 .moimHeaderWrap{display: flex; margin-top: 50px;}
 .moimThumbnail{width: 40%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px;}
-.moimThumbnail img{width: 550px; height: 100%;}
+.moimThumbnail img{width: 550px; height: 370px;}
 .moimHeaderContents{calc(60% - 250px); margin-left: 50px;}
 .moimHeaderContents .title{font-weight: bold; color: black;}
 .moimHeaderContents > div {margin-bottom: 13px; /* 각 요소 사이에 10px의 아래 여백을 추가합니다. */}
