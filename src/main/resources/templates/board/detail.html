@@ -172,7 +172,8 @@
                                 <div class="commentsHeader">
                                     <a th:href="@{/user/detail(no=${reply.users.userNo})}">
                                         <div class="writerProfile">
-                                            <img th:src="${reply.users.userDetail.profileImg}" alt="">
+                                            <img th:if="${reply.users.userDetail.profileImg != null}" th:src="${reply.users.userDetail.profileImg}" alt="">
+                                            <img th:if="${reply.users.userDetail.profileImg == null}" src="/images/profileBlank.png" alt="">
                                         </div>
                                         <p class="writerName">[[${reply.users.nickname}]]</p>
                                     </a>
