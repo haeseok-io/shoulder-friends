@@ -139,7 +139,7 @@ public class MoimService {
             }
 
             // 파일명에 경로 병합
-            moimImgName = "/upload/moim/"+moimImgName;
+            moimImgName = "moim/"+moimImgName;
         } else {
             Moim orgMoim = dto.getMoimNo()!=null ? moimRepository.findById(dto.getMoimNo()).orElse(null) : null;
             moimImgName = orgMoim!=null ? orgMoim.getMoimDetail().getMoimImg() : null;
