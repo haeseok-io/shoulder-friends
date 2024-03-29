@@ -127,7 +127,7 @@ public class MoimService {
             String[] fileInfo = file.getOriginalFilename().split("\\.");
             String fileSuffix = fileInfo[fileInfo.length - 1];
 
-            moimImgName = "moim"+UUID.randomUUID().toString()+"."+fileSuffix;
+            moimImgName = UUID.randomUUID().toString()+"."+fileSuffix;
 
             // 파일 업로드
             Path savePath = Paths.get(uploadPath+"moim/", moimImgName);
