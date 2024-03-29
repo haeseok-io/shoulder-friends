@@ -208,7 +208,7 @@
         <div class="container">
             <div class="moimHeaderWrap">
                 <div class="moimThumbnail">
-                    <img th:if="${moim.moimDetail.moimImg != null}" th:src="${moim.moimDetail.moimImg}" alt="">
+                    <img th:if="${moim.moimDetail.moimImg != null}" th:src="'/display?fileName='+${moim.moimDetail.moimImg}" alt="">
                     <img th:if="${moim.moimDetail.moimImg == null}" src="/images/moimBlank.png" alt="">
                 </div>
                 <div class="moimHeaderContents">
