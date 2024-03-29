@@ -53,16 +53,20 @@ public class StudyController {
     //스터디카페 등록
     @PostMapping("/cafe/write")
     public String cafe_writeOk(StudycafeDTO dto){
-
         MultipartFile file = dto.getMainImg();
+        String[] fileInfo = file.getOriginalFilename().split("\\.");
+        String fileSuffix = fileInfo[fileInfo.length - 1];
+        String mainImgName = UUID.randomUUID().toString()+"."+fileSuffix;
+
+        //MultipartFile file = dto.getMainImg();
 
         //파일 실제 이름
-        String originalFilename = file.getOriginalFilename();
+        //String originalFilename = file.getOriginalFilename();
 
         //고유한 이름 만들기
-        String uuid = UUID.randomUUID().toString();
+        //String uuid = UUID.randomUUID().toString();
 
-        Path savePath = Paths.get(uploadPath, uuid + "_" + originalFilename);
+        Path savePath = Paths.get(uploadPath+"study/",  mainImgName);
 
         Studycafe studycafe = Studycafe.builder()
                 .name(dto.getName())
@@ -71,7 +75,7 @@ public class StudyController {
                 .addr(dto.getAddr()+" "+dto.getAddrDetail())
                 .x(dto.getX())
                 .y(dto.getY())
-                .mainImg("/upload/"+uuid+"_"+originalFilename)
+                .mainImg("study/"+mainImgName)
                 .member(dto.getMember())
                 .build();
         studyService.saveCafe(studycafe);
@@ -107,24 +111,31 @@ public class StudyController {
 
         if(file.getSize() != 0){
 
+            //String cafeimgpath = studycafe1.getMainImg();
+            //int imgindex = cafeimgpath.lastIndexOf("/");
+            //String imgname =  cafeimgpath.substring(imgindex+1);
+
+            // 기존 파일이 존재할 경우 파일 제거
             Studycafe studycafe1 = studyService.oneCafe(dto.getStudycafeNo());
-            String cafeimgpath = studycafe1.getMainImg();
-            int imgindex = cafeimgpath.lastIndexOf("/");
-            String imgname =  cafeimgpath.substring(imgindex+1);
-
-            File files = new File(uploadPath+"\\"+imgname);
-
+            String orgMainImgName = studycafe1.getMainImg();
+            File files = new File(uploadPath+orgMainImgName);
             if(files.exists()){
                 files.delete();
             }
 
+            // 신규파일 업로드
+            String[] fileInfo = file.getOriginalFilename().split("\\.");
+            String fileSuffix = fileInfo[fileInfo.length - 1];
+            String mainImgName = UUID.randomUUID().toString()+"."+fileSuffix;
+
+
             //파일 실제 이름
-            String originalFilename = file.getOriginalFilename();
+            //String originalFilename = file.getOriginalFilename();
 
             //고유한 이름 만들기
-            String uuid = UUID.randomUUID().toString();
+            //String uuid = UUID.randomUUID().toString();
 
-            Path savePath = Paths.get(uploadPath, uuid + "_" + originalFilename);
+            Path savePath = Paths.get(uploadPath+"study/", mainImgName);
 
             // 이미지 수정시 스터디 카페 정보 수정
             Studycafe studycafe = Studycafe.builder()
@@ -135,7 +146,7 @@ public class StudyController {
                     .addr(address)
                     .x(dto.getX())
                     .y(dto.getY())
-                    .mainImg("/upload/"+uuid+"_"+originalFilename)
+                    .mainImg("study/"+mainImgName)
                     .member(dto.getMember())
                     .build();
             studyService.saveCafe(studycafe);
@@ -173,13 +184,13 @@ public class StudyController {
 
         //스터디룸이 존재하는지 확인
         if(studyroom.isEmpty() == true) {
-
             Studycafe studycafe1 = studyService.oneCafe(studycafeNo);
-            String cafeimgpath = studycafe1.getMainImg();
-            int imgindex = cafeimgpath.lastIndexOf("/");
-            String imgname = cafeimgpath.substring(imgindex + 1);
+            String orgMainImgName = studycafe1.getMainImg();
+            //String cafeimgpath = studycafe1.getMainImg();
+            //int imgindex = cafeimgpath.lastIndexOf("/");
+            //String imgname = cafeimgpath.substring(imgindex + 1);
 
-            File files = new File(uploadPath + "\\" + imgname);
+            File files = new File(uploadPath+orgMainImgName);
             if (files.exists()) {
                 files.delete();
             }
