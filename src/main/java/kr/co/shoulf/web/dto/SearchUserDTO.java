@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchUserDTO extends Users {
+public class SearchUserDTO {
     private Integer positionNo;
     private Integer positionDetailNo;
     private Integer onlineNo;
