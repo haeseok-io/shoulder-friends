@@ -44,6 +44,6 @@ public class AdminMainController {
         session.setAttribute("loggedInUser", loggedInUser);
 
 //        System.out.println(member.getUsername());
-        return "/admin/index";
+        return "admin/index";
     }
 }

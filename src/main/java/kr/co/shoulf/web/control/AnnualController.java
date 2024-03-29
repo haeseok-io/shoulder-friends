@@ -130,7 +130,7 @@ public class AnnualController {
         }
         model.addAttribute("memberNo", memberNo);
 
-        return "/admin/annual/grant";
+        return "admin/annual/grant";
     }
 
     @PostMapping("/grantLeaveOk")
