@@ -214,9 +214,16 @@ function updateMessageList(obj) {
     let profileImg = obj.sender.userDetail.profileImg ? "/display?fileName="+obj.sender.userDetail.profileImg : "/images/profileBlank.png";
 
     // Init
-    // - groupNo 와 일치하는 타겟이 없을경우 .active 클래스를 지정 ( 신규 메세지 발송시 )
+    // - groupNo 와 일치하는 타겟이 없을경우
     if( updateTarget.length<1 ) {
-        updateTarget = $("#message .messageList ul li.active");
+        // 신규 생성하는 메세지로 타겟 지정
+        updateTarget = $("#message .messageList ul li.create");
+
+        // 신규 생성하는 메세지도 없을경우 넘겨받은 obj로 리스트 생성
+        if( updateTarget.length<1 ) {
+            updateTarget = createMessageList(obj);
+            $("#message .messageList ul li").prepend(obj);
+        }
     }
 
     // Check
@@ -351,6 +358,7 @@ function createNewMessage(receiverNo, receiverNickname) {
     // Result
     let prependElement = createMessageList(option);
     prependElement.addClass("active");
+    prependElement.addClass("create");
     prependTarget.prepend(prependElement);
     messageContentOpenEvent(null, receiverNo);
 }
