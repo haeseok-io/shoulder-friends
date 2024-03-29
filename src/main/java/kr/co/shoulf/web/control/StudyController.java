@@ -244,18 +244,14 @@ public class StudyController {
         List<MultipartFile> files = dto.getPath(); //여러개
 
         for(MultipartFile file : files) {
-
-            //파일 실제 이름
-            String originalFilename = file.getOriginalFilename();
-
-            //고유한 이름 만들기
-            String uuid = UUID.randomUUID().toString();
-
-            Path savePath = Paths.get(uploadPath, uuid + "_" + originalFilename);
+            String[] fileInfo = file.getOriginalFilename().split("\\.");
+            String fileSuffix = fileInfo[fileInfo.length - 1];
+            String roomImgName = UUID.randomUUID().toString()+"."+fileSuffix;
+            Path savePath = Paths.get(uploadPath+"study/", roomImgName);
 
             StudyroomImage studyroomImage = StudyroomImage.builder()
                     .studyroom(studyroom)
-                    .path("/upload/"+uuid+"_"+originalFilename)
+                    .path("study/"+roomImgName)
                     .seq(seq)
                     .build();
             seq++;
@@ -312,37 +308,29 @@ public class StudyController {
 
             List<StudyroomImage> studyroomImageList = studyService.oneRoomImg(dto.getStudyroomNo());
 
+            // 기존 파일 제거
             for(int i=0; i<studyroomImageList.size(); i++) {
-                String cafeimgpath = studyroomImageList.get(i).getPath();
-                int imgindex = cafeimgpath.lastIndexOf("/");
-                String imgname = cafeimgpath.substring(imgindex + 1);
-
-                File file1 = new File(uploadPath + "\\" + imgname);
-
+                String orgRoomImgName = studyroomImageList.get(i).getPath();
+                File file1 = new File(uploadPath+orgRoomImgName);
                 if (file1.exists()) {
                     file1.delete();
                 }
             }
-
             studyService.deleteImg(studyroom);
 
+            // 신규파일 추가
             for (MultipartFile file : files) {
+                String[] fileInfo = file.getOriginalFilename().split("\\.");
+                String fileSuffix = fileInfo[fileInfo.length - 1];
+                String roomImgName = UUID.randomUUID().toString()+"."+fileSuffix;
 
-                //파일 실제 이름
-                String originalFilename = file.getOriginalFilename();
-
-                //고유한 이름 만들기
-                String uuid = UUID.randomUUID().toString();
-
-                Path savePath = Paths.get(uploadPath, uuid + "_" + originalFilename);
-
+                Path savePath = Paths.get(uploadPath+"study/", roomImgName);
                 StudyroomImage studyroomImage = StudyroomImage.builder()
                         .studyroom(studyroom)
-                        .path("/upload/" + uuid + "_" + originalFilename)
+                        .path("study/"+roomImgName)
                         .seq(seq)
                         .build();
                 seq++;
-
                 studyService.saveroomImg(studyroomImage);
 
                 try {
@@ -369,12 +357,8 @@ public class StudyController {
 
             //디렉토리 안에 파일 삭제
             for(int i=0; i<studyroomImageList.size(); i++) {
-                String cafeimgpath = studyroomImageList.get(i).getPath();
-                int imgindex = cafeimgpath.lastIndexOf("/");
-                String imgname = cafeimgpath.substring(imgindex + 1);
-
-                File file1 = new File(uploadPath + "\\" + imgname);
-
+                String orgRoomImgName = studyroomImageList.get(i).getPath();
+                File file1 = new File(uploadPath+orgRoomImgName);
                 if (file1.exists()) {
                     file1.delete();
                 }
