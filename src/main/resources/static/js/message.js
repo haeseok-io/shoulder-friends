@@ -187,7 +187,7 @@ function getMessageContentData(groupNo, messageSendTargetNo) {
 function createMessageList(obj) {
     let template = $($("#messageListTemplate").html());
     let messageSendTargetNo = loggedInUser.userNo!=obj.sender.userNo ? obj.sender.userNo : obj.receiver.userNo;
-    let profileImg = obj.sender.userDetail.profileImg ? obj.sender.userDetail.profileImg : "/images/profileBlank.png";
+    let profileImg = obj.sender.userDetail.profileImg ? "/display?fileName="+obj.sender.userDetail.profileImg : "/images/profileBlank.png";
 
     // Data
     template.attr("data-groupNo", obj?.groupNo);
@@ -211,7 +211,7 @@ function createMessageList(obj) {
 function updateMessageList(obj) {
     let updateTarget = $("#message .messageList ul li[data-groupNo='"+obj.groupNo+"']");
     let messageSendTargetNo = loggedInUser.userNo!==obj.sender.userNo ? obj.sender.userNo : obj.receiver.userNo;
-    let profileImg = obj.sender.userDetail.profileImg ? obj.sender.userDetail.profileImg : "/images/profileBlank.png";
+    let profileImg = obj.sender.userDetail.profileImg ? "/display?fileName="+obj.sender.userDetail.profileImg : "/images/profileBlank.png";
 
     // Init
     // - groupNo 와 일치하는 타겟이 없을경우 .active 클래스를 지정 ( 신규 메세지 발송시 )
@@ -255,7 +255,7 @@ function createMessageContent(obj) {
 
     let date = new Date(obj.regdate);
     let sendDate = `${date.getFullYear()}년 ${date.getMonth()+1}월 ${date.getDate()}일`;
-    let profileImg = obj.sender.userDetail.profileImg ? obj.sender.userDetail.profileImg : "/images/profileBlank.png";
+    let profileImg = obj.sender.userDetail.profileImg ? "/display?fileName="+obj.sender.userDetail.profileImg : "/images/profileBlank.png";
 
 
     if( loggedInUser.userNo==obj.sender.userNo ) {
