@@ -6,12 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -45,4 +44,10 @@ public class Users {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
     private UserDetail userDetail;
+
+    @OneToOne(mappedBy = "users", fetch = FetchType.LAZY)
+    private UserJob userJob;
+
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    private List<UserLanguage> userLanguageList;
 }

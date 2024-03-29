@@ -76,14 +76,12 @@
                 url: '/user/list/json',
                 type: 'GET',
                 success: function(data) {
-                    // 가져온 데이터를 userList 배열에 저장
-                    const userList = data;
-
+                    console.log(data)
                     // userList를 이용하여 동적으로 HTML 생성
-                    const userListHtml = userList.map(user => `
+                    const userListHtml = data.map(user => `
                         <li data-no="${user.userNo}">
                             <div class="thumbnail">
-                                <img src="${user.profileImg ? user.profileImg : '/images/profileBlank.png'}" alt="">
+                                <img src="${user.profileImg ? '/display?fileName='+user.profileImg : '/images/profileBlank.png'}" alt="">
                             </div>
                             <div class="wrap">
                                 <p class="nickname">
@@ -106,6 +104,7 @@
                 }
             });
 
+            return false;
         }
     </script>
 </th:block>
@@ -121,8 +120,8 @@
                 <div class="wrapper recommendUser">
                     <div class="randomUser">
                         <div class="thumbnail">
-                            <img th:if="${recommendUser.userDetail.getProfileImg != null}" th:src="${recommendUser.userDetail.getProfileImg}" alt="">
-                            <img th:if="${recommendUser.userDetail.getProfileImg == null}" src="https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png" alt="">
+                            <img th:if="${recommendUser.userDetail.getProfileImg != null}" th:src="'/display?fileName='+${recommendUser.userDetail.getProfileImg}" alt="">
+                            <img th:if="${recommendUser.userDetail.getProfileImg == null}" src="/images/profileBlank.png" alt="">
                         </div>
                         <div class="wrap">
                             <div class="position">

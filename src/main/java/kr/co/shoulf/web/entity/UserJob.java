@@ -1,8 +1,8 @@
 package kr.co.shoulf.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.catalina.User;
 
 @Entity
 @Table(name = "user_job")
@@ -25,5 +25,6 @@ public class UserJob {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no")
     @ToString.Exclude
+    @JsonIgnore
     private Users users;
 }
