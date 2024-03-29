@@ -222,7 +222,7 @@ function updateMessageList(obj) {
         // 신규 생성하는 메세지도 없을경우 넘겨받은 obj로 리스트 생성
         if( updateTarget.length<1 ) {
             updateTarget = createMessageList(obj);
-            $("#message .messageList ul li").prepend(updateTarget);
+            $("#message .messageList ul").prepend(updateTarget);
         }
     }
 
