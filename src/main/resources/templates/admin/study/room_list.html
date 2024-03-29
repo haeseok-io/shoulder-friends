@@ -234,7 +234,7 @@
             <div>
                 <div id="cafedetail">
                     <div class="cafe-name" th:text="${oneCafe.name}"></div>
-                    <img id="cafeimg" th:src="${oneCafe.mainImg}">
+                    <img id="cafeimg" th:src="'/display?fileName='+${oneCafe.mainImg}">
                     <div id="sdesc"><p class="pp" th:text="${oneCafe.shortDesc}"></p></div>
                     <div th:if="${oneCafe?.member != null}">
                         <div id="membername"><p class="membername" th:text="'관리자 : '+${oneCafe.member.name}"></p></div>
@@ -260,7 +260,7 @@
                         <div class="room-images">
                             <div th:each="imgdto : ${roomImgList}" th:if="${imgdto.studyroom.studyroomNo == dto.studyroomNo}" id="roomimg1">
                                 <div id="roomimg">
-                                    <img class="caferoomimg" th:src="${imgdto.path}">
+                                    <img class="caferoomimg" th:src="'/display?fileName='+${imgdto.path}">
                                 </div>
                             </div>
                         </div>

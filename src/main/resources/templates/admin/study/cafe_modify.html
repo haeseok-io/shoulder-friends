@@ -224,7 +224,7 @@
             <div class="main-title">카페 수정</div>
             <form action="/study/cafe/modify" method="post" name="studycafeadd" enctype="multipart/form-data">
                 <div id="imgimg" style="padding-top: 80px; padding-bottom: 10px; text-align: center">
-                    <img th:src="${oneCafe.mainImg}" id="mainimgfile">
+                    <img th:src="'/display?fileName='+${oneCafe.mainImg}" id="mainimgfile">
                 </div>
                 <div class="mb-3" id="in1">
                     <label for="files" class="form-label">메인 이미지 수정</label>

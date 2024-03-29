@@ -144,7 +144,7 @@
             <form action="/study/room/modify" method="post" enctype="multipart/form-data">
                 <div id="imgfiles">
                     <div th:each="imgdto : ${studyroomimg}">
-                        <img class="room-images" th:src="${imgdto.path}">
+                        <img class="room-images" th:src="'/display?fileName='+${imgdto.path}">
                     </div>
                 </div>
                 <div class="mb-3" id="in1">
