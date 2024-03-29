@@ -81,7 +81,7 @@
                     const userListHtml = data.map(user => `
                         <li data-no="${user.userNo}">
                             <div class="thumbnail">
-                                <img src="${user.profileImg ? '/display?fileName='+user.profileImg : '/images/profileBlank.png'}" alt="">
+                                <img th:src="${user.profileImg != null ? '/display?fileName='+user.profileImg : '/images/profileBlank.png'}" alt="">
                             </div>
                             <div class="wrap">
                                 <p class="nickname">
