@@ -6,10 +6,19 @@ main .container {
     justify-content: space-between;
     padding: 20px; /* 내부 여백 추가 */
 }
+.moimRightInfoContents {
+    position: fixed;
+    top: 30%;
+    left: 80%;
+    width: 250px;
+    margin-left: 10px;
+    padding: 20px; /* 내부 여백 추가 */
+    border-radius: 8px; /* 모서리를 둥글게 만듦 */
+}
 .moimHeaderWrap{display: flex; margin-top: 50px;}
-.moimThumbnail{width: 45%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px;}
-.moimThumbnail img{width: 550px; height: 300px;}
-.moimHeaderContents{width: 65%; margin-left: 50px;}
+.moimThumbnail{width: 40%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px;}
+.moimThumbnail img{width: 550px; height: 100%;}
+.moimHeaderContents{calc(60% - 250px); margin-left: 50px;}
 .moimHeaderContents .title{font-weight: bold; color: black;}
 .moimHeaderContents > div {margin-bottom: 13px; /* 각 요소 사이에 10px의 아래 여백을 추가합니다. */}
 .moimTitle{ display: flex;}
@@ -122,15 +131,6 @@ main .container {
     cursor: pointer;
 }
 
-.moimRightInfoContents {
-    position: fixed;
-    top: 20%;
-    left: 73%;
-    width: 20%;
-    margin-left: 10px;
-    padding: 20px; /* 내부 여백 추가 */
-    border-radius: 8px; /* 모서리를 둥글게 만듦 */
-}
 .moimTabMenu ul {display: flex; justify-content: space-between;}
 .moimTabMenu ul li { width: 150px; height: 60px; }
 .moimTabMenu ul li a{display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; font-size: 1.2rem; color: #aaa;}
@@ -142,8 +142,8 @@ main .container {
 .userProfile {text-align: center; /* 텍스트 가운데 정렬 */}
 .userProfile img {
     max-width: 50%; /* 이미지가 부모 요소를 넘어가지 않도록 함 */
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     border: 1px solid #ccc;
     border-radius: 100%;
     margin-top: 10px; /* 이미지 위 여백 추가 */
