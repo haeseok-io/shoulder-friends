@@ -112,7 +112,8 @@
                                     <th:block th:utext="${data.contents}"></th:block>
                                 </div>
                                 <div class="etc">
-                                    <img th:src="${data.users.userDetail.profileImg}" alt="">
+                                    <img th:if="${data.users.userDetail.profileImg != null}" th:src="${data.users.userDetail.profileImg}" alt="">
+                                    <img th:if="${data.users.userDetail.profileImg == null}" src="/images/profileBlank.png" alt="">
                                     <p>[[${data.users.nickname}]]</p>
                                     <span>조회수 : [[${data.hits}]]</span>
                                     <span>작성일 : [[${#dates.format(data.regdate, 'yyyy년 MM월 dd일 HH:mm:ss')}]]</span>
