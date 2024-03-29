@@ -46,7 +46,7 @@
                 if(loggedInUser != null) {
                     $(".userNo").val(loggedInUser.userNo);
                 } else {
-                    alert("로그인 해주세요.");
+                    $(".headerUser").addClass("active");
                     return false;
                 }
                 let type = $(this).closest(".headcount").data("tp");
@@ -120,9 +120,8 @@
                     success : function (){
                         console.log("success");
                     }
-
                 })
-
+                window.location.href="/moim/detail?no=" + moimNo +"&type=member";
             })
 
             //거절하기 버튼 클릭시
@@ -156,6 +155,7 @@
             $(".heart").on("click",function (){
                 let heartStatus = $(this).attr("data-heart");
                 let $currentHeart = $(this);
+                if(loggedInUser == null) $(".headerUser").addClass("active");
                 if(loggedInUser != null){
                     // 좋아요 처리
                     if( heartStatus == "false" ) {
@@ -319,6 +319,7 @@
                                         <ul th:each=" data : ${moim.headcountList}">
                                             <li class="headcount" th:data-no="${data.moimHeadcountNo}" th:data-tp="${moim.type}">
                                                 <div class="positionDetail">
+                                                    <p th:if="${data.positionDetail != null}">[[${data.positionDetail.middleName}]]</p>
                                                     <p th:unless="${data.positionDetail}">누구나 가능</p>
                                                 </div>
                                                 <div class="participant">
@@ -395,7 +396,7 @@
                                     <ul class="memberList">
                                         <li th:each="m : ${moimMember}" th:data-no="${m.userNo}">
                                             <div class="thumbnail">
-                                                <img th:if="${m.userDetail.profileImg}" th:src="${m.userDetail.profileImg}" alt="">
+                                                <img th:if="${m.userDetail.profileImg}" th:src="'/display?fileName='+${m.userDetail.profileImg}" alt="">
                                                 <img th:if="${m.userDetail.profileImg eq null}" src="/images/profileBlank.png" alt="">
                                             </div>
                                             <div class="info">
@@ -451,13 +452,15 @@
                                             <div class="info">
                                                 <div class="thumbnail">
                                                     <a th:href="@{/user/detail(no=${p.users.userNo})}">
-                                                        <img th:if="${p.users.userDetail.profileImg}" th:src="${p.users.userDetail.profileImg}" alt="">
+                                                        <img th:if="${p.users.userDetail.profileImg}" th:src="'/display?fileName='+${p.users.userDetail.profileImg}" alt="">
                                                         <img th:if="${p.users.userDetail.profileImg eq null}" src="/images/profileBlank.png" alt="">
                                                         <p class="nickname">
                                                             [[${p.users.nickname}]]
-                                                            <span class="level">
-                                                                Lv. <span th:text="${p.userJob == null ? '입력안함' : p.userJob.level}"></span>
-                                                            </span>
+                                                            <th:block th:if="${p.userJob != null}">
+                                                                <span class="level" th:if="${p.userJob.level != null}">
+                                                                    Lv. [[${p.userJob.level}]]
+                                                                </span>
+                                                            </th:block>
                                                         </p>
                                                     </a>
                                                 </div>
@@ -496,6 +499,7 @@
                                 </div>
                                 <div class="moimControl">
                                     <a th:href="@{/moim/complete(no=${moim.moimNo})}"><button type="button" class="moimComplete">모임 완료</button></a>
+                                    <a th:href="@{/moim/modify(no=${moim.moimNo})}"><button type="button" class="moimModify">모임 수정</button></a>
                                     <a th:href="@{/moim/delete(no=${moim.moimNo})}"><button type="button" class="moimDelete">모임 삭제</button></a>
                                 </div>
                             </div>
@@ -507,7 +511,7 @@
                         <div class="userProfile">
                             <p>[리더]</p>
                             <p>[[${moim.users.nickname}]]</p>
-                            <img th:if="${moim.users.userDetail.profileImg!=null}" th:src="${moim.users.userDetail.profileImg}" alt="">
+                            <img th:if="${moim.users.userDetail.profileImg!=null}" th:src="'/display?fileName='+${moim.users.userDetail.profileImg}" alt="">
                             <img th:if="${moim.users.userDetail.profileImg == null}" src="/images/profileBlank.png" alt="">
                         </div>
                     </a>

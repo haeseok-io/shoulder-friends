@@ -59,8 +59,9 @@ main .container {
 .participantWrap .participantList > li .decideBtn .approveBtn{width: 48%; height: 40px; border-radius: 5px; background-color:#FF8911; color:white;  border: 1px solid #FF8911;}
 .participantWrap .participantList > li .decideBtn .rejectBtn{width: 48%; height: 40px; border-radius: 5px; background-color:#CCCCCC; color:#444444;  border: 1px solid #CCCCCC;}
 .control .moimControl{width: 1000px;}
-.control .moimControl .moimComplete{width: 30%; height: 45px; border-radius: 5px; background-color:#7B27FF; color:white;  border: 1px solid #7B27FF;}
-.control .moimControl .moimDelete{margin-left: 10px; width: 30%; height: 45px; border-radius: 5px; background-color:#CC0000; color:white;  border: 1px solid #CC0000;}
+.control .moimControl .moimComplete{width: 22%; height: 45px; border-radius: 5px; background-color:#7B27FF; color:white;  border: 1px solid #7B27FF;}
+.control .moimControl .moimDelete{margin-left: 10px; width: 22%; height: 45px; border-radius: 5px; background-color:#CC0000; color:white;  border: 1px solid #CC0000;}
+.control .moimControl .moimModify{margin-left: 10px; width: 22%; height: 45px; border-radius: 5px; background-color:#FF8911; color:white;  border: 1px solid #FF8911;}
 .todo {margin-top: 30px;}
 .todo .title {margin-bottom: 30px; color: black;}
 .todo .contents{width: 70%; height: 40px; border-radius: 5px;}

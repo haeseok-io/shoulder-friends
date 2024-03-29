@@ -5,7 +5,6 @@ import kr.co.shoulf.web.dto.*;
 import kr.co.shoulf.web.entity.MoimLike;
 import kr.co.shoulf.web.entity.MoimParticipants;
 import kr.co.shoulf.web.entity.Users;
-import kr.co.shoulf.web.repository.UserRepository;
 import kr.co.shoulf.web.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -104,17 +103,16 @@ public class MoimController {
         return "redirect:/moim/detail?no=" + moimNo;
     }
     @PostMapping("/approveParticipant")
-    public String approveParticipant(@RequestParam("moimNo") Long moimNo,
+    public void approveParticipant(@RequestParam("moimNo") Long moimNo,
                                      @RequestParam("participantNo") Long participantNo){
         moimService.approveParticipant(participantNo);
-        return "redirect:/moim/detail?no=" + moimNo;
     }
     @PostMapping("/rejectParticipant")
     public String rejectParticipant(@RequestParam("participantNo") Long participantNo,
                                     @RequestParam("contents") String contents,
                                     @RequestParam("moimNo") Long moimNo){
         moimService.rejectParticipant(participantNo,contents);
-        return "redirect:/moim/detail?no=" + moimNo;
+        return "redirect:/moim/detail?no=" + moimNo +"&type=member";
     }
 
     @RequestMapping("/delete")
@@ -150,7 +148,6 @@ public class MoimController {
 
         //하트 검증
         MoimLike moimLike = moimService.readLike(moimNo, loggedInUser);
-        System.out.println(moimLike);
         model.addAttribute("moimLike", moimLike);
 
         // 자물쇠 검증
@@ -176,7 +173,6 @@ public class MoimController {
                         .build());
             });
         });
-        System.out.println(moimMember);
         model.addAttribute("moimMember", moimMember);
 
         // 지원자 읽어오기
