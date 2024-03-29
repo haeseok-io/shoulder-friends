@@ -20,6 +20,7 @@ main .container {
 .moimThumbnail img{width: 550px; height: 370px;}
 .moimHeaderContents{calc(60% - 250px); margin-left: 50px;}
 .moimHeaderContents .title{font-weight: bold; color: black; font-size: 1.5rem;}
+.moimHeaderContents .shortDesc{width:550px;}
 .moimHeaderContents > div {margin-bottom: 13px; /* 각 요소 사이에 10px의 아래 여백을 추가합니다. */}
 .moimTitle{ display: flex;}
 .moimTitle span{padding-top: 8px; margin-left: 10px; text-align: center;}
