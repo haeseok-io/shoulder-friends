@@ -27,6 +27,8 @@ public class ImgController {
             File file = new File(uploadPath + File.separator + srcFileName);
             HttpHeaders header = new HttpHeaders();
 
+            System.out.println(file);
+
             // Mime 타입 처리
             header.add("Content-Type", Files.probeContentType(file.toPath()));
 
