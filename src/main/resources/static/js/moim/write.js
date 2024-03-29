@@ -57,7 +57,7 @@ function moimImgLoader(path) {
     if( path ) {
         // 임시데이터 사용하는 동안
         if( path!="https://letspl.s3.ap-northeast-2.amazonaws.com/images/project_thumb_05.png" ) {
-            path = "/upload/moim/"+path;
+            path = "/display?fileName="+path;
         }
 
         $("#moimImg-thumbnail-btn").append("<img src='"+path+"' >")
