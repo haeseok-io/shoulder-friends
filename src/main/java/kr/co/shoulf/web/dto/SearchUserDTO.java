@@ -1,0 +1,18 @@
+package kr.co.shoulf.web.dto;
+
+import kr.co.shoulf.web.entity.Users;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class SearchUserDTO extends Users {
+    private Integer positionNo;
+    private Integer positionDetailNo;
+    private Integer onlineNo;
+    private String keyword;
+}
