@@ -17,7 +17,7 @@ public class AdminLoginController {
 
     @GetMapping("/login/")
     public String adminLogin() {
-        return "/admin/login/login";
+        return "admin/login/login";
     }
 
 //    @PostMapping("/loginProc")
