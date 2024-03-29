@@ -164,7 +164,7 @@ public class UserService {
             }
 
             // 파일명에 경로 병합
-            profileImgName = "/user/"+profileImgName;
+            profileImgName = "user/"+profileImgName;
         } else {
             profileImgName = users.getUserDetail().getProfileImg();
         }
