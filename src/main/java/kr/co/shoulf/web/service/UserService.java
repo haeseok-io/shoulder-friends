@@ -121,6 +121,7 @@ public class UserService {
         Users users = result.get();
         UserDTO dto = UserDTO.builder()
                 .userNo(users.getUserNo())
+                .userDetail(users.getUserDetail())
                 .email(users.getEmail())
                 .nickname(users.getNickname())
                 .pass(users.getPass())
