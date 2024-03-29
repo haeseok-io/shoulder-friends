@@ -42,12 +42,13 @@ public class UserService {
     public List<UserDTO> readSearchUser(Integer positionNo, Integer positionDetailNo, String keyword) {
         return userRepository.selectByTypeAndPositionAndKeyword(positionNo, positionDetailNo, keyword)
                 .stream().map(user -> {
-                    return UserDTO.builder()
+                    UserDTO userDTO = UserDTO.builder()
                             .userNo(user.getUserNo())
                             .nickname(user.getNickname())
                             .userOnline(userOnlineRepository.findByUsers(user))
                             .userJob(userJobRepository.findByUsers(user))
                             .build();
+                    return userDTO;
                 })
                 .collect(Collectors.toList());
     }
