@@ -6,7 +6,6 @@ main .container {
     margin: 0 auto; /* 가운데 정렬을 위해 추가 */
     display: flex;
     justify-content: space-between;
-    background-color: #f2f2f2; /* 배경색 추가 */
     padding: 20px; /* 내부 여백 추가 */
 }
 .content{padding: 20px;}
@@ -44,10 +43,8 @@ main .container {
 .board {
     width: 70%;
     height: 100%;
-    background-color: #fff; /* 내용 영역 배경색 추가 */
     padding: 20px 20px 300px; /* 내부 여백 추가 */
     border-radius: 8px; /* 모서리를 둥글게 만듦 */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
 }
 
 .wrapReply {
@@ -66,7 +63,6 @@ main .container {
 
 .detailSidebar {
     width: 25%;
-    background-color: #fff; /* 배경색 추가 */
     padding: 20px; /* 내부 여백 추가 */
     border-radius: 8px; /* 모서리를 둥글게 만듦 */
 }
@@ -97,6 +93,7 @@ input[type='submit'] {border-radius: 5px;}
 .commentsBottom{align-items: center; margin-left: 10px;}
 .btnPlusComments{height: 30px; font-size: 15px; line-height: normal;}
 .btnViewComments{height: 30px; font-size: 15px; line-height: normal;}
-.writerProfile img {width: 30px; height: 30px;  border-radius: 50%; /* 이미지를 원형으로 만듦 */}
+.writerName{margin-left: 5px;}
+.writerProfile img {width: 30px; height: 30px;  border-radius: 100%; /* 이미지를 원형으로 만듦 */}
 
 .recommentWrap{margin-top: 30px; margin-left: 20px;}
