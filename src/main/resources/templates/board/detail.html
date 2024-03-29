@@ -108,19 +108,20 @@
                 closestRecommentForm.toggle();
             });
 
-            $(".recommentBtn").on("click", function () {
-                let recomment = $.trim($("#recomment").val());
-                /*if (recomment === "") {
-                    alert("답글을 작성해주세요.");
-                    return false;*/
-                // }
-            });
-
             $(".replyWrite").on("click", function () {
                 console.log("댓글 작성 버튼");
                 let reply = $.trim($("#reply").val());
                 if (reply === "") {
                     alert("댓글을 작성해주세요.");
+                    return false;
+                }
+            })
+            $(".deleteBoard").on("click", function (){
+                console.log("test");
+                let confirmDelete = confirm("정말로 삭제하시겠습니까?");
+                if (confirmDelete){
+                    return true;
+                } else {
                     return false;
                 }
             })
@@ -141,7 +142,7 @@
                                 <th:block th:if="${sameUser}">
                                     <span class="wrapModify">
                                         <a th:href="@{/board/modify(boardNo=${boardDetail.board.boardNo})}">수정</a>
-                                        <a th:href="@{/board/delete(boardNo=${boardDetail.board.boardNo})}">삭제</a>
+                                        <a th:href="@{/board/delete(boardNo=${boardDetail.board.boardNo})}" class="deleteBoard">삭제</a>
                                     </span>
                                 </th:block>
                             </p>
