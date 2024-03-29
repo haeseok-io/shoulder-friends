@@ -19,10 +19,10 @@ main .container {
 .moimThumbnail{width: 40%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px;}
 .moimThumbnail img{width: 550px; height: 370px;}
 .moimHeaderContents{calc(60% - 250px); margin-left: 50px;}
-.moimHeaderContents .title{font-weight: bold; color: black;}
+.moimHeaderContents .title{font-weight: bold; color: black; font-size: 1.5rem;}
 .moimHeaderContents > div {margin-bottom: 13px; /* 각 요소 사이에 10px의 아래 여백을 추가합니다. */}
 .moimTitle{ display: flex;}
-.moimTitle span{margin-top: 13px; margin-left: 10px; text-align: center;}
+.moimTitle span{padding-top: 8px; margin-left: 10px; text-align: center;}
 .moimTitle div{margin-left: 200px;}
 .moimTitle div button{outline: none; border: none;}
 .moimLanguage .moimLanguageList{ display: flex; align-items: center; height: 50px;}
@@ -34,7 +34,7 @@ main .container {
 .moimDetailWrap .detailDesc, .recruitStatus{margin-top: 30px;}
 .recruitStatus, .participating  .title{margin-bottom: 30px; color: black;}
 .recruitStatus .headcount {display: flex; align-items: center; margin-bottom: 10px; /* 세로 간격 조정 */}
-.recruitStatus .participant{margin-left: 200px;}
+.recruitStatus .participant{width : 50px; margin-left: 200px;}
 .recruitStatus .positionDetail{width: 200px; align-items: center;}
 .recruitStatus ul{margin-bottom: 30px;}
 .recruitStatus .applyBtn .yet{margin-left: 30px; padding:10px; width: 100px; height: 40px; color:#FF8911;  border: 1px solid #FF8911; border-radius: 5px;}
