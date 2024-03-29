@@ -55,43 +55,62 @@
 
         $(() => {
             callList();
-            onOffSelect = $("select[name='onOff']").select2();
-            bigPositionSelect = $("select[name='bigPosition']").select2();
-            middlePositionSelect = $("select[name='middlePosition']").select2();
+            onOffSelect = $("select[name='onlineNo']").select2();
+            bigPositionSelect = $("select[name='positionNo']").select2();
+            middlePositionSelect = $("select[name='positionDetailNo']").select2();
 
+
+            bigPositionSelect.on("change", e => {
+                getPositionDetail($(e.currentTarget), middlePositionSelect, "직무 중분류 전체");
+            });
         })
 
         function callList() {
-            // 직무 대분류 선택 값 가져오기
-            let bigPosition = $("select[name='bigPosition']").val();
+            let form = $("form[name='searchForm']");
 
+            // 직무 대분류 선택 값 가져오기
+            // const bigPosition = $("select[name='bigPosition']").val();
+            // const middlePosition = $("select[name='middlePosition']").val();
             // AJAX 요청을 통해 해당하는 중분류 가져오기
             if (bigPosition) {
                 $.ajax({
-                    url: '/position/' + bigPosition + '/detail',
+                    url: '/user/list/json',
                     type: 'GET',
                     success: function(data) {
-                        console.log(data)
-                        let middlePosition = $("select[name='middlePosition']");
+                        // 가져온 데이터를 userList 배열에 저장
+                        const userList = data;
 
-                        // 기존 중분류 옵션 제거
-                        middlePosition.find("option").remove();
-                        middlePosition.append('<option value="">직무 중분류 전체</option>');
+                        // userList를 이용하여 동적으로 HTML 생성
+                        const userListHtml = userList.map(user => `
+                            <li data-no="${user.userNo}">
+                                <div class="thumbnail">
+                                    <img src="${user.profileImg ? user.profileImg : '/images/profileBlank.png'}" alt="">
+                                </div>
+                                <div class="wrap">
+                                    <p class="nickname">
+                                        ${user.nickname}
+                                        <span class="level">${user.userJob.level ? 'Lv. ' + user.userJob.level : 'Lv. 0'}</span>
+                                    </p>
+                                    <p class="positionDetail">${user.positionDetail ? user.positionDetail.middleName : '직무없음'}</p>
+                                </div>
+                                <div class="message">
+                                    <i class="bi bi-envelope"></i>
+                                </div>
+                            </li>
+                        `).join('');
 
-                        // 가져온 중분류 데이터로 옵션 추가
-                        data.forEach(detail => {
-                            console.log(detail)
-                            middlePosition.append(`<option value="${detail.positionDetailNo}">${detail.middleName}</option>`);
-                        });
+                        // userList를 userListHtml로 교체
+                        $(".userList").html(userListHtml);
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
                     }
                 });
             } else {
-                // 대분류를 선택하지 않은 경우 중분류 옵션 초기화
-                $("select[name='middlePosition']").empty().append('<option value="">직무 대분류를 선택해주세요</option>');
+                console.log("-----------")
             }
+
+            return false;
         }
     </script>
 </th:block>
@@ -141,19 +160,19 @@
                         <form name="searchForm" onsubmit="return callList();">
 
                             <div class="bigPosition">
-                                <select name="bigPosition" onchange="callList();">
+                                <select name="positionNo">
                                     <option value="">직무 대분류 전체</option>
                                     <option th:each="bigPosition : ${bigPositionList}" th:value="${bigPosition.positionNo}">[[${bigPosition.bigName}]]</option>
                                 </select>
                             </div>
                             <div class="middlePosition">
-                                <select name="middlePosition">
+                                <select name="positionDetailNo">
                                     <option value="">직무 중분류 전체</option>
                                     <option th:each="middlePosition : ${middlePositionList}" th:value="${middlePosition.positionDetailNo}">[[${middlePosition.middleName}]]</option>
                                 </select>
                             </div>
                             <div class="onOff">
-                                <select name="onOff">
+                                <select name="onlineNo">
                                     <option value="">모임 여부</option>
                                     <option th:each="onOff : ${online}" th:value="${onOff.onlineNo}">[[${onOff.onlineName}]]</option>
                                 </select>
@@ -167,31 +186,7 @@
                 </div>
                 <div class="wrapper newUser">
                     <div class="content">
-                        <ul class="userList">
-                            <li th:each="data : ${userNewList}" th:data-no="${data.userNo}">
-                                <div class="thumbnail">
-                                    <img th:if="${data.userDetail.profileImg eq null}" src="/images/profileBlank.png" alt="">
-                                    <img th:unless="${data.userDetail.profileImg eq null}" th:src="${data.userDetail.profileImg}" alt="">
-                                </div>
-                                <div class="wrap">
-                                    <p class="nickname">
-                                        [[${data.nickname}]]
-                                        <th:block th:unless="${data.userJob eq null}">
-                                    <span class="level" th:unless="${data.userJob.level eq null}">
-                                        Lv.
-                                        <span>[[${data.userJob.level}]]</span>
-                                    </span>
-                                        </th:block>
-                                    </p>
-                                    <p class="positionDetail">
-                                        <th:block th:text="${data.userJob==null || data.userJob.positionDetail==null ? '직무없음' : data.userJob.positionDetail.middleName}"></th:block>
-                                    </p>
-                                </div>
-                                <div class="message">
-                                    <i class="bi bi-envelope"></i>
-                                </div>
-                            </li>
-                        </ul>
+                        <ul class="userList"></ul>
                     </div>
                 </div>
             </div>
