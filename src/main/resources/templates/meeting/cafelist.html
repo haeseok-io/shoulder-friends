@@ -49,7 +49,7 @@
     <div class="cafes">
         <div th:each="dto:${cafeList}" id="cafecard">
             <div class="card" style="width: 250px;">
-                <a th:href="@{/meeting/roomlist(studycafeNo=${dto.studycafeNo}, checkin=${checkin}, moimNo=${moimNo})}"><img class="card-img-top" th:src="${dto.mainImg}"></a>
+                <a th:href="@{/meeting/roomlist(studycafeNo=${dto.studycafeNo}, checkin=${checkin}, moimNo=${moimNo})}"><img class="card-img-top" th:src="'/display?fileName='+${dto.mainImg}"></a>
                 <div class="card-body" style="padding: 16px 10px;">
                     <p class="card-text" id="cafename" th:text="${dto.name}"></p>
                 </div>
