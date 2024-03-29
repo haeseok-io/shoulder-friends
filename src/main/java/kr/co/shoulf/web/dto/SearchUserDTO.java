@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class SearchUserDTO {
     private Integer positionNo;
     private Integer positionDetailNo;
-    private Integer onlineNo;
+    private Long onlineNo;
     private String keyword;
 }

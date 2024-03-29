@@ -47,7 +47,7 @@ public class UserController {
     @GetMapping(value = "/list/json" , produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<UserDTO> getUserListByPosition(SearchUserDTO searchUserDTO) {
-        return userService.readSearchUser(searchUserDTO);
+        return userService.readSearchUser(searchUserDTO.getPositionNo(), searchUserDTO.getPositionDetailNo(), searchUserDTO.getKeyword());
     }
 
     @GetMapping(value = "/detail")

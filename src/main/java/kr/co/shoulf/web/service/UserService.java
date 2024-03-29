@@ -39,9 +39,17 @@ public class UserService {
     @Value("${kr.co.shoulf.upload.directory}")
     private String uploadPath;
 
-    public List<UserDTO> readSearchUser(SearchUserDTO searchUserDTO) {
-//        List<UserDTO> userList = userRepository;
-        return null;
+    public List<UserDTO> readSearchUser(Integer positionNo, Integer positionDetailNo, String keyword) {
+        return userRepository.selectByTypeAndPositionAndKeyword(positionNo, positionDetailNo, keyword)
+                .stream().map(user -> {
+                    return UserDTO.builder()
+                            .userNo(user.getUserNo())
+                            .nickname(user.getNickname())
+                            .userOnline(userOnlineRepository.findByUsers(user))
+                            .userJob(userJobRepository.findByUsers(user))
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 
     // 신규 회원 리스트
