@@ -53,7 +53,7 @@ main .container {
 .participating .memberList > li .info .positionDetail{margin-top: 10px;}
 .participating .memberList > li .message { width: 25%; text-align: right; cursor: pointer; }
 .participating .memberList > li .message i { font-size: 1.5rem; color: #ccc; }
-
+.decideBtn
 .participantWrap {width: 1200px;}
 .participantWrap .participantList{display: flex; justify-content: flex-start; flex-wrap: wrap;}
 .participantWrap .participantList li{position: relative; justify-content: space-between; align-items: center; width: calc(25% - (40px / 4)); border: 1px solid #ccc; border-radius: 10px; margin-right: 20px; margin-bottom: 30px; padding: 20px; overflow: hidden;}
