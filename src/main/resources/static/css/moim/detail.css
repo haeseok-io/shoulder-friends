@@ -74,7 +74,6 @@ main .container {
 .control .moimControl .moimModify{margin-left: 10px; width: 22%; height: 45px; border-radius: 5px; background-color:#FF8911; color:white;  border: 1px solid #FF8911;}
 .todo {margin-top: 30px;}
 
-
 .todo .title {margin-bottom: 30px; color: black;}
 .todo .contents{width: 70%; height: 40px; border-radius: 5px;}
 .todo .applyTodo input[type='submit']{width: 20%;  height: 40px; border-radius: 5px; background-color:#FF8911; color:#777777;  border: 1px solid;}
