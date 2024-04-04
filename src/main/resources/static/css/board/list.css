@@ -54,7 +54,6 @@ main .container {
     padding: 5px 10px;
     border-radius: 5px;
     margin-right: 10px;
-    background-color: #ecf0f1;
 }
 
 .selectCategory a:hover {
@@ -108,6 +107,7 @@ main .container {
     margin-right: 10px;
 }
 .search{margin-left: 15px;}
+#searchButton{background: white;}
 .wrapperAll{margin-top: 30px;}
 .nullNotice{text-align: center; padding: 10px;}
 .nullNotice h2{font-weight: 500; color: #1F1926;}
