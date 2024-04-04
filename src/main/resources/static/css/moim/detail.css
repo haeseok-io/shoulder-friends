@@ -15,6 +15,7 @@ main .container {
     padding: 20px; /* 내부 여백 추가 */
     border-radius: 8px; /* 모서리를 둥글게 만듦 */
 }
+.share, .heart{background-color:white;}
 .moimHeaderWrap{display: flex; margin-top: 50px;}
 .moimThumbnail{width: 40%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px;}
 .moimThumbnail img{width: 550px; height: 370px;}
@@ -38,8 +39,8 @@ main .container {
 .recruitStatus .participant{width : 50px; margin-left: 200px;}
 .recruitStatus .positionDetail{width: 200px; align-items: center;}
 .recruitStatus ul{margin-bottom: 30px;}
-.recruitStatus .applyBtn .yet{margin-left: 30px; padding:10px; width: 100px; height: 40px; color:#FF8911;  border: 1px solid #FF8911; border-radius: 5px;}
-.recruitStatus .applyBtn .done{margin-left: 30px; padding:10px; width: 100px; height: 40px; color:white;  border: 1px solid #FF8911; border-radius: 5px;}
+.recruitStatus .applyBtn .yet{margin-left: 30px; padding:10px; width: 100px; height: 40px; background-color:white;  color:#FF8911;  border: 1px solid #FF8911; border-radius: 5px;}
+.recruitStatus .applyBtn .done{margin-left: 30px; padding:10px; width: 100px; height: 40px; color:white; background-color:#FF8911; border: 1px solid #FF8911; border-radius: 5px;}
 .participating .memberWrap{width: 1200px;}
 .participating .memberList{display: flex; justify-content: flex-start; flex-wrap: wrap;}
 .participating .memberList li{position: relative; display: flex; justify-content: space-between; align-items: center; width: calc(25% - (60px / 4)); border: 1px solid #ccc; border-radius: 10px; margin-right: 20px; margin-bottom: 30px; padding: 20px; overflow: hidden; cursor: pointer;}
